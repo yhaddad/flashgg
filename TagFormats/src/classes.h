@@ -58,5 +58,8 @@ namespace  { struct dictionary {
 	edm::Wrapper<std::vector<flashgg::TTHhadronicTag> > wrp_vec_tthh;
 
 	std::vector<edm::Ptr<flashgg::Jet> > vect_ptr_jet;
+
+	edm::Ptr<flashgg::DiPhotonTagBase> Ptr_tagbase;
+	edm::Wrapper<edm::Ptr<flashgg::DiPhotonTagBase> > wrp_ptr_tagbase;
 	
 };}
