@@ -11,11 +11,10 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.GlobalTag.globaltag = 'POSTLS170_V5::All'
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( 100) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
 
 #process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring("/store/cmst3/user/gpetrucc/miniAOD/v1/GluGluToHToGG_M-125_13TeV-powheg-pythia6_Flat20to50_PAT.root"))
 process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring("/store/mc/Spring14miniaod/TTbarH_HToGG_M-125_13TeV_amcatnlo-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/049C0F9C-E61E-E411-9388-D8D385AE8466.root"))
-
 
 
 process.load("flashgg/MicroAODProducers/flashggVertexMaps_cfi")
@@ -47,18 +46,18 @@ process.flashggTagSorter = cms.EDProducer('FlashggTagSorter',
 process.TFileService = cms.Service("TFileService",fileName = cms.string("flashggTreeWithTags.root"))
 
 process.flashggTreeMakerWithTagSorter = cms.EDAnalyzer('FlashggFlashggTreeMakerWithTagSorter',
-                                                          VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
-                                                          GenParticleTag=cms.untracked.InputTag('prunedGenParticles'),
-                                                          VertexCandidateMapTagDz=cms.InputTag('flashggVertexMapUnique'),
-                                                          VertexCandidateMapTagAOD = cms.InputTag('flashggVertexMapValidator'),
-                                                          JetTagDz = cms.InputTag("flashggJets"),
-																													DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
-																													METTag = cms.untracked.InputTag('slimmedMETs'),
-																													PileUpTag = cms.untracked.InputTag('addPileupInfo'),
-																													TagSorter = cms.untracked.InputTag('flashggTagSorter'),
-																													rhoFixedGridCollection = cms.InputTag('fixedGridRhoAll'),
-                                                          )
-                                                 
+		VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
+		GenParticleTag=cms.untracked.InputTag('prunedGenParticles'),
+		VertexCandidateMapTagDz=cms.InputTag('flashggVertexMapUnique'),
+		VertexCandidateMapTagAOD = cms.InputTag('flashggVertexMapValidator'),
+		JetTagDz = cms.InputTag("flashggJets"),
+		DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
+		METTag = cms.untracked.InputTag('slimmedMETs'),
+		PileUpTag = cms.untracked.InputTag('addPileupInfo'),
+		TagSorter = cms.untracked.InputTag('flashggTagSorter'),
+		rhoFixedGridCollection = cms.InputTag('fixedGridRhoAll'),
+		)
+
 
 
 process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('myOutputFile.root'),
@@ -79,14 +78,14 @@ process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.stri
                                )
 
 process.commissioning = cms.EDAnalyzer('flashggCommissioning',
-                                       PhotonTag=cms.untracked.InputTag('flashggPhotons'),
-                                       DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
-                                       VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices')
-)
+		PhotonTag=cms.untracked.InputTag('flashggPhotons'),
+		DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
+		VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices')
+		)
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("tree.root")
-)
+		fileName = cms.string("tree.root")
+		)
 
 process.p = cms.Path(process.flashggVertexMapUnique*
                      process.flashggVertexMapNonUnique*
