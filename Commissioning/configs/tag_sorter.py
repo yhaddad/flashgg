@@ -13,8 +13,15 @@ process.GlobalTag.globaltag = 'POSTLS170_V5::All'
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( 100) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
 
+<<<<<<< HEAD
 #process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring("/store/cmst3/user/gpetrucc/miniAOD/v1/GluGluToHToGG_M-125_13TeV-powheg-pythia6_Flat20to50_PAT.root"))
 process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring("/store/mc/Spring14miniaod/TTbarH_HToGG_M-125_13TeV_amcatnlo-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/049C0F9C-E61E-E411-9388-D8D385AE8466.root"))
+=======
+process.source = cms.Source("PoolSource",
+#fileNames=cms.untracked.vstring("/store/cmst3/user/gpetrucc/miniAOD/v1/GluGluToHToGG_M-125_13TeV-powheg-pythia6_Flat20to50_PAT.root")
+fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/l/lcorpe/private/FLASHgg/CMSSW_7_0_7_patch1/src/flashgg/CE926731-9607-E411-B0BA-001E67248A1B.root")
+)
+>>>>>>> b944880a6bfc7eb6894ca611f28e85ca174ca0ec
 
 
 process.load("flashgg/MicroAODProducers/flashggVertexMaps_cfi")
@@ -31,6 +38,7 @@ process.load("flashgg/TagProducers/flashggVBFDiPhoDiJetMVA_cfi")
 process.load("flashgg/TagProducers/flashggTags_cfi")
 
 process.flashggTagSorter = cms.EDProducer('FlashggTagSorter',
+<<<<<<< HEAD
                                           DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
                                           TagVectorTag = cms.untracked.VInputTag(
         								cms.untracked.InputTag('flashggTTHleptonicTag'),
@@ -41,6 +49,17 @@ process.flashggTagSorter = cms.EDProducer('FlashggTagSorter',
                                           massCutUpper=cms.untracked.double(180.),
                                           massCutLower=cms.untracked.double(100)
                                           )
+=======
+		DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
+		TagVectorTag = cms.untracked.VInputTag(
+			cms.untracked.InputTag('flashggVBFTag'),
+			cms.untracked.InputTag('flashggUntaggedCategory'),
+			),
+		massCutUpper=cms.untracked.double(180),
+		massCutLower=cms.untracked.double(100)
+
+		)
+>>>>>>> b944880a6bfc7eb6894ca611f28e85ca174ca0ec
 
 
 process.TFileService = cms.Service("TFileService",fileName = cms.string("flashggTreeWithTags.root"))
@@ -61,6 +80,7 @@ process.flashggTreeMakerWithTagSorter = cms.EDAnalyzer('FlashggFlashggTreeMakerW
 
 
 process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('myOutputFile.root'),
+<<<<<<< HEAD
                                outputCommands = cms.untracked.vstring("drop *",
                                                                       "keep *_flashgg*_*_*",
                                                                       "drop *_flashggVertexMap*_*_*",
@@ -76,6 +96,23 @@ process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.stri
 #                               outputCommands = cms.untracked.vstring("keep *",
 #                                                                     )
                                )
+=======
+		#   outputCommands = cms.untracked.vstring("drop *",
+			#                                         "keep *_flashgg*_*_*",
+			#                                        "drop *_flashggVertexMap*_*_*",
+			#                                       "keep *_offlineSlimmedPrimaryVertices_*_*",
+			#                                      "keep *_reducedEgamma_reduced*Clusters_*",
+			#                                     "keep *_reducedEgamma_*PhotonCores_*",
+			#                                    "keep *_slimmedElectrons_*_*",
+			#                                   "keep *_slimmedMuons_*_*",
+			#                                  "keep *_slimmedMETs_*_*",
+			#                                 "keep *_slimmedTaus_*_*",
+			#                                "keep *_fixedGridRhoAll_*_*"
+			#                              )
+		outputCommands = cms.untracked.vstring("keep *",
+			)
+		)
+>>>>>>> b944880a6bfc7eb6894ca611f28e85ca174ca0ec
 
 process.commissioning = cms.EDAnalyzer('flashggCommissioning',
 		PhotonTag=cms.untracked.InputTag('flashggPhotons'),
@@ -88,6 +125,7 @@ process.TFileService = cms.Service("TFileService",
 		)
 
 process.p = cms.Path(process.flashggVertexMapUnique*
+<<<<<<< HEAD
                      process.flashggVertexMapNonUnique*
                      process.flashggPhotons*
                      process.flashggDiPhotons*
@@ -102,5 +140,20 @@ process.p = cms.Path(process.flashggVertexMapUnique*
                      process.flashggTagSorter*
                      process.flashggTreeMakerWithTagSorter
                     )
+=======
+		process.flashggVertexMapNonUnique*
+		process.flashggPhotons*
+		process.flashggDiPhotons*
+		process.flashggPreselectedDiPhotons*
+		(process.flashggDiPhotonMVA+process.flashggJets)* # These two could run in parallel, so use +
+		process.flashggUntaggedCategory*
+		(process.flashggVBFMVA)* # Needs to happen after Jets
+		(process.flashggVBFDiPhoDiJetMVA)* # Needs to happen after VBF MVA and DiPho MVA
+		(process.flashggVBFTag)* # Tag producers, once written, can run in parallel, so they go in here with +
+		process.flashggTagSorter*
+		process.flashggTreeMakerWithTagSorter
+		#process.commissioning*
+		)
+>>>>>>> b944880a6bfc7eb6894ca611f28e85ca174ca0ec
 
 process.e = cms.EndPath(process.out)

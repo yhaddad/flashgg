@@ -195,7 +195,6 @@ class FlashggTreeMakerWithTagSorter : public edm::EDAnalyzer {
 		Int_t leadjet_genmatch;
 		Int_t subljet_genmatch;
 
-
 		edm::EDGetTokenT<edm::View<flashgg::Photon> >            photonToken_; // SCZ work-in-progress adding this!
 		edm::EDGetTokenT<edm::OwnVector<flashgg::DiPhotonTagBase> > TagSorterToken_;
 };
