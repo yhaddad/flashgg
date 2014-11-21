@@ -32,6 +32,7 @@ namespace flashgg {
     EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
     unique_ptr<PileupJetIdAlgo>  pileupJetIdAlgo_;
     ParameterSet pileupJetIdParameters_;
+		 bool usePuppi;
     //    bool useAODOnlyPileupJetIdMethod_;
   };
 
@@ -42,7 +43,8 @@ namespace flashgg {
     //    vertexToken_(consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
     //    vertexToken_(consumes<reco::VertexCollection>(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
     vertexCandidateMapToken_(consumes<VertexCandidateMap>(iConfig.getParameter<InputTag>("VertexCandidateMapTag"))),
-    pileupJetIdParameters_(iConfig.getParameter<ParameterSet>("PileupJetIdParameters"))
+    pileupJetIdParameters_(iConfig.getParameter<ParameterSet>("PileupJetIdParameters")),
+		usePuppi(iConfig.getUntrackedParameter<bool>("UsePuppi",false))
     //    useAODOnlyPileupJetIdMethod_(iConfig.getUntrackedParameter<bool>("UseAODOnlyPileupJetIdMethod",false))
     
   {
@@ -79,9 +81,11 @@ namespace flashgg {
 	Ptr<reco::Vertex> vtx = diPhoton->getVertex();
 
 	// Method written just for MiniAOD --> MicroAOD
-	PileupJetIdentifier lPUJetId = pileupJetIdAlgo_->computeIdVariables(pjet.get(),vtx,*vertexCandidateMap,true);
 
+	if(!usePuppi){
+  PileupJetIdentifier lPUJetId = pileupJetIdAlgo_->computeIdVariables(pjet.get(),vtx,*vertexCandidateMap,true);
 	fjet.setPuJetId(vtx,lPUJetId);
+	}
       }
       jetColl->push_back(fjet);
     }
