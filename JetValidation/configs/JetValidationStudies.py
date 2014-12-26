@@ -16,7 +16,7 @@ process.source = cms.Source("PoolSource",
                             #fileNames=cms.untracked.vstring("/store/mc/Phys14DR/VBF_HToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/4A8E0BD1-026C-E411-8760-00266CFFA418.root"),
                             )
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( 100 ) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( 10000 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
 
 process.load("flashgg/MicroAODProducers/flashggVertexMaps_cfi")

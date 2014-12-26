@@ -117,6 +117,7 @@ struct jetInfo {
   int   passesPUJetID;
   int   legacyEqZeroth;
   int   nDiphotons;
+  int   nVtx;
   
   int   npart_0 ;    // number of particles at pt>0
   int   npart_5 ;    // number of particles at pt>5
@@ -266,6 +267,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   int legacyEqZeroth =0;
   int nDiphotons =0;
   
+  
   nDiphotons = diPhotonPointers.size();
   
   if(diPhotonPointers.size()==0){
@@ -380,6 +382,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     jInfo.eta              = jetsDzPointers[jdz]->eta();
     jInfo.phi              = jetsDzPointers[jdz]->phi();
     jInfo.area             = jetsDzPointers[jdz]->jetArea();
+    jInfo.nVtx             = vtxs.size();
     
     if(!(jetCollectionName.find("PPI")>1 && jetCollectionName.find("PPI")<jetCollectionName.size()) )
       {
@@ -564,6 +567,7 @@ JetValidationTreeMaker::beginJob()
   jetTree->Branch("passesPUJetID"   ,&jInfo.passesPUJetID     ,"passesPUJetID/I");
   jetTree->Branch("JetArea"         ,&jInfo.area              ,"area/F");
   jetTree->Branch("nDiphotons"      ,&jInfo.nDiphotons        ,"nDiphotons/I");
+  jetTree->Branch("nVtx"            ,&jInfo.nVtx              ,"nVtx/I");
   
   jetTree->Branch("npart_0"        ,&jInfo.npart_0      ,"npart_0/I");
   jetTree->Branch("npart_5"        ,&jInfo.npart_5      ,"npart_5/I");
