@@ -76,6 +76,10 @@
 ./JetPerformanceStudies_cc.so: ./roomacro.C
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TGraphErrors.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TGraph.h
+./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TF1.h
+./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TFormula.h
+./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TBits.h
+./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/Math/ParamFunctor.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TLegendEntry.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TLegend.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TPave.h
@@ -85,10 +89,6 @@
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TText.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TLine.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TMultiGraph.h
-./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TF1.h
-./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TFormula.h
-./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TBits.h
-./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/Math/ParamFunctor.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TMath.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TError.h
 ./JetPerformanceStudies_cc.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.18-cms12/include/TCut.h

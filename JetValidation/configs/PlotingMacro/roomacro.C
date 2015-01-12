@@ -1,4 +1,4 @@
-/** MyRoot.C --- 
+/** roomacro.C --- 
  *
  * Copyright (C) 2014 haddad yacine
  * Author: haddad yacine <yhaddad@cern.ch>
@@ -19,11 +19,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
+#include <math.h> 
 #include <TGraphErrors.h>
 #include <TGraph.h>
 #include <string>
 #include <TH1.h>
+#include <TH2.h>
+#include <TF1.h>
 #include <TCanvas.h>
 #include <TLegendEntry.h>
 #include <TLegend.h>
@@ -144,6 +146,93 @@ void Draw3Legend(TGraph *histo1,
   legend->Draw(); 
 }
 
+
+
+class jet_perf{
+public:
+  jet_perf(TH2* Hres, TString name="reso"):flag_resolution(0)
+  {
+    unsigned int  nbins = Hres->GetNbinsX();
+    TF1 *gaufit = new TF1("gaufit","[0]*TMath::Gaus(x,[1],[2])", 
+			  Hres->GetXaxis()->GetXmin(), 
+			  Hres->GetXaxis()->GetXmax());
+    
+    gaufit->SetParameters (200,1.0,1.0);
+    gaufit->SetParLimits  (1,0,2);
+    gaufit->SetParLimits  (1,0,10);
+    
+    double ex = (Hres->GetXaxis()->GetXmax()-Hres->GetXaxis()->GetXmin())/(2*nbins);
+    std::cout << __func__ << " events :: " << Hres->GetEntries() << std::endl;
+    
+    greso = new TGraphErrors();
+    gresp = new TGraphErrors();
+    
+    std::cout << __func__ << " fitting bins " << std::endl;
+    greso->SetName(name +TString("_reso"));
+    gresp->SetName(name +TString("_resp"));
+    int count = 0;
+    for(unsigned int ib=1; ib < nbins; ib++){
+      
+      TH1D* htmp = Hres->ProjectionY(Form("%s_py_%i",Hres->GetName(),ib),ib,ib+1,"");
+      std::cout << "\t fiting the bin == " << ib  
+		<< " entries == "<< htmp->GetEntries() 
+		<< std::endl;
+      
+      if(htmp->GetEntries()==0) continue;
+      
+      htmp->Fit(gaufit);
+      htmp->Fit(gaufit);
+      htmp->Fit(gaufit);
+      
+      double reso = 0;
+      if(gaufit->GetParameter(1)!=0) reso =  gaufit->GetParameter(2)/gaufit->GetParameter(1);
+      else continue;
+      
+      if (reso > 1 || isinf(reso)) continue;
+      
+      double err = reso * sqrt(pow(gaufit->GetParError(2)/gaufit->GetParameter(2),2)+pow(gaufit->GetParError(1)/gaufit->GetParameter(1),2));
+      std::cout << __func__<< "debug 1" << std::endl;
+      greso->SetPoint(count, 
+		      Hres->GetXaxis()->GetBinCenter(ib),
+		      fabs(reso));
+      greso->SetPointError(count, 
+			   ex,
+			   err);//gaufit->GetParError(2));
+      
+      std::cout << __func__<< "debug 2" << std::endl;
+      gresp->SetPoint     (count, 
+			   Hres->GetXaxis()->GetBinCenter(ib),
+			   gaufit->GetParameter(1));
+      gresp->SetPointError(count, 
+			   ex,
+			   gaufit->GetParError(1));
+      
+      std::cout << __func__<< "debug 3" << std::endl;
+      count ++;
+      delete htmp;
+    } 
+    
+    std::cout << __func__ << "end  fitting bins " << std::endl;
+    delete gaufit;
+    flag_resolution=true;
+  }
+  virtual ~jet_perf(){}
+  
+  TGraphErrors *GetResolution(){return greso;}
+  TGraphErrors *GetResponse(){return gresp;}
+  
+private:
+  TGraphErrors *greso;
+  TGraphErrors *gresp;
+  bool flag_resolution;
+};
+
+//TGraphErrors *GetResponse(TH2* Hres, TString name="reso"){
+//  std::cout << __func__<< " calling response ..." << std::endl;
+//  if(!flag_resolution) GetResponse(Hres,"");
+//  gresp->SetName(name);
+//  return gresp;
+//}
 //
 //void DrawLegends(std::map<TString,TH1*> histo, 
 //		 std::string opt="1")
