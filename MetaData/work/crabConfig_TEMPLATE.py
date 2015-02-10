@@ -7,7 +7,7 @@ from WMCore.Configuration import Configuration
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = "JOBNAME"
+config.General.requestName  = "JOBNAME"
 config.General.transferLogs = False
 
 config.section_("JobType")
@@ -17,17 +17,17 @@ config.JobType.psetName = "PSET"
 ## config.JobType.scriptExe = "cmsWrapper.sh"
 
 config.section_("Data")
-config.Data.inputDataset = "DATASET"
-config.Data.inputDBS = 'global'
-config.Data.splitting = "SPLITTING"
-config.Data.unitsPerJob = UNITSPERJOB
-config.Data.publication = True
-config.Data.publishDBS = 'phys03'
+config.Data.inputDataset    = "DATASET"
+config.Data.inputDBS        = 'global'
+config.Data.splitting       = "SPLITTING"
+config.Data.unitsPerJob     = UNITSPERJOB
+config.Data.publication     = True
+config.Data.publishDBS      = 'phys03'
 config.Data.publishDataName = 'FLASHGG_VERSION-PROCESSED_DSET'
-config.Data.outLFN = "OUTLFN"
+config.Data.outLFN          = "OUTLFN"
 
 config.section_("Site")
-config.Site.storageSite = "OUTSITE"
-#config.Site.blacklist = ["T2_CH_CERN"]
-config.Site.blacklist = ["T2_UK_London_Brunel","T1_US_FNAL","T2_US_MIT"]
+config.Site.storageSite     = "OUTSITE"
+#config.Site.blacklist       = ["T2_CH_CERN"]
+config.Site.blacklist       = ["T2_UK_London_Brunel","T1_US_FNAL","T2_US_MIT"]
 
