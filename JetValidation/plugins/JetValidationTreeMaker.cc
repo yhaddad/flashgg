@@ -141,7 +141,7 @@ struct jetInfo {
   float PUJetID_betaStar;
   float PUJetID_rms;
   int   passesPUJetID;
-  int   legacyEqZeroth;
+  int   LegIsPV0;
   int   nDiphotons;
   
   int nPV;
@@ -308,15 +308,14 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       legacyEqZeroth =1;
     }
   }
-  eInfo.nDiphotons = nDiphotons;
+  eInfo.nDiphotons     = nDiphotons;
   eInfo.legacyEqZeroth = legacyEqZeroth;
-  jInfo.legacyEqZeroth = legacyEqZeroth;
-  
+    
   initEventStructure();
   
   jInfo.nJets = jetsDzPointers.size();
-  jInfo.nPV  = vtxs.size();
-  eInfo.nSV  = 0;
+  jInfo.nPV   = vtxs.size();
+  eInfo.nSV   = 0;
   
   // ++  finding the photon-jet overlaping
   
@@ -382,10 +381,10 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       SortedPtJets.push_back(tmp_jet);
     }
   }
+  
   //std::cout << "(njet-idphotn) = (" << jetsDzPointers.size() - SortedPtJets.size() 
   //  	    <<")---> Gen("<< nGenPhoton 
   //   	    <<std::endl;
-  
   
   // +++ jets info  
   std::map<unsigned int, jetInfo> recojetmap;
@@ -449,6 +448,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     jInfo.phi              = SortedPtJets[jdz]->phi();
     jInfo.area             = SortedPtJets[jdz]->jetArea();
     
+    
     if(!(jetCollectionName.find("PPI")>1 && jetCollectionName.find("PPI")<jetCollectionName.size()) )
       {
 	// use the di-photon vertex if the di-photon existe otherwise use the Vtx0
@@ -487,8 +487,9 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       jInfo.passesPUJetID          = -999;
     }
     
-    jInfo.nDiphotons               = nDiphotons;
-    jInfo.legacyEqZeroth           = legacyEqZeroth;
+    jInfo.nDiphotons = nDiphotons;
+    jInfo.LegIsPV0   = legacyEqZeroth;
+    //std::cout << "----> matched photon jet["<< jdz <<"] == "<< jInfo.legacyEqZeroth <<std::endl;
     
     // Get constituants information
     jInfo.nPart     = SortedPtJets[jdz]->numberOfDaughters  ();
@@ -559,7 +560,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     genJetInfo.pt     = genJets[genLoop]->pt() ;
     genJetInfo.eta    = genJets[genLoop]->eta();
     genJetInfo.phi    = genJets[genLoop]->phi();
-
+    
     float deta;
     float dphi;
     float dr  ;
@@ -649,7 +650,7 @@ JetValidationTreeMaker::beginJob()
   jetTree->Branch("nDiphotons"      ,&jInfo.nDiphotons        ,"nDiphotons/I");
   jetTree->Branch("nPV"             ,&jInfo.nPV               ,"nPV/I");
   jetTree->Branch("nJets"           ,&jInfo.nJets             ,"nJets/I");
-  jetTree->Branch("legacyEqZeroth"  ,&jInfo.legacyEqZeroth    ,"legacyEqZeroth/F");
+  jetTree->Branch("LegIsPV0"        ,&jInfo.LegIsPV0          ,"LegIsPV0/I");
   
   
   // ===== PUJID variables
