@@ -17,10 +17,10 @@
 #root -l -q -b JetPerformanceStudies_PUJID.cc++\(3\);
 
 
-root -l -q -b PUJIDOpetimisation.cc++\(1,\"VBF\"\);
-root -l -q -b PUJIDOpetimisation.cc++\(2,\"VBF\"\);
-root -l -q -b PUJIDOpetimisation.cc++\(3,\"VBF\"\);
+root -l -q -b PUJIDOpetimisation.cc++'(1,"VBF")';
+root -l -q -b PUJIDOpetimisation.cc++'(2,"VBF")';
+root -l -q -b PUJIDOpetimisation.cc++'(3,"VBF")';
 
-root -l -q -b PUJIDOpetimisation.cc++\(1,\"GGF\"\);
-root -l -q -b PUJIDOpetimisation.cc++\(2,\"GGF\"\);
-root -l -q -b PUJIDOpetimisation.cc++\(3,\"GGF\"\);
+root -l -q -b PUJIDOpetimisation.cc++'(1,"GGF")';
+root -l -q -b PUJIDOpetimisation.cc++'(2,"GGF")';
+root -l -q -b PUJIDOpetimisation.cc++'(3,"GGF")';

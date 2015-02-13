@@ -120,6 +120,41 @@ void Draw3Legend(TH1 *histo1,
 }
 
 
+void Draw4Legend(TH1 *histo1, 
+		 TH1 *histo2,
+		 TH1 *histo3,
+		 TH1 *histo4,
+		 std::string label1, 
+		 std::string label2, 
+		 std::string label3, 
+		 std::string label4, 
+		 std::string opt="1")
+{
+  TLegend *legend ;
+  if(opt=="1") legend = new TLegend(0.5,0.75,0.85,0.85,NULL,"brNDC");
+  if(opt=="2") legend = new TLegend(0.5,0.65,0.85,0.75,NULL,"brNDC");
+  if(opt=="3") legend = new TLegend(0.5,0.55,0.85,0.65,NULL,"brNDC");
+  
+  legend->SetTextAlign(22);
+  TLegendEntry* entry1 = legend->AddEntry(histo1,label1.c_str(),"LP");  
+  entry1->SetTextColor(histo1->GetLineColor());
+  
+  TLegendEntry* entry2 = legend->AddEntry(histo2,label2.c_str(),"LP");
+  entry2->SetTextColor(histo2->GetLineColor());
+  
+  TLegendEntry* entry3 = legend->AddEntry(histo3,label3.c_str(),"LP");
+  entry3->SetTextColor(histo3->GetLineColor());
+
+  TLegendEntry* entry4 = legend->AddEntry(histo4,label4.c_str(),"LP");
+  entry4->SetTextColor(histo4->GetLineColor());
+  
+  legend->SetFillColor(0); 
+  legend->SetFillStyle(0); 
+  legend->Draw(); 
+}
+
+
+
 void Draw3Legend(TGraph *histo1, 
 		 TGraph *histo2,
 		 TGraph *histo3,

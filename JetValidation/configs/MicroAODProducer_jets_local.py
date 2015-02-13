@@ -96,117 +96,117 @@ process.selectedElectrons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("
 # select isolated  muons and electrons collections
 # tune the requirements to whatever ID and isolation you prefer 
 # first select the packedCandidates passing the loose "fromPV()" requirement (equivalent to CHS definition used for Jets in Run I)
-#process.pfCHS0 = cms.EDFilter("CandPtrSelector", src = cms.InputTag("packedPFCandidates"), cut = cms.string("fromPV"))
-#
-## then remove the previously selected muons
-#process.pfNoMuonCHS0 =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHS0"), veto = cms.InputTag("selectedMuons"))
-#
-## then remove the previously selected electrons
-#process.pfNoElectronsCHS0 = cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfNoMuonCHS0"), veto =  cms.InputTag("selectedElectrons"))
-#
-## Import RECO jet producer for ak4 PF and GEN jet
-#from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
-#from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
-#process.ak4PFJetsCHS0 = ak4PFJets.clone(src = 'pfNoElectronsCHS0', doAreaFastjet = True)
-#process.ak4GenJets0   = ak4GenJets.clone(src = 'packedGenParticles')
-#
-## The following is make patJets, but EI is done with the above
-#process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
-#process.load("Configuration.EventContent.EventContent_cff")
-#process.load('Configuration.StandardSequences.Geometry_cff')
-#process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-#process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-#process.GlobalTag.globaltag = 'PLS170_V7AN1::All'
-#from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
-#addJetCollection(
-#    process,
-#    postfix   = "",
-#    labelName = 'AK4PFCHS0',
-#    jetSource = cms.InputTag('ak4PFJetsCHS0'),
-#    trackSource = cms.InputTag('unpackedTracksAndVertices'), 
-#    pvSource = cms.InputTag('unpackedTracksAndVertices'), 
-#    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-#    btagDiscriminators = [      'combinedSecondaryVertexBJetTags'     ]
-#    ,algo= 'AK', rParam = 0.4
-#    )
-#
-## adjust MC matching
-#process.patJetGenJetMatchAK4PFCHS0.matched = "ak4GenJets"
-#process.patJetPartonMatchAK4PFCHS0.matched = "prunedGenParticles"
-#process.patJetPartons.particles = "prunedGenParticles"
-#
-## adjust PV used for Jet Corrections
-#process.patJetCorrFactorsAK4PFCHS0.primaryVertices = "offlineSlimmedPrimaryVertices"
-#
-## the following part is needed if you want to run b-tagging on the freshly made jets
-## CAVEAT: it is not 100% the same b-tagging as in RECO, but performance plots are almost identical
-## As tracks are not stored in miniAOD, and b-tag fwk for CMSSW < 72X does not accept candidates
-## we need to recreate tracks and pv for btagging in standard reco format:
-#process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
-#process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
-#
+process.pfCHS0 = cms.EDFilter("CandPtrSelector", src = cms.InputTag("packedPFCandidates"), cut = cms.string("fromPV"))
+
+# then remove the previously selected muons
+process.pfNoMuonCHS0 =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHS0"), veto = cms.InputTag("selectedMuons"))
+
+# then remove the previously selected electrons
+process.pfNoElectronsCHS0 = cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfNoMuonCHS0"), veto =  cms.InputTag("selectedElectrons"))
+
+# Import RECO jet producer for ak4 PF and GEN jet
+from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
+from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
+process.ak4PFJetsCHS0 = ak4PFJets.clone(src = 'pfNoElectronsCHS0', doAreaFastjet = True)
+process.ak4GenJets0   = ak4GenJets.clone(src = 'packedGenParticles')
+
+# The following is make patJets, but EI is done with the above
+process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
+process.load("Configuration.EventContent.EventContent_cff")
+process.load('Configuration.StandardSequences.Geometry_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+process.GlobalTag.globaltag = 'PLS170_V7AN1::All'
+from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
+addJetCollection(
+    process,
+    postfix   = "",
+    labelName = 'AK4PFCHS0',
+    jetSource = cms.InputTag('ak4PFJetsCHS0'),
+    trackSource = cms.InputTag('unpackedTracksAndVertices'), 
+    pvSource = cms.InputTag('unpackedTracksAndVertices'), 
+    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+    btagDiscriminators = [      'combinedSecondaryVertexBJetTags'     ]
+    ,algo= 'AK', rParam = 0.4
+    )
+
+# adjust MC matching
+process.patJetGenJetMatchAK4PFCHS0.matched = "ak4GenJets"
+process.patJetPartonMatchAK4PFCHS0.matched = "prunedGenParticles"
+process.patJetPartons.particles = "prunedGenParticles"
+
+# adjust PV used for Jet Corrections
+process.patJetCorrFactorsAK4PFCHS0.primaryVertices = "offlineSlimmedPrimaryVertices"
+
+# the following part is needed if you want to run b-tagging on the freshly made jets
+# CAVEAT: it is not 100% the same b-tagging as in RECO, but performance plots are almost identical
+# As tracks are not stored in miniAOD, and b-tag fwk for CMSSW < 72X does not accept candidates
+# we need to recreate tracks and pv for btagging in standard reco format:
+process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
+process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
+
 ##---------> END  PFCHS 0 REPROCESSING <-------------------
 #
-##---------> PFCHS Legacy VERTEX <-------------------
-## select isolated  muons and electrons collections
-## tune the requirements to whatever ID and isolation you prefer 
-## Do "projections"
-#process.flashggCHSLegacyVertexCandidates = cms.EDProducer('FlashggCHSLegacyVertexCandidateProducer',
-#                                                          PFCandidatesTag=cms.untracked.InputTag('packedPFCandidates'),
-#                                                          DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-#                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-#                                                          VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices')
-#                                                          )
-#
-## first select the packedCandidates passing the loose "fromPV()" requirement (equivalent to CHS definition used for Jets in Run I)
-#process.pfCHSLeg = cms.EDFilter("CandPtrSelector", src = cms.InputTag("flashggCHSLegacyVertexCandidates"), cut = cms.string(""))
-#
-## then remove the previously selected muons
-#process.pfNoMuonCHSLeg =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHSLeg"), veto = cms.InputTag("selectedMuons"))
-#
-## then remove the previously selected electrons
-#process.pfNoElectronsCHSLeg = cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfNoMuonCHSLeg"), veto =  cms.InputTag("selectedElectrons"))
-#
-## Import RECO jet producer for ak4 PF and GEN jet
-#from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
-#from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
-#process.ak4PFJetsCHSLeg = ak4PFJets.clone(src = 'pfNoElectronsCHSLeg', doAreaFastjet = True)
-#process.ak4GenJetsLeg = ak4GenJets.clone(src = 'packedGenParticles')
-#
-## The following is make patJets, but EI is done with the above
-#process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
-#process.load("Configuration.EventContent.EventContent_cff")
-#process.load('Configuration.StandardSequences.Geometry_cff')
-#process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-#process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-#process.GlobalTag.globaltag = 'PLS170_V7AN1::All'
-#from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
-#addJetCollection(
-#    process,
-#    postfix   = "",
-#    labelName = 'AK4PFCHSLeg',
-#    jetSource = cms.InputTag('ak4PFJetsCHSLeg'),
-#    trackSource = cms.InputTag('unpackedTracksAndVertices'), 
-#    pvSource = cms.InputTag('unpackedTracksAndVertices'), 
-#    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-#    btagDiscriminators = [      'combinedSecondaryVertexBJetTags'     ]
-#    ,algo= 'AK', rParam = 0.4
-#    )
-#
-## adjust MC matching
-#process.patJetGenJetMatchAK4PFCHSLeg.matched = "ak4GenJetsLeg"
-#process.patJetPartonMatchAK4PFCHSLeg.matched = "prunedGenParticles"
-#process.patJetPartons.particles = "prunedGenParticles"
-#
-## adjust PV used for Jet Corrections
-#process.patJetCorrFactorsAK4PFCHSLeg.primaryVertices = "offlineSlimmedPrimaryVertices"
-#
-## the following part is needed if you want to run b-tagging on the freshly made jets
-## CAVEAT: it is not 100% the same b-tagging as in RECO, but performance plots are almost identical
-## As tracks are not stored in miniAOD, and b-tag fwk for CMSSW < 72X does not accept candidates
-## we need to recreate tracks and pv for btagging in standard reco format:
-#process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
-#process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
+#---------> PFCHS Legacy VERTEX <-------------------
+# select isolated  muons and electrons collections
+# tune the requirements to whatever ID and isolation you prefer 
+# Do "projections"
+process.flashggCHSLegacyVertexCandidates = cms.EDProducer('FlashggCHSLegacyVertexCandidateProducer',
+                                                          PFCandidatesTag=cms.untracked.InputTag('packedPFCandidates'),
+                                                          DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
+                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                                          VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices')
+                                                          )
+
+# first select the packedCandidates passing the loose "fromPV()" requirement (equivalent to CHS definition used for Jets in Run I)
+process.pfCHSLeg = cms.EDFilter("CandPtrSelector", src = cms.InputTag("flashggCHSLegacyVertexCandidates"), cut = cms.string(""))
+
+# then remove the previously selected muons
+process.pfNoMuonCHSLeg =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHSLeg"), veto = cms.InputTag("selectedMuons"))
+
+# then remove the previously selected electrons
+process.pfNoElectronsCHSLeg = cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfNoMuonCHSLeg"), veto =  cms.InputTag("selectedElectrons"))
+
+# Import RECO jet producer for ak4 PF and GEN jet
+from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
+from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
+process.ak4PFJetsCHSLeg = ak4PFJets.clone(src = 'pfNoElectronsCHSLeg', doAreaFastjet = True)
+process.ak4GenJetsLeg = ak4GenJets.clone(src = 'packedGenParticles')
+
+# The following is make patJets, but EI is done with the above
+process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
+process.load("Configuration.EventContent.EventContent_cff")
+process.load('Configuration.StandardSequences.Geometry_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+process.GlobalTag.globaltag = 'PLS170_V7AN1::All'
+from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
+addJetCollection(
+    process,
+    postfix   = "",
+    labelName = 'AK4PFCHSLeg',
+    jetSource = cms.InputTag('ak4PFJetsCHSLeg'),
+    trackSource = cms.InputTag('unpackedTracksAndVertices'), 
+    pvSource = cms.InputTag('unpackedTracksAndVertices'), 
+    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+    btagDiscriminators = [      'combinedSecondaryVertexBJetTags'     ]
+    ,algo= 'AK', rParam = 0.4
+    )
+
+# adjust MC matching
+process.patJetGenJetMatchAK4PFCHSLeg.matched = "ak4GenJetsLeg"
+process.patJetPartonMatchAK4PFCHSLeg.matched = "prunedGenParticles"
+process.patJetPartons.particles = "prunedGenParticles"
+
+# adjust PV used for Jet Corrections
+process.patJetCorrFactorsAK4PFCHSLeg.primaryVertices = "offlineSlimmedPrimaryVertices"
+
+# the following part is needed if you want to run b-tagging on the freshly made jets
+# CAVEAT: it is not 100% the same b-tagging as in RECO, but performance plots are almost identical
+# As tracks are not stored in miniAOD, and b-tag fwk for CMSSW < 72X does not accept candidates
+# we need to recreate tracks and pv for btagging in standard reco format:
+process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
+process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
 
 #---------> END PFCHS Leg VERTEX <-------------------
 
@@ -408,22 +408,22 @@ process.flashggJets = cms.EDProducer('FlashggJetProducer',
                                      PileupJetIdParameters=cms.PSet(full_53x) # from PileupJetIDParams_cfi
                                  )
 
-#process.flashggJetsPFCHS0 = cms.EDProducer('FlashggJetProducer',
-#                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-#                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
-#                                           JetTag=cms.untracked.InputTag('patJetsAK4PFCHS0'),
-#                                           VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-#                                           PileupJetIdParameters = cms.PSet(full_53x) # from PileupJetIDParams_cfi
-#                                           )
-#
-#process.flashggJetsPFCHSLeg = cms.EDProducer('FlashggJetProducer',
-#                                             DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-#                                             VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
-#                                             JetTag=cms.untracked.InputTag('patJetsAK4PFCHSLeg'),
-#                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-#                                             PileupJetIdParameters = cms.PSet(full_53x), # from PileupJetIDParams_cfi
-#                                             UseConeBetaStar = cms.untracked.bool(True)
-#                                         )
+process.flashggJetsPFCHS0 = cms.EDProducer('FlashggJetProducer',
+                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
+                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
+                                           JetTag=cms.untracked.InputTag('patJetsAK4PFCHS0'),
+                                           VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                           PileupJetIdParameters = cms.PSet(full_53x) # from PileupJetIDParams_cfi
+                                       )
+
+process.flashggJetsPFCHSLeg = cms.EDProducer('FlashggJetProducer',
+                                             DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
+                                             VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
+                                             JetTag=cms.untracked.InputTag('patJetsAK4PFCHSLeg'),
+                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                             PileupJetIdParameters = cms.PSet(full_53x), # from PileupJetIDParams_cfi
+                                             UseConeBetaStar = cms.untracked.bool(True)
+                                         )
 #process.flashggJetsPUPPI0 = cms.EDProducer('FlashggJetProducer',
 #                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
 #                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
@@ -475,18 +475,18 @@ process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTree
                                                        StringTag		= cms.string("PF"),
                                                    )
 
-#process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-#                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-#                                                             StringTag		= cms.string("PFCHS0"),
-#)
-#
-#process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
-#                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
-#                                                               StringTag	= cms.string("PFCHSLeg"),
-#                                                           )
-#
+process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
+                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
+                                                             StringTag		= cms.string("PFCHS0"),
+                                                         )
+
+process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
+                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
+                                                               StringTag	= cms.string("PFCHSLeg"),
+                                                           )
+
 
 
 
@@ -507,8 +507,8 @@ process.options = cms.untracked.PSet(
     )
 
 process.p = cms.Path( process.flashggMicroAODSequence +
-                      process.flashggJetValidationTreeMaker #+
-                      #process.flashggJetValidationTreeMakerPFCHS0 +
-                      #process.flashggJetValidationTreeMakerPFCHSLeg 
+                      process.flashggJetValidationTreeMaker +
+                      process.flashggJetValidationTreeMakerPFCHS0 +
+                      process.flashggJetValidationTreeMakerPFCHSLeg 
                   )
 process.e = cms.EndPath(process.out)
