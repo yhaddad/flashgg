@@ -2,6 +2,7 @@
 // Adapted from the flashggCommissioning tree maker code  by C. Favaro et al.
 // modified by Y.Haddad
 //
+
 #include <memory>
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -57,8 +58,10 @@ struct info_t {
   float phi;
   float energy;
   float mass;
+  float dZ;
   float uncorrected_pt;
-  int pdgId;
+  int   pdgId;
+  int   event;
 };
 
 class FlashggPFCollAnalyzer : public edm::EDAnalyzer {
@@ -77,24 +80,26 @@ private:
   virtual void endJob() override;
 
   //void initEventStructure();
-
+  
   EDGetTokenT<View<reco::Candidate> > pfCollPF_;
   EDGetTokenT<View<reco::Candidate> > pfCollPFCHS0_;
   EDGetTokenT<View<reco::Candidate> > pfCollPFCHSLeg_;
-  EDGetTokenT<View<reco::Candidate> > pfCollPUPPI0_;
-  EDGetTokenT<View<reco::Candidate> > pfCollPUPPILeg_;
-EDGetTokenT<View<reco::Vertex> > vertexToken_;
+  //EDGetTokenT<View<reco::Candidate> > pfCollPUPPI0_;
+  //EDGetTokenT<View<reco::Candidate> > pfCollPUPPILeg_;
+  EDGetTokenT<View<reco::Vertex> > vertexToken_;
+  EDGetTokenT<edm::View<flashgg::DiPhotonCandidate> > diPhotonToken_;
+  
   TTree *tree_PF;
   TTree *tree_PFCHS0;
   TTree *tree_PFCHSLeg;
-  TTree *tree_PUPPI0;
-  TTree *tree_PUPPILeg;
+  //TTree *tree_PUPPI0;
+  //TTree *tree_PUPPILeg;
 
   info_t info_PF;
   info_t info_PFCHS0;
   info_t info_PFCHSLeg;
-  info_t info_PUPPI0;
-  info_t info_PUPPILeg;
+  //info_t info_PUPPI0;
+  //info_t info_PUPPILeg;
     
   TH1F *pfPt ;      
   TH1F *pfEta ;     
@@ -105,12 +110,12 @@ EDGetTokenT<View<reco::Vertex> > vertexToken_;
   TH1F *pfchsLegPt ;
   TH1F *pfchsLegEta;
   TH1F *pfchsLegPhi;
-  TH1F *puppi0Pt   ;
-  TH1F *puppi0Eta  ;
-  TH1F *puppi0Phi  ;
-  TH1F *puppiLegPt ;
-  TH1F *puppiLegEta;
-  TH1F *puppiLegPhi;
+  //TH1F *puppi0Pt   ;
+  //TH1F *puppi0Eta  ;
+  //TH1F *puppi0Phi  ;
+  //TH1F *puppiLegPt ;
+  //TH1F *puppiLegEta;
+  //TH1F *puppiLegPhi;
   
 
 
@@ -141,9 +146,10 @@ FlashggPFCollAnalyzer::FlashggPFCollAnalyzer(const edm::ParameterSet& iConfig):
   pfCollPF_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPF"))),
   pfCollPFCHS0_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPFPFCHS0"))),
   pfCollPFCHSLeg_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPFPFCHSLeg"))),
-  pfCollPUPPI0_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPFPUPPI0"))),
-  pfCollPUPPILeg_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPFPUPPILeg"))),
-	vertexToken_(consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices"))))
+  //pfCollPUPPI0_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPFPUPPI0"))),
+  //pfCollPUPPILeg_(consumes<View<reco::Candidate> >(iConfig.getParameter<InputTag>("CollTagPFPUPPILeg"))),
+  vertexToken_(consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
+  diPhotonToken_(consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons"))))
 {
 }
 
@@ -152,17 +158,19 @@ FlashggPFCollAnalyzer::~FlashggPFCollAnalyzer()
 
 }
 
+
+int ievent=0;
 void
 FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   // ********************************************************************************
   // access edm objects
-
+  
 
   Handle<View<reco::Candidate> > pfCollPF;
   iEvent.getByToken(pfCollPF_,pfCollPF);
   const PtrVector<reco::Candidate>& pfPtrs = pfCollPF->ptrVector();
-
+  
   Handle<View<reco::Candidate> > pfCollPFCHS0;
   iEvent.getByToken(pfCollPFCHS0_,pfCollPFCHS0);
   const PtrVector<reco::Candidate>& pfchs0Ptrs = pfCollPFCHS0->ptrVector();
@@ -170,101 +178,128 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   Handle<View<reco::Candidate> > pfCollPFCHSLeg;
   iEvent.getByToken(pfCollPFCHSLeg_,pfCollPFCHSLeg);
   const PtrVector<reco::Candidate>& pfchsLegPtrs = pfCollPFCHSLeg->ptrVector();
-
-  Handle<View<reco::Candidate> > pfCollPUPPI0;
-  iEvent.getByToken(pfCollPUPPI0_,pfCollPUPPI0);
-  const PtrVector<reco::Candidate>& puppi0Ptrs = pfCollPUPPI0->ptrVector();
-
-
-  Handle<View<reco::Candidate> > pfCollPUPPILeg;
-  iEvent.getByToken(pfCollPUPPILeg_,pfCollPUPPILeg);
-  const PtrVector<reco::Candidate>& puppiLegPtrs = pfCollPUPPILeg->ptrVector();
-	Handle<View<reco::Vertex> > primaryVertices;
-	iEvent.getByToken(vertexToken_,primaryVertices);
-	const PtrVector<reco::Vertex>& vtxs = primaryVertices->ptrVector();
+  
+  /*
+    Handle<View<reco::Candidate> > pfCollPUPPI0;
+    iEvent.getByToken(pfCollPUPPI0_,pfCollPUPPI0);
+    const PtrVector<reco::Candidate>& puppi0Ptrs = pfCollPUPPI0->ptrVector();
 
 
+    Handle<View<reco::Candidate> > pfCollPUPPILeg;
+    iEvent.getByToken(pfCollPUPPILeg_,pfCollPUPPILeg);
+    const PtrVector<reco::Candidate>& puppiLegPtrs = pfCollPUPPILeg->ptrVector();
+  */
+  
+  Handle<View<reco::Vertex> > primaryVertices;
+  iEvent.getByToken(vertexToken_,primaryVertices);
+  const PtrVector<reco::Vertex>& vtxs = primaryVertices->ptrVector();
+  
+  Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
+  iEvent.getByToken(diPhotonToken_,diPhotons);
+  const PtrVector<flashgg::DiPhotonCandidate>& diPhotonPointers = diPhotons->ptrVector();
+  
+  
+  bool skip = true;
+  if (diPhotonPointers.size()==0){
+    skip =true;
+  }else{
+    if(fabs(diPhotonPointers[0]->getVertex()->z() - vtxs[0]->z())<0.01){
+      skip = false;
+    }
+  }
+  
+  if (skip) return;
+  
+  std::cout << " +++"<< ievent <<"+++ " << std::endl;
+  
   for (UInt_t Loop =0; Loop < pfPtrs.size() ; Loop++){
     
     Float_t pt             = pfPtrs[Loop]->pt();
-  //  Float_t uncorrected_pt = pfPtrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = pfPtrs[Loop]->mass();
     Float_t eta            = pfPtrs[Loop]->eta();
     Float_t phi            = pfPtrs[Loop]->phi();
     int     pdgId          = pfPtrs[Loop]->pdgId();
     
     info_PF.pt             = pt;
-  //  info_PF.uncorrected_pt = uncorrected_pt;
     info_PF.mass           = mass;
     info_PF.eta            = eta;
     info_PF.phi            = phi;
     info_PF.pdgId          = int(pdgId);
-    
-    pfPt->Fill(pt);
-    pfEta->Fill(eta);
-    pfPhi->Fill(phi);
+    info_PF.dZ             = 0;//pfPtrs[Loop]->dz(vtxs[0]->position());
+    info_PF.event      = ievent;
+    //pfPt ->Fill(pt);
+    //pfEta->Fill(eta);
+    //pfPhi->Fill(phi);
     
     tree_PF->Fill();
-    
   }
   
   for (UInt_t Loop =0; Loop < pfchs0Ptrs.size() ; Loop++){
-    
+    if(pfchs0Ptrs[Loop]->charge()==0) continue;
     Float_t pt             = pfchs0Ptrs[Loop]->pt();
-  //  Float_t uncorrected_pt = pfchs0Ptrs[Loop]->correctedJet("raw").pt();
+    //  Float_t uncorrected_pt = pfchs0Ptrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = pfchs0Ptrs[Loop]->mass();
     Float_t eta            = pfchs0Ptrs[Loop]->eta();
     Float_t phi            = pfchs0Ptrs[Loop]->phi();
     int     pdgId          = pfchs0Ptrs[Loop]->pdgId();
     
     info_PFCHS0.pt             = pt;
-  //  info_PFCHS0.uncorrected_pt = uncorrected_pt;
+    //  info_PFCHS0.uncorrected_pt = uncorrected_pt;
     info_PFCHS0.mass           = mass;
     info_PFCHS0.eta            = eta;
     info_PFCHS0.phi            = phi;
     info_PFCHS0.pdgId          = int(pdgId);
-    
-		//std::cout << "[PFCHS0] particle " << Loop <<  ", eta "<< eta << ", phi " << phi << ", pt " << pt << ", pdgid " << pdgId << ", dz" << pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
-		if(vtxs.size());
-    pfchs0Pt->Fill(pt);
-    pfchs0Eta->Fill(eta);
-    pfchs0Phi->Fill(phi);
+    info_PFCHS0.event          = ievent;
+    info_PFCHS0.dZ             = pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z();
+    //info_PFCHS0.dZ             = pfchs0Ptrs[Loop]->dz(vtxs[0]->position());
+    //std::cout << " diPhotonPointers.size()==0 :: dz = " <<   pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
+    //std::cout << "[PFCHS0] particle " << Loop <<  ", eta "<< eta << ", phi " << phi << ", pt " << pt << ", pdgid " << pdgId << ", dz" << pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
+    if(vtxs.size());
+    //pfchs0Pt->Fill(pt);
+    //pfchs0Eta->Fill(eta);
+    //pfchs0Phi->Fill(phi);
     
     tree_PFCHS0->Fill();
   }
   for (UInt_t Loop =0; Loop < pfchsLegPtrs.size() ; Loop++){
-    
+    if(pfchsLegPtrs[Loop]->charge()) continue;
     Float_t pt             = pfchsLegPtrs[Loop]->pt();
-  //  Float_t uncorrected_pt = pfchsLegPtrs[Loop]->correctedJet("raw").pt();
+    //  Float_t uncorrected_pt = pfchsLegPtrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = pfchsLegPtrs[Loop]->mass();
     Float_t eta            = pfchsLegPtrs[Loop]->eta();
     Float_t phi            = pfchsLegPtrs[Loop]->phi();
     int     pdgId          = pfchsLegPtrs[Loop]->pdgId();
     
     info_PFCHSLeg.pt             = pt;
- //   info_PFCHSLeg.uncorrected_pt = uncorrected_pt;
+    //   info_PFCHSLeg.uncorrected_pt = uncorrected_pt;
     info_PFCHSLeg.mass           = mass;
     info_PFCHSLeg.eta            = eta;
     info_PFCHSLeg.phi            = phi;
     info_PFCHSLeg.pdgId          = int(pdgId);
+    info_PFCHSLeg.dZ             = pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z();
+    //info_PFCHSLeg.dZ             = pfchsLegPtrs[Loop]->dz(vtxs[0]->position());
     
-    pfchsLegPt->Fill(pt);
-    pfchsLegEta->Fill(eta);
-    pfchsLegPhi->Fill(phi);
+    if (fabs(pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z()) > 2) std::cout << " diPhotonPointers.size()==0 ("<< int(diPhotonPointers.size()==0) << "):: dz = " <<  pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
+    info_PFCHSLeg.event            = ievent;
+    //pfchsLegPt->Fill(pt);
+    //pfchsLegEta->Fill(eta);
+    //pfchsLegPhi->Fill(phi);
     
     tree_PFCHSLeg->Fill();
   }
-  for (UInt_t Loop =0; Loop < puppi0Ptrs.size() ; Loop++){
+  // puppi0
+  /*
+    for (UInt_t Loop =0; Loop < puppi0Ptrs.size() ; Loop++){
     
     Float_t pt             = puppi0Ptrs[Loop]->pt();
-   // Float_t uncorrected_pt = puppi0Ptrs[Loop]->correctedJet("raw").pt();
+    // Float_t uncorrected_pt = puppi0Ptrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = puppi0Ptrs[Loop]->mass();
     Float_t eta            = puppi0Ptrs[Loop]->eta();
     Float_t phi            = puppi0Ptrs[Loop]->phi();
     int     pdgId          = puppi0Ptrs[Loop]->pdgId();
     
     info_PUPPI0.pt             = pt;
- //   info_PUPPI0.uncorrected_pt = uncorrected_pt;
+    //   info_PUPPI0.uncorrected_pt = uncorrected_pt;
     info_PUPPI0.mass           = mass;
     info_PUPPI0.eta            = eta;
     info_PUPPI0.phi            = phi;
@@ -275,19 +310,19 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     puppi0Phi->Fill(phi);
     
     tree_PUPPI0->Fill();
-  }
+    }
 	
-  for (UInt_t Loop =0; Loop < puppiLegPtrs.size() ; Loop++){
+    for (UInt_t Loop =0; Loop < puppiLegPtrs.size() ; Loop++){
     
     Float_t pt             = puppiLegPtrs[Loop]->pt();
-  //  Float_t uncorrected_pt = puppiLegPtrs[Loop]->correctedJet("raw").pt();
+    //  Float_t uncorrected_pt = puppiLegPtrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = puppiLegPtrs[Loop]->mass();
     Float_t eta            = puppiLegPtrs[Loop]->eta();
     Float_t phi            = puppiLegPtrs[Loop]->phi();
     int     pdgId          = puppiLegPtrs[Loop]->pdgId();
     
     info_PUPPILeg.pt             = pt;
-   // info_PUPPILeg.uncorrected_pt = uncorrected_pt;
+    // info_PUPPILeg.uncorrected_pt = uncorrected_pt;
     info_PUPPILeg.mass           = mass;
     info_PUPPILeg.eta            = eta;
     info_PUPPILeg.phi            = phi;
@@ -298,8 +333,9 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     puppiLegPhi->Fill(phi);
     
     tree_PUPPILeg->Fill();
-  }
-	
+    }
+  */
+  ievent++;
 }
 
 
@@ -309,65 +345,68 @@ FlashggPFCollAnalyzer::beginJob()
 {
 
 
-  pfPt         = fs_->make<TH1F>("pfPt","pfPt",500,0,500);
-  pfEta        = fs_->make<TH1F>("pfEta","pfEta",500,-5,5);
-  pfPhi        = fs_->make<TH1F>("pfPhi","pfPhi",500,-6.3,6.3);
-  pfchs0Pt     = fs_->make<TH1F>("pfchs0Pt","pfchs0Pt",500,0,500);
-  pfchs0Eta    = fs_->make<TH1F>("pfchs0Eta","pfchs0Eta",500,-5,5);
-  pfchs0Phi    = fs_->make<TH1F>("pfchs0Phi","pfchs0Phi",500,-6.3,6.3);
-  pfchsLegPt   = fs_->make<TH1F>("pfchsLegPt","pfchsLegPt",500,0,500);
-  pfchsLegEta  = fs_->make<TH1F>("pfchsLegEta","pfchsLegEta",500,-5,5);
-  pfchsLegPhi  = fs_->make<TH1F>("pfchsLegPhi","pfchsLegPhi",500,-6.3,6.3);
-  puppi0Pt     = fs_->make<TH1F>("puppi0Pt","puppi0Pt",500,0,500);
-  puppi0Eta    = fs_->make<TH1F>("puppi0Eta","puppi0Eta",500,-5,5);
-  puppi0Phi    = fs_->make<TH1F>("puppi0Phi","puppi0Phi",500,-6.3,6.3);
-  puppiLegPt   = fs_->make<TH1F>("puppiLegPt","puppiLegPt",500,0,500);
-  puppiLegEta  = fs_->make<TH1F>("puppiLegEta","puppiLegEta",500,-5,5);
-  puppiLegPhi  = fs_->make<TH1F>("puppiLegPhi","puppiLegPhi",500,-6.3,6.3);
- 
+  //pfPt         = fs_->make<TH1F>("pfPt","pfPt",500,0,500);
+  //pfEta        = fs_->make<TH1F>("pfEta","pfEta",500,-5,5);
+  //pfPhi        = fs_->make<TH1F>("pfPhi","pfPhi",500,-6.3,6.3);
+  //pfchs0Pt     = fs_->make<TH1F>("pfchs0Pt","pfchs0Pt",500,0,500);
+  //pfchs0Eta    = fs_->make<TH1F>("pfchs0Eta","pfchs0Eta",500,-5,5);
+  //pfchs0Phi    = fs_->make<TH1F>("pfchs0Phi","pfchs0Phi",500,-6.3,6.3);
+  //pfchsLegPt   = fs_->make<TH1F>("pfchsLegPt","pfchsLegPt",500,0,500);
+  //pfchsLegEta  = fs_->make<TH1F>("pfchsLegEta","pfchsLegEta",500,-5,5);
+  //pfchsLegPhi  = fs_->make<TH1F>("pfchsLegPhi","pfchsLegPhi",500,-6.3,6.3);
+  //puppi0Pt     = fs_->make<TH1F>("puppi0Pt","puppi0Pt",500,0,500);
+  //puppi0Eta    = fs_->make<TH1F>("puppi0Eta","puppi0Eta",500,-5,5);
+  //puppi0Phi    = fs_->make<TH1F>("puppi0Phi","puppi0Phi",500,-6.3,6.3);
+  //puppiLegPt   = fs_->make<TH1F>("puppiLegPt","puppiLegPt",500,0,500);
+  //puppiLegEta  = fs_->make<TH1F>("puppiLegEta","puppiLegEta",500,-5,5);
+  //puppiLegPhi  = fs_->make<TH1F>("puppiLegPhi","puppiLegPhi",500,-6.3,6.3);
+  
   
   tree_PF = fs_->make<TTree>("tree_PF","");
+  //tree_PF->Branch("event"               ,&info_PF.event              ,"event/I" );
   tree_PF->Branch("pt"               ,&info_PF.pt              ,"pt/F" );
-//  tree_PF->Branch("uncorrected_pt"   ,&info_PF.uncorrected_pt  ,"uncorrected_pt/F" );
   tree_PF->Branch("mass"             ,&info_PF.phi             ,"mass/F");
   tree_PF->Branch("eta"              ,&info_PF.eta             ,"eta/F");
   tree_PF->Branch("phi"              ,&info_PF.phi             ,"phi/F");
   tree_PF->Branch("pdgId"            ,&info_PF.pdgId           ,"pdgId/I");
+  tree_PF->Branch("event"            ,&info_PF.event           ,"event/I");
+  tree_PF->Branch("dZ"               ,&info_PF.dZ              ,"dZ/F");
   
   tree_PFCHS0 = fs_->make<TTree>("tree_PFCHS0","");
+  tree_PFCHS0->Branch("event"             ,&info_PFCHS0.event              ,"event/I" );
   tree_PFCHS0->Branch("pt"               ,&info_PFCHS0.pt              ,"pt/F" );
-//  tree_PFCHS0->Branch("uncorrected_pt"   ,&info_PFCHS0.uncorrected_pt  ,"uncorrected_pt/F" );
   tree_PFCHS0->Branch("mass"             ,&info_PFCHS0.phi             ,"mass/F");
   tree_PFCHS0->Branch("eta"              ,&info_PFCHS0.eta             ,"eta/F");
   tree_PFCHS0->Branch("phi"              ,&info_PFCHS0.phi             ,"phi/F");
   tree_PFCHS0->Branch("pdgId"            ,&info_PFCHS0.pdgId           ,"pdgId/I");
-  
+  tree_PFCHS0->Branch("dZ"               ,&info_PFCHS0.dZ              ,"dZ/F");
   
   tree_PFCHSLeg = fs_->make<TTree>("tree_PFCHSLeg","");
   tree_PFCHSLeg->Branch("pt"               ,&info_PFCHSLeg.pt              ,"pt/F" );
-//  tree_PFCHSLeg->Branch("uncorrected_pt"   ,&info_PFCHSLeg.uncorrected_pt  ,"uncorrected_pt/F" );
   tree_PFCHSLeg->Branch("mass"             ,&info_PFCHSLeg.phi             ,"mass/F");
   tree_PFCHSLeg->Branch("eta"              ,&info_PFCHSLeg.eta             ,"eta/F");
   tree_PFCHSLeg->Branch("phi"              ,&info_PFCHSLeg.phi             ,"phi/F");
   tree_PFCHSLeg->Branch("pdgId"            ,&info_PFCHSLeg.pdgId           ,"pdgId/I");
+  tree_PFCHSLeg->Branch("event"            ,&info_PFCHSLeg.event           ,"event/I");
+  tree_PFCHSLeg->Branch("dZ"               ,&info_PFCHSLeg.dZ              ,"dZ/F");
+  /*
+    tree_PUPPI0 = fs_->make<TTree>("tree_PUPPI0","");
+    tree_PUPPI0->Branch("pt"               ,&info_PUPPI0.pt              ,"pt/F" );
+    //  tree_PUPPI0->Branch("uncorrected_pt"   ,&info_PUPPI0.uncorrected_pt  ,"uncorrected_pt/F" );
+    tree_PUPPI0->Branch("mass"             ,&info_PUPPI0.phi             ,"mass/F");
+    tree_PUPPI0->Branch("eta"              ,&info_PUPPI0.eta             ,"eta/F");
+    tree_PUPPI0->Branch("phi"              ,&info_PUPPI0.phi             ,"phi/F");
+    tree_PUPPI0->Branch("pdgId"            ,&info_PUPPI0.pdgId           ,"pdgId/I");
   
-  tree_PUPPI0 = fs_->make<TTree>("tree_PUPPI0","");
-  tree_PUPPI0->Branch("pt"               ,&info_PUPPI0.pt              ,"pt/F" );
-//  tree_PUPPI0->Branch("uncorrected_pt"   ,&info_PUPPI0.uncorrected_pt  ,"uncorrected_pt/F" );
-  tree_PUPPI0->Branch("mass"             ,&info_PUPPI0.phi             ,"mass/F");
-  tree_PUPPI0->Branch("eta"              ,&info_PUPPI0.eta             ,"eta/F");
-  tree_PUPPI0->Branch("phi"              ,&info_PUPPI0.phi             ,"phi/F");
-  tree_PUPPI0->Branch("pdgId"            ,&info_PUPPI0.pdgId           ,"pdgId/I");
   
-  
-  tree_PUPPILeg = fs_->make<TTree>("tree_PUPPILeg","");
-  tree_PUPPILeg->Branch("pt"               ,&info_PUPPILeg.pt              ,"pt/F" );
- // tree_PUPPILeg->Branch("uncorrected_pt"   ,&info_PUPPILeg.uncorrected_pt  ,"uncorrected_pt/F" );
-  tree_PUPPILeg->Branch("mass"             ,&info_PUPPILeg.phi             ,"mass/F");
-  tree_PUPPILeg->Branch("eta"              ,&info_PUPPILeg.eta             ,"eta/F");
-  tree_PUPPILeg->Branch("phi"              ,&info_PUPPILeg.phi             ,"phi/F");
-  tree_PUPPILeg->Branch("pdgId"            ,&info_PUPPILeg.pdgId           ,"pdgId/I");
-  
+    tree_PUPPILeg = fs_->make<TTree>("tree_PUPPILeg","");
+    tree_PUPPILeg->Branch("pt"               ,&info_PUPPILeg.pt              ,"pt/F" );
+    // tree_PUPPILeg->Branch("uncorrected_pt"   ,&info_PUPPILeg.uncorrected_pt  ,"uncorrected_pt/F" );
+    tree_PUPPILeg->Branch("mass"             ,&info_PUPPILeg.phi             ,"mass/F");
+    tree_PUPPILeg->Branch("eta"              ,&info_PUPPILeg.eta             ,"eta/F");
+    tree_PUPPILeg->Branch("phi"              ,&info_PUPPILeg.phi             ,"phi/F");
+    tree_PUPPILeg->Branch("pdgId"            ,&info_PUPPILeg.pdgId           ,"pdgId/I");
+  */
   //pfPt       ->Sumw2(); 
   //pfEta       ->Sumw2(); 
   //pfPhi       ->Sumw2(); 
