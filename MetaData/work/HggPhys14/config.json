@@ -6,7 +6,7 @@
     "unitsPerJob": 1, 
     "createCrabConfig": true, 
     "checkNFiles": false, 
-    "samples_src": "campaigns/Phys14_sig_samples.json", 
+    "samples_src": "campaigns/Phys14_GGF_VBF_samples.json", 
     "label": null, 
     "outputPath": "/store/group/phys_higgs/cmshgg/sethzenz/flashgg", 
     "mkPilot": false, 
@@ -15,15 +15,12 @@
         "bkg": [], 
         "sig": [
             "/GluGluToHToGG_M-125_13TeV-powheg-pythia6/Phys14DR-PU40bx25_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/GluGluToHToGG_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/TTbarH_HToGG_M-125_13TeV_amcatnlo-pythia8-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/VBF_HToGG_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/WH_ZH_HToGG_M-125_13TeV_pythia6/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
+            "/VBF_HToGG_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
         ]
     }, 
     "lumisPerJob": 10, 
     "outputSite": "T2_CH_CERN", 
-    "flashggVersion": "Phys14MicroAODJetV2", 
+    "flashggVersion": "Phys14MicroAODJetV4", 
     "parameterSet": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/flashgg/JetValidation/configs/MicroAODProducer_jets_grid.py", 
     "__opts__": null
 }
