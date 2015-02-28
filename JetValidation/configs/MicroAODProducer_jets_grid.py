@@ -468,34 +468,6 @@ process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to wo
 #                                       )
 
 
-
-process.TFileService = cms.Service("TFileService",fileName  = cms.string("SethTEST_jetValidationTrees_VBF_HToGG_1k.root"))
-process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                       GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
-                                                       JetTagDz                 = cms.InputTag("flashggJets"),
-                                                       StringTag		= cms.string("PF"),
-                                                   )
-
-process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-                                                             StringTag		= cms.string("PFCHS0"),
-                                                         )
-
-process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
-                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
-                                                               StringTag	= cms.string("PFCHSLeg"),
-                                                           )
-
-#process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
-#                                               CollTagPF         = cms.InputTag("packedPFCandidates"),
-#                                               CollTagPFPFCHS0   = cms.InputTag("pfNoElectronsCHS0"),
-#                                               CollTagPFPFCHSLeg = cms.InputTag("pfNoElectronsCHSLeg"),
-#                                           )
-
-
-
 from flashgg.MicroAODProducers.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
 process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('myMicroAODOutputFile.root'),
                                outputCommands = microAODDefaultOutputCommand
@@ -509,8 +481,8 @@ process.options = cms.untracked.PSet(
 
 process.p = cms.Path( process.flashggMicroAODSequence +
                       #process.flashggPFCollAnalyzer +
-                      process.flashggJetValidationTreeMaker +
-                      process.flashggJetValidationTreeMakerPFCHS0 +
-                      process.flashggJetValidationTreeMakerPFCHSLeg 
+#                      process.flashggJetValidationTreeMaker +
+#                      process.flashggJetValidationTreeMakerPFCHS0 +
+#                      process.flashggJetValidationTreeMakerPFCHSLeg 
                   )
 process.e = cms.EndPath(process.out)
