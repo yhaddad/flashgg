@@ -99,6 +99,14 @@ cd HggPhys14
 echo crabConfig_*.py | xargs -n 1 crab sub
 ```
 
+### PHYS14 JetV0, 28 February 2015, approx 0830 CET
+
+cd $CMSSW_BASE/src/flashgg/MetaData/work
+./prepareCrabJobs.py -C HggPhys14 -U 5 -s campaigns/Phys14_samples.json -V Phys14MicroAODJetV0 -p $CMSSW_BASE/src/JetValidation/configs/MicroAODProducer_jets_local.py
+cd HggPhys14
+echo crabConfig_*.py | xargs -n 1 crab sub
+
+
 ## Running on microAODs
 
 Once the microAOD production is completed, analysis code can be run on the resulting samples.
