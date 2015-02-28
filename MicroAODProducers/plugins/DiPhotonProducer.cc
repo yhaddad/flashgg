@@ -107,6 +107,8 @@ namespace flashgg {
         DiPhotonCandidate dipho(photon1_corr,photon2_corr,pvx);
         dipho.setVertex_index(ivtx);
 
+	std::cout << " The index of the selected vertex is: " << ivtx << std::endl;
+
         // Obviously the last selection has to be for this diphoton or this is wrong
         vertexSelector_->writeInfoFromLastSelectionTo(dipho);
 

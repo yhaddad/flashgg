@@ -72,11 +72,14 @@ namespace flashgg {
 	// Within specified distance of a vertex, so attach only to it (or the closest one if multiple)
 	Ptr<reco::Vertex> vtx =pvPtrs[closestDzIndex];
 	assoc->at(vtx).push_back(cand);
+	std::cout << " Associating cand " << i << " with only with one vertex, dz=" << closestDz << std::endl;
       } else { 
 	// if the track did not attach to any vertex, attach it to ALL vertices!
 	for (unsigned int j = 0 ; j < pvPtrs.size() ; j++) {
 	  Ptr<reco::Vertex> vtx = pvPtrs[j];
 	  assoc->at(vtx).push_back(cand);
+	  double dz = fabs(cand->dz(vtx->position()));
+	  std::cout << " Associating cand " << i << " with only with all vertices, vertex " << j << " dz=" << dz << std::endl;
 	}
       }
     } // loop over pf 

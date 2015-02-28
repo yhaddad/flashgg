@@ -15,14 +15,14 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # +++++ the input source file
 process.source = cms.Source("PoolSource",                #fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_VBF_HToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
-                        fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_GluGluToHToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
+                        fileNames=cms.untracked.vstring("file:myMicroAODOutputFile.root"))
 
 process.MessageLogger.cerr.threshold = 'ERROR'
 
 # +++++ the output files
 process.TFileService = cms.Service("TFileService",fileName = 
                                    #cms.string("/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV_JetValidationTree_v02.root"))
-                                   cms.string("/afs/cern.ch/work/y/yhaddad/TEST_GluGluToHToGG_M-125_13TeV_JetValidationTree_v02.root"))
+                                   cms.string("SethTEST_GluGluToHToGG_M-125_13TeV_JetValidationTree_v02.root"))
 
 # +++++ the processes
 process.flashggJetValidationTreeMaker         = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
@@ -46,11 +46,11 @@ process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValida
 
 #pfColl checkers
 
-#process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
-#                                               CollTagPF         = cms.InputTag("packedPFCandidates"),
-#                                               CollTagPFPFCHS0   = cms.InputTag("pfNoElectronsCHS0"),
-#                                               CollTagPFPFCHSLeg = cms.InputTag("pfNoElectronsCHSLeg"),
-#                                           )
+process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
+                                               CollTagPF         = cms.InputTag("packedPFCandidates"),
+                                               CollTagPFPFCHS0   = cms.InputTag("pfNoElectronsCHS0"),
+                                               CollTagPFPFCHSLeg = cms.InputTag("pfNoElectronsCHSLeg"),
+                                           )
 
 #process.out = cms.OutputModule("PoolOutputModule", 
 #                               #fileName = cms.untracked.string('myMicroAODOutputFile.root'),
@@ -62,7 +62,7 @@ process.options = cms.untracked.PSet(
 )
 
 process.p = cms.Path(
-    #process.flashggPFCollAnalyzer +
+#    process.flashggPFCollAnalyzer +
     process.flashggJetValidationTreeMaker +
     process.flashggJetValidationTreeMakerPFCHS0 +
     process.flashggJetValidationTreeMakerPFCHSLeg 

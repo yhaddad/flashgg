@@ -262,7 +262,7 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     tree_PFCHS0->Fill();
   }
   for (UInt_t Loop =0; Loop < pfchsLegPtrs.size() ; Loop++){
-    if(pfchsLegPtrs[Loop]->charge()) continue;
+    if(pfchsLegPtrs[Loop]->charge()==0) continue;
     Float_t pt             = pfchsLegPtrs[Loop]->pt();
     //  Float_t uncorrected_pt = pfchsLegPtrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = pfchsLegPtrs[Loop]->mass();

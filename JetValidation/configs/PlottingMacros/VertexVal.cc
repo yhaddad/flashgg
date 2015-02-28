@@ -22,7 +22,7 @@ void VertexVal(int event=-1){
   std::map<double ,TH1F*>     h_varpt_CHS0;
   std::map<double ,TH1F*>     h_varpt_CHSLeg;
   
-  TFile *file =  TFile::Open("/afs/cern.ch/work/y/yhaddad/PFVertexValidationTrees_VBF_HToGG.root");
+  TFile *file =  TFile::Open("../SethTEST_jetValidationTrees_VBF_HToGG_1k.root");
   
   TTree*     tree_CHS0  =(TTree*)file->Get("flashggPFCollAnalyzer/tree_PFCHS0");;
   TTree*     tree_CHSLeg=(TTree*)file->Get("flashggPFCollAnalyzer/tree_PFCHSLeg");;

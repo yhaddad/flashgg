@@ -42,6 +42,8 @@ namespace flashgg {
     vertexCandidateMapToken_(consumes<VertexCandidateMap>(iConfig.getParameter<InputTag>("VertexCandidateMapTag"))),
     useZeroth(iConfig.getUntrackedParameter<bool>("UseZeroth",false))
   {
+    std::cout << " CHSLegacyVertexCandidateProducer using vtxmap=" << (iConfig.getParameter<InputTag>("VertexCandidateMapTag")).label()
+              << " pfcands=" << (iConfig.getUntrackedParameter<InputTag> ("PFCandidatesTag", InputTag("packedPFCandidates"))).label() << std::endl;
     produces<vector<pat::PackedCandidate> >();
   }
 
@@ -69,7 +71,7 @@ namespace flashgg {
     // Handle<reco::VertexCollection> primaryVertices;
     evt.getByToken(vertexCandidateMapToken_,vtxmap);
     edm::Ptr<reco::Vertex> flashVertex;
-    
+
     //std::cout <<"Run[" << evt.run() <<  "]=evt["<< evt.id().event() << "]\t npart::" <<  pfPtrs.size() << std::endl;
     if(useZeroth) flashVertex =  pvPtrs[0];
     else {

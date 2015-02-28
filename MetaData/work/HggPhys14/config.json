@@ -6,19 +6,13 @@
     "unitsPerJob": 5, 
     "createCrabConfig": true, 
     "checkNFiles": false, 
-    "samples_src": "campaigns/Phys14_samples.json", 
+    "samples_src": "campaigns/Phys14_sig_samples.json", 
     "label": null, 
     "outputPath": "/store/group/phys_higgs/cmshgg/sethzenz/flashgg", 
     "mkPilot": false, 
     "samples": {
         "data": [], 
-        "bkg": [
-            "/GJet_Pt20to40_doubleEMEnriched_TuneZ2star_13TeV-pythia6/Phys14DR-PU20bx25_PHYS14_25_V1-v2/MINIAODSIM", 
-            "/GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/DYJetsToLL_M-50_13TeV-madgraph-pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/DYJetsToLL_M-50_13TeV-madgraph-pythia8/Phys14DR-PU4bx50_PHYS14_25_V1-v1/MINIAODSIM", 
-            "/GGJets_M-200To500_Pt-50_13TeV-sherpa/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-        ], 
+        "bkg": [], 
         "sig": [
             "/GluGluToHToGG_M-125_13TeV-powheg-pythia6/Phys14DR-PU40bx25_PHYS14_25_V1-v1/MINIAODSIM", 
             "/GluGluToHToGG_M-125_13TeV-powheg-pythia6/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/MINIAODSIM", 
@@ -29,7 +23,7 @@
     }, 
     "lumisPerJob": 10, 
     "outputSite": "T2_CH_CERN", 
-    "flashggVersion": "Phys14MicroAODJetV0", 
-    "parameterSet": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/JetValidation/configs/MicroAODProducer_jets_local.py", 
+    "flashggVersion": "Phys14MicroAODJetV1", 
+    "parameterSet": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/flashgg/JetValidation/configs/MicroAODProducer_jets_local.py", 
     "__opts__": null
 }

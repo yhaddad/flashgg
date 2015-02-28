@@ -7,8 +7,8 @@ process = cms.Process("FLASHggMicroAOD")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
 # the number of processed events
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 100 ) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 1000 ) )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 
 # the source file
 process.source = cms.Source("PoolSource",
@@ -154,7 +154,7 @@ process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71
 process.flashggCHSLegacyVertexCandidates = cms.EDProducer('FlashggCHSLegacyVertexCandidateProducer',
                                                           PFCandidatesTag=cms.untracked.InputTag('packedPFCandidates'),
                                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapForCHS"),
                                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices')
                                                           )
 
@@ -469,7 +469,7 @@ process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to wo
 
 
 
-process.TFileService = cms.Service("TFileService",fileName  = cms.string("TEST_jetValidationTrees_VBF_HToGG.root"))
+process.TFileService = cms.Service("TFileService",fileName  = cms.string("SethTEST_jetValidationTrees_VBF_HToGG_1k.root"))
 process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                        GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
                                                        JetTagDz                 = cms.InputTag("flashggJets"),
