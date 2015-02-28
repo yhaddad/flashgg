@@ -7,7 +7,7 @@ process = cms.Process("FLASHggMicroAOD")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
 # the number of processed events
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 10000 ) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 100 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # the source file
@@ -28,11 +28,11 @@ process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
 # the cofigurations
 # process.load("flashgg/MicroAODProducers/flashggVertexMaps_cfi")
 # flashggTkVtxMap_cfi.py
-process.load("flashgg/MicroAODProducers/flashggTkVtxMap_cfi") 
-process.load("flashgg/MicroAODProducers/flashggPhotons_cfi")
-process.load("flashgg/MicroAODProducers/flashggDiPhotons_cfi")
-process.load("flashgg/MicroAODProducers/flashggPreselectedDiPhotons_cfi")
-process.load("flashgg/MicroAODProducers/flashggElectrons_cfi")
+#process.load("flashgg/MicroAODProducers/flashggTkVtxMap_cfi") 
+#process.load("flashgg/MicroAODProducers/flashggPhotons_cfi")
+#process.load("flashgg/MicroAODProducers/flashggDiPhotons_cfi")
+#process.load("flashgg/MicroAODProducers/flashggPreselectedDiPhotons_cfi")
+#process.load("flashgg/MicroAODProducers/flashggElectrons_cfi")
 
 # Import RECO jet producer for ak4 PF and GEN jet
 
@@ -398,13 +398,14 @@ process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71
 #process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
 ##---------> END  PUPPI Leg  REPROCESSING <-------------------
 
+process.load("flashgg/MicroAODProducers/flashggMicroAODSequence_cff")
 
 from RecoJets.JetProducers.PileupJetIDParams_cfi import full_53x
 process.flashggJets = cms.EDProducer('FlashggJetProducer',
                                      DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
                                      VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
                                      JetTag=cms.untracked.InputTag('patJetsAK4PF'),
-                                     VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                     VertexCandidateMapTag = cms.InputTag("flashggVertexMapForCHS"),
                                      PileupJetIdParameters=cms.PSet(full_53x) # from PileupJetIDParams_cfi
                                  )
 
@@ -412,7 +413,7 @@ process.flashggJetsPFCHS0 = cms.EDProducer('FlashggJetProducer',
                                            DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
                                            VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
                                            JetTag=cms.untracked.InputTag('patJetsAK4PFCHS0'),
-                                           VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                           VertexCandidateMapTag = cms.InputTag("flashggVertexMapForCHS"),
                                            PileupJetIdParameters = cms.PSet(full_53x) # from PileupJetIDParams_cfi
                                        )
 
@@ -420,7 +421,7 @@ process.flashggJetsPFCHSLeg = cms.EDProducer('FlashggJetProducer',
                                              DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
                                              VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
                                              JetTag=cms.untracked.InputTag('patJetsAK4PFCHSLeg'),
-                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapForCHS"),
                                              PileupJetIdParameters = cms.PSet(full_53x), # from PileupJetIDParams_cfi
                                              UseConeBetaStar = cms.untracked.bool(True)
                                          )
@@ -468,7 +469,7 @@ process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to wo
 
 
 
-process.TFileService = cms.Service("TFileService",fileName  = cms.string("/afs/cern.ch/work/y/yhaddad/TEST_jetValidationTrees_VBF_HToGG.root"))
+process.TFileService = cms.Service("TFileService",fileName  = cms.string("TEST_jetValidationTrees_VBF_HToGG.root"))
 process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                        GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
                                                        JetTagDz                 = cms.InputTag("flashggJets"),
@@ -494,10 +495,9 @@ process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
                                            )
 
 
-process.load("flashgg/MicroAODProducers/flashggMicroAODSequence_cff")
 
 from flashgg.MicroAODProducers.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
-process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('/afs/cern.ch/work/y/yhaddad/myMicroAODOutputFile.root'),
+process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('myMicroAODOutputFile.root'),
                                outputCommands = microAODDefaultOutputCommand
 )
 process.out.outputCommands += microAODDebugOutputCommand # extra items for debugging, CURRENTLY REQUIRED
