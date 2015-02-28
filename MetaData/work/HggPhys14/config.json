@@ -3,7 +3,7 @@
     "crabTemplate": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/flashgg/MetaData/work/crabConfig_TEMPLATE.py", 
     "verbose": false, 
     "campaign": "HggPhys14", 
-    "unitsPerJob": 5, 
+    "unitsPerJob": 1, 
     "createCrabConfig": true, 
     "checkNFiles": false, 
     "samples_src": "campaigns/Phys14_sig_samples.json", 
@@ -23,7 +23,7 @@
     }, 
     "lumisPerJob": 10, 
     "outputSite": "T2_CH_CERN", 
-    "flashggVersion": "Phys14MicroAODJetV1", 
-    "parameterSet": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/flashgg/JetValidation/configs/MicroAODProducer_jets_local.py", 
+    "flashggVersion": "Phys14MicroAODJetV2", 
+    "parameterSet": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/flashgg/JetValidation/configs/MicroAODProducer_jets_grid.py", 
     "__opts__": null
 }
