@@ -99,10 +99,10 @@ cd HggPhys14
 echo crabConfig_*.py | xargs -n 1 crab sub
 ```
 
-### PHYS14 JetV0, 28 February 2015, approx 0830 CET
+### PHYS14 JetV1, 28 February 2015, approx 0830 CET
 
 cd $CMSSW_BASE/src/flashgg/MetaData/work
-./prepareCrabJobs.py -C HggPhys14 -U 5 -s campaigns/Phys14_samples.json -V Phys14MicroAODJetV0 -p $CMSSW_BASE/src/JetValidation/configs/MicroAODProducer_jets_local.py
+./prepareCrabJobs.py -C HggPhys14 -U 5 -s campaigns/Phys14_sig_samples.json -V Phys14MicroAODJetV1 -p $CMSSW_BASE/src/flashgg/JetValidation/configs/MicroAODProducer_jets_local.py
 cd HggPhys14
 echo crabConfig_*.py | xargs -n 1 crab sub
 
