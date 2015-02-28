@@ -479,7 +479,7 @@ process.options = cms.untracked.PSet(
     allowUnscheduled = cms.untracked.bool(True)
     )
 
-process.p = cms.Path( process.flashggMicroAODSequence +
+process.p = cms.Path( process.flashggMicroAODSequence# +
                       #process.flashggPFCollAnalyzer +
 #                      process.flashggJetValidationTreeMaker +
 #                      process.flashggJetValidationTreeMakerPFCHS0 +

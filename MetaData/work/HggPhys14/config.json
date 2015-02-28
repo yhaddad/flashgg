@@ -20,7 +20,7 @@
     }, 
     "lumisPerJob": 10, 
     "outputSite": "T2_CH_CERN", 
-    "flashggVersion": "Phys14MicroAODJetV4", 
+    "flashggVersion": "Phys14MicroAODJetV6", 
     "parameterSet": "/afs/cern.ch/work/s/sethzenz/fromscratch6/CMSSW_7_2_2_patch2/src/flashgg/JetValidation/configs/MicroAODProducer_jets_grid.py", 
     "__opts__": null
 }
