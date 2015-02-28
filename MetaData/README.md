@@ -106,10 +106,10 @@ cd $CMSSW_BASE/src/flashgg/MetaData/work
 cd HggPhys14
 echo crabConfig_*.py | xargs -n 1 crab sub
 
-### PHYS14 JetV2, 28 February 2015, approx 1200 CET
+### PHYS14 JetV2, 28 February 2015, approx 1215 CET
 
 cd $CMSSW_BASE/src/flashgg/MetaData/work
-./prepareCrabJobs.py -C HggPhys14 -U 1 -s campaigns/Phys14_sig_samples.json -V Phys14MicroAODJetV2 -p $CMSSW_BASE/src/flashgg/JetValidation/configs/MicroAODProducer_jets_local.py
+./prepareCrabJobs.py -C HggPhys14 -U 1 -s campaigns/Phys14_sig_samples.json -V Phys14MicroAODJetV2 -p $CMSSW_BASE/src/flashgg/JetValidation/configs/MicroAODProducer_jets_grid.py
 cd HggPhys14
 echo crabConfig_*Phys14MicroAODJetV2*.py | xargs -n 1 crab sub
 
