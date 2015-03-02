@@ -36,7 +36,7 @@ TGraph* GetRocCurve(TGraph* gx, TGraph* gy, TString name){
 
 
 
-void JetPerformanceStudies(int catbin=1, bool withPUJID=true){
+void JetPerformanceStudies(int catbin=1, bool withPUJID=false){
   
   
   
@@ -95,13 +95,11 @@ void JetPerformanceStudies(int catbin=1, bool withPUJID=true){
   TCut cut_genjetmatch    = "genJetMatch>0";
   TCut cut_recojetmatch   = "recoJetMatch>0";
   
-  TCut cut_all = cut_pt && cut_photon_rej && cat;
+  TCut cut_all = cut_pt && && cat;
   if(withPUJID) cut_all = cut_all && cut_PUJID;
   
   TCut cut_gen_all = cut_gen_pt && cut_gen_photon_rej && cat;
-    
   // ===> Only for def
-
   
   TFile *fplots = new TFile(Form("plots/perfomances_cat_%i_PUJID_%i.root",catbin,withPUJID),"UPDATE");
   fplots->cd();
@@ -116,10 +114,10 @@ void JetPerformanceStudies(int catbin=1, bool withPUJID=true){
     h_effpt_all[it->first] = new TH1F(Form("h_effpt_all_%s",it->first.Data()),
 				      Form("%s;p_{t};#varepsilon_{fake}",it->first.Data()),
 				      50,0,200);
+    
     h_effpt_sel[it->first] = new TH1F(Form("h_effpt_sel_%s",it->first.Data()),
 				      Form("%s;p_{t};#varepsilon_{fake}",it->first.Data()),
 				      50,0,200);
-    
     
     h2_response_pt[it->first] = new TH2F(Form("h2_response_pt_%s",it->first.Data()),
 					 Form("%s;p^{gen}_{t};p^{reco}_{t}/p^{gen}_{t}",it->first.Data()),

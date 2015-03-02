@@ -1,4 +1,3 @@
-
 #include "FWCore/Framework/interface/EDProducer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -21,7 +20,7 @@ namespace flashgg {
 
   class CHSLegacyVertexCandidateProducer : public EDProducer 
   {
-
+    
   public:
     CHSLegacyVertexCandidateProducer( const ParameterSet & );
   private:
@@ -32,7 +31,7 @@ namespace flashgg {
     EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
     //			double maxAllowedDz_;
     //			bool useEachTrackOnce_;
-			
+    
     bool useZeroth;
   };
 
@@ -71,20 +70,21 @@ namespace flashgg {
     evt.getByToken(vertexCandidateMapToken_,vtxmap);
     edm::Ptr<reco::Vertex> flashVertex;
     
-    std::cout <<"Run[" << evt.run() <<  "]=evt["<< evt.id().event() << "]\t npart::" <<  pfPtrs.size() << std::endl;
+    //std::cout <<"Run[" << evt.run() <<  "]=evt["<< evt.id().event() << "]\t npart::" <<  pfPtrs.size() << std::endl;
     if(useZeroth) flashVertex =  pvPtrs[0];
     else {
       if ( diPhotonPointers.size()==0 ){
 	flashVertex = pvPtrs[0];
       }
+      
       if ( diPhotonPointers.size()==1 ){
 	flashVertex = diPhotonPointers[0]->getVertex();
       }
+      
       if ( diPhotonPointers.size() >1 ){ //hopefully very rare
 	flashVertex = diPhotonPointers[0]->getVertex();
       }
       
-
       for (unsigned int diPhoLoop = 0; diPhoLoop< diPhotonPointers.size() ; diPhoLoop++){
 	//if( diPhotonPointers[diPhoLoop]->getVertex()->position() != flashVertex->position()){
 	// we only have a problem if the mutliple diphotons haev different vertices...

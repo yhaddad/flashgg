@@ -1,5 +1,5 @@
 import FWCore.ParameterSet.Config as cms
-from flashgg.MicroAODProducers.flashggTkVtxMap_cfi import flashggVertexMapUnique,flashggVertexMapNonUnique
+from flashgg.MicroAODProducers.flashggTkVtxMap_cfi import flashggVertexMapUnique,flashggVertexMapNonUnique, flashggVertexMapForCHS
 from flashgg.MicroAODProducers.flashggPhotons_cfi import flashggPhotons
 from flashgg.MicroAODProducers.flashggDiPhotons_cfi import flashggDiPhotons
 from flashgg.MicroAODProducers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDiPhotons
@@ -18,10 +18,13 @@ weightsCount = cms.EDProducer("WeightsCountProducer",
                               nbinsObsPileup=cms.int32(101),
                               )
 
-flashggMicroAODSequence = cms.Sequence((eventCount+weightsCount
-                                        +flashggVertexMapUnique+flashggVertexMapNonUnique+flashggElectrons
+flashggMicroAODSequence = cms.Sequence((eventCount
+                                        +weightsCount
+                                        +flashggVertexMapUnique
+                                        +flashggVertexMapNonUnique
+                                        +flashggElectrons
                                         +flashggMicroAODGenSequence
                                         )
                                        *flashggPhotons*flashggDiPhotons
-                                       *(flashggPreselectedDiPhotons+flashggJets)
+                                       *(flashggPreselectedDiPhotons+flashggVertexMapForCHS*flashggJets)
                                        )
