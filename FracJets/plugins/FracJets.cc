@@ -136,7 +136,14 @@ FracJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   
   for (unsigned int j = 0 ; j < recoJets.size() ; j++) {
+    PtrVector<reco::Candidate>& pfcand = SortedPtJets[j]->getJetConstituentsQuick();
+    for (unsigned int i = 0 ; i < pfcand.size() ; i++){
+      for (unsigned int i = 0 ; i < pfcand.size() ; i++){
+	
+      }
+    }
     
+    tree->Fill();
   }
 }
 
