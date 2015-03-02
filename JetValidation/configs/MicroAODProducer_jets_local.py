@@ -7,7 +7,7 @@ process = cms.Process("FLASHggMicroAOD")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
 # the number of processed events
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 10000 ) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 100 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # the source file
@@ -154,7 +154,7 @@ process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71
 process.flashggCHSLegacyVertexCandidates = cms.EDProducer('FlashggCHSLegacyVertexCandidateProducer',
                                                           PFCandidatesTag=cms.untracked.InputTag('packedPFCandidates'),
                                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapForCHS"),
                                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices')
                                                           )
 
@@ -468,7 +468,9 @@ process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to wo
 
 
 
-process.TFileService = cms.Service("TFileService",fileName  = cms.string("/afs/cern.ch/work/y/yhaddad/TEST_jetValidationTrees_VBF_HToGG.root"))
+process.TFileService = cms.Service("TFileService",
+                                   fileName  = cms.string("/afs/cern.ch/work/y/yhaddad/TEST_jetValidationTrees_VBF_HToGG.root"))
+
 process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                        GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
                                                        JetTagDz                 = cms.InputTag("flashggJets"),
@@ -505,7 +507,7 @@ process.out.outputCommands += ["keep *_patJetsAK4*_*_*"] # keep all the jets
 
 process.options = cms.untracked.PSet(
     allowUnscheduled = cms.untracked.bool(True)
-    )
+)
 
 process.p = cms.Path( process.flashggMicroAODSequence +
                       process.flashggPFCollAnalyzer +

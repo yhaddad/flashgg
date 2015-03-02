@@ -59,6 +59,7 @@ struct info_t {
   float energy;
   float mass;
   float dZ;
+  float pv0zerr;
   float uncorrected_pt;
   int   pdgId;
   int   event;
@@ -199,16 +200,19 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   const PtrVector<flashgg::DiPhotonCandidate>& diPhotonPointers = diPhotons->ptrVector();
   
   
-  bool skip = true;
+  bool skip= true;
   if (diPhotonPointers.size()==0){
-    skip =true;
+    skip   = true;
   }else{
     if(fabs(diPhotonPointers[0]->getVertex()->z() - vtxs[0]->z())<0.01){
       skip = false;
+    }else{
+      skip = true;
     }
   }
   
-  if (skip) return;
+  if ( skip ) return;
+  //if ( diPhotonPointers.size()==0 ) return;
   
   std::cout << " +++"<< ievent <<"+++ " << std::endl;
   
@@ -226,7 +230,8 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     info_PF.phi            = phi;
     info_PF.pdgId          = int(pdgId);
     info_PF.dZ             = 0;//pfPtrs[Loop]->dz(vtxs[0]->position());
-    info_PF.event      = ievent;
+    info_PF.event          = ievent;
+    info_PF.pv0zerr        = vtxs[0]->zError();
     //pfPt ->Fill(pt);
     //pfEta->Fill(eta);
     //pfPhi->Fill(phi);
@@ -251,6 +256,7 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     info_PFCHS0.pdgId          = int(pdgId);
     info_PFCHS0.event          = ievent;
     info_PFCHS0.dZ             = pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z();
+    info_PFCHS0.pv0zerr        = vtxs[0]->zError();
     //info_PFCHS0.dZ             = pfchs0Ptrs[Loop]->dz(vtxs[0]->position());
     //std::cout << " diPhotonPointers.size()==0 :: dz = " <<   pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
     //std::cout << "[PFCHS0] particle " << Loop <<  ", eta "<< eta << ", phi " << phi << ", pt " << pt << ", pdgid " << pdgId << ", dz" << pfchs0Ptrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
@@ -262,7 +268,7 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     tree_PFCHS0->Fill();
   }
   for (UInt_t Loop =0; Loop < pfchsLegPtrs.size() ; Loop++){
-    if(pfchsLegPtrs[Loop]->charge()) continue;
+    if(pfchsLegPtrs[Loop]->charge()==0) continue;
     Float_t pt             = pfchsLegPtrs[Loop]->pt();
     //  Float_t uncorrected_pt = pfchsLegPtrs[Loop]->correctedJet("raw").pt();
     Float_t mass           = pfchsLegPtrs[Loop]->mass();
@@ -271,20 +277,21 @@ FlashggPFCollAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     int     pdgId          = pfchsLegPtrs[Loop]->pdgId();
     
     info_PFCHSLeg.pt             = pt;
-    //   info_PFCHSLeg.uncorrected_pt = uncorrected_pt;
+    //info_PFCHSLeg.uncorrected_pt = uncorrected_pt;
     info_PFCHSLeg.mass           = mass;
     info_PFCHSLeg.eta            = eta;
     info_PFCHSLeg.phi            = phi;
     info_PFCHSLeg.pdgId          = int(pdgId);
     info_PFCHSLeg.dZ             = pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z();
     //info_PFCHSLeg.dZ             = pfchsLegPtrs[Loop]->dz(vtxs[0]->position());
+    info_PFCHSLeg.pv0zerr        = vtxs[0]->zError();
     
-    if (fabs(pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z()) > 2) std::cout << " diPhotonPointers.size()==0 ("<< int(diPhotonPointers.size()==0) << "):: dz = " <<  pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z() << std::endl;
+    //if (fabs(pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z()) > 2) 
+    //  std::cout << " diPhotonPointers.size()==0 ("<< int(diPhotonPointers.size()==0) 
+    //		<< "):: dz = "<<  pfchsLegPtrs[Loop]->vertex().z()-vtxs[0]->position().z() 
+    //		<< std::endl;
+    
     info_PFCHSLeg.event            = ievent;
-    //pfchsLegPt->Fill(pt);
-    //pfchsLegEta->Fill(eta);
-    //pfchsLegPhi->Fill(phi);
-    
     tree_PFCHSLeg->Fill();
   }
   // puppi0
@@ -371,6 +378,8 @@ FlashggPFCollAnalyzer::beginJob()
   tree_PF->Branch("pdgId"            ,&info_PF.pdgId           ,"pdgId/I");
   tree_PF->Branch("event"            ,&info_PF.event           ,"event/I");
   tree_PF->Branch("dZ"               ,&info_PF.dZ              ,"dZ/F");
+  tree_PF->Branch("pv0zerr"          ,&info_PF.pv0zerr              ,"pv0zerr/F");
+  //pv0zerr
   
   tree_PFCHS0 = fs_->make<TTree>("tree_PFCHS0","");
   tree_PFCHS0->Branch("event"             ,&info_PFCHS0.event              ,"event/I" );
@@ -380,6 +389,7 @@ FlashggPFCollAnalyzer::beginJob()
   tree_PFCHS0->Branch("phi"              ,&info_PFCHS0.phi             ,"phi/F");
   tree_PFCHS0->Branch("pdgId"            ,&info_PFCHS0.pdgId           ,"pdgId/I");
   tree_PFCHS0->Branch("dZ"               ,&info_PFCHS0.dZ              ,"dZ/F");
+  tree_PFCHS0->Branch("pv0zerr"          ,&info_PFCHS0.pv0zerr         ,"pv0zerr/F");
   
   tree_PFCHSLeg = fs_->make<TTree>("tree_PFCHSLeg","");
   tree_PFCHSLeg->Branch("pt"               ,&info_PFCHSLeg.pt              ,"pt/F" );
@@ -389,6 +399,7 @@ FlashggPFCollAnalyzer::beginJob()
   tree_PFCHSLeg->Branch("pdgId"            ,&info_PFCHSLeg.pdgId           ,"pdgId/I");
   tree_PFCHSLeg->Branch("event"            ,&info_PFCHSLeg.event           ,"event/I");
   tree_PFCHSLeg->Branch("dZ"               ,&info_PFCHSLeg.dZ              ,"dZ/F");
+  tree_PFCHSLeg->Branch("pv0zerr"          ,&info_PFCHSLeg.pv0zerr         ,"pv0zerr/F");
   /*
     tree_PUPPI0 = fs_->make<TTree>("tree_PUPPI0","");
     tree_PUPPI0->Branch("pt"               ,&info_PUPPI0.pt              ,"pt/F" );

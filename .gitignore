@@ -25,3 +25,11 @@ AutoDict_*
 *.log
 *.png
 *.pdf
+
+# just in my case
+.gitignore
+
+# 
+FracJet/
+FracJet/*
+FracJet/*/*
