@@ -48,6 +48,10 @@ namespace  { struct dictionary {
   flashgg::MinimalPileupJetIdentifier                                               pujetid;
   std::pair<edm::Ptr<reco::Vertex>,flashgg::MinimalPileupJetIdentifier>                    pair_ptr_vtx_pujetid;
   std::map<edm::Ptr<reco::Vertex>,flashgg::MinimalPileupJetIdentifier>                    map_ptr_vtx_pujetid;
+  
+  PileupJetIdentifier fullPujetid;
+  std::pair<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>                   pair_ptr_vtx_fullPujetid;
+  std::map<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>                    map_ptr_vtx_fullPujetid;
 
   flashgg::Jet                                                      fgg_jet;
   edm::Wrapper<flashgg::Jet>                                    wrp_fgg_jet;
