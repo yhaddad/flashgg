@@ -19,10 +19,10 @@ using namespace edm;
 
 namespace flashgg {
 
-	class VBFMVAProducer : public EDProducer {
+	class VBFMVAProducerNew : public EDProducer {
 
 		public:
-			VBFMVAProducer( const ParameterSet & );
+			VBFMVAProducerNew( const ParameterSet & );
 		private:
 			void produce( Event &, const EventSetup & ) override;
 
@@ -47,7 +47,7 @@ namespace flashgg {
 
 	};
 
-	VBFMVAProducer::VBFMVAProducer(const ParameterSet & iConfig) :
+	VBFMVAProducerNew::VBFMVAProducerNew(const ParameterSet & iConfig) :
 		diPhotonToken_(consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons")))),
 		jetTokenDz_(consumes<View<flashgg::Jet> >(iConfig.getUntrackedParameter<InputTag>("JetTag", InputTag("flashggJets"))))
 	{
@@ -67,11 +67,12 @@ namespace flashgg {
     sublPho_PToM_ =-999.;
 
 		VbfMva_.reset( new TMVA::Reader("!Color:Silent"));
-		VbfMva_->AddVariable("dijet_leadEta", &dijet_leadEta_);
-  	VbfMva_->AddVariable("dijet_subleadEta", &dijet_subleadEta_);
-//	VbfMva_->AddVariable("dijet_abs_dEta", &dijet_abs_dEta_);
+//		VbfMva_->AddVariable("dijet_leadEta", &dijet_leadEta_);
+ // 	VbfMva_->AddVariable("dijet_subleadEta", &dijet_subleadEta_);
 		VbfMva_->AddVariable("dijet_LeadJPt", &dijet_LeadJPt_);
 		VbfMva_->AddVariable("dijet_SubJPt", &dijet_SubJPt_);
+	VbfMva_->AddVariable("dijet_abs_dEta", &dijet_abs_dEta_);
+		VbfMva_->AddVariable("dijet_Mjj", &dijet_Mjj_);
 		VbfMva_->AddVariable("dijet_Zep", &dijet_Zep_);
 
 		// The below is from the globe code... unsure how to implement for 13TeV use...
@@ -89,18 +90,17 @@ namespace flashgg {
 		//	}}
 
 
-		VbfMva_->AddVariable("min(dijet_dPhi,2.916)", &dijet_dPhi_trunc_);
-		VbfMva_->AddVariable("dijet_Mjj", &dijet_Mjj_);
-		VbfMva_->AddVariable("dipho_pt/mass", &dipho_PToM_);
-	//	VbfMva_->AddVariable("leadPho_pt/mass", &leadPho_PToM_);
-	//	VbfMva_->AddVariable("sublPho_pt/mass", &sublPho_PToM_);
-		VbfMva_->BookMVA("BDT",vbfMVAweightfile_.fullPath());
+		VbfMva_->AddVariable("dijet_dPhi_trunc", &dijet_dPhi_trunc_);
+	//	VbfMva_->AddVariable("dipho_pt/mass", &dipho_PToM_);
+		VbfMva_->AddVariable("leadPho_PToM", &leadPho_PToM_);
+		VbfMva_->AddVariable("sublPho_PToM", &sublPho_PToM_);
+		VbfMva_->BookMVA("BDTG",vbfMVAweightfile_.fullPath());
 
 		produces<vector<VBFMVAResult> >();
 
 	} 
 
-	void VBFMVAProducer::produce( Event & evt, const EventSetup & ) {
+	void VBFMVAProducerNew::produce( Event & evt, const EventSetup & ) {
 		Handle<View<flashgg::DiPhotonCandidate> > diPhotons; 
 		evt.getByToken(diPhotonToken_,diPhotons); 
 		const PtrVector<flashgg::DiPhotonCandidate>& diPhotonPointers = diPhotons->ptrVector(); 
@@ -149,11 +149,11 @@ namespace flashgg {
 				// within eta 4.7?
 				if (fabs(jet->eta()) > 4.7) continue;
 				// close to lead photon?
-				float dPhi = deltaPhi(jet->phi(),phi1);
+				float dPhi = jet->phi() - phi1;
 				float dEta = jet->eta() - eta1;
 				if (sqrt(dPhi*dPhi +dEta*dEta) < dr2pho) continue;
 				// close to sublead photon?
-				dPhi = deltaPhi(jet->phi(),phi2);
+				dPhi = jet->phi() - phi2;
 				dEta = jet->eta() - eta2;
 				if (sqrt(dPhi*dPhi +dEta*dEta) < dr2pho) continue;
 
@@ -176,6 +176,7 @@ namespace flashgg {
 				if (dijet_indices.first != -1 && dijet_indices.second != -1) {hasValidVBFDijet =1;}
 
 			}
+			//std::cout << "[VBF] has valid VBF Dijet ? "<< hasValidVBFDijet<< std::endl;
 			if(hasValidVBFDijet)
 			{
 				std::pair < Ptr<flashgg::Jet>, Ptr<flashgg::Jet> > dijet;
@@ -185,7 +186,7 @@ namespace flashgg {
 
 				dijet_leadEta_ = dijet.first->eta();
 				dijet_subleadEta_ = dijet.second->eta();
-				dijet_abs_dEta_ = std::fabs(dijet.first->eta()- dijet.second->eta());
+			  dijet_abs_dEta_ = std::fabs(dijet.first->eta()- dijet.second->eta());
 				dijet_LeadJPt_ = dijet.first->pt();
 				dijet_SubJPt_ = dijet.second->pt();
 
@@ -196,11 +197,12 @@ namespace flashgg {
 
 				auto diphoton_p4 =leadPho_p4 + sublPho_p4;
 				auto dijet_p4 = leadJet_p4 + sublJet_p4;
-				float dijet_dPhi_ = deltaPhi(dijet_p4.Phi(),diphoton_p4.Phi());
+				float dijet_dPhi_ = fabs( dijet_p4.Phi() - diphoton_p4.Phi());
 
 				dijet_dPhi_trunc_ = std::min(dijet_dPhi_, (float) 2.916);
 
 				dijet_Zep_ = fabs(diphoton_p4.Eta() - 0.5*(leadJet_p4.Eta() + sublJet_p4.Eta()));
+				dijet_dPhi_ = fabs( dijet_p4.Phi() - diphoton_p4.Phi());
 				dijet_Mjj_ = dijet_p4.M();
 				dipho_PToM_ = diphoton_p4.Pt() / diphoton_p4.M();
 				leadPho_PToM_ =  diPhotonPointers[candIndex]->leadingPhoton()->pt() / diphoton_p4.M();
@@ -217,9 +219,8 @@ namespace flashgg {
 				//std::cout << mvares.leadJet.eta() << std::endl;
 				//std::cout << mvares.subleadJet.eta() << std::endl;
 
-
 			}
-			mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDT");
+			mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDTG");
 
 			mvares.dijet_leadEta = dijet_leadEta_ ; 
 			mvares.dijet_subleadEta = dijet_subleadEta_ ;
@@ -240,5 +241,5 @@ namespace flashgg {
 	}
 }
 
-typedef flashgg::VBFMVAProducer FlashggVBFMVAProducer;
-DEFINE_FWK_MODULE(FlashggVBFMVAProducer);
+typedef flashgg::VBFMVAProducerNew FlashggVBFMVAProducerNew;
+DEFINE_FWK_MODULE(FlashggVBFMVAProducerNew);

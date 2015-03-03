@@ -6,6 +6,13 @@ flashggVBFMVA = cms.EDProducer('FlashggVBFMVAProducer',
                                     JetTag=cms.untracked.InputTag('flashggJets'),
                                     vbfMVAweightfile = cms.FileInPath("flashgg/TagProducers/data/TMVA_dijet_sherpa_scalewt50_2evenb_powheg200_maxdPhi_oct9_Gradient.weights.xml"),
                                     )
+flashggVBFMVANew = cms.EDProducer('FlashggVBFMVAProducerNew',
+#                                    DiPhotonTag=cms.untracked.InputTag('flashggPreselectedDiPhotons'), # why doesn't this work?
+                                    DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
+                                    JetTag=cms.untracked.InputTag('flashggJets'),
+                                    vbfMVAweightfile = cms.FileInPath("flashgg/TagAlgos/test/weights/Louie_phopt_BDTG.weights.xml"),
+                                    )
+
 flashggVBFDiPhoDiJetMVA = cms.EDProducer('FlashggVBFDiPhoDiJetMVAProducer',
 #                                    DiPhotonTag=cms.untracked.InputTag('flashggPreselectedDiPhotons'), # why doesn't this work?
                                     DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
