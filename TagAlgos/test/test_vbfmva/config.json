@@ -1,0 +1,24 @@
+{
+    "queue": null, 
+    "processes": {
+        "vbf_m125": [
+            "VBF_HToGG_M-125_13TeV-powheg-pythia6"
+        ], 
+        "gamJet": [
+            "GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6"
+        ]
+    }, 
+    "verbose": false, 
+    "__opts__": null, 
+    "dry_run": false, 
+    "hadd_dataset": false, 
+    "jobExe": "cmsRun", 
+    "hadd": false, 
+    "ncpu": 8, 
+    "cmdLine": "cmsRun VBFMVATag_Training.py maxEvents=10 campaign=HggPhys14-Phys14MicroAODV2 processIdMap=test_vbfmva/config.json", 
+    "__opts___src": "VBFMVATrainingSamples.json", 
+    "hadd_process": false, 
+    "output": "output.root", 
+    "njobs": 0, 
+    "outputDir": "test_vbfmva"
+}
