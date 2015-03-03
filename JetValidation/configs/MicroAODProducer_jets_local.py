@@ -495,7 +495,6 @@ process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
                                                CollTagPFPFCHSLeg = cms.InputTag("pfNoElectronsCHSLeg"),
                                            )
 
-
 process.load("flashgg/MicroAODProducers/flashggMicroAODSequence_cff")
 
 from flashgg.MicroAODProducers.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
@@ -514,5 +513,6 @@ process.p = cms.Path( process.flashggMicroAODSequence +
                       process.flashggJetValidationTreeMaker +
                       process.flashggJetValidationTreeMakerPFCHS0 +
                       process.flashggJetValidationTreeMakerPFCHSLeg 
-                  )
+                    )
+
 process.e = cms.EndPath(process.out)

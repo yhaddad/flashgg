@@ -7,23 +7,12 @@ process = cms.Process("FLASHggMicroAOD")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
 # the number of processed events
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 1000 ) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 100 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # the source file
 process.source = cms.Source("PoolSource",
                             fileNames=cms.untracked.vstring("/store/mc/Phys14DR/GluGluToHToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/3C2EFAB1-B16F-E411-AB34-7845C4FC39FB.root"))
-
-# can't get suppressWarning to work: disable all warnings for now
-process.MessageLogger.cerr.threshold = 'ERROR'
-
-
-# Uncomment the following if you notice you have a memory leak
-# This is a lightweight tool to digg further
-
-process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
-                                        ignoreTotal = cms.untracked.int32(1),
-                                        monitorPssAndPrivate = cms.untracked.bool(True))
 
 # the cofigurations
 # process.load("flashgg/MicroAODProducers/flashggVertexMaps_cfi")
@@ -40,7 +29,7 @@ from RecoJets.JetProducers.ak4PFJets_cfi  import ak4PFJets
 from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
 
 process.ak4PFJets  = ak4PFJets.clone ( src = 'packedPFCandidates', doAreaFastjet = True)
-process.ak4GenJets = ak4GenJets.clone( src = 'packedGenParticles')
+process.ak4GenJets = ak4GenJets.clone(src = 'packedGenParticles')
 
 # The following is make patJets, but EI is done with the above
 process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
@@ -79,18 +68,16 @@ process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
 process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
 
 # ---------> END  PF JET REPROCESSING <-------------------
-process.selectedMuons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedMuons"), 
-                                     cut = cms.string('''abs(eta)<2.5 && pt>10. &&
-                                     (pfIsolationR04().sumChargedHadronPt+ max(0.,pfIsolationR04().sumNeutralHadronEt+
-                                     pfIsolationR04().sumPhotonEt-
-                                     0.50*pfIsolationR04().sumPUPt))/pt < 0.20 && 
-                                     (isPFMuon && (isGlobalMuon || isTrackerMuon) )'''))
-process.selectedElectrons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedElectrons"), 
-                                         cut = cms.string('''abs(eta)<2.5 && pt>20. &&
-                                         gsfTrack.isAvailable() &&
-                                         gsfTrack.hitPattern().numberOfLostHits(\'MISSING_INNER_HITS\') < 2 &&
-                                         (pfIsolationVariables().sumChargedHadronPt+
-                                         max(0.,pfIsolationVariables().sumNeutralHadronEt+
+process.selectedMuons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedMuons"), cut = cms.string('''abs(eta)<2.5 && pt>10. &&
+                                      (pfIsolationR04().sumChargedHadronPt+ max(0.,pfIsolationR04().sumNeutralHadronEt+
+                                      pfIsolationR04().sumPhotonEt-
+					 0.50*pfIsolationR04().sumPUPt))/pt < 0.20 && 
+				(isPFMuon && (isGlobalMuon || isTrackerMuon) )'''))
+process.selectedElectrons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedElectrons"), cut = cms.string('''abs(eta)<2.5 && pt>20. &&
+				gsfTrack.isAvailable() &&
+				gsfTrack.hitPattern().numberOfLostHits(\'MISSING_INNER_HITS\') < 2 &&
+				(pfIsolationVariables().sumChargedHadronPt+
+				 max(0.,pfIsolationVariables().sumNeutralHadronEt+
 					 pfIsolationVariables().sumPhotonEt-
 					 0.5*pfIsolationVariables().sumPUPt))/pt < 0.15'''))
 
@@ -98,25 +85,19 @@ process.selectedElectrons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("
 # select isolated  muons and electrons collections
 # tune the requirements to whatever ID and isolation you prefer 
 # first select the packedCandidates passing the loose "fromPV()" requirement (equivalent to CHS definition used for Jets in Run I)
-process.pfCHS0 = cms.EDFilter("CandPtrSelector", 
-                              src = cms.InputTag("packedPFCandidates"), 
-                              cut = cms.string("fromPV"))
+process.pfCHS0 = cms.EDFilter("CandPtrSelector", src = cms.InputTag("packedPFCandidates"), cut = cms.string("fromPV"))
 
 # then remove the previously selected muons
-process.pfNoMuonCHS0      = cms.EDProducer("CandPtrProjector", 
-                                           src = cms.InputTag("pfCHS0"), 
-                                           veto = cms.InputTag("selectedMuons"))
+process.pfNoMuonCHS0 =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHS0"), veto = cms.InputTag("selectedMuons"))
 
 # then remove the previously selected electrons
-process.pfNoElectronsCHS0 = cms.EDProducer("CandPtrProjector", 
-                                           src = cms.InputTag("pfNoMuonCHS0"), 
-                                           veto =  cms.InputTag("selectedElectrons"))
+process.pfNoElectronsCHS0 = cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfNoMuonCHS0"), veto =  cms.InputTag("selectedElectrons"))
 
 # Import RECO jet producer for ak4 PF and GEN jet
 from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
 from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
-process.ak4PFJetsCHS0 = ak4PFJets.clone( src = 'pfNoElectronsCHS0', doAreaFastjet = True)
-process.ak4GenJets0   = ak4GenJets.clone( src = 'packedGenParticles')
+process.ak4PFJetsCHS0 = ak4PFJets.clone(src = 'pfNoElectronsCHS0', doAreaFastjet = True)
+process.ak4GenJets0   = ak4GenJets.clone(src = 'packedGenParticles')
 
 # The following is make patJets, but EI is done with the above
 process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
@@ -124,7 +105,6 @@ process.load("Configuration.EventContent.EventContent_cff")
 process.load('Configuration.StandardSequences.Geometry_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-
 process.GlobalTag.globaltag = 'PLS170_V7AN1::All'
 from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
 addJetCollection(
@@ -154,8 +134,8 @@ process.patJetCorrFactorsAK4PFCHS0.primaryVertices = "offlineSlimmedPrimaryVerti
 process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
 process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71X
 
-#---------> END  PFCHS 0 REPROCESSING <-------------------
-
+##---------> END  PFCHS 0 REPROCESSING <-------------------
+#
 #---------> PFCHS Legacy VERTEX <-------------------
 # select isolated  muons and electrons collections
 # tune the requirements to whatever ID and isolation you prefer 
@@ -408,23 +388,22 @@ process.combinedSecondaryVertex.trackMultiplicityMin = 1  #needed for CMSSW < 71
 ##---------> END  PUPPI Leg  REPROCESSING <-------------------
 
 
-
 from RecoJets.JetProducers.PileupJetIDParams_cfi import full_53x
-process.flashggJets         = cms.EDProducer('FlashggJetProducer',
-                                             DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-                                             VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
-                                             JetTag=cms.untracked.InputTag('patJetsAK4PF'),
-                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-                                             PileupJetIdParameters=cms.PSet(full_53x) # from PileupJetIDParams_cfi
-                                             )
+process.flashggJets = cms.EDProducer('FlashggJetProducer',
+                                     DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
+                                     VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
+                                     JetTag=cms.untracked.InputTag('patJetsAK4PF'),
+                                     VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                     PileupJetIdParameters=cms.PSet(full_53x) # from PileupJetIDParams_cfi
+                                 )
 
-process.flashggJetsPFCHS0   = cms.EDProducer('FlashggJetProducer',
-                                             DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
-                                             VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
-                                             JetTag=cms.untracked.InputTag('patJetsAK4PFCHS0'),
-                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-                                             PileupJetIdParameters = cms.PSet(full_53x) # from PileupJetIDParams_cfi
-                                             )
+process.flashggJetsPFCHS0 = cms.EDProducer('FlashggJetProducer',
+                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
+                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
+                                           JetTag=cms.untracked.InputTag('patJetsAK4PFCHS0'),
+                                           VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                           PileupJetIdParameters = cms.PSet(full_53x) # from PileupJetIDParams_cfi
+                                       )
 
 process.flashggJetsPFCHSLeg = cms.EDProducer('FlashggJetProducer',
                                              DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
@@ -433,8 +412,7 @@ process.flashggJetsPFCHSLeg = cms.EDProducer('FlashggJetProducer',
                                              VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                              PileupJetIdParameters = cms.PSet(full_53x), # from PileupJetIDParams_cfi
                                              UseConeBetaStar = cms.untracked.bool(True)
-                                             )
-
+                                         )
 #process.flashggJetsPUPPI0 = cms.EDProducer('FlashggJetProducer',
 #                                           DiPhotonTag=cms.untracked.InputTag('flashggDiPhotons'),
 #                                           VertexTag=cms.untracked.InputTag('offlineSlimmedPrimaryVertices'),
@@ -453,43 +431,103 @@ process.flashggJetsPFCHSLeg = cms.EDProducer('FlashggJetProducer',
 #                                             )
 ##Tag stuff
 
-process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to work: disable all warnings for now
 
-#process.TFileService = cms.Service("TFileService",fileName  = cms.string("jetValidationTreesStudies.root"))
-#process.flashggJetValidationTreeMaker         = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                               GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
-#                                                               JetTagDz                 = cms.InputTag("flashggJets"),
-#                                                               StringTag		= cms.string("PF"),
-#                                                               )
+
+
+#process.load("flashgg/TagProducers/flashggDiPhotonMVA_cfi")
+#process.load("flashgg/TagProducers/flashggVBFMVA_cff")
+##process.load("flashgg/TagProducers/flashggVBFDiPhoDiJetMVA_cfi")
+#process.load("flashgg/TagProducers/flashggTags_cff")
 #
-#process.flashggJetValidationTreeMakerPFCHS0   = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                               GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-#                                                               JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-#                                                               StringTag		= cms.string("PFCHS0"),
-#                                                               )
+#process.flashggTagSorter = cms.EDProducer('FlashggTagSorter',
+#                                          DiPhotonTag = cms.untracked.InputTag('flashggDiPhotons'),
+#                                          TagVectorTag = cms.untracked.VInputTag(cms.untracked.InputTag('flashggVBFTag'),
+#                                                                                 cms.untracked.InputTag('flashggUntaggedCategory'),
+#                                                                                 ),
+#                                          massCutUpper=cms.untracked.double(180),
+#                                          massCutLower=cms.untracked.double(100)
+#                                          )
 #
-#process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
-#                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
-#                                                               StringTag	= cms.string("PFCHSLeg"),
-#                                                               )
+process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to work: disable all warnings for now
+# process.MessageLogger.suppressWarning.extend(['SimpleMemoryCheck','MemoryCheck']) # this would have been better...
+
+# Uncomment the following if you notice you have a memory leak
+# This is a lightweight tool to digg further
+#process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
+#                                        ignoreTotal = cms.untracked.int32(1),
+#                                        monitorPssAndPrivate = cms.untracked.bool(True)
+#                                       )
+
+
+
+process.TFileService = cms.Service("TFileService",
+                                   fileName  = cms.string("/afs/cern.ch/work/y/yhaddad/FracJet_VBF_HToGG.root"))
+
+process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                       GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
+                                                       JetTagDz                 = cms.InputTag("flashggJets"),
+                                                       StringTag		= cms.string("PF"),
+                                                   )
+
+process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
+                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
+                                                             StringTag		= cms.string("PFCHS0"),
+                                                         )
+
+process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
+                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
+                                                               StringTag	= cms.string("PFCHSLeg"),
+                                                           )
+
+
+
+
+
+process.flashggFracJetPF      =  cms.EDAnalyzer('FracJet',
+                                                JetTagDz        = cms.InputTag("flashggJets"),
+                                                StringTag       = cms.string("PF")
+                                            )
+
+#process.flashggFracPFCHS0Jet  =  cms.EDAnalyzer('FlashggFracJet',
+#                                                JetTagDz        = cms.InputTag("flashggJetsPFCHS0"),
+#                                                StringTag       = cms.string("PFCHS0")
+#                                            )
+#process.flashggFracPFCHSLegJet=  cms.EDAnalyzer('FlashggFracJet',
+#                                                JetTagDz        = cms.InputTag("flashggJetsPFCHSLeg"),
+#                                                StringTag       = cms.string("PFCHSLeg")
+#                                            )
 #
+#
+process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
+                                               CollTagPF         = cms.InputTag("packedPFCandidates"),
+                                               CollTagPFPFCHS0   = cms.InputTag("pfNoElectronsCHS0"),
+                                               CollTagPFPFCHSLeg = cms.InputTag("pfNoElectronsCHSLeg"),
+                                           )
+
 
 process.load("flashgg/MicroAODProducers/flashggMicroAODSequence_cff")
+
 from flashgg.MicroAODProducers.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
-process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('JetValidationMicroAOD.root'),
+process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('/afs/cern.ch/work/y/yhaddad/myMicroAODOutputFile.root'),
                                outputCommands = microAODDefaultOutputCommand
-                           )
+)
 process.out.outputCommands += microAODDebugOutputCommand # extra items for debugging, CURRENTLY REQUIRED
 process.out.outputCommands += ["keep *_patJetsAK4*_*_*"] # keep all the jets 
 
 process.options = cms.untracked.PSet(
     allowUnscheduled = cms.untracked.bool(True)
-    )
+)
 
-process.p = cms.Path( process.flashggMicroAODSequence #+
+process.p = cms.Path( process.flashggMicroAODSequence +
+                      #process.flashggPFCollAnalyzer +
                       #process.flashggJetValidationTreeMaker +
                       #process.flashggJetValidationTreeMakerPFCHS0 +
-                      #process.flashggJetValidationTreeMakerPFCHSLeg 
+                      #process.flashggJetValidationTreeMakerPFCHSLeg +
+                      process.flashggFracJetPF #+
+                      #process.flashggFracPFCHS0Jet +
+                      #process.flashggFracPFCHSLegJet
+                      
                   )
 process.e = cms.EndPath(process.out)

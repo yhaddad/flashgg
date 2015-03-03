@@ -181,45 +181,63 @@ FracJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     jet_info.phi              = recoJets[j]->phi();
     
     std::vector<edm::Ptr<reco::Candidate> > pfcand = recoJets[j]->getJetConstituents();
-    double Rstep =  0.1;
+    double Rstep =  0.05;
     double Rmax  =  0.4;
     unsigned int nstep =  (Rmax/Rstep);
     
     std::map<double,double> CorrVsR;
-    double Rmean = 0;
-    double Cmean = 0;
+    double logRmean = 0;
+    double logCmean = 0;
+    
+    std::cout << " +++++++ evt ("<< event_number 
+	      <<")  +++++++" << std::endl;
+    
+    unsigned int npoint = 0;
     for(unsigned int i=0; i < nstep; i++){
-      double R = i*Rstep;
+      double R = 0.01 + i*Rstep;
       double C = 0;
+      
+      std::cout << "--> npart ::" << pfcand.size() << std::endl;
+      std::cout << "    --> R ::" << R<< std::endl;
       
       for (unsigned int ip=0; ip < pfcand.size(); ip++){
   	for (unsigned int jp=0; jp < pfcand.size(); jp++){
   	  if (ip == jp ) continue;
-  	  
+	  
   	  double dphi   = deltaPhi(pfcand[ip]->phi(),pfcand[jp]->phi());
   	  double deta   = pfcand[ip]->eta() - pfcand[jp]->eta();
   	  double DeltaR = std::sqrt(deta*deta + dphi*dphi);
   	  
+	  
   	  if ( DeltaR > R ) continue; // resolution condition 
-  	  C += std::min(pow(pfcand[ip]->pt(),2),pow(pfcand[jp]->pt(),2)) * DeltaR *DeltaR ;
+  	  //C += std::min(pow(pfcand[ip]->pt(),-2),pow(pfcand[jp]->pt(),-2)) * DeltaR *DeltaR ;
+	  C += pfcand[ip]->pt() * pfcand[jp]->pt() * DeltaR *DeltaR ;
 	}
       }
-      CorrVsR.insert(std::make_pair(R, C));
-      Rmean += R;
-      Cmean += C;
       
+      std::cout << "    --> C ::" << C << std::endl;
+      if( C != 0 ){
+	CorrVsR.insert(std::make_pair(log(R), log(C)));
+	logRmean += log(R);
+	logCmean += log(C);
+	npoint++;
+      }
     }
-    Rmean = Rmean/nstep;
-    Cmean = Cmean/nstep;
     
-    jet_info.Rmean = Rmean;
-    jet_info.Cmean = Cmean;
+    logRmean = logRmean/npoint;
+    logCmean = logCmean/npoint;
+    
+    std::cout << "  ---> logRmean == " << logRmean  << std::endl;
+    std::cout << "  ---> logCmean == " << logCmean  << std::endl;
+    
+    jet_info.Rmean = logRmean;
+    jet_info.Cmean = logCmean;
     
     double sumD = 0;
     double sumN = 0;
     for(std::map<double,double>::iterator it = CorrVsR.begin();it != CorrVsR.end(); it++){
-      sumD += (it->first*it->second) - nstep * Rmean * Cmean;
-      sumN += (it->first*it->first ) - nstep * Rmean * Rmean;
+      sumD += (it->first*it->second) - npoint * logRmean * logCmean;
+      sumN += (it->first*it->first ) - npoint * logRmean * logRmean;
     }
     jet_info.D = sumD/sumN;
     
