@@ -12,6 +12,7 @@ crabConfig_*
 
 # ROOT-related files
 *.root
+*rootlogon.C
 *_cc.d
 *_cc.so
 *_C.d

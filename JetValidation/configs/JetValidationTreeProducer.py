@@ -15,14 +15,15 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # +++++ the input source file
 process.source = cms.Source("PoolSource",                #fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_VBF_HToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
-                        fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_GluGluToHToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
+    #fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_GluGluToHToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
 
+fileNames=cms.untracked.vstring("file:/afs/cern.ch/user/y/yhaddad/CMSSW_7_2_2_patch2/src/workspace/JobSending/HggPhys14_NEWCHS/crab_Phys14MicroAODforPUJIDV1_VBF_HToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root"))
 process.MessageLogger.cerr.threshold = 'ERROR'
 
 # +++++ the output files
 process.TFileService = cms.Service("TFileService",fileName = 
-                                   #cms.string("/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV_JetValidationTree_v02.root"))
-                                   cms.string("/afs/cern.ch/work/y/yhaddad/TEST_GluGluToHToGG_M-125_13TeV_JetValidationTree_v02.root"))
+                                   cms.string("/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV_JetValidationTree_NEWCHS.root"))
+                                   #cms.string("/afs/cern.ch/work/y/yhaddad/TEST_GluGluToHToGG_M-125_13TeV_JetValidationTree_v02.root"))
 
 # +++++ the processes
 process.flashggJetValidationTreeMaker         = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
@@ -42,7 +43,6 @@ process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValida
                                                                JetTagDz       = cms.InputTag("flashggJetsPFCHSLeg"),
                                                                StringTag      = cms.string("PFCHSLeg"),
                                                            )
-
 
 #pfColl checkers
 

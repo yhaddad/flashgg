@@ -35,10 +35,14 @@ process.analyzer.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 ## define categories and associated objects to dump
 cfgTools.addCategory(process.analyzer,
                      "Reject",
-                     "abs(leadingPhoton.superCluster.eta)>=1.4442&&abs(leadingPhoton.superCluster.eta)<=1.566||abs(leadingPhoton.superCluster.eta)>=2.5"
-                     "||abs(subLeadingPhoton.superCluster.eta)>=1.4442 && abs(subLeadingPhoton.superCluster.eta)<=1.566||abs(subLeadingPhoton.superCluster.eta)>=2.5",
-                      -1 ## if nSubcat is -1 do not store anythings
-                     )
+                     "abs(leadingPhoton.superCluster.eta)>=1.4442&&
+                     abs(leadingPhoton.superCluster.eta)<=1.566||
+                     abs(leadingPhoton.superCluster.eta)>=2.5
+                     ||abs(subLeadingPhoton.superCluster.eta)>=1.4442 && 
+                     abs(subLeadingPhoton.superCluster.eta)<=1.566||
+                     abs(subLeadingPhoton.superCluster.eta)>=2.5",
+                     -1 ## if nSubcat is -1 do not store anythings
+                 )
 
 # interestng categories 
 cfgTools.addCategories(process.analyzer,
