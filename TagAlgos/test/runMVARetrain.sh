@@ -11,21 +11,30 @@ NEvent=10000
 #export WORKSPACE='/afs/cern.ch/work/y/yhaddad/'
 
 
+echo
+echo -e "+++++++++++ Generate the Trees    ++++++++++++++++"
+echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
+echo 
 
-#echo -e "+++++++++++ Generate the Trees ++++++++++++++++"
 ## create a working space
-#mkdir -p ${WORKSPACE}/VBFTagging
+mkdir -p ${WORKSPACE}/VBFTagging
+
+# run the script
+fggRunJobs.py --load VBFMVATrainingSamples.json -d \
+    ${WORKSPACE}/VBFTagging/test_vbfmvatraining -x \
+    cmsRun VBFMVATag_Training.py maxEvents=${NEvent}
 #
-## run the script
-#fggRunJobs.py --load VBFMVATrainingSamples.json -d \
-#    ${WORKSPACE}/VBFTagging/test_vbfmvatraining -x \
-#    cmsRun VBFMVATag_Training.py maxEvents=${NEvent}
 #
-#
-#echo -e "+++++++++++ Run The training ++++++++++++++++"
-## run the training on background and without diplays
-#echo -e "run --> '("${NEvent}")'"
-#root -l VBFMVA_Training.cc++\(\"${NEvent}\"\)
+echo 
+echo -e "+++++++++++ Run The training ++++++++++++++++"
+echo
+# run the training on background and without diplays
+
+root -l VBFMVA_Training.cc++\(\"${NEvent}\"\)
+
+echo 
+echo -e "+++++++++++ Aplying the MVA ++++++++++++++++"
+echo
 
 #produce the trained tree and histograms  
 fggRunJobs.py --load VBFMVATrainingSamples.json -d \

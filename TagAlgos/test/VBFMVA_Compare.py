@@ -38,7 +38,7 @@ process.VBFMVADumperNew.quietRooFit   = True
 
 cfgTools.addCategories(process.VBFMVADumperNew,
                        [## cuts are applied in cascade
-                           ("AllNew","1",0),
+                           ("GoodVBFNew","dijet_LeadJPt>=0",0) # reject -999 VBF candidates
                        ],
                        variables=[
                            "dijet_abs_dEta   :=  dijet_abs_dEta  ",
@@ -67,27 +67,27 @@ process.VBFMVADumper.dumpWorkspace = False
 process.VBFMVADumper.quietRooFit = True
 
 cfgTools.addCategories(process.VBFMVADumper,
-		[## cuts are applied in cascade
-		("All","1",0),
-		],
-		variables=[
-		"dijet_abs_dEta   :=  dijet_abs_dEta  ",
-		"dijet_leadEta    :=  dijet_leadEta  ",
-		"dijet_subleadEta :=  dijet_subleadEta  ",
-		"dijet_LeadJPt    :=  dijet_LeadJPt    ",
-		"dijet_SubJPt     :=  dijet_SubJPt     ",
-		"dijet_Zep        :=  dijet_Zep        ",
-		"dijet_Mjj        :=  dijet_Mjj        ",
-		"dipho_PToM       :=  dipho_PToM     ",
-		"leadPho_PToM     :=  leadPho_PToM     ",
-		"sublPho_PToM     :=  sublPho_PToM     ",
-		"dijet_dPhi_trunc :=  dijet_dPhi_trunc ",
-		"VBFMVAValue      :=  VBFMVAValue ", # why ?
-		],
-		histograms=[
-		"VBFMVAValue>>VBFMVAValue(100,-1,1)",
-		]
-		)
+                       [## cuts are applied in cascade
+                           ("GoodVBFLeg","dijet_LeadJPt>=0",0)
+                       ],
+                       variables=[
+                           "dijet_abs_dEta   :=  dijet_abs_dEta  ",
+                           "dijet_leadEta    :=  dijet_leadEta  ",
+                           "dijet_subleadEta :=  dijet_subleadEta  ",
+                           "dijet_LeadJPt    :=  dijet_LeadJPt    ",
+                           "dijet_SubJPt     :=  dijet_SubJPt     ",
+                           "dijet_Zep        :=  dijet_Zep        ",
+                           "dijet_Mjj        :=  dijet_Mjj        ",
+                           "dipho_PToM       :=  dipho_PToM     ",
+                           "leadPho_PToM     :=  leadPho_PToM     ",
+                           "sublPho_PToM     :=  sublPho_PToM     ",
+                           "dijet_dPhi_trunc :=  dijet_dPhi_trunc ",
+                           "VBFMVAValue      :=  VBFMVAValue ", # why ?
+                       ],
+                       histograms=[
+                           "VBFMVAValue>>VBFMVAValue(100,-1,1)",
+                       ]
+                   )
 # split tree, histogram and datasets by process
 process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 

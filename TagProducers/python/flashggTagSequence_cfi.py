@@ -7,6 +7,7 @@ from flashgg.TagProducers.flashggTagSorter_cfi import flashggTagSorter
 
 flashggTagSequence = cms.Sequence(flashggDiPhotonMVA*
                                   flashggVBFMVA*
+                                  flashggVBFMVANew*
                                   flashggVBFDiPhoDiJetMVA*
                                   
                                   (flashggUntaggedCategory+

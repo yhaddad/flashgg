@@ -49,7 +49,7 @@ namespace flashgg {
     float leadPho_PToM_;
     float sublPho_PToM_;
     
-
+    
     // new variables
   };
   
@@ -61,7 +61,9 @@ namespace flashgg {
   {
     
     std::cout << "VBFMVAProducer::UseLegacyMVA(" << _isLegacyMVA <<")"<< std::endl;
+    
     vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>("vbfMVAweightfile");
+    
     dijet_leadEta_    = -999.; 
     dijet_subleadEta_ = -999.;
     dijet_abs_dEta_   = -999.;
@@ -77,6 +79,8 @@ namespace flashgg {
     VbfMva_.reset( new TMVA::Reader("!Color:Silent"));
     
     // This is the old variables
+    std::cout << ":::: vbfMVAweightfile_.fullPath() == " <<  vbfMVAweightfile_.fullPath() << std::endl;
+
     if(_isLegacyMVA){
       // legacy input var 
       VbfMva_->AddVariable("dijet_leadEta", &dijet_leadEta_);
@@ -87,7 +91,7 @@ namespace flashgg {
       VbfMva_->AddVariable("min(dijet_dPhi,2.916)", &dijet_dPhi_trunc_);
       VbfMva_->AddVariable("dijet_Mjj", &dijet_Mjj_);
       VbfMva_->AddVariable("dipho_pt/mass", &dipho_PToM_);
-      
+      VbfMva_->BookMVA("BDT",vbfMVAweightfile_.fullPath());
     }else{ 
       
       // new flashgg var
@@ -100,9 +104,13 @@ namespace flashgg {
       //VbfMva_->AddVariable("dipho_pt/mass", &dipho_PToM_);
       VbfMva_->AddVariable("leadPho_PToM", &leadPho_PToM_);
       VbfMva_->AddVariable("sublPho_PToM", &sublPho_PToM_);
+      
+      VbfMva_->BookMVA("BDTG",vbfMVAweightfile_.fullPath());
     }
+    
     //
-    VbfMva_->BookMVA("BDT",vbfMVAweightfile_.fullPath());
+    
+      
     
     // The below is from the globe code... unsure how to implement for 13TeV use...
     // For the time being, I am adding,dijet_dPhi

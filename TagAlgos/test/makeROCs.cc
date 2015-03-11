@@ -154,19 +154,24 @@ void makeROCs(){
   
   //
   TFile *f_sig = TFile::Open(path + "output_VBF_HToGG_M-125_13TeV-powheg-pythia6_numEvent10000_histos.root");
-  TH1F *old_sig = (TH1F*) f_sig->Get("VBFMVADumper/histograms/vbf_m125_13TeV_AllVBFMVAValue");
-  TH1F *new_sig = (TH1F*) f_sig->Get("VBFMVADumperNew/histograms/vbf_m125_13TeV_AllNewVBFMVAValue");
+  
+  //TTree *tree_old_sig = (TTree*) f_sig->Get("VBFMVADumper/trees/vbf_m125_13TeV_All");
+  //TTree *tree_old_sig = (TTree*) f_sig->Get("VBFMVADumper/trees/vbf_m125_13TeV_All");
+  
+  TH1F *old_sig = (TH1F*) f_sig->Get("VBFMVADumper/histograms/vbf_m125_13TeV_GoodVBFLegVBFMVAValue");
+  TH1F *new_sig = (TH1F*) f_sig->Get("VBFMVADumperNew/histograms/vbf_m125_13TeV_GoodVBFNewVBFMVAValue");
   
   TFile *f_bkg = TFile::Open(path + "output_GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6_numEvent10000_histos.root");
-  TH1F *old_bkg = (TH1F*) f_bkg->Get("VBFMVADumper/histograms/gamJet_13TeV_AllVBFMVAValue");
-  TH1F *new_bkg = (TH1F*) f_bkg->Get("VBFMVADumperNew/histograms/gamJet_13TeV_AllNewVBFMVAValue");
+  
+  TH1F *old_bkg = (TH1F*) f_bkg->Get("VBFMVADumper/histograms/gamJet_13TeV_GoodVBFLegVBFMVAValue");
+  TH1F *new_bkg = (TH1F*) f_bkg->Get("VBFMVADumperNew/histograms/gamJet_13TeV_GoodVBFNewVBFMVAValue");
   
   std::cout << "plotting" << std::endl;
-    
-  //old_sig->Draw();
-  //new_sig->Draw("same");
+  std::cout << " --> obj::old_bkg::" << old_bkg  <<std::endl;
+  std::cout << " --> obj::new_bkg::" << new_bkg  <<std::endl;
+  std::cout << " --> obj::old_sig::" << old_sig  <<std::endl;
+  std::cout << " --> obj::new_sig::" << new_sig  <<std::endl;
   
-
   TCanvas *c1 = new TCanvas("c1","",600,600);
   c1->cd();
   
@@ -183,15 +188,16 @@ void makeROCs(){
   itc++;
   mul->Add(makeROC2(new_sig, new_bkg,leg, itc));
   mul->SetTitle(";background efficiency;signal efficiency");
-  //mul->GetXaxis()->SetTitle("signal efficiency");
-  //mul->GetXaxis()->SetRangeUser(0,1);
-  //mul->GetYaxis()->SetRangeUser(0,1);
-  //mul->GetYaxis()->SetTitle("background rejection");
-  
   mul->Draw("APL");
   leg->Draw();
-  //c1->Print("ROCs.pdf");
   
-  //c1.Draw();
+  //TCanvas *c2 = new TCanvas("c2","",600,600);
+  //c2->cd();
+  //new_bkg->SetLineColor(kBlue);
+  //new_sig->SetLineColor(kRed);
+  //new_bkg->Draw();
+  //new_sig->Draw("same");
+  
+  
 }
 

@@ -4,11 +4,11 @@
     <Info name="TMVA Release" value="4.2.0 [262656]"/>
     <Info name="ROOT Release" value="5.34/18 [336402]"/>
     <Info name="Creator" value="yhaddad"/>
-    <Info name="Date" value="Tue Mar 10 18:06:23 2015"/>
+    <Info name="Date" value="Wed Mar 11 15:55:44 2015"/>
     <Info name="Host" value="Linux cmsdev02.cern.ch 2.6.32-431.23.3.el6.x86_64 #1 SMP Wed Jul 30 09:43:11 CEST 2014 x86_64 x86_64 x86_64 GNU/Linux"/>
     <Info name="Dir" value="/afs/cern.ch/user/y/yhaddad/CMSSW_7_2_2_patch2/src/flashgg/TagAlgos/test"/>
     <Info name="Training events" value="13962"/>
-    <Info name="TrainingTime" value="1.11376731e+01"/>
+    <Info name="TrainingTime" value="9.88509202e+00"/>
     <Info name="AnalysisType" value="Classification"/>
   </GeneralInfo>
   <Options>
