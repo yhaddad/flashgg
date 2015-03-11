@@ -3,7 +3,9 @@ import FWCore.ParameterSet.Config as cms
 from flashgg.TagAlgos.VBFMVATrainingDumpConf_cff import VBFMVATrainingDumpConf
 
 VBFMVADumper = cms.EDAnalyzer('CutBasedVBFMVAResultDumper',
-                                **VBFMVATrainingDumpConf.parameters_()
-                                )
+                              **VBFMVATrainingDumpConf.parameters_()
+                          )
+
+
 
 

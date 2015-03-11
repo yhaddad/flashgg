@@ -22,20 +22,22 @@ process.load("flashgg/TagProducers/flashggTagTester_cfi")
 from flashgg.TagProducers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('myTagOutputFile.root'),
+                               fileName       = cms.untracked.string('myTagOutputFile.root'),
                                outputCommands = tagDefaultOutputCommand			       
                            )
 
+
 import flashgg.TagAlgos.dumperConfigTools as cfgTools
 process.load("flashgg/TagProducers/VBFMVADumper_cff")
+
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("histo.root"),
                                    closeFileFast = cms.untracked.bool(True)
-)
+                               )
 
-process.VBFMVADumper.dumpTrees = True
+process.VBFMVADumper.dumpTrees     = True
 process.VBFMVADumper.dumpWorkspace = False
-process.VBFMVADumper.quietRooFit = True
+process.VBFMVADumper.quietRooFit   = True
 
 cfgTools.addCategories(process.VBFMVADumper,
                        [## cuts are applied in cascade
@@ -57,7 +59,8 @@ cfgTools.addCategories(process.VBFMVADumper,
                        histograms=[
                            "mvaresult>>VBFMVAValue(100,-1,1)",
                        ]
-                   )
+)
+
 # split tree, histogram and datasets by process
 process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 

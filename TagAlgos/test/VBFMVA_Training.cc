@@ -14,7 +14,7 @@
 #endif
 using namespace std;
 // --------- MAIN -------------------
-void VBFMVA_Training(TString Nevent="10000")
+void VBFMVA_Training(TString Nevent="10000", bool skipEvtWNoVBF=true)
 //void VBFMVA_Training(int argc, char** argv)
 {
   // options
@@ -24,7 +24,7 @@ void VBFMVA_Training(TString Nevent="10000")
   // you must define $WORKSPACE first
   TString path("${WORKSPACE}/VBFTagging/test_vbfmvatraining/");
   
-  TFile *inputS = TFile::Open(path + "output_VBF_HToGG_M-125_13TeV-powheg-pythia6_numEvent"+NEvent+"_histos.root");
+  TFile *inputS = TFile::Open(path + "output_VBF_HToGG_M-125_13TeV-powheg-pythia6_numEvent"+Nevent+"_histos.root");
   TFile *inputB = TFile::Open(path + "output_GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6_numEvent"+Nevent+"_histos.root");
   
   // Chain
@@ -162,19 +162,16 @@ void VBFMVA_Training(TString Nevent="10000")
   // == this high correlation between variables
   
   
-  TCut mycuts ="dijet_LeadJPt>=0";// " leadPho_PToM > (60./120.) && sublPho_PToM> (30./120.)";
-  TCut mycutb ="dijet_LeadJPt>=0";// " leadPho_PToM> (60./120.) && sublPho_PToM> (30./120.)";
   
-  //TCut mycuts ="";// " leadPho_PToM > (60./120.) && sublPho_PToM> (30./120.)";
-  //TCut mycutb ="";// " leadPho_PToM> (60./120.) && sublPho_PToM> (30./120.)";
-  
-  //... is photons PT is given as input to the MVA, use looser cuts
-  
-  if ( usePhotonsPt ) {
-    //mycuts = "isSignal == 1 && pho1pt/diphoM > (40./120.) && pho2pt/diphoM> (25./120.)";
-    //mycutb = "isSignal == 0 && pho1pt/diphoM > (40./120.) && pho2pt/diphoM> (25./120.)";
+  TCut mycuts ="";// " leadPho_PToM > (60./120.) && sublPho_PToM> (30./120.)";
+  TCut mycutb ="";// " leadPho_PToM> (60./120.) && sublPho_PToM> (30./120.)";
+  if(skipEvtWNoVBF){
+    mycuts ="dijet_LeadJPt>=0";// Skip the event with -999
+    mycutb ="dijet_LeadJPt>=0";//  
   }
+  //... is photons PT is given as input to the MVA, use looser cuts
   // tell the factory to use all remaining events in the trees after training for testing:
+  
   factory->PrepareTrainingAndTestTree( mycuts, mycutb,
 				       "SplitMode=Random:NormMode=NumEvents:!V" );
   // Boosted Decision Trees: use BDTG ( Gradient Boost )

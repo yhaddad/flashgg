@@ -29,7 +29,7 @@ namespace flashgg {
     EDGetTokenT<View<pat::PackedCandidate> > pfcandidateToken_;
     double maxAllowedDz_;
   };
-
+  
   DzVertexMapProducerForCHS::DzVertexMapProducerForCHS(const ParameterSet & iConfig) :
     vertexToken_(consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
     pfcandidateToken_(consumes<View<pat::PackedCandidate> >(iConfig.getUntrackedParameter<InputTag> ("PFCandidatesTag", InputTag("packedPFCandidates")))),

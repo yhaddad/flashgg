@@ -7,10 +7,10 @@
 
 namespace flashgg 
 { 
-	typedef CollectionDumper<std::vector<VBFMVAResult> > VBFMVAResultDumper;
-	typedef CollectionDumper<std::vector<VBFMVAResult> ,
-					VBFMVAResult,
-					CutBasedClassifier<VBFMVAResult> > CutBasedVBFMVAResultDumper;
+  typedef CollectionDumper<std::vector<VBFMVAResult> > VBFMVAResultDumper;
+  typedef CollectionDumper<std::vector<VBFMVAResult> ,
+    VBFMVAResult,
+    CutBasedClassifier<VBFMVAResult> > CutBasedVBFMVAResultDumper;
 }
 
 #endif 

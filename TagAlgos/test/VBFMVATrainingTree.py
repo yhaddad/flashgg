@@ -23,25 +23,25 @@ process.analyzer.dumpWorkspace = False
 process.analyzer.quietRooFit = True
 cfgTools.addCategories(process.analyzer,
                        [## cuts are applied in cascade
-                        ("All","1",0),
-                        ],
-		variables=[
-		"dijet_abs_dEta   :=  dijet_abs_dEta  ",
-		"dijet_leadEta    :=  dijet_leadEta  ",
-		"dijet_subleadEta :=  dijet_subleadEta  ",
-		"dijet_LeadJPt    :=  dijet_LeadJPt    ",
-		"dijet_SubJPt     :=  dijet_SubJPt     ",
-		"dijet_Zep        :=  dijet_Zep        ",
-		"dijet_Mjj        :=  dijet_Mjj        ",
-		"dipho_PToM       :=  dipho_PToM     ",
-		"leadPho_PToM     :=  leadPho_PToM     ",
-		"sublPho_PToM     :=  sublPho_PToM     ",
-		"dijet_dPhi_trunc :=  dijet_dPhi_trunc ",
-		],
-		histograms=[
-		"mvaresult>>VBFMVAValue(100,-1,1)",
-		]
-                       )
+                           ("All","1",0),
+                       ],
+                       variables=[
+                           "dijet_abs_dEta   :=  dijet_abs_dEta   ",
+                           "dijet_leadEta    :=  dijet_leadEta    ",
+                           "dijet_subleadEta :=  dijet_subleadEta ",
+                           "dijet_LeadJPt    :=  dijet_LeadJPt    ",
+                           "dijet_SubJPt     :=  dijet_SubJPt     ",
+                           "dijet_Zep        :=  dijet_Zep        ",
+                           "dijet_Mjj        :=  dijet_Mjj        ",
+                           "dipho_PToM       :=  dipho_PToM       ",
+                           "leadPho_PToM     :=  leadPho_PToM     ",
+                           "sublPho_PToM     :=  sublPho_PToM     ",
+                           "dijet_dPhi_trunc :=  dijet_dPhi_trunc ",
+                       ],
+                       histograms=[
+                           "mvaresult>>VBFMVAValue(100,-1,1)",
+                       ]
+                   )
 # customization for job splitting, lumi weighting, etc.
 from flashgg.MetaData.JobConfig import customize
 customize.setDefault("maxEvents",500)
