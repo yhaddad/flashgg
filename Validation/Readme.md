@@ -1,5 +1,6 @@
 Validation plots
 ================
+## Flashgg/GLOB Comparison	
 
 - Draw simple comparison plots between GLOBE flattrees and FLASHgg globe-like ntuples. 
 
@@ -32,3 +33,10 @@ Validation plots
 
 - note that by default plots are store in flashgg/GlobeComparison/plots/
 
+## Jet performances plots    
+
+### Efficiency and fake rate
+    
+### Jet resolution and response
+    
+## PUJID validation  for Hgg	 	
