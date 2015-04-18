@@ -32,8 +32,7 @@ void jetvarMVA(int catbin=1)
   }
   // you must define $WORKSPACE first
   TString path("${WORKSPACE}/");
-  
-  TFile *inputf = TFile::Open(path + "VBF_HToGG_M-125_13TeV_JetValidationTree_v02.root");
+  TFile *inputf = TFile::Open(path + "TEST_jetValTrees_VBF_HToGG.root");
   
   // for the moment looking only on the PF jets
   TTree *tree_in = (TTree*)inputf->Get("flashggJetValidationTreeMaker/jetTree_PF");
@@ -42,6 +41,7 @@ void jetvarMVA(int catbin=1)
   
   TCut mycuts = TCut("genJetMatch==1") && commonCut && cat ;// " leadPho_PToM > (60./120.) && sublPho_PToM> (30./120.)";
   TCut mycutb = TCut("genJetMatch==0") && commonCut && cat ;// " leadPho_PToM> (60./120.) && sublPho_PToM> (30./120.)";
+  
   std::cout << " ---- yacine :: the jets selection " << std::endl;
   std::cout << " ---- yacine :: cut s ("<< mycuts <<") " << std::endl;
   std::cout << " ---- yacine :: cut b ("<< mycutb <<") " << std::endl;
@@ -78,24 +78,20 @@ void jetvarMVA(int catbin=1)
 					     "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
   // -- variables
   factory->AddVariable( "betaStar  ");
-  //factory->AddVariable( "rms       ");
-  factory->AddVariable( "W         ");
-  factory->AddVariable( "dR2Mean   ");
-  factory->AddVariable( "dRMean    ");
-  factory->AddVariable(	"ptD       ");
+  factory->AddVariable( "log(dZ)   ");
+  factory->AddVariable( "rms       ");
+  factory->AddVariable(	"nPV       ");
+  factory->AddVariable(	"nJets     ");
   
   // -- spectators
   Double_t signalWeight     = 1.0;
   Double_t backgroundWeight = 1.0;
-  
   
   factory->AddSignalTree    ( tree_s, signalWeight    , "Training" );
   factory->AddSignalTree    ( tree_s, signalWeight    , "Test"     );
   
   factory->AddBackgroundTree( tree_b, backgroundWeight, "Training" );
   factory->AddBackgroundTree( tree_b, backgroundWeight, "Test"     );
-  
-  
   
   // tell the factory to use all remaining events in the trees after training for testing:
   factory->PrepareTrainingAndTestTree( "", "",

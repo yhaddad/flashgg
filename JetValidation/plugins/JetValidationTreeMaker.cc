@@ -92,19 +92,19 @@ struct GenJetInfo {
   float pt;
   float eta;
   float phi;
-  float recoJetPt   ; 
+  float recoJetPt    ; 
   float recoJetRawPt ;
   float recoJetBestPt;
   int   recoJetMatch ;
   float recoJetEta   ;
-  float dR   ;
-  int legacyEqZeroth;
-  int nDiphotons;
+  float dRmin        ;
+  float dR           ;
+  int   legacyEqZeroth ;
+  int   nDiphotons     ;
   float PUJetID_betaStar;
   float PUJetID_rms;
-  int passesPUJetID;
+  int   passesPUJetID;
   
-
   int   photonMatch;
   float photondRmin;
   float GenPhotonPt;
@@ -137,9 +137,16 @@ struct jetInfo {
   float jet_dRMean;
   float jet_dZ;
   float jet_ptD;
+  float jet_betaClassic;
+  float jet_betaStarClassic;
   
   float PUJetID_betaStar;
+  float PUJetID_beta;
   float PUJetID_rms;
+  
+  float mybetaStar;
+  float mybeta;
+  
   int   passesPUJetID;
   int   LegIsPV0;
   int   nDiphotons;
@@ -156,7 +163,10 @@ struct jetInfo {
   
   float genJetPt;
   float genJetEta;
+  float genJetPhi;
+  float genJetdRmin;
   int   genJetMatch;
+  
   float genQuarkPt;
   float genQuarkEta;
   int   genQuarkMatch;
@@ -225,6 +235,7 @@ private:
   EDGetTokenT< edm::View<flashgg::Jet> >      jetDzToken_;
   EDGetTokenT<edm::View<flashgg::DiPhotonCandidate> > diPhotonToken_;
   EDGetTokenT< View<reco::Vertex> > vertexToken_;
+  EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
   
   TTree*     eventTree;
   TTree*     jetTree;
@@ -250,12 +261,40 @@ JetValidationTreeMaker::JetValidationTreeMaker(const edm::ParameterSet& iConfig)
   jetDzToken_   (consumes<View<flashgg::Jet> >(iConfig.getParameter<InputTag>("JetTagDz"))),
   diPhotonToken_(consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons")))),
   vertexToken_  (consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
+  vertexCandidateMapToken_(consumes<VertexCandidateMap>(iConfig.getParameter<InputTag>("VertexCandidateMapTag"))),
   usePUJetID    (iConfig.getUntrackedParameter<bool>("UsePUJetID"   ,false)),
   photonJetVeto (iConfig.getUntrackedParameter<bool>("PhotonJetVeto",true))
 {
   event_number = 0;
   jetCollectionName = iConfig.getParameter<string>("StringTag");
 }
+
+//class photonMatching 
+//{     
+//  
+//public:
+//  photonMatching()
+//  {}
+//  void photonMatching( const PtrVector<flashgg::Jet>& jet, const PtrVector<reco::GenParticle>& gens)
+//  {
+//    _jets =  jets; _gens = gens;
+//    
+//    
+//  }
+//  ~photonMatching(){}
+//  
+//  
+//  std::map<unsigned int, GenPhotonInfo> matchingList(){ return _photonJet_id; }
+//private:
+//  const PtrVector<flashgg::Jet>&      _jets;// = jetsDz->ptrVector();
+//  const PtrVector<reco::GenParticle>& _gens;//= genParticles->ptrVector();
+//  
+//  std::map<unsigned int, GenPhotonInfo> _photonJet_id;
+//  std::map<unsigned int, bool> _isPhoton;
+//  unsigned int _nGenPhoton = 0;
+//  
+//  bool _pflag;
+//};
 
 //double JetPtSorter(std::vector<>){
 
@@ -275,6 +314,10 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   Handle<View<reco::Vertex> > primaryVertices;
   iEvent.getByToken(vertexToken_,primaryVertices);
   const PtrVector<reco::Vertex>& vtxs = primaryVertices->ptrVector();
+  
+  Handle<VertexCandidateMap> vertexCandidateMap;
+  iEvent.getByToken(vertexCandidateMapToken_,vertexCandidateMap);
+  const std::map<edm::Ptr<reco::Vertex>,edm::PtrVector<pat::PackedCandidate> >& vtxmap = *vertexCandidateMap;
   
   Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
   iEvent.getByToken(diPhotonToken_,diPhotons);
@@ -296,13 +339,14 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   
   int legacyEqZeroth =0;
   int nDiphotons =0;
-
+  
   //std::cout <<"Event == "<< <<std::endl;
   
-  if(event_number%5000 == 0) 
-    std::cout <<"Run["  << iEvent.run() 
-	      <<"]=evt["<< event_number << "]" 
-	      << std::endl;
+  //if(event_number%1000 == 0) 
+  std::cout <<"===========Run["  << iEvent.run() 
+	    <<"]=evt["<< event_number << "]=============" 
+	    << std::endl;
+  
   nDiphotons = diPhotonPointers.size();
   if(diPhotonPointers.size()==0){
     legacyEqZeroth =1; //if there is no diphoton, we use 0th vertex anyway.
@@ -311,6 +355,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       legacyEqZeroth =1;
     }
   }
+  
   eInfo.nDiphotons     = nDiphotons;
   eInfo.legacyEqZeroth = legacyEqZeroth;
     
@@ -321,9 +366,10 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   eInfo.nSV   = 0;
   
   // ++  finding the photon-jet overlaping
-  std::map<unsigned int, GenPhotonInfo> photonJet_id;
-  std::map<unsigned int, bool> _isPhoton;
-  unsigned int nGenPhoton = 0;
+  
+  std::vector<edm::Ptr<reco::GenParticle> > genPhoton;
+  std::vector<edm::Ptr<reco::GenParticle> > genParton;
+  
   for( unsigned int genLoop =0 ; genLoop < gens.size(); genLoop++){
     genInfo.pt     = gens[genLoop]->pt() ;
     genInfo.eta    = gens[genLoop]->eta();
@@ -334,77 +380,131 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     TLorentzVector p;
     p.SetPxPyPzE( gens[genLoop]->px(), gens[genLoop]->py(), gens[genLoop]->pz(), gens[genLoop]->pt());
     genInfo.y = p.Rapidity(); 
-    
-    std::map<float,unsigned int> minim;
-    std::map<unsigned int,GenPhotonInfo> minim_info;
-    float DeltaRmin=999.;
-    //std::cout << " status(pdg == "<< gens[genLoop]->pdgId() <<")== "<< gens[genLoop]->status() << std::endl;
-    if (gens[genLoop]->pdgId() == 22 && gens[genLoop]-> mother(0)->pdgId() == 25){ // be sure that the photons comes from the higgs
-      nGenPhoton++;
-      for( unsigned int jetLoop =0 ; jetLoop < jetsDzPointers.size(); jetLoop++){
-	GenPhotonInfo tmp_info;
-	
-	float dphi  = deltaPhi(jetsDzPointers[jetLoop]->phi(),gens[genLoop]->phi());
-	float deta  = jetsDzPointers[jetLoop]->eta() -  gens[genLoop]->eta();
-	float dr    =  std::sqrt(deta*deta + dphi*dphi);
-	
-	DeltaRmin = std::min (dr, DeltaRmin);
-	minim[dr] = jetLoop; 
-	
-	// fill the info
-	tmp_info.pt     = gens[genLoop]->pt ();
-	tmp_info.eta    = gens[genLoop]->eta();
-	tmp_info.phi    = gens[genLoop]->phi();	
-	tmp_info.DRmin  = DeltaRmin;
-	
-	_isPhoton[jetLoop] = false;
-	minim_info[jetLoop] = tmp_info;
-      }
-      unsigned int bestjetid = minim.find(DeltaRmin)->second;
-      if(DeltaRmin < 0.3){
-	//std::cout << " ---> realy found["<< bestjetid << "]"<<std::endl;
-	photonJet_id[bestjetid] = minim_info[bestjetid];
-	_isPhoton[bestjetid] = true;
+    // be sure that the photons comes from the higgs
+    if (gens[genLoop]->pdgId() == 22 && gens[genLoop]-> mother(0)->pdgId() == 25){ 
+      genPhoton.push_back(gens[genLoop]);
+    }
+
+    // select the quark and gluon 
+    if (std::abs(gens[genLoop]->pdgId()) == 21 || // gluons
+	std::abs(gens[genLoop]->pdgId()) <= 5     // quarks
+	){
+      if(gens[genLoop]->status()==3){ // another condition about the status 3
+	genParton.push_back(gens[genLoop]);
+	std::cout << " ---> the status 3 parton :: "<< gens[genLoop]->pdgId() << std::endl;
       }
     }
+    // fill the tree
     genPartTree->Fill();
   }
-  //std::cout << "============================" << std::endl;
   
-  // jets pt sorters 
-  //PtrVector<flashgg::Jet> SortedPtJets;
-  //for (unsigned int jdz = 0 ; jdz < jetsDzPointers.size() ; jdz++) {
-  //  edm::Ptr<flashgg::Jet> tmp_jet= jetsDzPointers[jdz];
-  //  if(photonJetVeto){
-  //    if(!(photonJet_id.find(jdz) != photonJet_id.end())){
-  //	SortedPtJets.push_back(tmp_jet);
-  //    }
-  //  }else{
-  //    SortedPtJets.push_back(tmp_jet);
-  //  }
-  //}
+  // find tag the gets close to the photons
+  std::map<unsigned int, GenPhotonInfo> photonJet_id;
+  std::map<unsigned int, bool>             _isPhoton;
+  
+  for( unsigned int jetLoop =0 ; jetLoop < jetsDzPointers.size(); jetLoop++){
+    float minDr = 1000;
+    std::map<float,unsigned int> minim;
+    GenPhotonInfo tmp_info;
+    
+    for( unsigned int ig=0; ig < genPhoton.size(); ig++){
+      float dphi  = deltaPhi(jetsDzPointers[jetLoop]->phi(),genPhoton[ig]->phi());
+      float deta  = jetsDzPointers[jetLoop]->eta() -  genPhoton[ig]->eta();
+      float dr    =  std::sqrt(deta*deta + dphi*dphi);
+      minDr = std::min(dr, minDr);
+      minim[dr] = ig; 
+    }
+    unsigned int close_gid = minim.find(minDr)->second;
+    
+    tmp_info.pt     = genPhoton[close_gid]->pt ();
+    tmp_info.eta    = genPhoton[close_gid]->eta();
+    tmp_info.phi    = genPhoton[close_gid]->phi();
+    tmp_info.DRmin  = minDr;
+    
+    _isPhoton[jetLoop] = false;
+    if(minDr < 0.3){
+      _isPhoton[jetLoop] = true;
+    }
+    
+    //std ::cout << "DEBUG:: tmp_info.pt == " << tmp_info.pt << std::endl;
+    photonJet_id[jetLoop] =  tmp_info;
+  }
+  // Parton -> jet matcing
+  std::map<unsigned int, GenJetInfo>     genJet_id;
+  std::map<unsigned int, bool>          _isMatched;
+  std::map<unsigned int, unsigned int>   pairs;
+  for( unsigned int jetLoop =0; jetLoop < jetsDzPointers.size(); jetLoop++){
+    float minDr = 1000;
+    std::map<float,unsigned int> minim;
+    GenJetInfo tmp_info;
+    
+    for( unsigned int ig=0; ig < genJets.size(); ig++){
+      float dphi  = deltaPhi(jetsDzPointers[jetLoop]->phi(),genJets[ig]->phi());
+      float deta  = jetsDzPointers[jetLoop]->eta() -  genJets[ig]->eta();
+      float dr    =  std::sqrt(deta*deta + dphi*dphi);
+      minDr = std::min(dr, minDr);
+      minim[dr] = ig; 
+    }
+    
+    unsigned int close_genjet_id = minim.find(minDr)->second;
+    tmp_info.pt     = genJets[close_genjet_id]->pt ();
+    tmp_info.eta    = genJets[close_genjet_id]->eta();
+    tmp_info.phi    = genJets[close_genjet_id]->phi();
+    tmp_info.dRmin  = minDr;
+    
+    _isMatched[jetLoop] = false;
+    if(minDr < 0.4 && pairs.find(close_genjet_id)==pairs.end()){
+      _isMatched[jetLoop] = true;
+      pairs[close_genjet_id] = jetLoop;
+      
+      std ::cout << "DEBUG:: jet("<< jetLoop
+		 <<") == genJet(" << close_genjet_id
+		 << ") pt = "     << tmp_info.pt 
+		 << "DEBUG::  Dr min     == " << minDr 
+		 << std::endl;
+      
+    }
+    
+    genJet_id[jetLoop] =  tmp_info;
+  }
+  
+  std::cout << " number of parton :: " << genParton.size() << std::endl;
+  std::cout << " number of mathes :: " << _isMatched.size() << std::endl;
+  std::cout << " number of genJet :: " << genJets.size() << std::endl;
   
   // +++ jets info  
   std::map<unsigned int, jetInfo> recojetmap;
-  
   // +++ loop on the reconstructed jets
   for (unsigned int jdz = 0 ; jdz < SortedPtJets.size() ; jdz++) {
     jInfo.id            = jdz;
     jInfo.photonMatch   = int(_isPhoton[jdz]); 
     
-    if( _isPhoton[jdz] ){
-      GenPhotonInfo tmp_info = photonJet_id.find(jdz)->second; // call find ones 
-      jInfo.photondRmin  = tmp_info.DRmin;
-      jInfo.GenPhotonPt  = tmp_info.pt   ;
-      jInfo.GenPhotonEta = tmp_info.eta  ;
-      jInfo.GenPhotonPhi = tmp_info.phi  ;
-    }else{
-      jInfo.photondRmin  = -999.;
-      jInfo.GenPhotonPt  = -999.;
-      jInfo.GenPhotonEta = -999.;
-      jInfo.GenPhotonPhi = -999.;
-      jInfo.photondRmin  = -999.;
-    }
+    GenPhotonInfo tmp_info = photonJet_id.find(jdz)->second; // call find ones
+    
+    jInfo.GenPhotonPt  = tmp_info.pt   ;
+    jInfo.GenPhotonEta = tmp_info.eta  ;
+    jInfo.GenPhotonPhi = tmp_info.phi  ;
+    jInfo.photondRmin  = tmp_info.DRmin;
+    
+    
+    
+    jInfo.genJetMatch             = int(_isMatched[jdz]);
+    
+    GenJetInfo tmp_genjet_info    = genJet_id.find(jdz)->second;
+    jInfo.genJetPt                = tmp_genjet_info.pt ;
+    jInfo.genJetEta               = tmp_genjet_info.eta;
+    jInfo.genJetPhi               = tmp_genjet_info.phi;
+    jInfo.genJetdRmin             = tmp_genjet_info.dRmin;
+    //std ::cout << "DEBUG:: jInfo.GenPhotonPt == " << jInfo.GenPhotonPt<< std::endl;
+    //if( _isPhoton[jdz] ){
+    //  
+    //}else{
+    //  jInfo.photondRmin  = -999.;
+    //  jInfo.GenPhotonPt  = -999.;
+    //  jInfo.GenPhotonEta = -999.;
+    //  jInfo.GenPhotonPhi = -999.;
+    //  jInfo.photondRmin  = -999.;
+    //}
     
     jInfo.pt            = SortedPtJets[jdz]->pt();
     jInfo.rawPt         = SortedPtJets[jdz]->correctedJet("Uncorrected").pt() ;
@@ -415,16 +515,16 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       jInfo.bestPt      = SortedPtJets[jdz]->pt() ;
     }
     
-    if( SortedPtJets[jdz]->genJet()){
-      jInfo.genJetMatch           = 1;
-      jInfo.genJetPt              = SortedPtJets[jdz]->genJet()->pt();
-      jInfo.genJetEta             = SortedPtJets[jdz]->genJet()->eta();
-      jInfo.genJetEta             = SortedPtJets[jdz]->genJet()->eta();
-    } else {
-      jInfo.genJetPt              = -9999.;
-      jInfo.genJetEta             = -9999.;
-      jInfo.genJetMatch           = 0;
-    }
+    //if( SortedPtJets[jdz]->genJet()){
+    //  jInfo.genJetMatch           = 1;
+    //  jInfo.genJetPt              = SortedPtJets[jdz]->genJet()->pt();
+    //  jInfo.genJetEta             = SortedPtJets[jdz]->genJet()->eta();
+    //  jInfo.genJetEta             = SortedPtJets[jdz]->genJet()->eta();
+    //} else {
+    //  jInfo.genJetPt              = -9999.;
+    //  jInfo.genJetEta             = -9999.;
+    //  jInfo.genJetMatch           = 0;
+    //}
     
     if( SortedPtJets[jdz]->genParton()){
       jInfo.genQuarkMatch           = 1;
@@ -462,10 +562,13 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	  jInfo.jet_dZ      = SortedPtJets[jdz]->pileupJetIdentifier(diPhotonPointers[0]->getVertex()).dZ();
 	  jInfo.jet_ptD     = SortedPtJets[jdz]->pileupJetIdentifier(diPhotonPointers[0]->getVertex()).ptD();
 	  
+	  jInfo.jet_betaClassic    = SortedPtJets[jdz]->pileupJetIdentifier(diPhotonPointers[0]->getVertex()).betaClassic();
+	  jInfo.jet_betaStarClassic= SortedPtJets[jdz]->pileupJetIdentifier(diPhotonPointers[0]->getVertex()).betaStarClassic();
 	  
 	} else {
-	  
+	  //std::cout << " ....  we use 0 vertex ....." << std::endl;
 	  jInfo.PUJetID_betaStar   = SortedPtJets[jdz]->betaStar(vtxs[0]);
+	  jInfo.PUJetID_beta       = SortedPtJets[jdz]->pileupJetIdentifier(vtxs[0]).beta();
 	  jInfo.PUJetID_rms        = SortedPtJets[jdz]->RMS(vtxs[0]);
 	  jInfo.passesPUJetID      = SortedPtJets[jdz]->passesPuJetId(vtxs[0]);
 	  
@@ -475,6 +578,8 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	  jInfo.jet_dZ      = SortedPtJets[jdz]->pileupJetIdentifier(vtxs[0]).dZ();
 	  jInfo.jet_ptD     = SortedPtJets[jdz]->pileupJetIdentifier(vtxs[0]).ptD();
 	  
+	  jInfo.jet_betaClassic    = SortedPtJets[jdz]->pileupJetIdentifier(vtxs[0]).betaClassic();
+	  jInfo.jet_betaStarClassic= SortedPtJets[jdz]->pileupJetIdentifier(vtxs[0]).betaStarClassic();
 	}
       } else {
       
@@ -502,33 +607,105 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     
     float jetPt_tmp = SortedPtJets[jdz]->pt();
     float M_ab =0 , M_aa = 0, M_bb = 0;
+    */
     
-    for (unsigned int i = 0 ; i < SortedPtJets[jdz]->getJetConstituentsQuick().size() ; i++){
-      const reco::Candidate* icand = SortedPtJets[jdz]->getJetConstituentsQuick()[i];
-      float candPt                 = icand->pt();
-      float candCharge             = icand->charge();
-      jInfo.S      += (candPt/jetPt_tmp) * TMath::Log(candPt/jetPt_tmp); 
-      jInfo.Q      += candCharge * TMath::Log(candPt/jetPt_tmp); 
-      //jInfo.Weight += candCharge * TMath::Log(candPt/jetPt_tmp); 
+    
+    double sumTkPt = 0;
+    
+    double beta     = 0;
+    double betaStar = 0;
+    
+    for (unsigned int i = 0 ; i < SortedPtJets[jdz]->numberOfDaughters()  ; i++){
+      edm::Ptr<pat::PackedCandidate> icand = edm::Ptr<pat::PackedCandidate> ( SortedPtJets[jdz]->daughterPtr(i) );
+      if ( icand->charge() == 0 ) continue ;
       
-      M_ab +=  candPt * (SortedPtJets[jdz]->eta() - icand->eta()) * (SortedPtJets[jdz]->phi() - icand->phi());
-      M_aa +=  candPt * (SortedPtJets[jdz]->eta() - icand->eta()) * (SortedPtJets[jdz]->eta() - icand->eta());
-      M_bb +=  candPt * (SortedPtJets[jdz]->phi() - icand->phi()) * (SortedPtJets[jdz]->eta() - icand->phi());
+      float tkpt = icand->pt();
+      sumTkPt += tkpt;
+      // 'classic' beta definition based on track-vertex association
+      //bool inVtx0 = std::abs(icand->dz(vtxs[0]->position())) < 0.02;
+      
+      bool inAnyOther = false;
+      // alternative beta definition based on track-vertex distance of closest approach
+      double dZ0 = std::abs(icand->dz(vtxs[0]->position()));
+      double dZ  = dZ0;
+      //for(reco::VertexCollection::const_iterator  vi=vtxs.begin(); vi!=vtxs.end(); ++vi ) {
+      //for(unsigned int iv=0; iv < vtxs.size(); ++iv) {
+      for (std::map<edm::Ptr<reco::Vertex>,edm::PtrVector<pat::PackedCandidate> >::const_iterator vi=vtxmap.begin();vi!=vtxmap.end();vi++){
+	const reco::Vertex & iv = *(vi->first);
+	if( iv.isFake() || iv.ndof() < 4 ) { continue; }
+	// the primary vertex may have been copied by the user: check identity by position  
+	bool isVtx0  = (iv.position() - vtxs[0]->position()).r() < 0.02;
+	if( !isVtx0 && ! inAnyOther ) {
+	  inAnyOther = std::count(vi->second.begin(),vi->second.end(),icand);
+	}
+	dZ = std::min<double>(dZ,std::abs(icand->dz(iv.position())));
+      }
+      
+      bool isdroped  = false;
+      bool isnothing = false;
+      
+      if( dZ0 < 0.2 ) {
+	isdroped = false;
+	beta += tkpt;
+      } else if( dZ < 0.2 ) {
+	isdroped=true;
+	betaStar += tkpt;
+      } else {
+	isnothing = true;
+      }
+      
+      float candPt                 = icand->pt();
+      if(!(jInfo.photonMatch) && SortedPtJets[jdz]->pt() > 20 ){
+	std::cout <<"\t ["<< i << "] pdg(" << icand->pdgId() 
+		  << ") pt("               << candPt 
+		  << ") dz0 to PV0("       << dZ0
+		  << ") from other PV ("   << isdroped
+		  << ") no belong (" << isnothing
+		  <<")"<< std::endl;
+      }
+      
     }
     
-    TMatrix M(2,2);
-    M[0][0] = M_aa;
-    M[1][1] = M_bb;
-    M[0][1] = M_ab;
-    M[1][0] = M_ab;
+    if( sumTkPt != 0. ) {
+      beta     = beta    /sumTkPt;
+      betaStar = betaStar/sumTkPt;
+    }else{
+      beta     = -1;
+      betaStar = -1;
+    }
     
-    TVector eigenvalues;
-    TMatrix eigenvectors = M.EigenVectors(eigenvalues);
+
+    jInfo.mybetaStar = betaStar;
+    jInfo.mybeta     = beta;
     
-    jInfo.PlanarFlow = 4 * eigenvalues[0]*eigenvalues[1] / pow(eigenvalues[0] + eigenvalues[1],2);
+    if(!(jInfo.photonMatch) && SortedPtJets[jdz]->pt() > 20 ){
+      std::cout << " JetId ["        << jdz
+		<<"]  genJet ("      << jInfo.genJetMatch
+		<<")  DR min ("      << jInfo.genJetdRmin
+		<<")  betaStar ("    << jInfo.PUJetID_betaStar
+		<<")  betaStarNew (" << jInfo.mybetaStar
+		<<")  beta ("        << jInfo.PUJetID_beta
+		<<")  betaNew ("     << jInfo.mybeta
+		<< ") pt("           << SortedPtJets[jdz]->pt() 
+		<< ") eta("          << SortedPtJets[jdz]->eta()
+		<< ") drphoton("     << jInfo.photondRmin
+		<< ")"<< std::endl;
+    }
     
-    jInfo.S = - jInfo.S;
-    jInfo.Q = - jInfo.Q;
+    /*
+      TMatrix M(2,2);
+      M[0][0] = M_aa;
+      M[1][1] = M_bb;
+      M[0][1] = M_ab;
+      M[1][0] = M_ab;
+    
+      TVector eigenvalues;
+      TMatrix eigenvectors = M.EigenVectors(eigenvalues);
+    
+      jInfo.PlanarFlow = 4 * eigenvalues[0]*eigenvalues[1] / pow(eigenvalues[0] + eigenvalues[1],2);
+    
+      jInfo.S = - jInfo.S;
+      jInfo.Q = - jInfo.Q;
     */
     
     recojetmap[jdz] = jInfo;
@@ -568,17 +745,17 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     //float DeltaRmin=999.;
     // take only the jets without photons
     /*
-    for( unsigned int jetLoop =0 ; jetLoop < jetsDzPointers.size(); jetLoop++){
+      for( unsigned int jetLoop =0 ; jetLoop < jetsDzPointers.size(); jetLoop++){
       float dphi  = jetsDzPointers[jetLoop]->phi() -  gens[genLoop]->phi();
       float deta  = jetsDzPointers[jetLoop]->eta() -  gens[genLoop]->eta();
       float dr    =  std::sqrt(deta*deta + dphi*dphi);
       
       DeltaRmin = std::min (dr, DeltaRmin);
       minim[dr] = jetLoop; 
-    }
+      }
     
-    unsigned int bestjetid = minim.find(DeltaRmin)->second;
-    if(DeltaRmin < 100){
+      unsigned int bestjetid = minim.find(DeltaRmin)->second;
+      if(DeltaRmin < 100){
       genJetInfo.dR              = DeltaRmin;
       genJetInfo.recoJetPt       = jetsDzPointers[bestjetid]->pt() ;
       genJetInfo.recoJetRawPt    = jetsDzPointers[bestjetid]->correctedJet("Uncorrected").pt()  ;
@@ -587,37 +764,37 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       // ABOUT THE OVERLAPING PHOTON
       genJetInfo.photonMatch       = _isPhoton[bestjetid];
       if (_isPhoton[bestjetid]){ 
-	jetInfo tmpjetinfo          = recojetmap[bestjetid];
-	genJetInfo.GenPhotonPt     = tmpjetinfo.GenPhotonPt;
-	genJetInfo.photondRmin     = tmpjetinfo.photondRmin;
+      jetInfo tmpjetinfo          = recojetmap[bestjetid];
+      genJetInfo.GenPhotonPt     = tmpjetinfo.GenPhotonPt;
+      genJetInfo.photondRmin     = tmpjetinfo.photondRmin;
       }else{
-	genJetInfo.GenPhotonPt     = -999;
-	genJetInfo.photondRmin     = -999;
+      genJetInfo.GenPhotonPt     = -999;
+      genJetInfo.photondRmin     = -999;
       }
       
       if(!(jetCollectionName.find("PPI")>1 && jetCollectionName.find("PPI")<jetCollectionName.size())){
-	genJetInfo.recoJetBestPt   =  jetsDzPointers[bestjetid]->correctedJet("Uncorrected").pt() ;
-	if( (diPhotonPointers.size() > 0 ) && 
-	    ((jetCollectionName.find("Leg")>1 && jetCollectionName.find("Leg")<jetCollectionName.size())||(jetCollectionName.length()   <3 )) ) { // for PF
+      genJetInfo.recoJetBestPt   =  jetsDzPointers[bestjetid]->correctedJet("Uncorrected").pt() ;
+      if( (diPhotonPointers.size() > 0 ) && 
+      ((jetCollectionName.find("Leg")>1 && jetCollectionName.find("Leg")<jetCollectionName.size())||(jetCollectionName.length()   <3 )) ) { // for PF
 	  
-	  genJetInfo.PUJetID_betaStar        = jetsDzPointers[bestjetid]->betaStar(diPhotonPointers[0]->getVertex());
-	  genJetInfo.PUJetID_rms             = jetsDzPointers[bestjetid]->RMS(diPhotonPointers[0]->getVertex());
-	  genJetInfo.passesPUJetID           = jetsDzPointers[bestjetid]->passesPuJetId(diPhotonPointers[0]->getVertex());
-	} else {
-	  genJetInfo.PUJetID_betaStar        = jetsDzPointers[bestjetid]->betaStar(vtxs[0]);
-	  genJetInfo.PUJetID_rms             = jetsDzPointers[bestjetid]->RMS(vtxs[0]);
-	  genJetInfo.passesPUJetID           = jetsDzPointers[bestjetid]->passesPuJetId(vtxs[0]);
-	  
-	}
+      genJetInfo.PUJetID_betaStar        = jetsDzPointers[bestjetid]->betaStar(diPhotonPointers[0]->getVertex());
+      genJetInfo.PUJetID_rms             = jetsDzPointers[bestjetid]->RMS(diPhotonPointers[0]->getVertex());
+      genJetInfo.passesPUJetID           = jetsDzPointers[bestjetid]->passesPuJetId(diPhotonPointers[0]->getVertex());
       } else {
-	genJetInfo.recoJetBestPt   = jetsDzPointers[bestjetid]->pt()  ;
-	genJetInfo.PUJetID_betaStar  = -999.;
-	genJetInfo.PUJetID_rms       = -999.;
-	genJetInfo.passesPUJetID     = -999;
+      genJetInfo.PUJetID_betaStar        = jetsDzPointers[bestjetid]->betaStar(vtxs[0]);
+      genJetInfo.PUJetID_rms             = jetsDzPointers[bestjetid]->RMS(vtxs[0]);
+      genJetInfo.passesPUJetID           = jetsDzPointers[bestjetid]->passesPuJetId(vtxs[0]);
+	  
+      }
+      } else {
+      genJetInfo.recoJetBestPt   = jetsDzPointers[bestjetid]->pt()  ;
+      genJetInfo.PUJetID_betaStar  = -999.;
+      genJetInfo.PUJetID_rms       = -999.;
+      genJetInfo.passesPUJetID     = -999;
       }
       
       genJetInfo.recoJetMatch    = 1 ;
-    }
+      }
     */
     // ===========================
     
@@ -654,9 +831,9 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	  }
 	} else {
 	  genJetInfo.recoJetBestPt   = SortedPtJets[recoLoop]->pt()  ;
-	    genJetInfo.PUJetID_betaStar  = -999.;
-	    genJetInfo.PUJetID_rms       = -999.;
-	    genJetInfo.passesPUJetID     = -999;
+	  genJetInfo.PUJetID_betaStar  = -999.;
+	  genJetInfo.PUJetID_rms       = -999.;
+	  genJetInfo.passesPUJetID     = -999;
 	}
 	
 	genJetInfo.recoJetMatch    = 1 ;
@@ -679,7 +856,7 @@ JetValidationTreeMaker::beginJob()
 
   eventTree = fs_->make<TTree>(type.c_str(),jetCollectionName.c_str());
   eventTree->Branch("eventBranch",&eInfo.legacyEqZeroth,"legacyEqZeroth/I:nDiphotons/I");
-
+  
   std::string typeJet("jetTree_");
   typeJet += jetCollectionName;
   jetTree = fs_->make<TTree>(typeJet.c_str(),jetCollectionName.c_str());
@@ -704,7 +881,13 @@ JetValidationTreeMaker::beginJob()
   
   
   // ===== PUJID variables
-  jetTree->Branch("betaStar" ,&jInfo.PUJetID_betaStar ,"betaStar/F");
+  jetTree->Branch("betaStar"        ,&jInfo.PUJetID_betaStar    ,"betaStar/F");
+  jetTree->Branch("betaClassic"     ,&jInfo.jet_betaClassic     ,"betaClassic/F");
+  jetTree->Branch("betaStarClassic" ,&jInfo.jet_betaStarClassic ,"betaStarClassic/F");
+  
+  jetTree->Branch("mybetaStar"      ,&jInfo.mybetaStar    ,"mybetaStar/F");
+  jetTree->Branch("mybeta"          ,&jInfo.mybeta        ,"mybetaS/F");
+  
   jetTree->Branch("rms"      ,&jInfo.PUJetID_rms      ,"rms/F");
   jetTree->Branch("W"        ,&jInfo.jet_W            ,"W/F");
   jetTree->Branch("dR2Mean"  ,&jInfo.jet_dR2Mean      ,"dR2Mean/F");

@@ -14,16 +14,12 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( -1 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # +++++ the input source file
-process.source = cms.Source("PoolSource",                #fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_VBF_HToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
-    #fileNames=cms.untracked.vstring("file:/afs/cern.ch/work/y/yhaddad/JobSending/HggPUJIDValPhys14/crab_Phys14MicroAODV1_GluGluToHToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root")) 
-
-fileNames=cms.untracked.vstring("file:/afs/cern.ch/user/y/yhaddad/CMSSW_7_2_2_patch2/src/workspace/JobSending/HggPhys14_NEWCHS/crab_Phys14MicroAODforPUJIDV1_VBF_HToGG_M-125_13TeV-powheg-pythia6_00/results/JetValidationMicroAOD_1.root"))
+#process.source=cms.Source("PoolSource",fileNames=cms.untracked.vstring("/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggPhys14_BetaStarTest/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggPhys14_BetaStarTest-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150408_114000/0000/JetValidationMicroAOD_1.root"));
+process.source=cms.Source("PoolSource",fileNames=cms.untracked.vstring("/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggPhys14_BetaStarTest/Phys14MicroAOD/WH_ZH_HToGG_M-125_13TeV_pythia6/HggPhys14_BetaStarTest-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150408_114035/0000/JetValidationMicroAOD_1.root"));
 process.MessageLogger.cerr.threshold = 'ERROR'
 
 # +++++ the output files
-process.TFileService = cms.Service("TFileService",fileName = 
-                                   cms.string("/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV_JetValidationTree_NEWCHS.root"))
-                                   #cms.string("/afs/cern.ch/work/y/yhaddad/TEST_GluGluToHToGG_M-125_13TeV_JetValidationTree_v02.root"))
+process.TFileService = cms.Service("TFileService",fileName=cms.string("/afs/cern.ch/work/y/yhaddad/Validation/PUJID/WH_ZH_HToGG_M-125_13TeV_pythia6.root"))
 
 # +++++ the processes
 process.flashggJetValidationTreeMaker         = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
@@ -57,6 +53,7 @@ process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValida
 #                               fileName = cms.untracked.vstring(),
 #                               outputCommands = cms.untracked.vstring())
 #
+
 process.options = cms.untracked.PSet(
     allowUnscheduled = cms.untracked.bool(True)
 )

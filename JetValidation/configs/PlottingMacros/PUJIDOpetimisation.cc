@@ -154,27 +154,45 @@ TH2F *Get2DPurity(TH2* hs,TH2F* hb, TString name){
   return hout; 
 }
 
-void DrawVariable(TH1 *h1, TH1 *h2, TString name="", bool logy=false, bool norm=true)
+void DrawVariable(TH1 *h1, TH1 *h2, TString name="", bool logy=false, bool norm=true,bool addSum=false)
 {
   TCanvas *c_ = new TCanvas(name + "_cvar", name , 500,500);
   c_->cd();
   if(logy) gPad->SetLogy();
+  TH1F *sum = (TH1F*) h1->Clone("sum");
+  if(addSum)
+    {
+      sum->Add(h2);  
+    }
   
   h1->SetLineColor(kRed);
-  h2->SetLineColor(kBlue);
+  h2->SetLineColor(8);
+  h1->SetMarkerColor(kRed);
+  h2->SetMarkerColor(8);
   if(norm){
     h2->Scale(1.0/h2->Integral());
     h1->Scale(1.0/h1->Integral());
   }
   
   if(h1->GetMaximum() >= h2->GetMaximum()){
-    h1->Draw();
-    h2->Draw("same");
+    if(addSum){
+      sum->Draw();
+      h1->Draw("same");
+      h2->Draw("same");
+    }else{
+      h1->Draw();
+      h2->Draw("same");
+    }
   }else{
-    h2->Draw();
-    h1->Draw("same");
+    if(addSum){
+      sum->Draw();
+      h1->Draw("same");
+      h2->Draw("same");
+    }else{
+      h2->Draw();
+      h1->Draw("same");
+    }
   }
-  
   c_->SaveAs("plots/" + name + ".png");
   c_->SaveAs("plots/" + name + ".pdf");
 }
@@ -196,7 +214,7 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
 
   std::map<TString,TH1F*>      h_ptD_PUJ;	  
   std::map<TString,TH1F*>      h_ptD_JET;	  
-  
+
   std::map<TString,TH1F*>      h_dZ_PUJ;	  
   std::map<TString,TH1F*>      h_dZ_JET;	  
   
@@ -205,6 +223,9 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
   
   std::map<TString,TH1F*>      h_nPart_PUJ;	  
   std::map<TString,TH1F*>      h_nPart_JET;	  
+  
+  std::map<TString,TH1F*>      h_nPV_PUJ;	  
+  std::map<TString,TH1F*>      h_nPV_JET;	  
   
   std::map<TString,TH1F*>      h_W_PUJ;	  
   std::map<TString,TH1F*>      h_W_JET;	  
@@ -223,12 +244,24 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
   
   std::map<TString,TH2F*>      h2_JET;	  
   std::map<TString,TH2F*>      h2_PUJ;	  
+
+  std::map<TString,TH2F*>      h2_rms_beta_PUJ;	  
+  std::map<TString,TH2F*>      h2_rms_beta_JET;	  
+  
+  std::map<TString,TH2F*>      h2_dz_beta_PUJ;	  
+  std::map<TString,TH2F*>      h2_dz_beta_JET;	  
   
   std::map<TString,TH2F*>      g_JET_Eff;	  
   std::map<TString,TH2F*>      g_PUJ_Eff;	  
   
   std::map<TString,TH2F*>      g_JET_Rjc;	  
   std::map<TString,TH2F*>      g_PUJ_Rjc;	  
+
+  std::map<TString,TProfile*>      p_JET_npv_betaStar;	  
+  std::map<TString,TProfile*>      p_PUJ_npv_betaStar;	  
+  
+  std::map<TString,TProfile*>      p_JET_npv_rms;	  
+  std::map<TString,TProfile*>      p_PUJ_npv_rms; 
   
   std::map<TString,TGraph*>      g_betaStar_Eff;	  
   std::map<TString,TGraph*>      g_betaStar_Rjc;	  
@@ -258,14 +291,14 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
   TFile *file;
   
   if     (sample == "VBF") 
-    file = TFile::Open("/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV_JetValidationTree.root");
+    file = TFile::Open("${WORKSPACE}/Validation/PUJID/VBF_HToGG_M-125_13TeV-powheg-pythia6.root");
   else if(sample == "GGF") 
     file = TFile::Open("/afs/cern.ch/work/y/yhaddad/GluGluToHToGG_M-125_13TeV_JetValidationTree.root");
   else return;
   
   JetTree["PF"]      = (TTree*)file->Get("flashggJetValidationTreeMaker/jetTree_PF");
-  JetTree["PFCHS0"]  = (TTree*)file->Get("flashggJetValidationTreeMakerPFCHS0/jetTree_PFCHS0"); 
-  JetTree["PFCHSLeg"]= (TTree*)file->Get("flashggJetValidationTreeMakerPFCHSLeg/jetTree_PFCHSLeg"); 
+  //JetTree["PFCHS0"]  = (TTree*)file->Get("flashggJetValidationTreeMakerPFCHS0/jetTree_PFCHS0"); 
+  //JetTree["PFCHSLeg"]= (TTree*)file->Get("flashggJetValidationTreeMakerPFCHSLeg/jetTree_PFCHSLeg"); 
   
   //====> cuts
   TCut cat;
@@ -285,10 +318,11 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
     weight  = "4.22*(0.778-exp(-bestPt*0.0204))";
   }
   
-  TCut cut_photon_rej     = "!(photonMatch==1 && GenPhotonPt/bestPt > 0.5 && photondRmin < 0.2)";
-  TCut cut_gen_photon_rej = "!(photonMatch==1 && GenPhotonPt/pt > 0.5     && photondRmin < 0.2)";
+  TCut cut_photon_rej     = "!(photonMatch==1)";
+  TCut cut_gen_photon_rej = "!(photonMatch==1)";
+  
   TCut cut_pt             = "bestPt>20.0";
-  TCut cut_genjetmatch    = "genJetMatch==1";
+  TCut cut_genjetmatch    = "genJetMatch==1 && genJetPt>8";  // the 8 GeV comes from the PUJID note
   
   TString  sampleName = "";
   
@@ -298,8 +332,8 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
   //TCut cut_PUJ = weight * (cut_pt && cut_photon_rej && cat &&!cut_genjetmatch);
   //TCut cut_JET = weight * (cut_pt && cut_photon_rej && cat && cut_genjetmatch);
   
-  TCut cut_PUJ = cut_pt && cat && !cut_genjetmatch;
-  TCut cut_JET = cut_pt && cat &&  cut_genjetmatch;
+  TCut cut_PUJ = cut_pt && cat && !cut_genjetmatch && cut_photon_rej;
+  TCut cut_JET = cut_pt && cat &&  cut_genjetmatch && cut_photon_rej;
   
   // ===> Only for def
   std::cout << ":: PUJ == " << cut_PUJ.GetTitle() << std::endl;
@@ -311,14 +345,14 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
 					     sampleName.Data(), 
 					     it->first.Data() , 
 					     catname.Data()  ),
-					250,0,1);
+					100,0,1);
     
     h_betaStar_JET[it->first]= new TH1F(Form("h_betaStar_JET_%s",it->first.Data()),
 					Form("%s %s %s;#beta^{*};n_{jets}", 
 					     sampleName.Data(),
 					     it->first.Data() ,
 					     catname.Data()  ),
-					250,0,1);
+					100,0,1);
     
     
     h_RMS_PUJ[it->first] = new TH1F(Form("h_RMS_PUJ_%s",it->first.Data()),
@@ -326,43 +360,43 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
 					 sampleName.Data(),
 					 it->first.Data() ,
 					 catname.Data()  ),
-				    250,0,0.1);
+				    100,0,0.1);
     
     h_RMS_JET[it->first] = new TH1F(Form("h_RMS_JET_%s",it->first.Data()),
 				    Form("%s %s %s;#LT#Delta R^{2}#GT;n_{jets}", 
 					 sampleName.Data(),
 					 it->first.Data() , 
 					 catname.Data()  ),
-				    250,0,0.1);
+				    100,0,0.1);
     
     
-    h_ptD_PUJ[it->first] = new TH1F(Form("h_ptD_PUJ_%s",it->first.Data()),
-				    Form("%s %s %s;p_{t}^{D};n_{jets}", 
-					 sampleName.Data(),
-					 it->first.Data() ,
-					 catname.Data()  ),
-				    250,0,1);
-    
-    h_ptD_JET[it->first] = new TH1F(Form("h_ptD_JET_%s",it->first.Data()),
-				    Form("%s %s %s;p_{t}^{D};n_{jets}", 
-					 sampleName.Data(),
-					 it->first.Data() ,
-					 catname.Data()  ),
-				    250,0,1);
-    
-    h_dZ_PUJ[it->first] =  new TH1F(Form("h_dZ_PUJ_%s",it->first.Data()),
-				    Form("%s %s %s;dZ;n_{jets}", 
-					 sampleName.Data(),
-					 it->first.Data() ,
-					 catname.Data()  ),
-				    250,0,40);
-    
-    h_dZ_JET[it->first] = new TH1F(Form("h_dZ_JET_%s",it->first.Data()),
-				   Form("%s %s %s;dZ;n_{jets}", 
+    h_pt_PUJ[it->first] = new TH1F(Form("h_pt_PUJ_%s",it->first.Data()),
+				   Form("%s %s %s;p_{T}[GeV];n_{jets}", 
 					sampleName.Data(),
 					it->first.Data() ,
 					catname.Data()  ),
-				   250,0,40);
+				   180,20,200);
+    
+    h_pt_JET[it->first] = new TH1F(Form("h_pt_JET_%s",it->first.Data()),
+				   Form("%s %s %s;p_{T}[GeV];n_{jets}", 
+					sampleName.Data(),
+					it->first.Data() ,
+					catname.Data()  ),
+				   180,20,200);
+    
+    h_dZ_PUJ[it->first] =  new TH1F(Form("h_dZ_PUJ_%s",it->first.Data()),
+				    Form("%s %s %s;exp(-dZ);n_{jets}", 
+					 sampleName.Data(),
+					 it->first.Data() ,
+					 catname.Data()  ),
+				    125,-15,10);
+    
+    h_dZ_JET[it->first] = new TH1F(Form("h_dZ_JET_%s",it->first.Data()),
+				   Form("%s %s %s;exp(-dZ);n_{jets}", 
+					sampleName.Data(),
+					it->first.Data() ,
+					catname.Data()  ),
+				   125,-15,10);
     
     h_nCharged_PUJ[it->first] = new TH1F(Form("h_nCharged_PUJ_%s",it->first.Data()),
 					 Form("%s %s %s;n^{ch};n_{jets}", 
@@ -377,6 +411,20 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
 					      it->first.Data() ,
 					      catname.Data()  ),
 					 41,0,40);
+    
+    h_nPV_PUJ[it->first] = new TH1F(Form("h_nPV_PUJ_%s",it->first.Data()),
+				    Form("%s %s %s;n^{PV};n_{jets}", 
+					 sampleName.Data(),
+					 it->first.Data() ,
+					 catname.Data()  ),
+				    41,0,40);
+    
+    h_nPV_JET[it->first] = new TH1F(Form("h_nPV_JET_%s",it->first.Data()),
+				    Form("%s %s %s;n^{PV};n_{jets}", 
+					 sampleName.Data(),
+					 it->first.Data() ,
+					 catname.Data()  ),
+				    41,0,40);
     
     h_nPart_PUJ[it->first] = new TH1F(Form("h_nPart_PUJ_%s",it->first.Data()),
 				      Form("%s %s %s;n^{PF};n_{jets}", 
@@ -411,13 +459,13 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
 				     100,0,1);
     
     
-    h_pt_PUJ[it->first] = new TH1F(Form("h_pt_PUJ_%s",it->first.Data()),
-				   Form("%s %s %s;W;n_{jets}", sampleName.Data(),it->first.Data(),catname.Data()),
-				   150,0,150);
-    
-    h_pt_JET[it->first] = new TH1F(Form("h_pt_JET_%s",it->first.Data()),
-				   Form("%s %s %s;W;n_{jets}", sampleName.Data(),it->first.Data(),catname.Data()),
-				   150,0,150);
+    //h_pt_PUJ[it->first] = new TH1F(Form("h_pt_PUJ_%s",it->first.Data()),
+    //				   Form("%s %s %s;W;n_{jets}", sampleName.Data(),it->first.Data(),catname.Data()),
+    //				   150,0,150);
+    //
+    //h_pt_JET[it->first] = new TH1F(Form("h_pt_JET_%s",it->first.Data()),
+    //				   Form("%s %s %s;W;n_{jets}", sampleName.Data(),it->first.Data(),catname.Data()),
+    //				   150,0,150);
     
     h_dRMean_PUJ[it->first] = new TH1F(Form("h_dRMean_PUJ_%s",it->first.Data()),
 				       Form("%s %s %s;#LT#Delta R#GT;n_{jets}", sampleName.Data(),it->first.Data(),catname.Data()),
@@ -441,33 +489,67 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
     JetTree[it->first]->Project(Form("h_RMS_PUJ_%s",it->first.Data()),"rms",cut_PUJ,"");
     JetTree[it->first]->Project(Form("h_RMS_JET_%s",it->first.Data()),"rms",cut_JET,"");
     
-    JetTree[it->first]->Project(Form("h_ptD_PUJ_%s",it->first.Data()),"ptD",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_ptD_JET_%s",it->first.Data()),"ptD",cut_JET,"");
-
-    JetTree[it->first]->Project(Form("h_dZ_PUJ_%s",it->first.Data()),"dZ",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_dZ_JET_%s",it->first.Data()),"dZ",cut_JET,"");
-
-    JetTree[it->first]->Project(Form("h_nPart_PUJ_%s",it->first.Data()),"nPart",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_nPart_JET_%s",it->first.Data()),"nPart",cut_JET,"");
-    
-    JetTree[it->first]->Project(Form("h_nCharged_PUJ_%s",it->first.Data()),"nCharged",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_nCharged_JET_%s",it->first.Data()),"nCharged",cut_JET,"");
-    
-    JetTree[it->first]->Project(Form("h_W_PUJ_%s",it->first.Data()),"W",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_W_JET_%s",it->first.Data()),"W",cut_JET,"");
-
     JetTree[it->first]->Project(Form("h_pt_PUJ_%s",it->first.Data()),"bestPt",cut_PUJ,"");
     JetTree[it->first]->Project(Form("h_pt_JET_%s",it->first.Data()),"bestPt",cut_JET,"");
     
-    JetTree[it->first]->Project(Form("h_area_PUJ_%s",it->first.Data()),"area",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_area_JET_%s",it->first.Data()),"area",cut_JET,"");
+    JetTree[it->first]->Project(Form("h_dZ_PUJ_%s",it->first.Data()),"log(dZ)",cut_PUJ,"");
+    JetTree[it->first]->Project(Form("h_dZ_JET_%s",it->first.Data()),"log(dZ)",cut_JET,"");
     
-    JetTree[it->first]->Project(Form("h_dRMean_PUJ_%s",it->first.Data()),"dRMean",cut_PUJ,"");
-    JetTree[it->first]->Project(Form("h_dRMean_JET_%s",it->first.Data()),"dRMean",cut_JET,"");
+    //JetTree[it->first]->Project(Form("h_nPart_PUJ_%s",it->first.Data()),"nPart",cut_PUJ,"");
+    //JetTree[it->first]->Project(Form("h_nPart_JET_%s",it->first.Data()),"nPart",cut_JET,"");
+    
+    JetTree[it->first]->Project(Form("h_nPV_PUJ_%s",it->first.Data()),"nPV",cut_PUJ,"");
+    JetTree[it->first]->Project(Form("h_nPV_JET_%s",it->first.Data()),"nPV",cut_JET,"");
+    
+    //JetTree[it->first]->Project(Form("h_W_PUJ_%s",it->first.Data()),"W",cut_PUJ,"");
+    //JetTree[it->first]->Project(Form("h_W_JET_%s",it->first.Data()),"W",cut_JET,"");
+
+    //JetTree[it->first]->Project(Form("h_pt_PUJ_%s",it->first.Data()),"bestPt",cut_PUJ,"");
+    //JetTree[it->first]->Project(Form("h_pt_JET_%s",it->first.Data()),"bestPt",cut_JET,"");
+    
+    //JetTree[it->first]->Project(Form("h_area_PUJ_%s",it->first.Data()),"area",cut_PUJ,"");
+    //JetTree[it->first]->Project(Form("h_area_JET_%s",it->first.Data()),"area",cut_JET,"");
+    
+    //JetTree[it->first]->Project(Form("h_dRMean_PUJ_%s",it->first.Data()),"dRMean",cut_PUJ,"");
+    //JetTree[it->first]->Project(Form("h_dRMean_JET_%s",it->first.Data()),"dRMean",cut_JET,"");
+    
+    h2_PUJ[it->first] = new TH2F(Form("h2_PUJ_%s",it->first.Data()),
+				 Form("%s %s %s;n_{pv};#LT#beta^{*} #GT", 
+				      sampleName.Data(),it->first.Data(),catname.Data()),
+				 40,0,40,100,0,1);
+    
+    h2_JET[it->first] = new TH2F(Form("h2_JET_%s",it->first.Data()),
+				 Form("%s %s %s;n_{pv};#LT#beta^{*} #GT", 
+				      sampleName.Data(),it->first.Data(),catname.Data()),
+				 40,0,40,100,0,1);
+    
+    JetTree[it->first]->Project(Form("h2_JET_%s",it->first.Data()),"betaStar:nPV",cut_JET,"");
+    JetTree[it->first]->Project(Form("h2_PUJ_%s",it->first.Data()),"betaStar:nPV",cut_PUJ,"");
     
     
-    //JetTree[it->first]->Project(Form("h2_JET_%s",it->first.Data()),"PUJetID_rms:PUJetID_betaStar",cut_JET,"");
-    //JetTree[it->first]->Project(Form("h2_PUJ_%s",it->first.Data()),"PUJetID_rms:PUJetID_betaStar",cut_PUJ,"");
+    h2_rms_beta_PUJ[it->first] = new TH2F(Form("h2_rms_beta_PUJ_%s",it->first.Data()),
+					  Form("%s %s %s;#beta^{*};#LT#Delta R^{2} #GT", 
+					       sampleName.Data(),it->first.Data(),catname.Data()),
+					  100,0,1,100,0,0.1);
+    h2_rms_beta_JET[it->first] = new TH2F(Form("h2_rms_beta_JET_%s",it->first.Data()),
+					  Form("%s %s %s;#beta^{*};#LT#Delta R^{2} #GT", 
+					       sampleName.Data(),it->first.Data(),catname.Data()),
+					  100,0,1,100,0,0.1);
+    
+    JetTree[it->first]->Project(Form("h2_rms_beta_JET_%s",it->first.Data()),"rms:betaStar",cut_JET,"");
+    JetTree[it->first]->Project(Form("h2_rms_beta_PUJ_%s",it->first.Data()),"rms:betaStar",cut_PUJ,"");
+    
+    h2_dz_beta_PUJ[it->first] = new TH2F(Form("h2_dz_beta_PUJ_%s",it->first.Data()),
+					 Form("%s %s %s;#beta^{*};#LT#Delta R^{2} #GT", 
+					      sampleName.Data(),it->first.Data(),catname.Data()),
+					 100,0,1,125,-15,10);
+    h2_dz_beta_JET[it->first] = new TH2F(Form("h2_dz_beta_JET_%s",it->first.Data()),
+					 Form("%s %s %s;#beta^{*};#LT#Delta R^{2} #GT", 
+					      sampleName.Data(),it->first.Data(),catname.Data()),
+					 100,0,1,125,-15,10);
+    
+    JetTree[it->first]->Project(Form("h2_dz_beta_JET_%s",it->first.Data()),"log(dZ):betaStar",cut_JET,"");
+    JetTree[it->first]->Project(Form("h2_dz_beta_PUJ_%s",it->first.Data()),"log(dZ):betaStar",cut_PUJ,"");
     
     // canvas
     std::cout << it->first 
@@ -475,7 +557,9 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
 	      << "\t :PUJ: "<<  h_RMS_PUJ[it->first]->GetEntries() 
 	      << std::endl;
     
-    
+    // create the profiles
+    p_JET_npv_betaStar[it->first] =  h2_JET[it->first]->ProfileX("p_JET_npv_betaStar");
+    p_PUJ_npv_betaStar[it->first] =  h2_PUJ[it->first]->ProfileX("p_PUJ_npv_betaStar");
     
     //g_betaStar_Eff[it->first] = GetEff(h_betaStar_JET[it->first],"BetaStarJetEff");
     //g_betaStar_Rjc[it->first] = GetEff(h_betaStar_PUJ[it->first],"BetaStarPUJRjc");
@@ -489,34 +573,40 @@ void PUJIDOpetimisation(int catbin=1, TString sample ="VBF"){
     //g_JET_Eff[it->first]     = Get2DEff(h2_JET[it->first], Form("JET2DEff_%s",it->first.Data()),"eff");
     //g_PUJ_Eff[it->first]     = Get2DEff(h2_PUJ[it->first], Form("PUJ2DEff_%s",it->first.Data()),"eff");
     //h2_purity[it->first]     = Get2DPurity(h2_JET[it->first], h2_PUJ[it->first],"purity");
-    TString cattmp(Form("%i",catbin)); 
-    DrawVariable(h_RMS_JET[it->first]     ,h_RMS_PUJ[it->first]     ,it->first +"_" + cattmp + sample + "_rms");
-    DrawVariable(h_betaStar_JET[it->first],h_betaStar_PUJ[it->first],it->first +"_" + cattmp + sample + "_betaStar",true);
-    DrawVariable(h_dZ_JET[it->first]      ,h_dZ_PUJ[it->first]      ,it->first +"_" + cattmp + sample + "_dZ",true);
-    DrawVariable(h_nCharged_JET[it->first],h_nCharged_PUJ[it->first],it->first +"_" + cattmp + sample + "_nCharged");
-    DrawVariable(h_nPart_JET[it->first]   ,h_nPart_PUJ[it->first]   ,it->first +"_" + cattmp + sample + "_nPart");
-    DrawVariable(h_W_JET[it->first]       ,h_W_PUJ[it->first]       ,it->first +"_" + cattmp + sample + "_W");
-    DrawVariable(h_ptD_JET[it->first]     ,h_ptD_PUJ[it->first]     ,it->first +"_" + cattmp + sample + "_ptD");
-    DrawVariable(h_pt_JET[it->first]     ,h_pt_PUJ[it->first]       ,it->first +"_" + cattmp + sample + "_pt",true);
-    DrawVariable(h_area_JET[it->first]   ,h_area_PUJ[it->first]     ,it->first +"_" + cattmp + sample + "_area");
-    DrawVariable(h_dRMean_JET[it->first] ,h_dRMean_PUJ[it->first]   ,it->first +"_" + cattmp + sample + "_dRMean");
     
-    //Canv_Dis[it->first] = new TCanvas(Form("c_Dis_%s",it->first.Data()),
-    //				      Form("c_Dis_%s",it->first.Data()),1000,500);
-    //Canv_Dis[it->first]->Divide(2,1);
-    //Canv_Dis[it->first]->cd(1);
-    //h2_PUJ[it->first]->Draw("colz");
-    //Canv_Dis[it->first]->cd(2);
-    //h2_JET[it->first]->Draw("colz");
-    //
-    ////Canv_Eff[it->first] = new TCanvas(Form("c_Eff_%s",it->first.Data()),
-    ////				      Form("c_Eff_%s",it->first.Data()),1000,500);
-    ////Canv_Eff[it->first]->Divide(2,1);
-    ////Canv_Eff[it->first]->cd(1);
-    ////g_PUJ_Eff[it->first]->Draw("colz");
-    ////Canv_Eff[it->first]->cd(2);
-    ////g_JET_Eff[it->first]->Draw("colz");
-    ////
+    TString cattmp(Form("%i",catbin)); 
+    DrawVariable(h_RMS_JET[it->first]     ,h_RMS_PUJ[it->first]     ,it->first +"_" + cattmp + sample + "_rms",false);
+    DrawVariable(h_betaStar_JET[it->first],h_betaStar_PUJ[it->first],it->first +"_" + cattmp + sample + "_betaStar",false);
+    DrawVariable(h_dZ_JET[it->first]      ,h_dZ_PUJ[it->first]      ,it->first +"_" + cattmp + sample + "_dZ",false);
+    
+    DrawVariable(h_nPV_JET[it->first],h_nPV_PUJ[it->first],it->first +"_" + cattmp + sample + "_nPV",false);
+    
+    
+    DrawVariable(p_JET_npv_betaStar[it->first],p_PUJ_npv_betaStar[it->first],it->first +"_" + cattmp + sample + "_npv_betaStar",false,false);
+    
+    //DrawVariable(h_nPart_JET[it->first]   ,h_nPart_PUJ[it->first]   ,it->first +"_" + cattmp + sample + "_nPart");
+    //DrawVariable(h_W_JET[it->first]       ,h_W_PUJ[it->first]       ,it->first +"_" + cattmp + sample + "_W");
+    //DrawVariable(h_ptD_JET[it->first]     ,h_ptD_PUJ[it->first]     ,it->first +"_" + cattmp + sample + "_ptD");
+    DrawVariable(h_pt_JET[it->first]       ,h_pt_PUJ[it->first]       ,it->first +"_" + cattmp + sample + "_pt",true,false,true);
+    //DrawVariable(h_area_JET[it->first]   ,h_area_PUJ[it->first]     ,it->first +"_" + cattmp + sample + "_area");
+    //DrawVariable(h_dRMean_JET[it->first] ,h_dRMean_PUJ[it->first]   ,it->first +"_" + cattmp + sample + "_dRMean");
+    
+    Canv_Dis[it->first] = new TCanvas(Form("c_Dis_%s",it->first.Data()),
+				      Form("c_Dis_%s",it->first.Data()),1000,500);
+    Canv_Dis[it->first]->Divide(2,1);
+    Canv_Dis[it->first]->cd(1);
+    h2_dz_beta_PUJ[it->first]->Draw("colz");
+    Canv_Dis[it->first]->cd(2);
+    h2_dz_beta_JET[it->first]->Draw("colz");
+    
+    Canv_Eff[it->first] = new TCanvas(Form("c_Eff_%s",it->first.Data()),
+    				      Form("c_Eff_%s",it->first.Data()),1000,500);
+    Canv_Eff[it->first]->Divide(2,1);
+    Canv_Eff[it->first]->cd(1);
+    h2_rms_beta_PUJ[it->first]->Draw("colz");
+    Canv_Eff[it->first]->cd(2);
+    h2_rms_beta_JET[it->first]->Draw("colz");
+    
     ////Canv_purity[it->first] = new TCanvas(Form("c_Purity_%s",it->first.Data()),
     ////					 Form("c_Purity_%s",it->first.Data()),500,500);
     ////Canv_purity[it->first]->cd();

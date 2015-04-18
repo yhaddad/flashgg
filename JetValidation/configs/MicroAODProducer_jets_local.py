@@ -7,7 +7,7 @@ process = cms.Process("FLASHggMicroAOD")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
 # the number of processed events
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 100 ) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32 ( 2000 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 # the source file
@@ -469,26 +469,27 @@ process.MessageLogger.cerr.threshold = 'ERROR' # can't get suppressWarning to wo
 
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName  = cms.string("/afs/cern.ch/work/y/yhaddad/TEST_jetValidationTrees_VBF_HToGG.root"))
+                                   fileName  = cms.string("/afs/cern.ch/work/y/yhaddad/TEST_jetValTrees_VBF_HToGG.root"))
 
 process.flashggJetValidationTreeMaker = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                        GenParticleTag           = cms.untracked.InputTag('prunedGenParticles'),
                                                        JetTagDz                 = cms.InputTag("flashggJets"),
                                                        StringTag		= cms.string("PF"),
+                                                       VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                                    )
 
-process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-                                                             StringTag		= cms.string("PFCHS0"),
-                                                         )
-
-process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
-                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
-                                                               StringTag	= cms.string("PFCHSLeg"),
-                                                           )
-
+#process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+#                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
+#                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
+#                                                             StringTag		= cms.string("PFCHS0"),
+#                                                         )
+#
+#process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+#                                                               GenParticleTag   = cms.untracked.InputTag('prunedGenParticles'),
+#                                                               JetTagDz         = cms.InputTag("flashggJetsPFCHSLeg"),
+#                                                               StringTag	= cms.string("PFCHSLeg"),
+#                                                           )
+#
 process.flashggPFCollAnalyzer = cms.EDAnalyzer('FlashggFlashggPFCollAnalyzer',
                                                CollTagPF         = cms.InputTag("packedPFCandidates"),
                                                CollTagPFPFCHS0   = cms.InputTag("pfNoElectronsCHS0"),
@@ -509,10 +510,10 @@ process.options = cms.untracked.PSet(
 )
 
 process.p = cms.Path( process.flashggMicroAODSequence +
-                      process.flashggPFCollAnalyzer +
-                      process.flashggJetValidationTreeMaker +
-                      process.flashggJetValidationTreeMakerPFCHS0 +
-                      process.flashggJetValidationTreeMakerPFCHSLeg 
+                      #process.flashggPFCollAnalyzer +
+                      process.flashggJetValidationTreeMaker# +
+                      #process.flashggJetValidationTreeMakerPFCHS0 +
+                      #process.flashggJetValidationTreeMakerPFCHSLeg 
                     )
 
 process.e = cms.EndPath(process.out)
