@@ -39,7 +39,7 @@ namespace  {
         edm::Wrapper<edm::Ptr<flashgg::DiPhotonCandidate> >       wrp_ptr_fgg_dip;
         std::vector<edm::Ptr<flashgg::DiPhotonCandidate> >        vec_ptr_fgg_dip;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::DiPhotonCandidate> > >   wrp_vec_ptr_fgg_dip;
-
+        
         edm::Ptr<reco::Vertex>                                        ptr_rec_vtx;
         std::vector<edm::Ptr<reco::Vertex> >                      vec_ptr_rec_vtx;
 
@@ -59,7 +59,11 @@ namespace  {
         flashgg::MinimalPileupJetIdentifier                                               pujetid;
         std::pair<edm::Ptr<reco::Vertex>, flashgg::MinimalPileupJetIdentifier>                    pair_ptr_vtx_pujetid;
         std::map<edm::Ptr<reco::Vertex>, flashgg::MinimalPileupJetIdentifier>                    map_ptr_vtx_pujetid;
-
+        
+        PileupJetIdentifier fullPujetid;
+        std::pair<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>                   pair_ptr_vtx_fullPujetid;
+        std::map<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>                    map_ptr_vtx_fullPujetid;
+        
         flashgg::Jet                                                      fgg_jet;
         edm::Wrapper<flashgg::Jet>                                    wrp_fgg_jet;
         std::vector<flashgg::Jet>                                     vec_fgg_jet;

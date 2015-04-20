@@ -60,6 +60,14 @@ float Jet::betaStar( const edm::Ptr<DiPhotonCandidate> dipho ) const
     return betaStar( dipho->vtx() );
 }
 
+//------------------------------
+PileupJetIdentifier Jet::pileupJetIdentifier(const edm::Ptr<reco::Vertex> vtx) const {
+    return fullPuJetId_.at(vtx);
+}
+
+PileupJetIdentifier Jet::pileupJetIdentifier(const edm::Ptr<DiPhotonCandidate> dipho) const {
+    return fullPuJetId_.at(dipho->vtx());
+}
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil

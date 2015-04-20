@@ -29,8 +29,13 @@ namespace flashgg {
         bool passesPuJetId( const edm::Ptr<DiPhotonCandidate> dipho, PileupJetIdentifier::Id level = PileupJetIdentifier::kLoose ) const;
         float rms( const edm::Ptr<DiPhotonCandidate> dipho ) const;
         float betaStar( const edm::Ptr<DiPhotonCandidate> dipho ) const;
+
+        // new function related to PUJID
+        PileupJetIdentifier pileupJetIdentifier(const edm::Ptr<reco::Vertex> vtx) const ;
+        PileupJetIdentifier pileupJetIdentifier(const edm::Ptr<DiPhotonCandidate> dipho) const ;
     private:
         std::map<edm::Ptr<reco::Vertex>, MinimalPileupJetIdentifier> puJetId_;
+        std::map<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>  fullPuJetId_;
     };
 }
 
