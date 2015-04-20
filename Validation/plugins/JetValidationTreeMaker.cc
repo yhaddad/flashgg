@@ -628,7 +628,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	if(!(jetCollectionName.find("PPI")>1 && jetCollectionName.find("PPI")<jetCollectionName.size())){
 	  genJetInfo.recoJetBestPt   =  jetsDz->ptrAt( recoLoop )->correctedJet("Uncorrected").pt() ;
 	  if( (diPhotons->size() > 0 ) && 
-	      ((jetCollectionName.find("Leg")>1 && jetCollectionName.find("Leg")<jetCollectionName.size())||(jetCollectionName.length()   <3 )) ) { // for PF
+	      ((jetCollectionName.find("Leg")>1 && jetCollectionName.find("Leg")<jetCollectionName.size())||(jetCollectionName.length()   <3 )) ) {
 	    
 	    genJetInfo.PUJetID_betaStar        = jetsDz->ptrAt( recoLoop )->betaStar(diPhotons->ptrAt(0)->vtx());
 	    genJetInfo.PUJetID_rms             = jetsDz->ptrAt( recoLoop )->rms(diPhotons->ptrAt(0)->vtx());
