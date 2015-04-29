@@ -357,7 +357,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	tmp_info.phi    = gens->ptrAt( genLoop )->phi();	
 	tmp_info.DRmin  = DeltaRmin;
 	
-	_isPhoton[jetLoop] = false;
+	_isPhoton[jetLoop]  = false;
 	minim_info[jetLoop] = tmp_info;
       }
       unsigned int bestjetid = minim.find(DeltaRmin)->second;
