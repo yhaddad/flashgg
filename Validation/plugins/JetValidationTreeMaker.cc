@@ -34,7 +34,7 @@
 #include "DataFormats/Math/interface/deltaR.h"
 
 #include "DataFormats/JetReco/interface/PileupJetIdentifier.h"
-
+#include "DataFormats/Common/interface/ValueMap.h"
 
 #include "TTree.h"
 #include "TMatrix.h"
@@ -271,18 +271,18 @@ private:
   // Additional methods
   void initEventStructure();
   
-  
   //bool GenRecoMatching(reco::GenJet genjet, const PtrVector<flashgg::Jet>& RecoJets){}
   //EDGetTokenT< VertexCandidateMap > vertexCandidateMapTokenDz_;
   //EDGetTokenT< VertexCandidateMap > vertexCandidateMapTokenAOD_;
   
-  EDGetTokenT< edm::View<reco::GenParticle> > genPartToken_;
-  EDGetTokenT< edm::View<reco::GenJet> >      genJetToken_;
-  EDGetTokenT< edm::View<flashgg::Jet> >      jetDzToken_;
+  EDGetTokenT< edm::View<reco::GenParticle> >         genPartToken_;
+  EDGetTokenT< edm::View<reco::GenJet> >              genJetToken_;
+  EDGetTokenT< edm::View<flashgg::Jet> >              jetDzToken_;
   EDGetTokenT<edm::View<flashgg::DiPhotonCandidate> > diPhotonToken_;
-  EDGetTokenT< View<reco::Vertex> >           vertexToken_;
+  EDGetTokenT< View<reco::Vertex> >                   vertexToken_;
   EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
   
+  //EDGetTokenT< VertexCandidateMap > qgToken;
   TTree*     eventTree;
   TTree*     jetTree;
   TTree*     genPartTree;
@@ -300,30 +300,30 @@ private:
   bool        usePUJetID;
   bool        photonJetVeto;
   bool        homeGenJetMatching_;
+  bool        scanJetConstituents_;
   bool        debug_;
   
 };
 
 JetValidationTreeMaker::JetValidationTreeMaker(const edm::ParameterSet& iConfig):
+  
   genPartToken_ (consumes<View<reco::GenParticle> >(iConfig.getUntrackedParameter<InputTag> ("GenParticleTag", InputTag("prunedGenParticles")))),
   genJetToken_  (consumes<View<reco::GenJet> >(iConfig.getUntrackedParameter<InputTag> ("GenJetTag", InputTag("slimmedGenJets")))),
   jetDzToken_   (consumes<View<flashgg::Jet> >(iConfig.getParameter<InputTag>("JetTagDz"))),
   diPhotonToken_(consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons")))),
   vertexToken_  (consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
   vertexCandidateMapToken_(consumes<VertexCandidateMap>(iConfig.getParameter<InputTag>("VertexCandidateMapTag"))),
+  
   usePUJetID    (iConfig.getUntrackedParameter<bool>("UsePUJetID"   ,false)),
   photonJetVeto (iConfig.getUntrackedParameter<bool>("PhotonJetVeto",true)),
   homeGenJetMatching_ (iConfig.getUntrackedParameter<bool>("homeGenJetMatching",false)),
+  scanJetConstituents_(iConfig.getUntrackedParameter<bool>("scanJetConstituents",false)),
   debug_ (iConfig.getUntrackedParameter<bool>("debug",false))
 {
   event_number = 0;
   jetCollectionName = iConfig.getParameter<string>("StringTag");
+  //qgToken = consumes<edm::ValueMap<float>>(edm::InputTag("QGTagger", "qgLikelihood"));
 }
-
-//double JetPtSorter(std::vector<>){
-
-//}
-
 
 JetValidationTreeMaker::~JetValidationTreeMaker()
 {
@@ -343,7 +343,6 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     std::cout <<"\e[0m"<< std::endl;
   }
   
-
   Handle<View<reco::Vertex> > vtxs;
   iEvent.getByToken(vertexToken_,vtxs);
   //const PtrVector<reco::Vertex>& vtxs = primaryVertices->ptrVector();
@@ -366,8 +365,9 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
   Handle<VertexCandidateMap> vtxmap;
   iEvent.getByToken(vertexCandidateMapToken_,vtxmap);
-  
-  
+    
+  //edm::Handle<edm::ValueMap<float>> qgHandle; iEvent.getByToken(qgToken, qgHandle);
+    
   int legacyEqZeroth =0;
   int nDiphotons =0;
   
@@ -479,11 +479,11 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     GenJetInfo tmp_info;
     if (genJets->size()!=0){
       for( unsigned int ig=0; ig < genJets->size(); ig++){
-	float dphi  = deltaPhi(jetsDz->ptrAt( jetLoop )->phi(),genJets->ptrAt( ig )->phi());
-	float deta  = jetsDz->ptrAt( jetLoop )->eta() - genJets->ptrAt( ig )->eta();
-	float dr    =  std::sqrt(deta*deta + dphi*dphi);
-	minDr = std::min(dr, minDr);
-	minim[dr] = ig; 
+  	float dphi  = deltaPhi(jetsDz->ptrAt( jetLoop )->phi(),genJets->ptrAt( ig )->phi());
+  	float deta  = jetsDz->ptrAt( jetLoop )->eta() - genJets->ptrAt( ig )->eta();
+  	float dr    =  std::sqrt(deta*deta + dphi*dphi);
+  	minDr = std::min(dr, minDr);
+  	minim[dr] = ig; 
       }
       
       unsigned int close_genjet_id = minim.find(minDr)->second;
@@ -494,15 +494,15 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       
       _isMatched[jetLoop] = false;
       if(minDr < 0.4 && pairs.find(close_genjet_id)==pairs.end()){
-	_isMatched[jetLoop] = true;
-	pairs[close_genjet_id] = jetLoop;
-	
-	//std ::cout << "DEBUG:: jet("<< jetLoop
-	//<<") == genJet(" << close_genjet_id
-	//<< ") pt = "     << tmp_info.pt 
-	//<< "DEBUG::  Dr min     == " << minDr 
-	//<< std::endl;
-	
+  	_isMatched[jetLoop] = true;
+  	pairs[close_genjet_id] = jetLoop;
+  	
+  	//std ::cout << "DEBUG:: jet("<< jetLoop
+  	//<<") == genJet(" << close_genjet_id
+  	//<< ") pt = "     << tmp_info.pt 
+  	//<< "DEBUG::  Dr min     == " << minDr 
+  	//<< std::endl;
+  	
       }
       genJet_id[jetLoop] =  tmp_info;
     }else{
@@ -552,6 +552,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       jInfo.genJetdRmin             = tmp_genjet_info.dRmin;
     }else{
       if( jetsDz->ptrAt( jdz )->genJet()){
+	
 	jInfo.genJetMatch           = 1;
 	jInfo.genJetPt              = jetsDz->ptrAt( jdz )->genJet()->pt();
 	jInfo.genJetEta             = jetsDz->ptrAt( jdz )->genJet()->eta();
@@ -649,56 +650,63 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       std::cout << std::endl;
     }
     
-    const std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > >&  vtxmap_ = *vtxmap;
-    for (unsigned int i = 0 ; i < jetsDz->ptrAt( jdz )->numberOfDaughters()  ; i++){
-      edm::Ptr<pat::PackedCandidate> icand = edm::Ptr<pat::PackedCandidate> (jetsDz->ptrAt( jdz )->daughterPtr(i) );
-      if ( icand->charge() == 0 ) continue ;
-      
-      float tkpt = icand->pt();
-      sumTkPt   += tkpt;
-      
-      double dZ0 = std::abs(icand->dz(vtxs->ptrAt(0)->position()));
-      double dZ  = dZ0;
-      for (flashgg::VertexCandidateMap::const_iterator vi = vtxmap_.begin() ; vi != vtxmap_.end() ; vi++){
-	const edm::Ptr<reco::Vertex> iv = (vi->first);
-	if( iv->isFake() || iv->ndof() < 4 ) { continue; }
-	dZ = std::min<double>(dZ,std::abs(icand->dz(iv->position())));
+    if(scanJetConstituents_){
+      const std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > >&  vtxmap_ = *vtxmap;
+      for (unsigned int i = 0 ; i < jetsDz->ptrAt( jdz )->numberOfDaughters()  ; i++){
+	edm::Ptr<pat::PackedCandidate> icand = edm::Ptr<pat::PackedCandidate> (jetsDz->ptrAt( jdz )->daughterPtr(i) );
+	if ( icand->charge() == 0 ) continue ;
+	
+	float tkpt = icand->pt();
+	sumTkPt   += tkpt;
+	
+	double dZ0 = std::abs(icand->dz(vtxs->ptrAt(0)->position()));
+	double dZ  = dZ0;
+	for (flashgg::VertexCandidateMap::const_iterator vi = vtxmap_.begin() ; vi != vtxmap_.end() ; vi++){
+	  const edm::Ptr<reco::Vertex> iv = (vi->first);
+	  if( iv->isFake() || iv->ndof() < 4 ) { continue; }
+	  dZ = std::min<double>(dZ,std::abs(icand->dz(iv->position())));
+	}
+	
+	bool inVtx0       = false;
+	bool inAnotherVtx = false;
+	
+	if( dZ0 < 0.2 ) {
+	  inVtx0 = true;
+	  beta += tkpt;
+	} else if( dZ < 0.2 ) {
+	  inAnotherVtx =true;
+	  betaStar += tkpt;
+	} 
+	
+	if(debug_ && std::abs(jetsDz->ptrAt( jdz )->eta())<2.5 && jetsDz->ptrAt( jdz )->pt() > 20.0 ){
+	  std::cout << setw(12) << i;
+	  std::cout << setw(12) << icand->pdgId();
+	  std::cout << setw(12) << icand->pt();
+	  std::cout << setw(12) << dZ0;
+	  std::cout << setw(12) << dZ;
+	  std::cout << setw(12) << inVtx0;
+	  std::cout << setw(12) << inAnotherVtx;
+	  std::cout << std::endl;
+	}
       }
       
-      bool inVtx0       = false;
-      bool inAnotherVtx = false;
-      
-      if( dZ0 < 0.2 ) {
-	inVtx0 = true;
-	beta += tkpt;
-      } else if( dZ < 0.2 ) {
-	inAnotherVtx =true;
-	betaStar += tkpt;
-      } 
-
-      if(debug_ && std::abs(jetsDz->ptrAt( jdz )->eta())<2.5 && jetsDz->ptrAt( jdz )->pt() > 20.0 ){
-	std::cout << setw(12) << i;
-	std::cout << setw(12) << icand->pdgId();
-	std::cout << setw(12) << icand->pt();
-	std::cout << setw(12) << dZ0;
-	std::cout << setw(12) << dZ;
-	std::cout << setw(12) << inVtx0;
-	std::cout << setw(12) << inAnotherVtx;
-	std::cout << std::endl;
+      if( sumTkPt != 0. ) {
+	beta     = beta    /sumTkPt;
+	betaStar = betaStar/sumTkPt;
+      }else{
+	beta     = -1;
+	betaStar = -1;
       }
+      
+      jInfo.mybetaStar = betaStar;
+      jInfo.mybeta     = beta;
+      
+    } else {
+      
+      jInfo.mybetaStar = -999.0;
+      jInfo.mybeta     = -999.0;
+      
     }
-    
-    if( sumTkPt != 0. ) {
-      beta     = beta    /sumTkPt;
-      betaStar = betaStar/sumTkPt;
-    }else{
-      beta     = -1;
-      betaStar = -1;
-    }
-    
-    
-    jInfo.mybetaStar = betaStar;
-    jInfo.mybeta     = beta;
     
     if(debug_ && std::abs(jetsDz->ptrAt( jdz )->eta())<2.5 && jetsDz->ptrAt( jdz )->pt() > 20.0 ){
       std::cout << setw(6)  <<"";

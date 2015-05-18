@@ -12,6 +12,7 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
+
 process.maxEvents  = cms.untracked.PSet( input = cms.untracked.int32( 100 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
@@ -20,13 +21,13 @@ jdebug=True
 
 # PHYS14 Files
 process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring(
-    #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/622CAFBA-BD9A-E411-BE11-002481E14FFC.root",
-    #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/FA4B46B9-8E9A-E411-A899-002590A3C954.root",
-    #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/8607F88E-F799-E411-A180-0025B3E063F0.root",
-    #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/F620A7C9-F799-E411-8DEF-002590A371AC.root"
-    #"/store/mc/Spring14miniaod/VBF_HToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/141029_PU40bx50_PLS170_V6AN2-v1/10000/5C3A5675-7C72-E411-AC85-003048D436EA.root"
-    "/store/mc/Phys14DR/GluGluToHToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/3C2EFAB1-B16F-E411-AB34-7845C4FC39FB.root"),
-    skipEvents=cms.untracked.uint32(0)
+        #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/622CAFBA-BD9A-E411-BE11-002481E14FFC.root",
+        #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/FA4B46B9-8E9A-E411-A899-002590A3C954.root",
+        #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/8607F88E-F799-E411-A180-0025B3E063F0.root",
+        #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/F620A7C9-F799-E411-8DEF-002590A371AC.root"
+        #"/store/mc/Spring14miniaod/VBF_HToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/141029_PU40bx50_PLS170_V6AN2-v1/10000/5C3A5675-7C72-E411-AC85-003048D436EA.root"
+        "/store/mc/Phys14DR/GluGluToHToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/3C2EFAB1-B16F-E411-AB34-7845C4FC39FB.root"),
+                            skipEvents=cms.untracked.uint32(0)
                        
 )
 
@@ -42,11 +43,10 @@ process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
 
 process.load("flashgg/MicroAOD/flashggMicroAODSequence_cff")
 process.load("flashgg/MicroAOD/flashggMicroAODExtraJetsSequence_cff")
-process.load("flashgg/Validation/JetTreeMaker_cff")
 
 from flashgg.MicroAOD.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName       = cms.untracked.string('.workspace/myMicroAODOutputFile.root'),
+                               fileName       = cms.untracked.string('./workspace/myMicroAODOutputFile.root'),
                                outputCommands = microAODDefaultOutputCommand
                            )
 
@@ -77,6 +77,26 @@ from flashgg.MicroAOD.flashggJets_cfi import addFlashggPFCHSLegJets
 # call the function, it takes care of everything else.
 addFlashggPFCHSLegJets(process)
 # +++++++++++++++++++++++++++++++++++
+
+
+
+#----------------------------------------------------------------------------
+# Quark-Gluon likelihoo
+#----------------------------------------------------------------------------
+
+#process.load('RecoJets.JetProducers.QGTagger_cfi')
+
+# Could be reco::PFJetCollection or pat::JetCollection (both AOD and miniAOD)
+#process.QGTagger.srcJets          = cms.InputTag('flashggJetsPFCHS0')
+# Other options (might need to add an ESSource for it): see https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGDataBaseVersion
+#process.QGTagger.jetsLabel        = cms.string('QGL_AK4PFchs')        
+# 
+#process.QGTagger.jec              = cms.string('')# keept empty, because are already corrected
+#process.QGTagger.systematicsLabel = cms.string('')# Produce systematic smearings (not yet available, keep empty)
+
+
+#----------------------------------------------------------------------------
+
 
 
 # ++++++++++++ JetTreeMaker +++++++++

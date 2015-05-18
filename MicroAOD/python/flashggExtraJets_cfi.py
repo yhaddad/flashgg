@@ -9,10 +9,10 @@ from flashgg.MicroAOD.flashggJets_cfi import flashggBTag
 def addFlashggPF(process):
   print "JET PRODUCER :: Flashgg PF producer ::"
   from RecoJets.JetProducers.ak4PFJets_cfi  import ak4PFJets
-  from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
+  #from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
   
   process.ak4PFJets  = ak4PFJets.clone (src = 'packedPFCandidates', doAreaFastjet = True)
-  process.ak4GenJets = ak4GenJets.clone(src = 'packedGenParticles')
+  #process.ak4GenJets = ak4GenJets.clone(src = 'packedGenParticles')
   ## cluster the jets
   addJetCollection(
     process,
@@ -24,14 +24,15 @@ def addFlashggPF(process):
     btagDiscriminators = [ flashggBTag ],
     jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], 'None'),
     
-    genJetCollection = cms.InputTag('ak4GenJets'),
+    #genJetCollection = cms.InputTag('ak4GenJets'),
+    genJetCollection = cms.InputTag('slimmedGenJets'),
     genParticles     = cms.InputTag('prunedGenParticles'),
     # jet param
     algo = 'AK', rParam = 0.4
   )
   ## adjust MC matching
-  process.patJetGenJetMatchAK4PF.matched = "ak4GenJets"
-  process.patJetPartonMatchAK4PF.matched = "prunedGenParticles"
+  #process.patJetGenJetMatchAK4PF.matched = "ak4GenJets"
+  #process.patJetPartonMatchAK4PF.matched = "prunedGenParticles"
   #process.patJetPartons.particles        = "prunedGenParticles"
   
   #adjust PV used for Jet Corrections
@@ -85,9 +86,9 @@ def addFlashggPFCHS0(process):
   
   #Import RECO jet producer for ak4 PF and GEN jet
   from RecoJets.JetProducers.ak4PFJets_cfi  import ak4PFJets
-  from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
+  #from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
   process.ak4PFJetsCHS0 = ak4PFJets.clone ( src = 'pfNoElectronsCHS0', doAreaFastjet = True)
-  process.ak4GenJets    = ak4GenJets.clone( src = 'packedGenParticles')
+  #process.ak4GenJets    = ak4GenJets.clone( src = 'packedGenParticles')
   
   # NOTE : these line are from the new Jet recipe 
   # The following is make patJets, but EI is done with the above
@@ -109,15 +110,16 @@ def addFlashggPFCHS0(process):
     btagDiscriminators =  [ flashggBTag ],
     jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], 'None'),
     
-    genJetCollection = cms.InputTag('ak4GenJets0'),
+    #genJetCollection = cms.InputTag('ak4GenJets0'),
     genParticles     = cms.InputTag('prunedGenParticles'),
+    genJetCollection = cms.InputTag('slimmedGenJets'),
     # jet param
     algo = 'AK', rParam = 0.4
-  )
+    )
   
   # adjust MC matching
-  process.patJetGenJetMatchAK4PFCHS0.matched = "ak4GenJetsLeg"
-  process.patJetPartonMatchAK4PFCHS0.matched = "prunedGenParticles"
+  #process.patJetGenJetMatchAK4PFCHS0.matched = "ak4GenJetsLeg"
+  #process.patJetPartonMatchAK4PFCHS0.matched = "prunedGenParticles"
   #process.patJetPartons.particles = "prunedGenParticles"
 
   #adjust PV used for Jet Corrections
