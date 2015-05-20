@@ -13,7 +13,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
 
-process.maxEvents  = cms.untracked.PSet( input = cms.untracked.int32( 100 ) )
+process.maxEvents  = cms.untracked.PSet( input = cms.untracked.int32( 1 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 
@@ -84,17 +84,17 @@ addFlashggPFCHSLegJets(process)
 # Quark-Gluon likelihoo
 #----------------------------------------------------------------------------
 
-#process.load('RecoJets.JetProducers.QGTagger_cfi')
-
+process.load('RecoJets.JetProducers.QGTagger_cfi')
+#from RecoJets.JetProducers.QGTagger_cfi import QGTagger
 # Could be reco::PFJetCollection or pat::JetCollection (both AOD and miniAOD)
-#process.QGTagger.srcJets          = cms.InputTag('flashggJetsPFCHS0')
-# Other options (might need to add an ESSource for it): see https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGDataBaseVersion
-#process.QGTagger.jetsLabel        = cms.string('QGL_AK4PFchs')        
-# 
+process.QGTagger.srcJets     = cms.InputTag('flashggJetsPFCHS0')
+process.QGTagger.jetsLabel   = cms.string('QGL_AK4PFchs') 
+# for all the options :  https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGDataBaseVersion
 #process.QGTagger.jec              = cms.string('')# keept empty, because are already corrected
 #process.QGTagger.systematicsLabel = cms.string('')# Produce systematic smearings (not yet available, keep empty)
-
-
+#process.qgTaggerPF       = QGTagger.clone( srcJets = 'flashggJetsPF'      ,jetsLabel = 'QGL_AK4PF' );
+#process.qgTaggerPFCHS0   = QGTagger.clone( srcJets = 'flashggJetsPFCHS0'  ,jetsLabel = 'ak4PFJetsCHS' );
+#process.qgTaggerPFCHSLeg = QGTagger.clone( srcJets = 'flashggJetsPFCHSLeg',jetsLabel = 'ak4PFJetsCHS' );
 #----------------------------------------------------------------------------
 
 
@@ -108,32 +108,33 @@ process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTr
                                                          JetTagDz              = cms.InputTag("flashggJetsPF"),
                                                          StringTag	       = cms.string("PF"),
                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                                         #qgTaggerInput         = cms.InputTag("qgTaggerPF"),
                                                          debug                 = cms.untracked.bool(jdebug),
                                                      )
-
-process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-                                                             StringTag		= cms.string("PFCHS0"),
-                                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-                                                             debug                 = cms.untracked.bool(jdebug),
-                                                         )
-
-process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                               GenParticleTag = cms.untracked.InputTag('prunedGenParticles'),
-                                                               JetTagDz       = cms.InputTag("flashggJets"),                  
-                                                               StringTag	= cms.string("PFCHSLeg"),
-                                                               VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-                                                               debug                 = cms.untracked.bool(jdebug),
-                                                           )
-
+#
+#process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+#                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
+#                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
+#                                                             StringTag		= cms.string("PFCHS0"),
+#                                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+#                                                             debug                 = cms.untracked.bool(jdebug),
+#                                                         )
+#
+#process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+#                                                               GenParticleTag = cms.untracked.InputTag('prunedGenParticles'),
+#                                                               JetTagDz       = cms.InputTag("flashggJets"),                  
+#                                                               StringTag	= cms.string("PFCHSLeg"),
+#                                                               VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+#                                                               debug                 = cms.untracked.bool(jdebug),
+#                                                           )
+#
 # +++++++++++++++++++++++++++++++++
 process.p = cms.Path(  process.flashggMicroAODSequence
                        + process.flashggMicroAODExtraJetsSequence
                        # tree producer ...
                        + process.flashggJetValidationTreeMakerPF 
-                       + process.flashggJetValidationTreeMakerPFCHS0
-                       + process.flashggJetValidationTreeMakerPFCHSLeg
+                       #+ process.flashggJetValidationTreeMakerPFCHS0
+                       #+ process.flashggJetValidationTreeMakerPFCHSLeg
                    )
 
 process.e = cms.EndPath(process.out)

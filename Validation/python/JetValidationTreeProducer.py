@@ -16,44 +16,50 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 # +++++ the source file
 process.MessageLogger.cerr.threshold = 'ERROR'
 
-jdebug=True
+jdebug=False
+
+#process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring(
+#    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/GluGluToHToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/150518_105748/0000/myMicroAODOutputFile_1.root",
+#    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/GluGluToHToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/150518_105748/0000/myMicroAODOutputFile_2.root",
+#    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/GluGluToHToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/150518_105748/0000/myMicroAODOutputFile_3.root"),
+#)
 
 process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring(
-  #"/store/temp/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150512_104446/0000/myMicroAODOutputFile_1.root",
- # "/store/temp/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150512_104446/0000/myMicroAODOutputFile_2.root",
-  #"/store/temp/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150512_104446/0000/myMicroAODOutputFile_3.root",
-  #"/store/temp/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150512_104446/0000/myMicroAODOutputFile_4.root"),
-        "file:/afs/cern.ch/work/y/yhaddad/myMicroAODOutputFile.root")                                                       
+    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150518_105844/0000/myMicroAODOutputFile_1.root",
+    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150518_105844/0000/myMicroAODOutputFile_2.root",
+    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150518_105844/0000/myMicroAODOutputFile_3.root",
+    "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/HggJetVal14/Phys14MicroAOD/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggJetVal14-Phys14MicroAOD-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150518_105844/0000/myMicroAODOutputFile_4.root"),
 )
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName  = cms.string("file:/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV-powheg-pythia6-PU20bx25.root")) 
+                                   fileName  = cms.string("file:/afs/cern.ch/work/y/yhaddad/VBF_HToGG_M-125_13TeV-powheg-pythia6-PU20bx25.root"))
+                                   #fileName  = cms.string("file:/afs/cern.ch/work/y/yhaddad/GluGluToHToGG_M-125_13TeV-powheg-pythia6-PU20bx25.root")) 
 
 
 
 process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                          GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
-                                                         JetTagDz              = cms.InputTag("flashggJets"),
+                                                         JetTagDz              = cms.InputTag("flashggJetsPF"),
                                                          StringTag	       = cms.string("PF"),
                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                                          debug                 = cms.untracked.bool(jdebug),
+                                                     )
+
+process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                             GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
+                                                             JetTagDz              = cms.InputTag("flashggJetsPFCHS0"),
+                                                             StringTag		   = cms.string("PFCHS0"),
+                                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                                             debug                 = cms.untracked.bool(jdebug),
                                                          )
 
-#process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                             GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
-#                                                             JetTagDz              = cms.InputTag("flashggJetsPFCHS0"),
-#                                                             StringTag		   = cms.string("PFCHS0"),
-#                                                             VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-#                                                             debug                 = cms.untracked.bool(jdebug),
-#                                                         )
-#
-#process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-#                                                               GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
-#                                                               JetTagDz              = cms.InputTag("flashggJetsPFCHSLeg"),                  
-#                                                               StringTag	     = cms.string("PFCHSLeg"),
-#                                                               VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-#                                                               debug                 = cms.untracked.bool(jdebug),
-#                                                               )
+process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+                                                               GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
+                                                               JetTagDz              = cms.InputTag("flashggJets"),                  
+                                                               StringTag	     = cms.string("PFCHSLeg"),
+                                                               VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+                                                               debug                 = cms.untracked.bool(jdebug),
+                                                               )
 
 
 
@@ -62,11 +68,11 @@ process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTr
 
 process.options = cms.untracked.PSet(
     allowUnscheduled = cms.untracked.bool(True)
-    )
+)
 
 process.p = cms.Path(
     process.flashggJetValidationTreeMakerPF 
-    #+ process.flashggJetValidationTreeMakerPFCHS0 
-    #+ process.flashggJetValidationTreeMakerPFCHSLeg 
+    + process.flashggJetValidationTreeMakerPFCHS0 
+    + process.flashggJetValidationTreeMakerPFCHSLeg 
     )
 #process.e = cms.EndPath(process.out)

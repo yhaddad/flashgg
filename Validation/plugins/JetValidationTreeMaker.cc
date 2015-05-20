@@ -172,7 +172,7 @@ struct jetInfo {
   float area;
   float eta;
   float phi;
-
+  
   float PlanarFlow;
   float S;
   float Q;
@@ -184,6 +184,8 @@ struct jetInfo {
   float jet_ptD;
   float jet_betaClassic;
   float jet_betaStarClassic;
+  float jet_qgLikelihood;
+  
   
   float PUJetID_betaStar;
   float PUJetID_beta;
@@ -281,8 +283,8 @@ private:
   EDGetTokenT<edm::View<flashgg::DiPhotonCandidate> > diPhotonToken_;
   EDGetTokenT< View<reco::Vertex> >                   vertexToken_;
   EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
+  //EDGetTokenT< edm::ValueMap<float> > qgToken_;
   
-  //EDGetTokenT< VertexCandidateMap > qgToken;
   TTree*     eventTree;
   TTree*     jetTree;
   TTree*     genPartTree;
@@ -313,7 +315,8 @@ JetValidationTreeMaker::JetValidationTreeMaker(const edm::ParameterSet& iConfig)
   diPhotonToken_(consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons")))),
   vertexToken_  (consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
   vertexCandidateMapToken_(consumes<VertexCandidateMap>(iConfig.getParameter<InputTag>("VertexCandidateMapTag"))),
-  
+  //qgToken_      (consumes<edm::ValueMap<float> >(edm::InputTag("QGTagger", "qgLikelihood"))),
+  //qgToken_      (consumes<edm::ValueMap<float> >(iConfig.getUntrackedParameter<InputTag> ( ("qgTaggerInput", InputTag("qgTaggerPF") ))),
   usePUJetID    (iConfig.getUntrackedParameter<bool>("UsePUJetID"   ,false)),
   photonJetVeto (iConfig.getUntrackedParameter<bool>("PhotonJetVeto",true)),
   homeGenJetMatching_ (iConfig.getUntrackedParameter<bool>("homeGenJetMatching",false)),
@@ -322,7 +325,7 @@ JetValidationTreeMaker::JetValidationTreeMaker(const edm::ParameterSet& iConfig)
 {
   event_number = 0;
   jetCollectionName = iConfig.getParameter<string>("StringTag");
-  //qgToken = consumes<edm::ValueMap<float>>(edm::InputTag("QGTagger", "qgLikelihood"));
+  //qgToken_ = consumes<edm::ValueMap<float>>(edm::InputTag("QGTagger", "qgLikelihood"));
 }
 
 JetValidationTreeMaker::~JetValidationTreeMaker()
@@ -365,9 +368,10 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
   Handle<VertexCandidateMap> vtxmap;
   iEvent.getByToken(vertexCandidateMapToken_,vtxmap);
-    
-  //edm::Handle<edm::ValueMap<float>> qgHandle; iEvent.getByToken(qgToken, qgHandle);
-    
+  
+  //edm::Handle<edm::ValueMap<float> > qgHandle;
+  //iEvent.getByToken(qgToken_, qgHandle);
+  
   int legacyEqZeroth =0;
   int nDiphotons =0;
   
@@ -522,6 +526,8 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   
   // +++ loop on the reconstructed jets
   for (unsigned int jdz = 0 ; jdz < jetsDz->size() ; jdz++) {
+    //jInfo.jet_qgLikelihood =   (*qgHandle)[jetsDz->ptrAt( jdz )];
+    
     jInfo.id            = jdz;
     jInfo.photonMatch   = int(_isPhoton[jdz]); 
     
@@ -584,6 +590,8 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     jInfo.phi              = jetsDz->ptrAt( jdz )->phi();
     jInfo.area             = jetsDz->ptrAt( jdz )->jetArea();
 
+
+    
     
     if(!(jetCollectionName.find("PPI")>1 && jetCollectionName.find("PPI")<jetCollectionName.size()) )
       {
