@@ -85,7 +85,9 @@ namespace  {
         edm::Wrapper<flashgg::Jet>                                    wrp_fgg_jet;
         std::vector<flashgg::Jet>                                     vec_fgg_jet;
         edm::Ptr<flashgg::Jet>                                        ptr_fgg_jet;
-        edm::Ptr<pat::Muon>                                        ptr_fgg_muon;
+        /* commeneted because already defined in the release
+           edm::Ptr<pat::Muon>                                       ptr_fgg_muon;
+        */
         std::vector<pat::Muon>                                        vec_fgg_muon;
         edm::Wrapper<std::vector<flashgg::Jet> >                  wrp_vec_fgg_jet;
         std::map<edm::Ptr<reco::Vertex>, float>                    map_ptr_vtx_flo;
@@ -139,9 +141,12 @@ namespace  {
         flashgg::TTHLeptonicTag tthl;
         std::vector<flashgg::TTHLeptonicTag> vec_tthl;
         edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> > wrp_vec_tthl;
-        edm::Ptr<pat::Electron> ptr_elec;
-        edm::Ptr<pat::Muon> ptr_muon;
-
+        
+        /* -- theses lines are commented, they are already on the realese 
+           edm::Ptr<pat::Electron> ptr_elec;
+           edm::Ptr<pat::Muon> ptr_muon;
+        */
+        
         flashgg::TTHHadronicTag tthh;
         std::vector<flashgg::TTHHadronicTag> vec_tthh;
         edm::Wrapper<std::vector<flashgg::TTHHadronicTag> > wrp_vec_tthh;
@@ -157,9 +162,12 @@ namespace  {
         flashgg::VHLooseTag vhl;
         std::vector<flashgg::VHLooseTag> vec_vhl;
         edm::Wrapper<std::vector<flashgg::VHLooseTag> > wrp_vec_vhl;
-        edm::Ptr<pat::Electron> ptr_elec_vhl;
-        edm::Ptr<pat::Muon> ptr_muon_vhl;
-
+        
+        /*
+          edm::Ptr<pat::Electron> ptr_elec_vhl;
+          edm::Ptr<pat::Muon> ptr_muon_vhl;
+        */
+        
         flashgg::VHTightTag vht;
         std::vector<flashgg::VHTightTag> vec_vht;
         edm::Wrapper<std::vector<flashgg::VHTightTag> > wrp_vec_vht;
@@ -167,17 +175,19 @@ namespace  {
         flashgg::VHHadronicTag vhhad;
         std::vector<flashgg::VHHadronicTag> vec_vhhad;
         edm::Wrapper<std::vector<flashgg::VHHadronicTag> > wrp_vec_vhhad;
-
-        edm::Ptr<pat::Electron> ptr_elec_vht;
-        edm::Ptr<pat::Muon> ptr_muon_vht;
-
+        
+        /*
+          edm::Ptr<pat::Electron> ptr_elec_vht;
+          edm::Ptr<pat::Muon> ptr_muon_vht;
+        */
+        
         std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> >  pair_ptr_vx_ptr_pat_pc;
         std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > >  vec_pair_ptr_vx_ptr_pat_pc;
         edm::Wrapper<std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > > > wrp_vec_pair_ptr_vx_ptr_pat_pc;
-
+        
         std::vector<edm::Ptr<pat::Muon> >        vec_ptr_pat_mu;
         edm::Wrapper<std::vector<edm::Ptr<pat::Muon> > >   wrp_vec_ptr_pat_mu;
-
+        
         std::vector<edm::Ptr<flashgg::Electron> >        vec_ptr_pat_ele;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::Electron> > >   wrp_vec_ptr_pat_ele;
 

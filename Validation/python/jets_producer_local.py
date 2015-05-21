@@ -46,7 +46,7 @@ process.load("flashgg/MicroAOD/flashggMicroAODExtraJetsSequence_cff")
 
 from flashgg.MicroAOD.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName       = cms.untracked.string('./workspace/myMicroAODOutputFile.root'),
+                               fileName       = cms.untracked.string('./myMicroAODOutputFile.root'),
                                outputCommands = microAODDefaultOutputCommand
                            )
 
@@ -101,7 +101,7 @@ addFlashggPFCHSLegJets(process)
 
 # ++++++++++++ JetTreeMaker +++++++++
 process.TFileService = cms.Service("TFileService",
-                                   fileName  = cms.string("./workspace/GluGluToHToGG_M-125_13TeV_JetValTrees_NEW_0.root"))
+                                   fileName  = cms.string("./myJetValTrees.root"))
 
 process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                          GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
@@ -109,7 +109,7 @@ process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTr
                                                          StringTag	       = cms.string("PF"),
                                                          VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                                          debug                 = cms.untracked.bool(jdebug),
-                                                     )
+                                                         )
 
 process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
                                                              GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),

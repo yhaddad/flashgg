@@ -27,9 +27,13 @@
 <class name="flashgg::TTHLeptonicTag"/>
 <class name="std::vector<flashgg::TTHLeptonicTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> >"/>
-<class name="edm::Ptr<pat::Electron>"/>
+<!-- This two lines are commented, there are already in the realese
+     <class name="edm::Ptr<pat::Electron>"/>
+     -->
 <class name="std::vector<pat::Muon>"/>
+<!-- This two lines are commented, there are already in the realese
 <class name="edm::Ptr<pat::Muon>"/> 
+-->
 <class name="flashgg::TTHHadronicTag"/>
 <class name="std::vector<flashgg::TTHHadronicTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::TTHHadronicTag> >"/>
