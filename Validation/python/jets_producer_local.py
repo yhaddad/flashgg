@@ -61,41 +61,35 @@ process.options = cms.untracked.PSet(
 
 # ++++++++++++ PF +++++++++++++++++++
 # uses the vertex 0
-from flashgg.MicroAOD.flashggExtraJets_cfi import addFlashggPF
+from flashgg.MicroAOD.flashggExtraJets_cfi import addFlashggPF#,addQGTaggerPF
 addFlashggPF(process)
+#addQGTaggerPF(process)
 # +++++++++++++++++++++++++++++++++++
 
 # ++++++++++++ PFCHS0 +++++++++++++++
 # uses the vertex 0
-from flashgg.MicroAOD.flashggExtraJets_cfi import addFlashggPFCHS0
+from flashgg.MicroAOD.flashggExtraJets_cfi import addFlashggPFCHS0#, addQGTaggerPFCHS0
 addFlashggPFCHS0(process)
+#addQGTaggerPFCHS0(process)
 # +++++++++++++++++++++++++++++++++++
 
 # ++++++++++++ PFCHSLeg +++++++++++++
 # import function which takes care of reclustering the jets using legacy vertex     
-from flashgg.MicroAOD.flashggJets_cfi import addFlashggPFCHSLegJets 
+from flashgg.MicroAOD.flashggJets_cfi import addFlashggPFCHSLegJets #, addQGTaggerPFCHSLeg
 # call the function, it takes care of everything else.
 addFlashggPFCHSLegJets(process)
+#addQGTaggerPFCHSLeg(process)
+
 # +++++++++++++++++++++++++++++++++++
 
 
 
-#----------------------------------------------------------------------------
-# Quark-Gluon likelihoo
-#----------------------------------------------------------------------------
+process.load('RecoJets.JetProducers.QGTagger_cfi')
+process.QGTaggerPFCHS0            =  process.QGTagger.clone( srcJets   = 'flashggJetsPFCHS0' ,
+                                                             jetsLabel = 'QGL_AK4PFchs')
 
-#process.load('RecoJets.JetProducers.QGTagger_cfi')
-
-# Could be reco::PFJetCollection or pat::JetCollection (both AOD and miniAOD)
-#process.QGTagger.srcJets          = cms.InputTag('flashggJetsPFCHS0')
-# Other options (might need to add an ESSource for it): see https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGDataBaseVersion
-#process.QGTagger.jetsLabel        = cms.string('QGL_AK4PFchs')        
-# 
-#process.QGTagger.jec              = cms.string('')# keept empty, because are already corrected
-#process.QGTagger.systematicsLabel = cms.string('')# Produce systematic smearings (not yet available, keep empty)
-
-
-#----------------------------------------------------------------------------
+process.QGTaggerPFCHS0.jec              = cms.InputTag('')# keept empty, because are already corrected
+process.QGTaggerPFCHS0.systematicsLabel = cms.string('')# Produce systematic smearings (not yet available, keep empty)
 
 
 
@@ -103,37 +97,43 @@ addFlashggPFCHSLegJets(process)
 process.TFileService = cms.Service("TFileService",
                                    fileName  = cms.string("./myJetValTrees.root"))
 
-process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                         GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
-                                                         JetTagDz              = cms.InputTag("flashggJetsPF"),
-                                                         StringTag	       = cms.string("PF"),
-                                                         VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-                                                         debug                 = cms.untracked.bool(jdebug),
-                                                         )
+#process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+#                                                         GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
+#                                                         JetTagDz              = cms.InputTag("flashggJetsPF"),
+#                                                         StringTag	        = cms.string("PF"),
+#                                                         QGTagger              = cms.untracked.InputTag("QGTaggerPF"),
+#                                                         VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+#                                                         debug                 = cms.untracked.bool(jdebug),
+#                                                         )
 
 process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-                                                             StringTag		= cms.string("PFCHS0"),
+                                                             GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
+                                                             JetTagDz              = cms.InputTag("flashggJetsPFCHS0"),
+                                                             StringTag		   = cms.string("PFCHS0"),
+                                                             QGTagger              = cms.untracked.InputTag("QGTaggerPFCHS0"),
                                                              VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                                              debug                 = cms.untracked.bool(jdebug),
                                                          )
 
-process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                               GenParticleTag = cms.untracked.InputTag('prunedGenParticles'),
-                                                               JetTagDz       = cms.InputTag("flashggJets"),                  
-                                                               StringTag	= cms.string("PFCHSLeg"),
-                                                               VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
-                                                               debug                 = cms.untracked.bool(jdebug),
-                                                           )
+
+
+
+#process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
+#                                                               GenParticleTag = cms.untracked.InputTag('prunedGenParticles'),
+#                                                               JetTagDz       = cms.InputTag("flashggJets"),                  
+#                                                               StringTag	= cms.string("PFCHSLeg"),
+#                                                               QGTagger              = cms.untracked.InputTag("QGTaggerPFCHSLeg"),
+#                                                               VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
+#                                                               debug                 = cms.untracked.bool(jdebug),
+#                                                           )
 
 # +++++++++++++++++++++++++++++++++
 process.p = cms.Path(  process.flashggMicroAODSequence
                        + process.flashggMicroAODExtraJetsSequence
                        # tree producer ...
-                       + process.flashggJetValidationTreeMakerPF 
+                       #+ process.flashggJetValidationTreeMakerPF 
                        + process.flashggJetValidationTreeMakerPFCHS0
-                       + process.flashggJetValidationTreeMakerPFCHSLeg
+                       #+ process.flashggJetValidationTreeMakerPFCHSLeg
                    )
 
 process.e = cms.EndPath(process.out)

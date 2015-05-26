@@ -282,7 +282,7 @@ private:
   EDGetTokenT< View<reco::Vertex> >                   vertexToken_;
   EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
   
-  //EDGetTokenT< VertexCandidateMap > qgToken;
+  EDGetTokenT< edm::ValueMap<float> > qgToken_;
   TTree*     eventTree;
   TTree*     jetTree;
   TTree*     genPartTree;
@@ -313,7 +313,7 @@ JetValidationTreeMaker::JetValidationTreeMaker(const edm::ParameterSet& iConfig)
   diPhotonToken_(consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons")))),
   vertexToken_  (consumes<View<reco::Vertex> >(iConfig.getUntrackedParameter<InputTag> ("VertexTag", InputTag("offlineSlimmedPrimaryVertices")))),
   vertexCandidateMapToken_(consumes<VertexCandidateMap>(iConfig.getParameter<InputTag>("VertexCandidateMapTag"))),
-  
+  qgToken_      (consumes<edm::ValueMap<float> >(iConfig.getUntrackedParameter<InputTag>("QGTagger", InputTag("qgLikelihood")))),
   usePUJetID    (iConfig.getUntrackedParameter<bool>("UsePUJetID"   ,false)),
   photonJetVeto (iConfig.getUntrackedParameter<bool>("PhotonJetVeto",true)),
   homeGenJetMatching_ (iConfig.getUntrackedParameter<bool>("homeGenJetMatching",false)),
@@ -365,9 +365,9 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
   Handle<VertexCandidateMap> vtxmap;
   iEvent.getByToken(vertexCandidateMapToken_,vtxmap);
-    
-  //edm::Handle<edm::ValueMap<float>> qgHandle; iEvent.getByToken(qgToken, qgHandle);
-    
+  
+  edm::Handle<edm::ValueMap<float>> qgHandle; iEvent.getByToken(qgToken_, qgHandle);
+  
   int legacyEqZeroth =0;
   int nDiphotons =0;
   
@@ -522,6 +522,9 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   
   // +++ loop on the reconstructed jets
   for (unsigned int jdz = 0 ; jdz < jetsDz->size() ; jdz++) {
+    //edm::RefToBase<pat::Jet> jetRef(edm::Ref<edm::View<pat::Jet> >(jets, jet - jets->begin()));
+    float qgLikelihood = (*qgHandle)[jetsDz->refAt( jdz )];
+    
     jInfo.id            = jdz;
     jInfo.photonMatch   = int(_isPhoton[jdz]); 
     
@@ -647,6 +650,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       std::cout << setw(12) << "dZ";
       std::cout << setw(12) << "inVtx0";
       std::cout << setw(12) << "inOtherVtx";
+      
       std::cout << std::endl;
     }
     
@@ -686,6 +690,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	  std::cout << setw(12) << dZ;
 	  std::cout << setw(12) << inVtx0;
 	  std::cout << setw(12) << inAnotherVtx;
+	  
 	  std::cout << std::endl;
 	}
       }
@@ -721,6 +726,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       std::cout << setw(12) << "isPhoton";
       std::cout << setw(12) << "vtx_0";
       std::cout << setw(12) << "vtx_gg";
+      std::cout << setw(12) << "qgLikelihood";
       std::cout << std::endl;
       
       std::cout << setw(12) << jdz;
@@ -735,7 +741,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       
       if(diPhotons->size()>0) std::cout << setw(12) << diPhotons->ptrAt(0)->vtx()->position().z();
       else                    std::cout << setw(12) << "no gg";
-      
+      std::cout << setw(12) << qgLikelihood ;
       std::cout << std::endl;
       std::cout << setw(6) <<"";
       std::cout << setw(6) <<"=======================================================" << std::endl;

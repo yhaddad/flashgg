@@ -96,7 +96,7 @@ def addFlashggPFCHSLegJets(process):
   # process.patJetGenJetMatchAK4PFCHSLeg.matched = "ak4GenJetsLeg"
   # process.patJetPartonMatchAK4PFCHSLeg.matched = "prunedGenParticles"
   # process.patJetPartons.particles = "prunedGenParticles"
-  
+    
   
 # Flashgg Jet producer using the collection created with function above.
 flashggJets = cms.EDProducer('FlashggJetProducer',
@@ -109,3 +109,13 @@ flashggJets = cms.EDProducer('FlashggJetProducer',
 )
   
 
+
+def addQGTaggerPFCHSLeg(process):
+  process.load('RecoJets.JetProducers.QGTagger_cfi')
+
+  process.QGTaggerPFCHSLeg = process.QGTagger.clone( srcJets   = 'flashggJets' ,
+                                                     jetsLabel = 'QGL_AK4PFchs')
+  
+  process.QGTaggerPFCHSLeg.jec              = cms.InputTag('')# keept empty, because are already corrected
+  process.QGTaggerPFCHSLeg.systematicsLabel = cms.string('')# Produce systematic smearings (not yet available, keep empty)
+  
