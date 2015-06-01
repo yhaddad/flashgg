@@ -12,11 +12,11 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
-process.maxEvents  = cms.untracked.PSet( input = cms.untracked.int32( 500 ) )
+process.maxEvents  = cms.untracked.PSet( input = cms.untracked.int32( 100 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 100 )
 
 
-jdebug=False
+jdebug=True
 
 # PHYS14 Files
 process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring(
@@ -25,7 +25,7 @@ process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring(
     #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/8607F88E-F799-E411-A180-0025B3E063F0.root",
     #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/F620A7C9-F799-E411-8DEF-002590A371AC.root"
     #"/store/mc/Spring14miniaod/VBF_HToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/141029_PU40bx50_PLS170_V6AN2-v1/10000/5C3A5675-7C72-E411-AC85-003048D436EA.root"
-    "/store/mc/Phys14DR/GluGluToHToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/3C2EFAB1-B16F-E411-AB34-7845C4FC39FB.root"),
+    "/store/mc/Phys14DR/DYJetsToLL_M-50_13TeV-madgraph-pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0432E62A-7A6C-E411-87BB-002590DB92A8.root"),
     skipEvents=cms.untracked.uint32(0)
                        
 )
@@ -46,7 +46,7 @@ process.load("flashgg/Validation/JetTreeMaker_cff")
 
 from flashgg.MicroAOD.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand,microAODDebugOutputCommand
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName       = cms.untracked.string('myMicroAODOutputFile.root'),
+                               fileName       = cms.untracked.string('./workspace/myMicroAODOutputFile.root'),
                                outputCommands = microAODDefaultOutputCommand
                            )
 

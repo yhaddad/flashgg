@@ -21,6 +21,8 @@
 #include "flashgg/DataFormats/interface/VHHadronicTag.h"
 #include "flashgg/DataFormats/interface/VHLooseTag.h"
 #include "flashgg/DataFormats/interface/VHTightTag.h"
+#include "flashgg/DataFormats/interface/DiMuonCandidate.h"   //JTao
+#include "flashgg/DataFormats/interface/MuMuGammaCandidate.h"   //JTao
 #include <vector>
 #include <map>
 
@@ -39,7 +41,26 @@ namespace  {
         edm::Wrapper<edm::Ptr<flashgg::DiPhotonCandidate> >       wrp_ptr_fgg_dip;
         std::vector<edm::Ptr<flashgg::DiPhotonCandidate> >        vec_ptr_fgg_dip;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::DiPhotonCandidate> > >   wrp_vec_ptr_fgg_dip;
-        
+
+        //-----------J. Tao from IHEP-Beijing--------------
+        flashgg::DiMuonCandidate                                        fgg_dim;
+        edm::Wrapper<flashgg::DiMuonCandidate>                      wrp_fgg_dim;
+        std::vector<flashgg::DiMuonCandidate>                       vec_fgg_dim;
+        edm::Wrapper<std::vector<flashgg::DiMuonCandidate> >    wrp_vec_fgg_dim;
+        edm::Ptr<flashgg::DiMuonCandidate>                          ptr_fgg_dim;
+        edm::Wrapper<edm::Ptr<flashgg::DiMuonCandidate> >       wrp_ptr_fgg_dim;
+        std::vector<edm::Ptr<flashgg::DiMuonCandidate> >        vec_ptr_fgg_dim;
+        edm::Wrapper<std::vector<edm::Ptr<flashgg::DiMuonCandidate> > >   wrp_vec_ptr_fgg_dim;
+        flashgg::MuMuGammaCandidate                                        fgg_mmg;
+        edm::Wrapper<flashgg::MuMuGammaCandidate>                      wrp_fgg_mmg;
+        std::vector<flashgg::MuMuGammaCandidate>                       vec_fgg_mmg;
+        edm::Wrapper<std::vector<flashgg::MuMuGammaCandidate> >    wrp_vec_fgg_mmg;
+        edm::Ptr<flashgg::MuMuGammaCandidate>                          ptr_fgg_mmg;
+        edm::Wrapper<edm::Ptr<flashgg::MuMuGammaCandidate> >       wrp_ptr_fgg_mmg;
+        std::vector<edm::Ptr<flashgg::MuMuGammaCandidate> >        vec_ptr_fgg_mmg;
+        edm::Wrapper<std::vector<edm::Ptr<flashgg::MuMuGammaCandidate> > >   wrp_vec_ptr_fgg_mmg;
+        //-----------J. Tao from IHEP-Beijing--------------
+
         edm::Ptr<reco::Vertex>                                        ptr_rec_vtx;
         std::vector<edm::Ptr<reco::Vertex> >                      vec_ptr_rec_vtx;
 
@@ -59,20 +80,20 @@ namespace  {
         flashgg::MinimalPileupJetIdentifier                                               pujetid;
         std::pair<edm::Ptr<reco::Vertex>, flashgg::MinimalPileupJetIdentifier>                    pair_ptr_vtx_pujetid;
         std::map<edm::Ptr<reco::Vertex>, flashgg::MinimalPileupJetIdentifier>                    map_ptr_vtx_pujetid;
-        
-        PileupJetIdentifier fullPujetid;
-        std::pair<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>                   pair_ptr_vtx_fullPujetid;
-        std::map<edm::Ptr<reco::Vertex>,const PileupJetIdentifier>                    map_ptr_vtx_fullPujetid;
-        
+
         flashgg::Jet                                                      fgg_jet;
         edm::Wrapper<flashgg::Jet>                                    wrp_fgg_jet;
         std::vector<flashgg::Jet>                                     vec_fgg_jet;
         edm::Ptr<flashgg::Jet>                                        ptr_fgg_jet;
-        edm::Ptr<pat::Muon>                                        ptr_fgg_muon;
+        /* commeneted because already defined in the release
+           edm::Ptr<pat::Muon>                                       ptr_fgg_muon;
+        */
         std::vector<pat::Muon>                                        vec_fgg_muon;
         edm::Wrapper<std::vector<flashgg::Jet> >                  wrp_vec_fgg_jet;
         std::map<edm::Ptr<reco::Vertex>, float>                    map_ptr_vtx_flo;
         std::pair<edm::Ptr<reco::Vertex>, float>                   pai_ptr_vtx_flo;
+        std::map<std::string, std::map<edm::Ptr<reco::Vertex>, float> >  map_str_ptr_vtx_flo;
+        std::pair<std::string, std::map<edm::Ptr<reco::Vertex>, float> >  pai_str_ptr_vtx_flo;
         flashgg::Electron						    fgg_ele;
         edm::Ptr<flashgg::Electron> 					  ptr_fgg_ele;
         edm::Wrapper<flashgg::Electron>				  wrp_fgg_ele;
@@ -120,9 +141,12 @@ namespace  {
         flashgg::TTHLeptonicTag tthl;
         std::vector<flashgg::TTHLeptonicTag> vec_tthl;
         edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> > wrp_vec_tthl;
-        edm::Ptr<pat::Electron> ptr_elec;
-        edm::Ptr<pat::Muon> ptr_muon;
-
+        
+        /* -- theses lines are commented, they are already on the realese 
+           edm::Ptr<pat::Electron> ptr_elec;
+           edm::Ptr<pat::Muon> ptr_muon;
+        */
+        
         flashgg::TTHHadronicTag tthh;
         std::vector<flashgg::TTHHadronicTag> vec_tthh;
         edm::Wrapper<std::vector<flashgg::TTHHadronicTag> > wrp_vec_tthh;
@@ -138,9 +162,12 @@ namespace  {
         flashgg::VHLooseTag vhl;
         std::vector<flashgg::VHLooseTag> vec_vhl;
         edm::Wrapper<std::vector<flashgg::VHLooseTag> > wrp_vec_vhl;
-        edm::Ptr<pat::Electron> ptr_elec_vhl;
-        edm::Ptr<pat::Muon> ptr_muon_vhl;
-
+        
+        /*
+          edm::Ptr<pat::Electron> ptr_elec_vhl;
+          edm::Ptr<pat::Muon> ptr_muon_vhl;
+        */
+        
         flashgg::VHTightTag vht;
         std::vector<flashgg::VHTightTag> vec_vht;
         edm::Wrapper<std::vector<flashgg::VHTightTag> > wrp_vec_vht;
@@ -148,17 +175,19 @@ namespace  {
         flashgg::VHHadronicTag vhhad;
         std::vector<flashgg::VHHadronicTag> vec_vhhad;
         edm::Wrapper<std::vector<flashgg::VHHadronicTag> > wrp_vec_vhhad;
-
-        edm::Ptr<pat::Electron> ptr_elec_vht;
-        edm::Ptr<pat::Muon> ptr_muon_vht;
-
+        
+        /*
+          edm::Ptr<pat::Electron> ptr_elec_vht;
+          edm::Ptr<pat::Muon> ptr_muon_vht;
+        */
+        
         std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> >  pair_ptr_vx_ptr_pat_pc;
         std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > >  vec_pair_ptr_vx_ptr_pat_pc;
         edm::Wrapper<std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > > > wrp_vec_pair_ptr_vx_ptr_pat_pc;
-
+        
         std::vector<edm::Ptr<pat::Muon> >        vec_ptr_pat_mu;
         edm::Wrapper<std::vector<edm::Ptr<pat::Muon> > >   wrp_vec_ptr_pat_mu;
-
+        
         std::vector<edm::Ptr<flashgg::Electron> >        vec_ptr_pat_ele;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::Electron> > >   wrp_vec_ptr_pat_ele;
 

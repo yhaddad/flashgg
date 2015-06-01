@@ -18,7 +18,7 @@ void Jet::setPuJetId( const edm::Ptr<reco::Vertex> vtx, const PileupJetIdentifie
     MinimalPileupJetIdentifier min_id;
     min_id.RMS = id.RMS();
     min_id.betaStar = id.betaStar();
-    min_id.idFlag  = id.idFlag();
+    min_id.idFlag = id.idFlag();
     puJetId_.insert( std::make_pair( vtx, min_id ) );
 }
 
@@ -26,12 +26,6 @@ bool Jet::hasPuJetId( const edm::Ptr<reco::Vertex> vtx ) const
 {
     return ( puJetId_.count( vtx ) > 0 );
 }
-
-unsigned int Jet::nPuJetId() const
-{
-    return puJetId_.size();
-}
-
 
 bool Jet::passesPuJetId( const edm::Ptr<reco::Vertex> vtx, PileupJetIdentifier::Id level ) const
 {
@@ -53,7 +47,7 @@ float Jet::betaStar( const edm::Ptr<reco::Vertex> vtx ) const
 
 bool Jet::passesPuJetId( const edm::Ptr<DiPhotonCandidate> dipho, PileupJetIdentifier::Id level ) const
 {
-    return passesPuJetId( dipho->vtx() , level);
+    return passesPuJetId( dipho->vtx(), level );
 }
 
 float Jet::rms( const edm::Ptr<DiPhotonCandidate> dipho ) const
@@ -66,14 +60,6 @@ float Jet::betaStar( const edm::Ptr<DiPhotonCandidate> dipho ) const
     return betaStar( dipho->vtx() );
 }
 
-//------------------------------
-PileupJetIdentifier Jet::pileupJetIdentifier(const edm::Ptr<reco::Vertex> vtx) const {
-    return fullPuJetId_.at(vtx);
-}
-
-PileupJetIdentifier Jet::pileupJetIdentifier(const edm::Ptr<DiPhotonCandidate> dipho) const {
-    return fullPuJetId_.at(dipho->vtx());
-}
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil

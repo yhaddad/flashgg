@@ -151,7 +151,11 @@ struct GenJetInfo {
   float PUJetID_rms;
   int   passesPUJetID;
   
-
+  int   LegIsPV0;
+  
+  int   nPV;
+  int   nJets;
+  
   int   photonMatch;
   float photondRmin;
   float GenPhotonPt;
@@ -363,11 +367,11 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   Handle<View<flashgg::Jet> > jetsDz;
   iEvent.getByToken(jetDzToken_,jetsDz);
   //const PtrVector<flashgg::Jet>& jetsDzPointers = jetsDz->ptrVector();
-
+  
   Handle<VertexCandidateMap> vtxmap;
-  iEvent.getByToken(vertexCandidateMapToken_,vtxmap);
-  
-  
+  if(debug_ ) {
+    iEvent.getByToken(vertexCandidateMapToken_,vtxmap);
+  }
   int legacyEqZeroth =0;
   int nDiphotons =0;
   
@@ -386,6 +390,8 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   
   jInfo.nJets = jetsDz->size();
   jInfo.nPV   = vtxs->size();
+  genJetInfo.nJets = jetsDz->size();
+  genJetInfo.nPV   = vtxs->size();
   eInfo.nSV   = 0;
 
   if(debug_){
@@ -619,6 +625,9 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     }
     jInfo.nDiphotons = nDiphotons;
     jInfo.LegIsPV0   = legacyEqZeroth;
+
+    genJetInfo.nDiphotons = nDiphotons;
+    genJetInfo.LegIsPV0   = legacyEqZeroth;
     
     // Get constituants information
     jInfo.nPart     = jetsDz->ptrAt( jdz )->numberOfDaughters  ();
@@ -633,9 +642,8 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
     double betaStar = 0;
     //if(debug_ && std::abs(jetsDz->ptrAt( jdz )->eta())<2.5){
     if(debug_ && std::abs(jetsDz->ptrAt( jdz )->eta())<2.5 && jetsDz->ptrAt( jdz )->pt() > 20.0 ){
-      std::cout << setw(12)<<"jet["<< jdz
-		<<"] nPuJetId( "   << jetsDz->ptrAt( jdz )->nPuJetId() << " )"
-		<<" vtx0==vtxgg( " << jInfo.LegIsPV0 << " )"
+      std::cout << setw(12)<<"jet[" << jdz
+		<<"] vtx0==vtxgg( " << jInfo.LegIsPV0 << " )"
 		<< std::endl ;
       std::cout << setw(6) <<"";
       std::cout << setw(6) <<"=======================================================" << std::endl;
@@ -650,33 +658,34 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       std::cout << std::endl;
     }
     
-    const std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > >&  vtxmap_ = *vtxmap;
-    for (unsigned int i = 0 ; i < jetsDz->ptrAt( jdz )->numberOfDaughters()  ; i++){
-      edm::Ptr<pat::PackedCandidate> icand = edm::Ptr<pat::PackedCandidate> (jetsDz->ptrAt( jdz )->daughterPtr(i) );
-      if ( icand->charge() == 0 ) continue ;
-      
-      float tkpt = icand->pt();
-      sumTkPt   += tkpt;
-      
-      double dZ0 = std::abs(icand->dz(vtxs->ptrAt(0)->position()));
-      double dZ  = dZ0;
-      for (flashgg::VertexCandidateMap::const_iterator vi = vtxmap_.begin() ; vi != vtxmap_.end() ; vi++){
-	const edm::Ptr<reco::Vertex> iv = (vi->first);
-	if( iv->isFake() || iv->ndof() < 4 ) { continue; }
-	dZ = std::min<double>(dZ,std::abs(icand->dz(iv->position())));
-      }
-      
-      bool inVtx0       = false;
-      bool inAnotherVtx = false;
-      
-      if( dZ0 < 0.2 ) {
-	inVtx0 = true;
-	beta += tkpt;
-      } else if( dZ < 0.2 ) {
-	inAnotherVtx =true;
-	betaStar += tkpt;
-      } 
-
+    if (debug_ && vtxmap.isValid() ){
+      const std::vector<std::pair<edm::Ptr<reco::Vertex>, edm::Ptr<pat::PackedCandidate> > >&  vtxmap_ = *vtxmap;
+      for (unsigned int i = 0 ; i < jetsDz->ptrAt( jdz )->numberOfDaughters()  ; i++){
+	edm::Ptr<pat::PackedCandidate> icand = edm::Ptr<pat::PackedCandidate> (jetsDz->ptrAt( jdz )->daughterPtr(i) );
+	if ( icand->charge() == 0 ) continue ;
+	
+	float tkpt = icand->pt();
+	sumTkPt   += tkpt;
+	
+	double dZ0 = std::abs(icand->dz(vtxs->ptrAt(0)->position()));
+	double dZ  = dZ0;
+	for (flashgg::VertexCandidateMap::const_iterator vi = vtxmap_.begin() ; vi != vtxmap_.end() ; vi++){
+	  const edm::Ptr<reco::Vertex> iv = (vi->first);
+	  if( iv->isFake() || iv->ndof() < 4 ) { continue; }
+	  dZ = std::min<double>(dZ,std::abs(icand->dz(iv->position())));
+	}
+	
+	bool inVtx0       = false;
+	bool inAnotherVtx = false;
+	
+	if( dZ0 < 0.2 ) {
+	  inVtx0 = true;
+	  beta += tkpt;
+	} else if( dZ < 0.2 ) {
+	  inAnotherVtx =true;
+	  betaStar += tkpt;
+	} 
+	
       if(debug_ && std::abs(jetsDz->ptrAt( jdz )->eta())<2.5 && jetsDz->ptrAt( jdz )->pt() > 20.0 ){
 	std::cout << setw(12) << i;
 	std::cout << setw(12) << icand->pdgId();
@@ -687,17 +696,17 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	std::cout << setw(12) << inAnotherVtx;
 	std::cout << std::endl;
       }
+      
+      }
+      if( sumTkPt != 0. ) {
+	beta     = beta    /sumTkPt;
+	betaStar = betaStar/sumTkPt;
+      }else{
+	beta     = -1;
+	betaStar = -1;
+      }
     }
-    
-    if( sumTkPt != 0. ) {
-      beta     = beta    /sumTkPt;
-      betaStar = betaStar/sumTkPt;
-    }else{
-      beta     = -1;
-      betaStar = -1;
-    }
-    
-    
+
     jInfo.mybetaStar = betaStar;
     jInfo.mybeta     = beta;
     
@@ -960,6 +969,11 @@ JetValidationTreeMaker::beginJob()
   genJetTree->Branch("passesPUJetID"    ,&genJetInfo.passesPUJetID    ,"passesPUJetID/I");
   genJetTree->Branch("nDiphotons"       ,&genJetInfo.nDiphotons        ,"nDiphotons/I");
 
+  genJetTree->Branch("nDiphotons"       ,&genJetInfo.nDiphotons        ,"nDiphotons/I");
+  genJetTree->Branch("nPV"              ,&genJetInfo.nPV               ,"nPV/I");
+  genJetTree->Branch("nJets"            ,&genJetInfo.nJets             ,"nJets/I");
+  genJetTree->Branch("LegIsPV0"         ,&genJetInfo.LegIsPV0          ,"LegIsPV0/I");
+  
   genJetTree->Branch("photonMatch"      ,&genJetInfo.photonMatch  ,"photonMatch/I" );
   genJetTree->Branch("photondRmin"      ,&genJetInfo.photondRmin  ,"photondRmin/F" );
   genJetTree->Branch("GenPhotonPt"      ,&genJetInfo.GenPhotonPt  ,"GenPhotonPt/F" );
