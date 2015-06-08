@@ -20,12 +20,12 @@ jdebug=True
 
 # PHYS14 Files
 process.source = cms.Source("PoolSource",fileNames=cms.untracked.vstring(
-    #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/622CAFBA-BD9A-E411-BE11-002481E14FFC.root",
-    #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/FA4B46B9-8E9A-E411-A899-002590A3C954.root",
+        "/store/mc/Phys14DR/GluGluToHToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/3C2EFAB1-B16F-E411-AB34-7845C4FC39FB.root"), #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/622CAFBA-BD9A-E411-BE11-002481E14FFC.root",
+                            #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/00000/FA4B46B9-8E9A-E411-A899-002590A3C954.root",
     #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/8607F88E-F799-E411-A180-0025B3E063F0.root",
     #"/store/mc/Phys14DR/DYToMuMu_M-50_Tune4C_13TeV-pythia8/MINIAODSIM/PU40bx25_tsg_castor_PHYS14_25_V1-v2/10000/F620A7C9-F799-E411-8DEF-002590A371AC.root"
     #"/store/mc/Spring14miniaod/VBF_HToGG_M-125_13TeV-powheg-pythia6/MINIAODSIM/141029_PU40bx50_PLS170_V6AN2-v1/10000/5C3A5675-7C72-E411-AC85-003048D436EA.root"
-    "/store/mc/Phys14DR/DYJetsToLL_M-50_13TeV-madgraph-pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0432E62A-7A6C-E411-87BB-002590DB92A8.root"),
+    #"/store/mc/Phys14DR/DYJetsToLL_M-50_13TeV-madgraph-pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0432E62A-7A6C-E411-87BB-002590DB92A8.root"),
     skipEvents=cms.untracked.uint32(0)
                        
 )
@@ -92,17 +92,17 @@ process.flashggJetValidationTreeMakerPF = cms.EDAnalyzer('FlashggJetValidationTr
                                                      )
 
 process.flashggJetValidationTreeMakerPFCHS0 = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                             GenParticleTag     = cms.untracked.InputTag('prunedGenParticles'),
-                                                             JetTagDz           = cms.InputTag("flashggJetsPFCHS0"),
-                                                             StringTag		= cms.string("PFCHS0"),
+                                                             GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
+                                                             JetTagDz              = cms.InputTag("flashggJetsPFCHS0"),
+                                                             StringTag		   = cms.string("PFCHS0"),
                                                              VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                                              debug                 = cms.untracked.bool(jdebug),
                                                          )
 
 process.flashggJetValidationTreeMakerPFCHSLeg = cms.EDAnalyzer('FlashggJetValidationTreeMaker',
-                                                               GenParticleTag = cms.untracked.InputTag('prunedGenParticles'),
-                                                               JetTagDz       = cms.InputTag("flashggJets"),                  
-                                                               StringTag	= cms.string("PFCHSLeg"),
+                                                               GenParticleTag        = cms.untracked.InputTag('prunedGenParticles'),
+                                                               JetTagDz              = cms.InputTag("flashggJets"),                  
+                                                               StringTag	     = cms.string("PFCHSLeg"),
                                                                VertexCandidateMapTag = cms.InputTag("flashggVertexMapUnique"),
                                                                debug                 = cms.untracked.bool(jdebug),
                                                            )
