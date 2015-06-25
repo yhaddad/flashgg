@@ -287,7 +287,7 @@ private:
   EDGetTokenT<edm::View<flashgg::DiPhotonCandidate> > diPhotonToken_;
   EDGetTokenT< View<reco::Vertex> >           vertexToken_;
   EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
-  // EDGetTokenT< edm::ValueMap<float> > qgToken_;
+  //EDGetTokenT< edm::ValueMap<float> > qgToken_;
 
   
   TTree*     eventTree;
@@ -379,8 +379,6 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
   //const PtrVector<flashgg::Jet>& jetsDzPointers = jetsDz->ptrVector();
   
   //edm::Handle<edm::ValueMap<float>> qgHandle; iEvent.getByToken(qgToken_, qgHandle);
-  
-  
   
   Handle<VertexCandidateMap> vtxmap;
   if(debug_ ) {
@@ -587,14 +585,14 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
       jInfo.genJetPhi               = tmp_genjet_info.phi;
       jInfo.genJetdRmin             = tmp_genjet_info.dRmin;
     }else{
-      std::cout << "test 1"<< std::endl;
+      //std::cout << "test 1"<< std::endl;
       if( jetsDz->ptrAt( jdz )->genJet()){
 	jInfo.genJetMatch           = 1;
 	jInfo.genJetPt              = jetsDz->ptrAt( jdz )->genJet()->pt();
 	jInfo.genJetEta             = jetsDz->ptrAt( jdz )->genJet()->eta();
 	jInfo.genJetEta             = jetsDz->ptrAt( jdz )->genJet()->eta();
 	jInfo.genJetdRmin           = delta_R(jetsDz->ptrAt( jdz )->genJet(), jetsDz->ptrAt( jdz ));
-	std::cout << "test 2"<< std::endl;
+	//std::cout << "test 2"<< std::endl;
       } else {
 	jInfo.genJetPt              = -9999.;
 	jInfo.genJetEta             = -9999.;
@@ -828,7 +826,7 @@ JetValidationTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup&
 	genJetInfo.GenPhotonPt     = tmpjetinfo.GenPhotonPt;
 	genJetInfo.photondRmin     = tmpjetinfo.photondRmin;
 	
-	std::cout << " test ["<< recoLoop << "]--> (" << tmpjetinfo.photonMatch <<")"<<std::endl;
+	//std::cout << " test ["<< recoLoop << "]--> (" << tmpjetinfo.photonMatch <<")"<<std::endl;
 	
 	if(!(jetCollectionName.find("PPI")>1 && jetCollectionName.find("PPI")<jetCollectionName.size())){
 	  genJetInfo.recoJetBestPt   =  jetsDz->ptrAt( recoLoop )->correctedJet("Uncorrected").pt() ;
