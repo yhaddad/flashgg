@@ -58,30 +58,32 @@ namespace flashgg {
             Ptr<pat::PackedCandidate> cand = pfCandidates->ptrAt( i );
             if( cand->charge() == 0 ) { continue; } // skip neutrals
             for( unsigned int j = 0 ; j < primaryVertices->size() ; j++ ) {
-                //                std::cout << "Particle " << i << " vertex " << j << " - cuts at " << fromPVgt_ << " " << fromPVgtIfDz_ << " " << dzCut_ << std::endl;
+                //std::cout << "Particle " << i << " vertex " << j << " - cuts at " << fromPVgt_ << " " << fromPVgtIfDz_ << " " << dzCut_ << std::endl;
                 if( cand->fromPV( j ) > fromPVgt_ ) {
                     assoc->emplace_back( primaryVertices->ptrAt( j ), cand );
-                    //                    std::cout << " Included because fromPV=" << cand->fromPV( j ) << " > " << fromPVgt_ << std::endl;
+                    //std::cout << " Included because fromPV=" << cand->fromPV( j ) << " > " << fromPVgt_ << std::endl;
                 } else if( cand->fromPV( j ) > fromPVgtIfDz_ ) {
                     // This section to support extra cut on dZ in puppi code
-                    double absdz = fabs( cand->dz( primaryVertices->ptrAt( j )->position() ) );
+                    // double absdz = fabs( cand->dz( primaryVertices->ptrAt( j )->position() ) );
+                    double absdz = fabs( cand->dz( j ) ); // this not a an accurate methode to calculate the dz(),
+
                     if( absdz  < dzCut_ ) {
                         assoc->emplace_back( primaryVertices->ptrAt( j ), cand );
-                        //                        std::cout << " Included because fromPV=" <<cand->fromPV( j) << " > " << fromPVgtIfDz_<< " and dz=" << absdz << " < " << dzCut_ << std::endl;
-                        //                    } else {
-                        //                        std::cout << " Not included: fromPV=" << cand->fromPV( j) << " dz=" << absdz << " - cuts at " << fromPVgt_ << " " << fromPVgtIfDz_ << " " << dzCut_ << std::endl;
+                        //std::cout << " Included because fromPV=" <<cand->fromPV( j) << " > " << fromPVgtIfDz_<< " and dz=" << absdz << " < " << dzCut_ << std::endl;
+                    } else {
+                        //std::cout << " Not included: fromPV=" << cand->fromPV( j) << " dz=" << absdz << " - cuts at " << fromPVgt_ << " " << fromPVgtIfDz_ << " " << dzCut_ << std::endl;
                     }
                     // Are we perfectly emulating logic from PUPPI? It might be more like the lines below
                     // But maybe the basic PackedCandidate::dz already does the 'best' thing???
                     // Sort it out later, keep code simple for now
                     // N.B. trackRef and gsfTrackRef don't exist in PackedCandidate
                     /*
-                    double pDZ    = -9999;
-                    if      ( cand->trackRef().isNonnull()    ) {
-                        pDZ = cand->trackRef()   ->dz(primaryVertices->ptrAt( j )->position());
-                    } else if ( cand->gsfTrackRef().isNonnull() ) {
-                        pDZ = cand->gsfTrackRef()->dz(primaryVertices->ptrAt( j )->position());
-                    }
+                      double pDZ    = -9999;
+                      if      ( cand->trackRef().isNonnull()    ) {
+                      pDZ = cand->trackRef()   ->dz(primaryVertices->ptrAt( j )->position());
+                      } else if ( cand->gsfTrackRef().isNonnull() ) {
+                      pDZ = cand->gsfTrackRef()->dz(primaryVertices->ptrAt( j )->position());
+                      }
                     */
                 }
             }

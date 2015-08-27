@@ -7,7 +7,7 @@ import FWCore.ParameterSet.Config as cms
 from RecoJets.JetProducers.PileupJetIDParams_cfi import cutbased_new as pu_jetid
 from PhysicsTools.PatAlgos.tools.jetTools        import addJetCollection
 from flashgg.MicroAOD.flashggJets_cfi            import flashggBTag
-
+import os 
 def addFlashggPF(process, doQGTagging =  True, label ='', debug = False):
   
   from RecoJets.JetProducers.ak4PFJets_cfi  import ak4PFJets
@@ -95,7 +95,7 @@ def addStandardPuppiJets(process,
     pfCandidates       = cms.InputTag('packedPFCandidates'),
     svSource           = cms.InputTag('slimmedSecondaryVertices'),
     btagDiscriminators = [ flashggBTag ],
-    jetCorrections     = ('AK4PFchs',['L1FastJet',  'L2Relative', 'L3Absolute'], 'None'),
+    jetCorrections     = ('AK4PFPuppi',['L1FastJet',  'L2Relative', 'L3Absolute'], 'None'),
     genJetCollection   = cms.InputTag('slimmedGenJets'),
     genParticles       = cms.InputTag('prunedGenParticles'),
     # jet param
