@@ -14,7 +14,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32( 5000 ) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
-debug = False
+debug = True
 
 # Fix because auto:run2_mc points to MCRUN2_74_V9::All
 current_gt = process.GlobalTag.globaltag.value()
@@ -27,8 +27,8 @@ if current_gt.count("::All"):
 
 process.source = cms.Source("PoolSource",
                             fileNames=cms.untracked.vstring(
-                                "/store/mc/RunIISpring15DR74/VBFHToGG_M-125_13TeV_powheg_pythia8/MINIAODSIM/Asympt50ns_MCRUN2_74_V9A-v1/50000/049AAFAA-CA2D-E511-93E8-02163E00F402.root"
-                                #"/store/mc/RunIISpring15DR74/QCD_Pt-15to7000_TuneCUETP8M1_Flat_13TeV_pythia8/MINIAODSIM/AsymptFlat0to50bx50Reco_MCRUN2_74_V9A-v3/00000/023F427F-0E08-E511-A813-0025905A60EE.root"
+                                #"/store/mc/RunIISpring15DR74/VBFHToGG_M-125_13TeV_powheg_pythia9/MINIAODSIM/Asympt50ns_MCRUN2_74_V9A-v1/50000/049AAFAA-CA2D-E511-93E8-02163E00F402.root"
+                                "/store/mc/RunIISpring15DR74/QCD_Pt-15to7000_TuneCUETP8M1_Flat_13TeV_pythia8/MINIAODSIM/AsymptFlat0to50bx50Reco_MCRUN2_74_V9A-v3/00000/023F427F-0E08-E511-A813-0025905A60EE.root"
                             ),
                             skipEvents=cms.untracked.uint32(0))
 
@@ -44,11 +44,13 @@ process.load("flashgg/MicroAOD/flashggMicroAODSequence_cff")
 
 from flashgg.MicroAOD.flashggMicroAODOutputCommands_cff import microAODDefaultOutputCommand
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('workspace/myMicroAOD_puppi_validation_VBFHtoGG.root'),
-                               outputCommands = microAODDefaultOutputCommand
+                            #   fileName = cms.untracked.string('workspace/myMicroAOD_puppi_validation_VBFHtoGG.root'),
+                               fileName = cms.untracked.string('workspace/myMicroAOD_puppi_validation_QCD.root'),
+ 				outputCommands = microAODDefaultOutputCommand
                            )
 
-process.TFileService = cms.Service("TFileService",fileName  = cms.string("workspace/trees_puppi_validation_VBFHtoGG.root"))
+#process.TFileService = cms.Service("TFileService",fileName  = cms.string("workspace/trees_puppi_validation_VBFHtoGG.root"))
+process.TFileService = cms.Service("TFileService",fileName  = cms.string("workspace/trees_puppi_validation_QCD.root"))
 
 # need to allow unscheduled processes otherwise reclustering function will fail
 # this is because of the jet clustering tool, and we have to live with it for now.
@@ -64,15 +66,15 @@ from flashgg.MicroAOD.flashggJets_cfi import PuppiJetCollectionVInputTag, JetCol
 
 
 for vtx in range(0,maxJetCollections):
-    addFlashggPFCHSJets (process = process,
-                         vertexIndex =vtx,
-                         doQGTagging = False,
-                         label = '' + str(vtx))    
+    addFlashggPFCHSJets ( process = process,
+                          vertexIndex = vtx,
+                          doQGTagging = True,
+                          label       = '' + str(vtx))    
     
-    addFlashggPuppiJets (process     = process,
-                         vertexIndex = vtx,
-                         debug       = debug,
-                         label = '' + str(vtx))
+    addFlashggPuppiJets ( process     = process,
+                          vertexIndex = vtx,
+                          debug       = debug,
+                          label       = '' + str(vtx))
     
 #------------------------------------------------------------------------------------------------    
 # run a standard puppi with the default seeting
@@ -90,6 +92,7 @@ process.flashggJetTreeMakerPFCHS = cms.EDAnalyzer('FlashggJetValidationTreeMaker
                                                   DiPhotonTag    = cms.InputTag('flashggDiPhotons'),
                                                   inputTagJets   = JetCollectionVInputTag,
                                                   debug          = cms.untracked.bool(debug),
+                                                  UseQGL         = cms.untracked.bool(True),
                                                   ZeroVertexOnly = cms.untracked.bool(True),
                                                   StringTag      = cms.string("PFCHS"))
 
@@ -98,6 +101,7 @@ process.flashggJetTreeMakerPUPPI = cms.EDAnalyzer('FlashggJetValidationTreeMaker
                                                   DiPhotonTag    = cms.InputTag('flashggDiPhotons'),
                                                   inputTagJets   = PuppiJetCollectionVInputTag,
                                                   debug          = cms.untracked.bool(debug),
+                                                  UseQGL         = cms.untracked.bool(False),
                                                   ZeroVertexOnly = cms.untracked.bool(True),
                                                   StringTag      = cms.string("PUPPI"))
 
@@ -106,13 +110,14 @@ process.flashggJetTreeMakerSTDPUPPI = cms.EDAnalyzer('FlashggJetValidationTreeMa
                                                      DiPhotonTag    = cms.InputTag('flashggDiPhotons'),
                                                      inputTagJets   = StandardPUPIJetVInputTag,#TmpJetVInputTag,
                                                      debug          = cms.untracked.bool(debug),
+                                                     UseQGL         = cms.untracked.bool(False),
                                                      ZeroVertexOnly = cms.untracked.bool(True),
                                                      StringTag      = cms.string("STDPUPPI"))
 
-process.p = cms.Path(process.flashggMicroAODSequence )#+
-                     #process.flashggJetTreeMakerPFCHS +
-                     #process.flashggJetTreeMakerPUPPI  +
-                     #process.flashggJetTreeMakerSTDPUPPI  )
+process.p = cms.Path( process.flashggMicroAODSequence +
+                      process.flashggJetTreeMakerPFCHS +
+                      process.flashggJetTreeMakerPUPPI  +
+                      process.flashggJetTreeMakerSTDPUPPI  )
 process.e = cms.EndPath(process.out)
 
 

@@ -318,7 +318,7 @@ private:
     //EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
 
     edm::InputTag 					qgVariablesInputTag;
-    //edm::EDGetTokenT<edm::ValueMap<float>> 		qgToken;
+    edm::EDGetTokenT<edm::ValueMap<float>> 		qgToken;
 
     typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
 
@@ -341,6 +341,7 @@ private:
     bool        photonJetVeto;
     bool        homeGenJetMatching_;
     bool        ZeroVertexOnly_;
+    bool        useQGL_;
     bool        debug_;
 
 };
@@ -352,6 +353,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
     diPhotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( iConfig.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
     vertexToken_( consumes<View<reco::Vertex> >( iConfig.getUntrackedParameter<InputTag> ( "VertexTag", InputTag( "offlineSlimmedPrimaryVertices" ) ) ) ),
+
     //vertexCandidateMapToken_( consumes<VertexCandidateMap>( iConfig.getParameter<InputTag>( "VertexCandidateMapTag" ) ) ),
 
     //qgVariablesInputTag( iConfig.getParameter<edm::InputTag>( "qgVariablesInputTag" ) ),
@@ -360,6 +362,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     photonJetVeto( iConfig.getUntrackedParameter<bool>( "PhotonJetVeto", true ) ),
     homeGenJetMatching_( iConfig.getUntrackedParameter<bool>( "homeGenJetMatching", false ) ),
     ZeroVertexOnly_( iConfig.getUntrackedParameter<bool>( "ZeroVertexOnly", false ) ),
+    useQGL_( iConfig.getUntrackedParameter<bool>( "UseQGL", false ) ),
     debug_( iConfig.getUntrackedParameter<bool>( "debug", false ) )
 
 {
@@ -406,8 +409,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
 
 
     //edm::Handle<edm::ValueMap<float>> qgHandle;
-    //if(!isPatJetCollection(jets))
-    //iEvent.getByToken( qgToken, qgHandle );
+    //if(useQGL_) iEvent.getByToken( qgToken, qgHandle );
 
     //Handle<VertexCandidateMap> vtxmap;
     //if( debug_ ) {
@@ -607,10 +609,12 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             jInfo.eventID        = event_number;
             jInfo.id             = jdz;
             // qg likelihood retrieve
+
             jInfo.photonMatch    = int( _isPhoton[jdz] );
             jInfo.smartIndex     = jetCollectionIndex;
             jInfo.diphotonIndex  = diphoIndex;
             jInfo.JetIndex       = jdz;
+
             //jInfo.jet_qgLikelihood = ( *qgHandle )[Jets[jetCollectionIndex]->refAt( jdz )];
 
             GenPhotonInfo tmp_info = photonJet_id.find( jdz )->second; // call find ones

@@ -111,9 +111,9 @@ def addFlashggPFCHSJets(process, vertexIndex = 0, doQGTagging = True, label ='',
 def addFlashggPuppiJets(process,
                         vertexIndex = 0,
                         doQGTagging = True,
-                        label       ='',
+                        label       = '',
                         useLocalJEC = True,
-                        dbfile      = 'flashgg/MetaData/data/PuppiJEC/PY8_RunIISpring15DR74_bx50_MC.db',
+                        dbfile      = 'PY8_RunIISpring15DR74_bx50_MC.db',
                         debug       = False):
     
   from CommonTools.PileupAlgos.flashggPuppi_cff          import flashggPuppi 
@@ -135,11 +135,14 @@ def addFlashggPuppiJets(process,
   
   if useLocalJEC :
     print ':: using a local JEC dbfile for PUPPI :',
-    print '\t -- ',  dbfile
-    
+    print '\t -- dbfile          [',  dbfile                 ,']'
+    print '\t -- file in path    [',  cms.FileInPath(dbfile) ,']'
+    print '\t -- local directory [',  os.environ['PWD']      ,']' 
     from flashgg.MicroAOD.flashggJetTools_cfi import loadLocalJECDBfile
+    
     loadLocalJECDBfile(process,
-                       dbfile = os.environ['CMSSW_BASE'] + '/src/' + dbfile,
+                       #dbfile = os.environ['CMSSW_BASE'] + '/src/' + dbfile,
+                       dbfile = 'PY8_RunIISpring15DR74_bx50_MC.db',
                        tag    = 'JetCorrectorParametersCollection_PY8_RunIISpring15DR74_bx50_MC_AK4PUPPI',
                        label  = 'AK4PFPuppi')
     
@@ -190,11 +193,11 @@ for i in range(0,maxJetCollections):
   
 flashggFinalJets = cms.EDProducer("FlashggVectorVectorJetCollector",
                                   inputTagJets= JetCollectionVInputTag
-)
+                                )
 
 flashggFinalPuppiJets = cms.EDProducer("FlashggVectorVectorJetCollector",
-                                  inputTagJets= PuppiJetCollectionVInputTag
-)
+                                       inputTagJets= PuppiJetCollectionVInputTag
+                                     )
 
   
 

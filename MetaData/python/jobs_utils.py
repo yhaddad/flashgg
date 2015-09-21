@@ -38,7 +38,7 @@ class JobsManager(object):
     
     def __init__(self,
                  defaults={}
-                 ):       
+             ):       
         """
         Constructur:
         @defaults: default options

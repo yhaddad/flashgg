@@ -4,7 +4,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 from flashgg.MetaData.samples_utils import SamplesManager
 
-process = cms.Process("VBFDiPhoDiJetMVATraining")
+process = cms.Process("VBFDiPhoDiJetMVATrainingPUPPI")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.load("Configuration.StandardSequences.GeometryDB_cff")
@@ -20,7 +20,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
 import flashgg.Taggers.dumperConfigTools as cfgTools
-process.load("flashgg.Taggers.VBFMVADumperNew_cff")
+process.load("flashgg.Taggers.VBFMVADumperPUPPI_cff")
 
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("histo.root"),
@@ -44,15 +44,14 @@ process.out = cms.OutputModule("PoolOutputModule",
 			)
 
 
-process.VBFMVADumperNew.dumpTrees     = True
-process.VBFMVADumperNew.dumpWorkspace = False
-process.VBFMVADumperNew.quietRooFit   = True
+process.VBFMVADumperPUPPI.dumpTrees     = True
+process.VBFMVADumperPUPPI.dumpWorkspace = False
+process.VBFMVADumperPUPPI.quietRooFit   = True
 
-cfgTools.addCategories(process.VBFMVADumperNew,
+cfgTools.addCategories(process.VBFMVADumperPUPPI,
                        [## cuts are applied in cascade
                            ("VBFPFCHS",
-                            "dijet_LeadJPt > 30 && dijet_SubJPt > 20 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_Mjj > 250 && leadPho_PToM > 0.5"
-                            ,0),
+                            "dijet_LeadJPt > 30 && dijet_SubJPt > 20 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_Mjj > 250 && leadPho_PToM > 0.5",0),
                        ],
                        variables=[
                            "dijet_abs_dEta   :=  dijet_abs_dEta  ",
@@ -66,40 +65,40 @@ cfgTools.addCategories(process.VBFMVADumperNew,
                            "leadPho_PToM     :=  leadPho_PToM     ",
                            "sublPho_PToM     :=  sublPho_PToM     ",
                            "dijet_dPhi_trunc :=  dijet_dPhi_trunc ",
-                           "vbfMvaResult_value      := vbfMvaResult_value",
+                           "vbfMvaResult_value := vbfMvaResult_value",
                            "vbfMvaResult_value_bdt  := vbfMvaResult_value_bdt",
                            "vbfMvaResult_value_bdtg := vbfMvaResult_value_bdtg",
                        ],
                        histograms=[
-                           "vbfMvaResult_value_bdt>>output_bdt(400,-1,1)",
-                           "vbfMvaResult_value_bdtg>>output_bdtg(400,-1,1)",
+                           "vbfMvaResult_value_bdt >> output_bdt(400,-1,1)",
+                           "vbfMvaResult_value_bdtg>> output_bdtg(400,-1,1)",
                        ]
 )
 # split tree, histogram and datasets by process
-process.VBFMVADumperNew.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+process.VBFMVADumperPUPPI.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 
-process.load("flashgg/Taggers/VBFDiPhoDiJetMVADumperNew_cff")
+process.load("flashgg/Taggers/VBFDiPhoDiJetMVADumperPUPPI_cff")
 
-process.VBFDiPhoDiJetMVADumperNew.dumpTrees     = True
-process.VBFDiPhoDiJetMVADumperNew.dumpWorkspace = False
-process.VBFDiPhoDiJetMVADumperNew.quietRooFit   = True
+process.VBFDiPhoDiJetMVADumperPUPPI.dumpTrees = True
+process.VBFDiPhoDiJetMVADumperPUPPI.dumpWorkspace = False
+process.VBFDiPhoDiJetMVADumperPUPPI.quietRooFit = True
 
-cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperNew,
-                       [## cuts are applied in cascade
-                           ("VBFPFCHS","dipho_PToM>=0",0),
-                       ],
-                       variables=[
-                           "dijet_mva :=  dijet_mva",
-                           "dipho_mva :=  dipho_mva",
-                           "dipho_PToM :=  dipho_PToM",
-                           "vbfDiPhoDiJetMvaResult := vbfDiPhoDiJetMvaResult",
-                       ],
-                       histograms=[
-                           "VBFDiPhoDiJetMVAResult>>VBFDiPhoDiJetMVAResult(400,-1,1)",
-                       ]
+cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperPUPPI,
+			[## cuts are applied in cascade
+			("All","dipho_PToM>=0",0),
+			],
+			variables=[
+                            "dijet_mva  :=  dijet_mva",
+                            "dipho_mva  :=  dipho_mva",
+                            "dipho_PToM :=  dipho_PToM",
+                            "vbfDiPhoDiJetMvaResult := vbfDiPhoDiJetMvaResult",
+			],
+			histograms=[
+                            "VBFDiPhoDiJetMVAResult>>VBFDiPhoDiJetMVAResult(400,-1,1)",
+			]
                    )
 # split tree, histogram and datasets by process
-process.VBFDiPhoDiJetMVADumperNew.nameTemplate = "$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+process.VBFDiPhoDiJetMVADumperPUPPI.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 
 # customization for job splitting, lumi weighting, etc.
 from flashgg.MetaData.JobConfig import customize
@@ -107,10 +106,10 @@ customize.setDefault("maxEvents",-1)
 customize.setDefault("targetLumi",1.e+4)
 customize(process)
 
-process.p = cms.Path( process.flashggTagSequence*
-                      process.VBFMVADumperNew*
-                      process.VBFDiPhoDiJetMVADumperNew
-                  )
+process.p = cms.Path(process.flashggTagSequence*
+                     process.VBFMVADumperPUPPI*
+                     process.VBFDiPhoDiJetMVADumperPUPPI
+                 )
 
 process.e = cms.EndPath(process.out)
 

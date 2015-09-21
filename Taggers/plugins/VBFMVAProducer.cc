@@ -31,7 +31,7 @@ namespace flashgg {
         //EDGetTokenT<View<flashgg::Jet> > jetTokenDz_;
         std::vector<edm::InputTag> inputTagJets_;
 
-        unique_ptr<TMVA::Reader>VbfMva_;
+        unique_ptr<TMVA::Reader> VbfMva_;
         FileInPath vbfMVAweightfile_;
         bool _isLegacyMVA;
         bool _usePuJetID;
@@ -51,6 +51,18 @@ namespace flashgg {
         float leadPho_PToM_;
         float sublPho_PToM_;
 
+        // additional variables for the VBF MVA
+        // -- quark-gluon likelihood variable
+        float dijet_leadJQGL_;
+        float dijet_subleadJQGL_;
+
+        // -- informantion about btagging
+        float dijet_leadJbtag_;
+        float dijet_subleadJbtag_;
+
+
+        float vbfMvaResult_value_bdt;
+        float vbfMvaResult_value_bdtg;
 
     };
 
@@ -77,6 +89,8 @@ namespace flashgg {
         leadPho_PToM_ = -999.;
         sublPho_PToM_ = -999.;
 
+        vbfMvaResult_value_bdt  = -999.;
+        vbfMvaResult_value_bdtg = -999.;
 
         VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
 
@@ -86,11 +100,11 @@ namespace flashgg {
             VbfMva_->AddVariable( "dijet_subleadEta", &dijet_subleadEta_ );
             VbfMva_->AddVariable( "dijet_LeadJPt", &dijet_LeadJPt_ );
             VbfMva_->AddVariable( "dijet_SubJPt", &dijet_SubJPt_ );
-            VbfMva_->AddVariable( "dijet_Zep", &dijet_Zep_ );
+            VbfMva_->AddVariable( "dijet_Zep"   , &dijet_Zep_ );
             VbfMva_->AddVariable( "min(dijet_dPhi,2.916)", &dijet_dPhi_trunc_ );
-            VbfMva_->AddVariable( "dijet_Mjj", &dijet_Mjj_ );
+            VbfMva_->AddVariable( "dijet_Mjj"    , &dijet_Mjj_ );
             VbfMva_->AddVariable( "dipho_pt/mass", &dipho_PToM_ );
-            VbfMva_->BookMVA( "BDTG", vbfMVAweightfile_.fullPath() );
+            VbfMva_->BookMVA( "BDTG"         , vbfMVAweightfile_.fullPath() );
         } else {
             // new flashgg var
             VbfMva_->AddVariable( "dijet_LeadJPt" , &dijet_LeadJPt_ );
@@ -129,22 +143,22 @@ namespace flashgg {
 
         std::auto_ptr<vector<VBFMVAResult> > vbf_results( new vector<VBFMVAResult> );
 
-
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
 
             flashgg::VBFMVAResult mvares;
 
-            dijet_leadEta_ = -999.;
+            dijet_leadEta_    = -999.;
             dijet_subleadEta_ = -999.;
-            dijet_abs_dEta_ = -999.;
-            dijet_LeadJPt_ = -999.;
-            dijet_SubJPt_ = -999.;
-            dijet_Zep_ = -999.;
+            dijet_abs_dEta_   = -999.;
+            dijet_LeadJPt_    = -999.;
+            dijet_SubJPt_     = -999.;
+            dijet_Zep_        = -999.;
             dijet_dPhi_trunc_ = -999.;
-            dijet_Mjj_ = -999.;
-            dipho_PToM_ = -999.;
-            leadPho_PToM_ = -999.;
-            sublPho_PToM_ = -999.;
+            dijet_Mjj_        = -999.;
+            dipho_PToM_       = -999.;
+
+            leadPho_PToM_     = -999.;
+            sublPho_PToM_     = -999.;
 
 
             // First find dijet by looking for highest-pt jets...
@@ -246,9 +260,14 @@ namespace flashgg {
 
             if( _isLegacyMVA ) {
                 mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( "BDTG" );
+
             } else {
-                mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( "BDT" );
+                vbfMvaResult_value_bdt  = VbfMva_->EvaluateMVA( "BDT" );
+                mvares.vbfMvaResult_value      = mvares.vbfMvaResult_value_bdt;
+                vbfMvaResult_value_bdtg = VbfMva_->EvaluateMVA( "BDTG" );
             }
+
+
 
             //	mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDT");
             //std::cout <<" debug mva " <<  mvares.vbfMvaResult_value << std::endl;

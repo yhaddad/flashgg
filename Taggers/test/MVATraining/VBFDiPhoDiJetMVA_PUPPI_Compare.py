@@ -32,15 +32,16 @@ process.TFileService = cms.Service("TFileService",
 
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
-process.load("flashgg/Taggers/VBFMVADumperNew_cff")
+process.load("flashgg/Taggers/VBFMVADumperPUPPI_cff")
 
-process.VBFMVADumperNew.dumpTrees = True
-process.VBFMVADumperNew.dumpWorkspace = False
-process.VBFMVADumperNew.quietRooFit = True
+process.VBFMVADumperPUPPI.dumpTrees = True
+process.VBFMVADumperPUPPI.dumpWorkspace = False
+process.VBFMVADumperPUPPI.quietRooFit = True
 
-cfgTools.addCategories(process.VBFMVADumperNew,
+cfgTools.addCategories(process.VBFMVADumperPUPPI,
                        [## cuts are applied in cascade
-                           ("VBFPFCHS",
+                           ("VBFPUPPI",
+                            # this is the legacy precelection
                             "dijet_LeadJPt > 30 && dijet_SubJPt > 20 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_Mjj > 250 && leadPho_PToM > 0.5"
                             ,0),
                        ],
@@ -61,13 +62,13 @@ cfgTools.addCategories(process.VBFMVADumperNew,
                            "vbfMvaResult_value_bdtg := vbfMvaResult_value_bdtg",
                        ],
                        histograms=[
-                           "vbfMvaResult_value_bdt  >> output_bdt(400,-1,1)",
-                           "vbfMvaResult_value_bdtg >> output_bdtg(400,-1,1)",
+                           "vbfMvaResult_value_bdt >> output_bdt(400,-1,1)",
+                           "vbfMvaResult_value_bdtg>> output_bdtg(400,-1,1)",
                        ]
                    )
 
 # split tree, histogram and datasets by process
-process.VBFMVADumperNew.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+process.VBFMVADumperPUPPI.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 process.load("flashgg/Taggers/VBFMVADumper_cff")
 process.VBFMVADumper.dumpTrees = True
 process.VBFMVADumper.dumpWorkspace = False
@@ -102,15 +103,15 @@ cfgTools.addCategories(process.VBFMVADumper,
 process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 #############################################################
 
-process.load("flashgg/Taggers/VBFDiPhoDiJetMVADumperNew_cff")
+process.load("flashgg/Taggers/VBFDiPhoDiJetMVADumperPUPPI_cff")
 
-process.VBFDiPhoDiJetMVADumperNew.dumpTrees = True
-process.VBFDiPhoDiJetMVADumperNew.dumpWorkspace = False
-process.VBFDiPhoDiJetMVADumperNew.quietRooFit = True
+process.VBFDiPhoDiJetMVADumperPUPPI.dumpTrees = True
+process.VBFDiPhoDiJetMVADumperPUPPI.dumpWorkspace = False
+process.VBFDiPhoDiJetMVADumperPUPPI.quietRooFit = True
 
-cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperNew,
+cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperPUPPI,
 	[## cuts are applied in cascade
-	 ("GoodVBFDiPhoDiJetNew","dipho_PToM>=0",0)
+	 ("GoodVBFDiPhoDiJetPUPPI","dipho_PToM>=0",0)
 	],
 	variables=[
 			"dijet_mva :=  dijet_mva",
@@ -124,7 +125,7 @@ cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperNew,
 	)
 
 # split tree, histogram and datasets by process
-process.VBFDiPhoDiJetMVADumperNew.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
+process.VBFDiPhoDiJetMVADumperPUPPI.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 process.load("flashgg/Taggers/VBFDiPhoDiJetMVADumper_cff")
 process.VBFDiPhoDiJetMVADumper.dumpTrees = True
 process.VBFDiPhoDiJetMVADumper.dumpWorkspace = False
@@ -157,9 +158,9 @@ customize(process)
 
 process.p = cms.Path(process.flashggTagSequence*
 	process.VBFMVADumper*
-	process.VBFMVADumperNew*
+	process.VBFMVADumperPUPPI*
 	process.VBFDiPhoDiJetMVADumper*
-	process.VBFDiPhoDiJetMVADumperNew
+	process.VBFDiPhoDiJetMVADumperPUPPI
 	)
 
 process.e = cms.EndPath(process.out)

@@ -10,7 +10,7 @@ cd $WORKSPACE
 cmsenv
 . runAllVBFMVARetrain.sh 1000
 ```
-
+	
 Details below...
 
 ## Introduction
@@ -81,16 +81,19 @@ The second will create a tree containing the output of the VBFMVA and the VBFDiP
 *Usage*
 
 To generate the Training Trees, simply use the `fggRunJobs.py` tool to run over the required signal and background samples...:
-```
+
+```bash
 fggRunJobs.py --load VBFMVATrainingSamples.json -d /test_diphodijet_training -x cmsRun VBFDiPhoDiJetMVA_Training.py maxEvents=${NEvent}
 ```
 The output trees will be available for you to inspect in `/test_diphodijet_training`... 
 
 For the Comaprison trees, similarly, do:
-```
+
+```bash
 fggRunJobs.py --load VBFMVATrainingSamples.json -d /test_diphodijet_compare -x cmsRun VBFDiPhoDiJetMVA_Compare.py maxEvents=${NEvent}
 
 ```
+
 And inspect your output in ` /test_diphodijet_training`...
 
 ### Macros

@@ -1,9 +1,9 @@
-
 import FWCore.ParameterSet.Config as cms
 
-VBFDiPhoDiJetMVATrainingDumpConfNew = cms.PSet(
-    className       = cms.untracked.string("CutBasedVBFDiPhoDiJetMVAResultDumper"),
-    src             = cms.InputTag("flashggVBFDiPhoDiJetMVANew"),
+DiPhotonMVATrainingDumpConfPUPPI = cms.PSet(
+    className       = cms.untracked.string("CutBasedDiPhotonMVAResultDumper"),
+    src             = cms.InputTag("flashggDiPhotonMVAPUPPI"),
+    #src = cms.InputTag("flashggPhotons"),
     generatorInfo   = cms.InputTag("generator"),
     processId       = cms.string(""),
     maxCandPerEvent = cms.int32(1),
@@ -18,7 +18,7 @@ VBFDiPhoDiJetMVATrainingDumpConfNew = cms.PSet(
     quietRooFit     = cms.untracked.bool(False),
     dumpGlobalVariables = cms.untracked.bool(True),
     globalVariables     = cms.PSet(
-    rho = cms.InputTag('fixedGridRhoAll'),
+        rho      = cms.InputTag('fixedGridRhoAll'),
         vertexes = cms.InputTag("offlineSlimmedPrimaryVertices"),
     )
 )

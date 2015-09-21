@@ -64,8 +64,8 @@ namespace flashgg {
                     //std::cout << " Included because fromPV=" << cand->fromPV( j ) << " > " << fromPVgt_ << std::endl;
                 } else if( cand->fromPV( j ) > fromPVgtIfDz_ ) {
                     // This section to support extra cut on dZ in puppi code
-                    // double absdz = fabs( cand->dz( primaryVertices->ptrAt( j )->position() ) );
-                    double absdz = fabs( cand->dz( j ) ); // this not a an accurate methode to calculate the dz(),
+                    double absdz = fabs( cand->dz( primaryVertices->ptrAt( j )->position() ) );
+                    //double absdz = fabs( cand->dz( j ) ); // this not a an accurate methode to calculate the dz(),
 
                     if( absdz  < dzCut_ ) {
                         assoc->emplace_back( primaryVertices->ptrAt( j ), cand );

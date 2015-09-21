@@ -4,8 +4,7 @@
 #include "flashgg/Taggers/interface/CollectionDumper.h"
 namespace flashgg {
     typedef CollectionDumper<std::vector<VBFMVAResult> > VBFMVAResultDumper;
-    typedef CollectionDumper<std::vector<VBFMVAResult> ,
-            VBFMVAResult,
+    typedef CollectionDumper<std::vector<VBFMVAResult> , VBFMVAResult,
             CutBasedClassifier<VBFMVAResult> > CutBasedVBFMVAResultDumper;
 }
 #endif

@@ -91,7 +91,8 @@ for vtx in range(0,maxJetCollections):
     addFlashggPuppiJets (process     = process,
                          vertexIndex = vtx,
                          debug       = False,
-                         label = '' + str(vtx))
+                         dbfile      = 'PY8_RunIISpring15DR74_bx50_MC.db'
+                         label       = '' + str(vtx))
 
 process.p = cms.Path(process.flashggMicroAODSequence)
 process.e = cms.EndPath(process.out)
