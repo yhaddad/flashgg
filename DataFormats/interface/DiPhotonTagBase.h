@@ -14,7 +14,6 @@ namespace flashgg {
         virtual ~DiPhotonTagBase();
         DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
         DiPhotonTagBase( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
-        DiPhotonTagBase( const DiPhotonTagBase & );
         const edm::Ptr<DiPhotonCandidate> diPhoton() const { return dipho_; }
         const DiPhotonMVAResult diPhotonMVA() const { return mva_result_; }
         int diPhotonIndex() const {return diPhotonIndex_;}
@@ -29,6 +28,7 @@ namespace flashgg {
         const edm::Ptr<TagTruthBase> tagTruth() const { return truth_; }
         void setSystLabel( const std::string label ) { systLabel_ = label; }
         std::string systLabel() const { return systLabel_; }
+        bool hasSyst( const string &label ) const { return ( systLabel_ == label );}
     private:
         DiPhotonMVAResult mva_result_;
         int category_number_;
