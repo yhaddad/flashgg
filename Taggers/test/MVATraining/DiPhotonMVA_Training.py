@@ -27,9 +27,9 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
-process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('myMicroAODOutputFile.root'),
-                               outputCommands =tagDefaultOutputCommand
-                           )
+#process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('myMicroAODOutputFile.root'),
+#                               outputCommands =tagDefaultOutputCommand
+#                           )
 
 import flashgg.Taggers.dumperConfigTools as cfgTools
 process.load("flashgg/Taggers/DiPhotonMVADumperNew_cff")
@@ -75,4 +75,4 @@ process.p = cms.Path( process.flashggTagSequence
                       *process.DiPhotonMVADumperNew
 )
 
-process.e = cms.EndPath(process.out)
+#process.e = cms.EndPath(process.out)

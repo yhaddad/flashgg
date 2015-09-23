@@ -21,14 +21,15 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
-process.out = cms.OutputModule("PoolOutputModule",
-	fileName = cms.untracked.string('myTagOutputFile.root'),
-	outputCommands = tagDefaultOutputCommand
-	)
+#process.out = cms.OutputModule("PoolOutputModule",
+#                               fileName = cms.untracked.string('myTagOutputFile.root'),
+#                               outputCommands = tagDefaultOutputCommand
+#                           )
+
 process.TFileService = cms.Service("TFileService",
-	fileName = cms.string("histo.root"),
-	closeFileFast = cms.untracked.bool(True)
-	)
+                                   fileName = cms.string("histo.root"),
+                                   closeFileFast = cms.untracked.bool(True)
+                               )
 
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
@@ -157,10 +158,10 @@ customize.setDefault("targetLumi",1.e+4)
 customize(process)
 
 process.p = cms.Path(process.flashggTagSequence*
-	process.VBFMVADumper*
-	process.VBFMVADumperPUPPI*
-	process.VBFDiPhoDiJetMVADumper*
-	process.VBFDiPhoDiJetMVADumperPUPPI
-	)
+                     process.VBFMVADumper*
+                     process.VBFMVADumperPUPPI*
+                     process.VBFDiPhoDiJetMVADumper*
+                     process.VBFDiPhoDiJetMVADumperPUPPI
+)
 
-process.e = cms.EndPath(process.out)
+#process.e = cms.EndPath(process.out)

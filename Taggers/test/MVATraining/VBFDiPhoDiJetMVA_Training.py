@@ -25,11 +25,9 @@ process.load("flashgg.Taggers.VBFMVADumperNew_cff")
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("histo.root"),
                                    closeFileFast = cms.untracked.bool(True)
-                               )
+                                   )
 
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1)
-
-
 
 #process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring( "/store/group/phys_higgs/cmshgg/sethzenz/flashgg/HggPhys14/Phys14MicroAODV2/VBF_HToGG_M-125_13TeV-powheg-pythia6/HggPhys14-Phys14MicroAODV2-v0-Phys14DR-PU20bx25_PHYS14_25_V1-v1/150210_160130/0000/myMicroAODOutputFile_1.root"))
 
@@ -38,10 +36,10 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
-process.out = cms.OutputModule("PoolOutputModule",
-			fileName = cms.untracked.string('myTagOutputFile.root'),
-			outputCommands = tagDefaultOutputCommand			       
-			)
+#process.out = cms.OutputModule("PoolOutputModule",
+#			fileName = cms.untracked.string('myTagOutputFile.root'),
+#			outputCommands = tagDefaultOutputCommand			       
+#			)
 
 
 process.VBFMVADumperNew.dumpTrees     = True
@@ -50,29 +48,30 @@ process.VBFMVADumperNew.quietRooFit   = True
 
 cfgTools.addCategories(process.VBFMVADumperNew,
                        [## cuts are applied in cascade
-                           ("VBFPFCHS",
+                           ("All",
                             "dijet_LeadJPt > 30 && dijet_SubJPt > 20 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_Mjj > 250 && leadPho_PToM > 0.5"
                             ,0),
                        ],
                        variables=[
-                           "dijet_abs_dEta   :=  dijet_abs_dEta  ",
-                           "dijet_leadEta    :=  dijet_leadEta  ",
-                           "dijet_subleadEta :=  dijet_subleadEta  ",
+                           "dijet_abs_dEta   :=  dijet_abs_dEta   ",
+                           "dijet_leadEta    :=  dijet_leadEta    ",
+                           "dijet_subleadEta :=  dijet_subleadEta ",
                            "dijet_LeadJPt    :=  dijet_LeadJPt    ",
                            "dijet_SubJPt     :=  dijet_SubJPt     ",
                            "dijet_Zep        :=  dijet_Zep        ",
                            "dijet_Mjj        :=  dijet_Mjj        ",
-                           "dipho_PToM       :=  dipho_PToM     ",
+                           "dipho_PToM       :=  dipho_PToM       ",
                            "leadPho_PToM     :=  leadPho_PToM     ",
                            "sublPho_PToM     :=  sublPho_PToM     ",
                            "dijet_dPhi_trunc :=  dijet_dPhi_trunc ",
                            "vbfMvaResult_value      := vbfMvaResult_value",
-                           "vbfMvaResult_value_bdt  := vbfMvaResult_value_bdt",
-                           "vbfMvaResult_value_bdtg := vbfMvaResult_value_bdtg",
+                           #"vbfMvaResult_value_bdt  := vbfMvaResult_value_bdt",
+                           #"vbfMvaResult_value_bdtg := vbfMvaResult_value_bdtg",
                        ],
                        histograms=[
-                           "vbfMvaResult_value_bdt>>output_bdt(400,-1,1)",
-                           "vbfMvaResult_value_bdtg>>output_bdtg(400,-1,1)",
+                           "vbfMvaResult_value>>outputBDT(400,-1,1)",
+                           #"vbfMvaResult_value_bdt>>output_bdt(400,-1,1)",
+                           #"vbfMvaResult_value_bdtg>>output_bdtg(400,-1,1)",
                        ]
 )
 # split tree, histogram and datasets by process
@@ -86,7 +85,7 @@ process.VBFDiPhoDiJetMVADumperNew.quietRooFit   = True
 
 cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperNew,
                        [## cuts are applied in cascade
-                           ("VBFPFCHS","dipho_PToM>=0",0),
+                           ("All","dipho_PToM>=0",0),
                        ],
                        variables=[
                            "dijet_mva :=  dijet_mva",
@@ -112,5 +111,5 @@ process.p = cms.Path( process.flashggTagSequence*
                       process.VBFDiPhoDiJetMVADumperNew
                   )
 
-process.e = cms.EndPath(process.out)
+#process.e = cms.EndPath(process.out)
 

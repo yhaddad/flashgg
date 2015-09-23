@@ -25,7 +25,7 @@ process.load("flashgg.Taggers.VBFMVADumperPUPPI_cff")
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("histo.root"),
                                    closeFileFast = cms.untracked.bool(True)
-                               )
+)
 
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1)
 
@@ -38,10 +38,10 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
-process.out = cms.OutputModule("PoolOutputModule",
-			fileName = cms.untracked.string('myTagOutputFile.root'),
-			outputCommands = tagDefaultOutputCommand			       
-			)
+#process.out = cms.OutputModule("PoolOutputModule",
+#                               fileName = cms.untracked.string('myTagOutputFile.root'),
+#                               outputCommands = tagDefaultOutputCommand			       
+#                           )
 
 
 process.VBFMVADumperPUPPI.dumpTrees     = True
@@ -111,5 +111,5 @@ process.p = cms.Path(process.flashggTagSequence*
                      process.VBFDiPhoDiJetMVADumperPUPPI
                  )
 
-process.e = cms.EndPath(process.out)
+#process.e = cms.EndPath(process.out)
 

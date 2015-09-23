@@ -25,10 +25,10 @@ process.out = cms.OutputModule("PoolOutputModule",
 	fileName = cms.untracked.string('myTagOutputFile.root'),
 	outputCommands = tagDefaultOutputCommand
 	)
-process.TFileService = cms.Service("TFileService",
-	fileName = cms.string("histo.root"),
-	closeFileFast = cms.untracked.bool(True)
-	)
+#process.TFileService = cms.Service("TFileService",
+#	fileName = cms.string("histo.root"),
+#	closeFileFast = cms.untracked.bool(True)
+#	)
 
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
@@ -162,4 +162,4 @@ process.p = cms.Path(process.flashggTagSequence*
 	process.VBFDiPhoDiJetMVADumperNew
 	)
 
-process.e = cms.EndPath(process.out)
+#process.e = cms.EndPath(process.out)

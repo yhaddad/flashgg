@@ -524,6 +524,8 @@ class SGEJob(LsfJob):
         if mydomain == "hep.ph.ic.ac.uk":
             ret += "mkdir -p $TMP/sgejob-$JOB_ID\n"
             ret += "cd $TMP/sgejob-$JOB_ID\n"
+#            ret += "export  X509_USER_PROXY=/home/hep/yhaddad/x509up_u`id -u`"
+#            ret += "echo    \"X509_USER_PROXY=${X509_USER_PROXY}\" "
         return ret
 
     def epilogue(self,cmd,dest):
