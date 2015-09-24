@@ -82,7 +82,16 @@ class MicroAODCustomize(object):
     # process customization
     def customize(self,process):
         self.parse()
-        
+
+        if self.puppi == 0:
+            self.customizePFCHS(process)
+            self.customizeRemovePuppi(process)
+        elif self.puppi == 1:
+            self.customizePuppi(process)
+            self.customizeRemovePFCHS(process)
+        else: # e.g. 2                                                                                                                               
+            self.customizePFCHS(process)
+            self.customizePuppi(process)
         if self.processType == "data":
             self.customizeData(process)
         elif self.processType == "signal":
@@ -101,15 +110,6 @@ class MicroAODCustomize(object):
             self.customizeFileNames(process)
         if self.timing == 1:
             self.customizeTiming(process)
-        if self.puppi == 0:
-            self.customizePFCHS(process)
-            self.customizeRemovePuppi(process)
-        elif self.puppi == 1:
-            self.customizePuppi(process)
-            self.customizeRemovePFCHS(process)
-        else: # e.g. 2
-            self.customizePFCHS(process)
-            self.customizePuppi(process)
             
     # signal specific customization
     def customizeSignal(self,process):
@@ -185,14 +185,18 @@ class MicroAODCustomize(object):
                                  label = '' + str(vtx))
 
     def customizeRemovePFCHS(self,process):
-        process.flashggMicroAODSequence.remove(process.flashggVertexMapForCHS)
-        process.flashggMicroAODSequence.remove(process.flashggFinalJets)
-        process.out.outputCommands.remove('keep *_flashggFinalJets_*_*')
+        for pathName in process.paths:
+            path = getattr(process,pathName)
+            path.remove(process.flashggVertexMapForCHS)
+            path.remove(process.flashggFinalJets)
+        process.out.outputCommands.append('drop *_flashggFinalJets_*_*')
 
     def customizeRemovePuppi(self,process):
-        process.flashggMicroAODSequence.remove(process.flashggVertexMapForPUPPI)
-        process.flashggMicroAODSequence.remove(process.flashggFinalPuppiJets)
-        process.out.outputCommands.remove('keep *_flashggFinalPuppiJets_*_*')
+        for pathName in process.paths:
+            path = getattr(process,pathName)
+            path.remove(process.flashggVertexMapForPUPPI)
+            path.remove(process.flashggFinalPuppiJets)
+        process.out.outputCommands.append('drop *_flashggFinalPuppiJets_*_*')
 
 # customization object
 customize = MicroAODCustomize()
