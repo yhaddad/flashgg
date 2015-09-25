@@ -10,6 +10,8 @@ __init__.py
 crab_*
 crabConfig_*
 
+Taggers/test/MVATraining/test_diphodijet*
+
 # ROOT-related files
 *.root
 *_cc.d

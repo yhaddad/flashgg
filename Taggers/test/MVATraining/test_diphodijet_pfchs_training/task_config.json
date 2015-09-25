@@ -4,60 +4,38 @@
             "cmsRun", 
             [
                 "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/VBFDiPhoDiJetMVA_Training.py", 
-                "maxEvents=100", 
+                "maxEvents=5000", 
                 "useAAA=1", 
                 "campaign=flashggMicroAODSpring15", 
                 "processIdMap=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/config.json", 
                 "dataset=VBFHToGG_M-125_13TeV_powheg_pythia8", 
-                "outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root", 
-                "lastAttempt=1"
+                "outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root"
             ], 
-            "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent100.root", 
-            3, 
-            1, 
+            "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent5000_histos.root", 
+            0, 
+            0, 
             [
                 "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/runJobs0", 
-                7039506
+                7049006
             ]
         ], 
         [
             "cmsRun", 
             [
                 "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/VBFDiPhoDiJetMVA_Training.py", 
-                "maxEvents=100", 
+                "maxEvents=5000", 
                 "useAAA=1", 
                 "campaign=flashggMicroAODSpring15", 
                 "processIdMap=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/config.json", 
                 "dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8", 
-                "outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root", 
-                "lastAttempt=1"
+                "outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root"
             ], 
-            "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent100.root", 
-            3, 
-            1, 
+            "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent5000_histos.root", 
+            0, 
+            0, 
             [
                 "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/runJobs1", 
-                7039504
-            ]
-        ], 
-        [
-            "cmsRun", 
-            [
-                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/VBFDiPhoDiJetMVA_Training.py", 
-                "maxEvents=100", 
-                "useAAA=1", 
-                "campaign=flashggMicroAODSpring15", 
-                "processIdMap=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/config.json", 
-                "dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8", 
-                "outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root", 
-                "lastAttempt=1"
-            ], 
-            "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent100.root", 
-            3, 
-            1, 
-            [
-                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/runJobs2", 
-                7039505
+                7049007
             ]
         ]
     ], 
@@ -69,32 +47,26 @@
         "GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8": [
             "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root", 
             []
-        ], 
-        "GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8": [
-            "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root", 
-            []
         ]
     }, 
     "process_output": {
         "vbf_m125": [
             "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_vbf_m125.root", 
             [
-                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent100.root"
+                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent5000_histos.root"
             ]
         ], 
         "gamJet": [
             "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_gamJet.root", 
             [
-                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent100.root", 
-                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent100.root"
+                "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent5000_histos.root"
             ]
         ]
     }, 
     "outputPfx": "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output", 
-    "last_job_id": 3, 
+    "last_job_id": 2, 
     "output": [
-        "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent100.root", 
-        "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent100.root", 
-        "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent100.root"
+        "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent5000_histos.root", 
+        "/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent5000_histos.root"
     ]
 }

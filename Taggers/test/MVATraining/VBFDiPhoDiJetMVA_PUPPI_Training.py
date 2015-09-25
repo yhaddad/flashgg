@@ -38,10 +38,10 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
-#process.out = cms.OutputModule("PoolOutputModule",
-#                               fileName = cms.untracked.string('myTagOutputFile.root'),
-#                               outputCommands = tagDefaultOutputCommand			       
-#                           )
+process.out = cms.OutputModule("PoolOutputModule",
+                               fileName = cms.untracked.string('myTagOutputFile.root'),
+                               outputCommands = tagDefaultOutputCommand			       
+                               )
 
 
 process.VBFMVADumperPUPPI.dumpTrees     = True

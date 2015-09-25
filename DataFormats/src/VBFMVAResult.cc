@@ -17,7 +17,10 @@ namespace flashgg {
         dipho_PToM( -9999. ),
         leadPho_PToM( -9999. ),
         sublPho_PToM( -9999. ),
-        vbfMvaResult_value( -9999. ) {}
+        vbfMvaResult_value( -9999. ), 
+        vbfMvaResult_value_bdt( -9999. ), 
+        vbfMvaResult_value_bdtg( -9999. ) 
+    {}
 
     VBFMVAResult::VBFMVAResult( edm::Ptr<VBFMVAResult> x )
     {
@@ -34,7 +37,9 @@ namespace flashgg {
         dipho_PToM       = x->dipho_PToM ;
         leadPho_PToM = x->leadPho_PToM ;
         sublPho_PToM = x->sublPho_PToM ;
-        vbfMvaResult_value     = x->vbfMvaResult_value;
+        vbfMvaResult_value      = x->vbfMvaResult_value;
+        vbfMvaResult_value_bdt  = x->vbfMvaResult_value_bdt;
+        vbfMvaResult_value_bdtg = x->vbfMvaResult_value_bdtg;
     }
 }
 // Local Variables:

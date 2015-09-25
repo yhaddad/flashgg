@@ -32,18 +32,17 @@ fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json \
     -q hepshort.q useAAA=1 --no-use-tarball
 #
 #echo -e "+++++++++++ Generate PUPPI Traininig +++++++++++++"
-#fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json -d \
-#	      ${WORKSPACE}/test_diphodijet_puppi_training -x \
-#	      cmsRun VBFDiPhoDiJetMVA_PUPPI_Training.py maxEvents=${NEvent}
-#
-#
+#fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json \
+#    -d ${WORKSPACE}/test_diphodijet_puppi_training \
+#    -x cmsRun VBFDiPhoDiJetMVA_PUPPI_Training.py maxEvents=${NEvent}  \
+#    -q hepshort.q useAAA=1 --no-use-tarball
 #
 #echo 
 #echo -e "+++++++++++ Run the training macro ++++++++++++++"
 #echo
 ## run the training on background and without diplays
-#
 #mkdir -p plots
+#
 #root  -l -q VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"CHS\"\)
 #root  -l -q VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"PUPPI\"\)
 #
@@ -51,14 +50,15 @@ fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json \
 #echo -e "+++++++++++ Applying the MVA +++++++++++++++++"
 #echo
 #
-##produce the trained tree and histograms  
-#fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json -d \
-#	      ${WORKSPACE}/test_diphodijet_pfchs_compare/ -x \
-#	      cmsRun VBFDiPhoDiJetMVA_Compare.py maxEvents=${NEvent}
+#fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json \
+#    -d ${WORKSPACE}/test_diphodijet_pfchs_compare \
+#    -x cmsRun VBFDiPhoDiJetMVA_Compare.py maxEvents=${NEvent}  \
+#    -q hepshort.q useAAA=1 --no-use-tarball
 #
-#fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json -d \
-#	      ${WORKSPACE}/test_diphodijet_puppi_compare/ -x \
-#	      cmsRun VBFDiPhoDiJetMVA_PUPPI_Compare.py maxEvents=${NEvent}
+#fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json \
+#    -d ${WORKSPACE}/test_diphodijet_puppi_compare \
+#    -x cmsRun VBFDiPhoDiJetMVA_PUPPI_Compare.py maxEvents=${NEvent}  \
+#    -q hepshort.q useAAA=1 --no-use-tarball
 #
 #echo 
 #echo -e "+++++++++++ Generating ROC curves ++++++++++++++++"
@@ -71,4 +71,4 @@ fggRunJobs.py --load VBFMVATrainingSamplesWithPUPPI.json \
 #echo -e "######          RETRAINING COMPLETE         ######"
 #echo -e "##################################################"
 #echo
-#echo -e " You can retrieve your ROC curve for this training from plots/VBF_ROCs.pdf
+##echo -e " You can retrieve your ROC curve for this training from plots/VBF_ROCs.pdf

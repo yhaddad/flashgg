@@ -19,10 +19,9 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
     // you must define $WORKSPACE first
     TString path;
     if( JetPUType == "CHS" ) {
-        path = "${WORKSPACE}/test_diphodijet_pfchs_training/";
-
+        path = "./test_diphodijet_pfchs_training/";
     } else if( JetPUType == "PUPPI" ) {
-        path = "${WORKSPACE}/test_diphodijet_puppi_training/";
+        path = "./test_diphodijet_puppi_training/";
     }
     bool useDiphotonPt = 0;
     bool usePhotonsPt = true;

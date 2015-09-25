@@ -262,11 +262,11 @@ namespace flashgg {
                 mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( "BDTG" );
 
             } else {
-                vbfMvaResult_value_bdt  = VbfMva_->EvaluateMVA( "BDT" );
+                mvares.vbfMvaResult_value_bdt  = VbfMva_->EvaluateMVA( "BDT" );
                 mvares.vbfMvaResult_value      = mvares.vbfMvaResult_value_bdt;
-                vbfMvaResult_value_bdtg = VbfMva_->EvaluateMVA( "BDTG" );
+                //vbfMvaResult_value_bdtg = VbfMva_->EvaluateMVA( "BDTG" );
             }
-
+            
 
 
             //	mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDT");

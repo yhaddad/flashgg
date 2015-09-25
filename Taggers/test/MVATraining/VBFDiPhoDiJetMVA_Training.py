@@ -36,10 +36,10 @@ process.load("flashgg/Taggers/flashggTagTester_cfi")
 
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
-#process.out = cms.OutputModule("PoolOutputModule",
-#			fileName = cms.untracked.string('myTagOutputFile.root'),
-#			outputCommands = tagDefaultOutputCommand			       
-#			)
+process.out = cms.OutputModule("PoolOutputModule",
+                               fileName = cms.untracked.string('myTagOutputFile.root'),
+                               outputCommands = tagDefaultOutputCommand			       
+                               )
 
 
 process.VBFMVADumperNew.dumpTrees     = True
@@ -47,10 +47,8 @@ process.VBFMVADumperNew.dumpWorkspace = False
 process.VBFMVADumperNew.quietRooFit   = True
 
 cfgTools.addCategories(process.VBFMVADumperNew,
-                       [## cuts are applied in cascade
-                           ("All",
-                            "dijet_LeadJPt > 30 && dijet_SubJPt > 20 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_Mjj > 250 && leadPho_PToM > 0.5"
-                            ,0),
+                       [#"dijet_LeadJPt > 30 && dijet_SubJPt > 20 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_leadEta < 4.7 && dijet_leadEta > -4.7 && dijet_Mjj > 250 && leadPho_PToM > 0.5"
+                       ("All","dijet_LeadJPt >0",0),
                        ],
                        variables=[
                            "dijet_abs_dEta   :=  dijet_abs_dEta   ",
@@ -85,8 +83,8 @@ process.VBFDiPhoDiJetMVADumperNew.quietRooFit   = True
 
 cfgTools.addCategories(process.VBFDiPhoDiJetMVADumperNew,
                        [## cuts are applied in cascade
-                           ("All","dipho_PToM>=0",0),
-                       ],
+        ("All","dipho_PToM>=0",0),
+        ],
                        variables=[
                            "dijet_mva :=  dijet_mva",
                            "dipho_mva :=  dipho_mva",
@@ -107,9 +105,9 @@ customize.setDefault("targetLumi",1.e+4)
 customize(process)
 
 process.p = cms.Path( process.flashggTagSequence*
-                      process.VBFMVADumperNew*
-                      process.VBFDiPhoDiJetMVADumperNew
-                  )
+                      process.VBFMVADumperNew#*
+                      #process.VBFDiPhoDiJetMVADumperNew
+                      )
 
 #process.e = cms.EndPath(process.out)
 

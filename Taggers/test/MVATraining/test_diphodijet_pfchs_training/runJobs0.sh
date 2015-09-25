@@ -12,7 +12,7 @@ cd $WD
 mkdir /home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training
 echo "ls $X509_USER_PROXY"
 ls $X509_USER_PROXY
-cmsRun /home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/VBFDiPhoDiJetMVA_Training.py maxEvents=100 useAAA=1 campaign=flashggMicroAODSpring15 processIdMap=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root lastAttempt=1
+cmsRun /home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/VBFDiPhoDiJetMVA_Training.py maxEvents=5000 useAAA=1 campaign=flashggMicroAODSpring15 processIdMap=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/home/hep/yhaddad/work/CMSSW_7_4_12/src/flashgg/Taggers/test/MVATraining/test_diphodijet_pfchs_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root
 retval=$?
 if [[ $retval == 0 ]]; then
     errors=""
