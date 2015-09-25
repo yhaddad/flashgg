@@ -33,13 +33,14 @@ def addCategory(pset,label,cutbased=None,subcats=0,variables=[],histograms=[],mv
         if( label != "" ):
             cb.name = cms.untracked.string(label)
            # cb.name = cms.untracked.string(systLabel)
-        if( classname != "" ): #if classname AND cutbased, then this is
+        #if( classname != "" ): #if classname AND cutbased, then this is
 				#the cut-and-class based dumper. For now only used in systematics dumping.
 				#in future might want to generalise this, maybe have a "systmatics" flag or 
 				# change the nominal systmaic from "" to "nominal"...
-            cb.name = cms.untracked.string(systLabel)
+            #cb.name = cms.untracked.string(systLabel)
         pset.classifierCfg.categories.append(cb)
-        #print "DEBUG classname ", classname	, " cutbased " , cutbased,  (cutbased!=None) 
+        print "DEBUG classfiderCfg.append  cb " , cb
+        print "DEBUG classname ", classname	, " cutbased " , cutbased,  (cutbased!=None) 
 
     
 # -----------------------------------------------------------------------
