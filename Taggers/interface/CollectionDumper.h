@@ -65,7 +65,7 @@ namespace flashgg {
             for( auto &rm : remap ) {
                 remap_.insert( std::make_pair( rm.getUntrackedParameter<std::string>( "src" ),
                                                rm.getUntrackedParameter<std::string>( "dst" )
-                                             ) );
+                                               ) );
             }
         }
 
@@ -185,24 +185,34 @@ namespace flashgg {
             //std::cout << "DEBUG CategoryDumper label " << label << std::endl;
             auto systLabel = cat.getParameter<std::string>( "systLabel" );
             //std::cout << "DEBUG CategoryDumper systlabel " << systLabel << std::endl;
-            auto classname = cat.getParameter<std::string>( "classname" );
+            std::string classname = "";
+            std::cout<<"DEBUG CLASSNAME " << classname << std::endl; 
+            if( cat.exists("classname") ) { classname = cat.getParameter<std::string>( "classname" ); }
+            if( cat.exists("classname") ) { std::cout<<"DEBUG CLASSNAME FOUND " << classname << std::endl; }
+            classname = cat.getParameter<std::string>( "classname" );
+            std::cout << "DEBUG CategoryDumper classname " << classname << std::endl;
+            //auto classname = cat.getParameter<std::string>( "classname" );
             //std::cout << "DEBUG CategoryDumper classname " << classname << std::endl;
             auto subcats = cat.getParameter<int>( "subcats" );
             //std::cout << "DEBUG CategoryDumper subcats " << subcats << std::endl;
             auto cutbased = cat.getParameter<bool>( "cutbased" );
             auto name = replaceString( nameTemplate_, "$LABEL", label );
             name = replaceString( name, "$SYST", systLabel );
-            name = replaceString( name, "$CLASSNAME", classname );
+            if( cat.exists("classname") ) {
+                std::cout << "DEBUG replaceing $CLASSNAME by " << classname << " in name template " << name << std::endl;
+                name = replaceString( name, "$CLASSNAME", classname );
+            }
+            //name = replaceString( name, "$CLASSNAME", classname );
             auto key = std::make_pair(label, systLabel );
             bool classbased = (classname != "");
             // the key is in general of the format <classname,cutname>
             // for cutbased dumpers, the label is the cutname
             if (cutbased && !classbased){ 
-            key = std::make_pair("",label); 
+                key = std::make_pair("",label); 
             }
             // for classbased, the label is the classname
             if (classbased && !cutbased) {
-            key = std::make_pair(label,"");
+                key = std::make_pair(label,"");
             }
             //for cut-and-classbased, I guess the syntax should be to use the key <classname, label>
             //if no systLabel is stored 
@@ -211,7 +221,8 @@ namespace flashgg {
             //cut is labelled by the systLabel. This could probably be merged with the case above in future. //FIXME
             // for now this is the only application of cut-and-class dumper, so should be amended in future if needed.
             if (classbased && cutbased) {
-                key = std::make_pair(classname, systLabel); 
+                //key = std::make_pair(classname, systLabel); 
+                key = std::make_pair(classname, label);
             }
             hasSubcat_[key] = ( subcats > 0 );
             auto &dumpers = dumpers_[key];
@@ -256,69 +267,69 @@ namespace flashgg {
     //// }
 
     template<class C, class T, class U>
-        void CollectionDumper<C, T, U>::beginJob()
-        {
-        }
+    void CollectionDumper<C, T, U>::beginJob()
+    {
+    }
 
     template<class C, class T, class U>
-        void CollectionDumper<C, T, U>::endJob()
-        {
-        }
+    void CollectionDumper<C, T, U>::endJob()
+    {
+    }
 
     template<class C, class T, class U>
-        double CollectionDumper<C, T, U>::eventWeight( const edm::EventBase &event )
-        {
-            double weight = 1.;
-            if( ! event.isRealData() ) {
-                edm::Handle<GenEventInfoProduct> genInfo;
-                event.getByLabel( genInfo_, genInfo );
+    double CollectionDumper<C, T, U>::eventWeight( const edm::EventBase &event )
+    {
+        double weight = 1.;
+        if( ! event.isRealData() ) {
+            edm::Handle<GenEventInfoProduct> genInfo;
+            event.getByLabel( genInfo_, genInfo );
 
-                weight = lumiWeight_;
+            weight = lumiWeight_;
 
-                if( genInfo.isValid() ) {
-                    const auto &weights = genInfo->weights();
-                    // FIMXE store alternative/all weight-sets
-                    if( ! weights.empty() ) {
-                        weight *= weights[0];
-                    }
+            if( genInfo.isValid() ) {
+                const auto &weights = genInfo->weights();
+                // FIMXE store alternative/all weight-sets
+                if( ! weights.empty() ) {
+                    weight *= weights[0];
                 }
             }
-            return weight;
         }
+        return weight;
+    }
 
     template<class C, class T, class U>
-        void CollectionDumper<C, T, U>::analyze( const edm::EventBase &event )
-        {
-            edm::Handle<collection_type> collectionH;
-            event.getByLabel( src_, collectionH );
-            const auto &collection = *collectionH;
-            weight_ = eventWeight( event );
+    void CollectionDumper<C, T, U>::analyze( const edm::EventBase &event )
+    {
+        edm::Handle<collection_type> collectionH;
+        event.getByLabel( src_, collectionH );
+        const auto &collection = *collectionH;
+        weight_ = eventWeight( event );
 
-            if( globalVarsDumper_ ) { globalVarsDumper_->fill( event ); }
-            int nfilled = maxCandPerEvent_;
+        if( globalVarsDumper_ ) { globalVarsDumper_->fill( event ); }
+        int nfilled = maxCandPerEvent_;
 
-            for (auto &dumper : dumpers_){
-             //   std::cout << "DEBUG available dumper keys " << dumper.first.first <<  ", " << dumper.first.second << std::endl;
-            }
-
-            for( auto &cand : collection ) {
-                auto cat = classifier_( cand );
-                auto which = dumpers_.find( cat.first );
-               // std::cout << " DEBUG " << cat.first.first << ", " << cat.first.second << std::endl;
-               // auto count = dumpers_.count( cat.first );
-               // std::cout << ">> DEBUG Number of matches with that key " << count  << std::endl;
-
-                if( which != dumpers_.end() ) {
-                    // which->second.print();
-                    int isub = ( hasSubcat_[cat.first] ? cat.second : 0 );
-                    // FIXME per-candidate weights
-                    which->second[isub].fill( cand, weight_, maxCandPerEvent_ - nfilled );
-                    --nfilled;
-                    //   which++;
-                }
-                if( ( maxCandPerEvent_ > 0 )  && nfilled == 0 ) { break; }
-            }
+        for (auto &dumper : dumpers_){
+            //   std::cout << "DEBUG available dumper keys " << dumper.first.first <<  ", " << dumper.first.second << std::endl;
         }
+
+        for( auto &cand : collection ) {
+            auto cat = classifier_( cand );
+            auto which = dumpers_.find( cat.first );
+            // std::cout << " DEBUG " << cat.first.first << ", " << cat.first.second << std::endl;
+            // auto count = dumpers_.count( cat.first );
+            // std::cout << ">> DEBUG Number of matches with that key " << count  << std::endl;
+
+            if( which != dumpers_.end() ) {
+                // which->second.print();
+                int isub = ( hasSubcat_[cat.first] ? cat.second : 0 );
+                // FIXME per-candidate weights
+                which->second[isub].fill( cand, weight_, maxCandPerEvent_ - nfilled );
+                --nfilled;
+                //   which++;
+            }
+            if( ( maxCandPerEvent_ > 0 )  && nfilled == 0 ) { break; }
+        }
+    }
 
 }
 
