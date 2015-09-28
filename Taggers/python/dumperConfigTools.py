@@ -7,19 +7,17 @@ def addCategories(pset,cats,variables,histograms,mvas=None):
         addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
 
 # -----------------------------------------------------------------------
-def addCategory(pset,label,cutbased=None,subcats=0,variables=[],histograms=[],mvas=None,systLabel="",classname=""):
+def addCategory(pset,label,cutbased=None,subcats=0,variables=[],histograms=[],mvas=None,classname=None):
     
    
     if subcats >= 0:
         catDef = cms.PSet(label=cms.string(label),
-				                  cutbased=cms.bool(cutbased!=None),
                           subcats=cms.int32(subcats),
                           variables=cms.VPSet(),
                           histograms=cms.VPSet(),
-													systLabel=cms.string(systLabel),
-													classname=cms.string(classname)
                           )
-        
+        if classname: catDef.className=cms.string(classname)
+         
         addVariables( catDef.variables, variables )
         addHistograms( catDef.histograms, histograms  )
         if mvas: 
@@ -30,19 +28,11 @@ def addCategory(pset,label,cutbased=None,subcats=0,variables=[],histograms=[],mv
 
     if cutbased:
         cb = cms.PSet( cut=cms.string(cutbased) )
-        if( label != "" ):
+        if( label != "" or classname):
             cb.name = cms.untracked.string(label)
-           # cb.name = cms.untracked.string(systLabel)
-        #if( classname != "" ): #if classname AND cutbased, then this is
-				#the cut-and-class based dumper. For now only used in systematics dumping.
-				#in future might want to generalise this, maybe have a "systmatics" flag or 
-				# change the nominal systmaic from "" to "nominal"...
-            #cb.name = cms.untracked.string(systLabel)
         pset.classifierCfg.categories.append(cb)
-        print "DEBUG classfiderCfg.append  cb " , cb
-        print "DEBUG classname ", classname	, " cutbased " , cutbased,  (cutbased!=None) 
 
-    
+   
 # -----------------------------------------------------------------------
 def addVariable(vpset,expr,name=None,nbins=None,vmin=None,vmax=None):
     if ":=" in expr:

@@ -82,7 +82,7 @@ namespace flashgg {
 
         std::vector<edm::Ptr<flashgg::Electron> > goodElectrons;
 
-        std::cout << " LC DEBUG (LeptonSlection.cc) nElectrons " << ElectronPointers.size() << std::endl;
+        // std::cout << " LC DEBUG (LeptonSlection.cc) nElectrons " << ElectronPointers.size() << std::endl;
         for( unsigned int ElectronIndex = 0; ElectronIndex < ElectronPointers.size(); ElectronIndex++ ) {
 
             Ptr<flashgg::Electron> Electron = ElectronPointers[ElectronIndex];
