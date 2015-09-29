@@ -6,9 +6,17 @@ flashggUnpackedJets = cms.EDProducer("FlashggVectorVectorJetUnpacker",
                                      NCollections = cms.uint32(maxJetCollections)
                                      )
 
+flashggUnpackedPuppiJets = cms.EDProducer("FlashggVectorVectorJetUnpacker",
+                                          JetsTag = cms.InputTag("flashggFinalPuppiJets"),
+                                          NCollections = cms.uint32(maxJetCollections)
+                                      )
+
 UnpackedJetCollectionVInputTag = cms.VInputTag()
+UnpackedPuppiJetCollectionVInputTag = cms.VInputTag()
 for i in range(0,maxJetCollections):
     UnpackedJetCollectionVInputTag.append(cms.InputTag('flashggUnpackedJets',str(i)))
+    UnpackedPuppiJetCollectionVInputTag.append(cms.InputTag('flashggUnpackedPuppiJets',str(i)))
+    
 
 flashggUntagged = cms.EDProducer("FlashggUntaggedTagProducer",
                                  DiPhotonTag=cms.InputTag('flashggDiPhotons'),
