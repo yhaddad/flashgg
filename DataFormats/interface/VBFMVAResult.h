@@ -38,6 +38,9 @@ namespace flashgg {
 
         // Output
         float vbfMvaResult_value;
+        // specify the bdt value here, this is
+        float vbfMvaResult_value_bdt;
+        float vbfMvaResult_value_bdtg;
     };
 
     typedef std::map<edm::Ptr<DiPhotonCandidate>, VBFMVAResult> VBFMVAResultMap;

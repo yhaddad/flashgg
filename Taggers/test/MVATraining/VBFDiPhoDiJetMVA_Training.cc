@@ -14,22 +14,37 @@
 #endif
 using namespace std;
 // --------- MAIN -------------------
-void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDiPhoDiJet", bool skipEvtWNoVBF = true )
+void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDiPhoDiJet", TString JetPUType = "CHS", bool skipEvtWNoVBF = true )
 {
     // you must define $WORKSPACE first
     TString path;
-    path = "${WORKSPACE}/test_diphodijet_training/";
-
+    if( JetPUType == "CHS" ) {
+        path = "./test_diphodijet_pfchs_training/";
+    } else if( JetPUType == "PUPPI" ) {
+        path = "./test_diphodijet_puppi_training/";
+    }
     bool useDiphotonPt = 0;
     bool usePhotonsPt = true;
 
 
-    TFile *inputS = TFile::Open( path + "output_VBF_HToGG_M-125_13TeV-powheg-pythia6_numEvent" + Nevent + "_histos.root" );
-    TFile *inputB = TFile::Open( path + "output_GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6_numEvent" + Nevent + "_histos.root" );
+    //TFile *inputS = TFile::Open( path + "output_VBF_HToGG_M-125_13TeV-powheg-pythia6_numEvent" + Nevent + "_histos.root" );
+    //TFile *inputB = TFile::Open( path + "output_GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6_numEvent" + Nevent + "_histos.root" );
 
-    TTree *treeS = ( TTree * )inputS->Get( Level + "MVADumperNew/trees/vbf_m125_13TeV_All" );
-    TTree *treeB = ( TTree * )inputB->Get( Level + "MVADumperNew/trees/gamJet_13TeV_All" );
+    TFile *inputS = TFile::Open( path + "output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent" + Nevent + "_histos.root" );
+    TFile *inputB = TFile::Open( path + "output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root" );
 
+    std::cout << "open file [sig]::" << path + "output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent" + Nevent + "_histos.root" << std::endl;
+    std::cout << "open file [bkg]::" << path + "output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent" + Nevent + "_histos.root" << std::endl;
+
+    TTree *treeS = NULL;
+    TTree *treeB = NULL;
+    if( JetPUType == "CHS" ) {
+        treeS = ( TTree * )inputS->Get( Level + "MVADumperNew/trees/vbf_m125_13TeV_All" );
+        treeB = ( TTree * )inputB->Get( Level + "MVADumperNew/trees/gamJet_13TeV_All" );
+    } else if( JetPUType == "PUPPI" ) {
+        treeS = ( TTree * )inputS->Get( Level + "MVADumperPUPPI/trees/vbf_m125_13TeV_All" );
+        treeB = ( TTree * )inputB->Get( Level + "MVADumperPUPPI/trees/gamJet_13TeV_All" );
+    }
 
     // Declaration of leaf types
 
@@ -50,35 +65,35 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
 
 
     if( Level == "VBFDiPhoDiJet" ) {
-        treeS->SetBranchAddress( "dipho_mva"         , &dipho_mva );
-        treeS->SetBranchAddress( "dijet_mva" , &dijet_mva );
-        treeS->SetBranchAddress( "dipho_PToM"     , &dipho_PToM );
+        treeS->SetBranchAddress( "dipho_mva"       , &dipho_mva );
+        treeS->SetBranchAddress( "dijet_mva"       , &dijet_mva );
+        treeS->SetBranchAddress( "dipho_PToM"      , &dipho_PToM );
     } else  if( Level == "VBF" ) {
-        treeS->SetBranchAddress( "dijet_abs_dEta   ", &dijet_abs_dEta );
-        treeS->SetBranchAddress( "dijet_leadEta    ", &dijet_leadEta );
-        treeS->SetBranchAddress( "dijet_subleadEta ", &dijet_subleadEta );
-        treeS->SetBranchAddress( "dijet_LeadJPt    ", &dijet_LeadJPt );
-        treeS->SetBranchAddress( "dijet_SubJPt     ", &dijet_SubJPt );
-        treeS->SetBranchAddress( "dijet_Zep        ", &dijet_Zep );
-        treeS->SetBranchAddress( "dijet_Mjj        ", &dijet_Mjj );
-        treeS->SetBranchAddress( "dipho_PToM       ", &dipho_PToM );
-        treeS->SetBranchAddress( "leadPho_PToM     ", &leadPho_PToM );
-        treeS->SetBranchAddress( "sublPho_PToM     ", &sublPho_PToM );
-        treeS->SetBranchAddress( "dijet_dPhi_trunc ", &dijet_dPhi_trunc );
+        treeS->SetBranchAddress( "dijet_abs_dEta"  , &dijet_abs_dEta );
+        treeS->SetBranchAddress( "dijet_leadEta"   , &dijet_leadEta );
+        treeS->SetBranchAddress( "dijet_subleadEta", &dijet_subleadEta );
+        treeS->SetBranchAddress( "dijet_LeadJPt"   , &dijet_LeadJPt );
+        treeS->SetBranchAddress( "dijet_SubJPt"    , &dijet_SubJPt );
+        treeS->SetBranchAddress( "dijet_Zep"       , &dijet_Zep );
+        treeS->SetBranchAddress( "dijet_Mjj"       , &dijet_Mjj );
+        treeS->SetBranchAddress( "dipho_PToM"      , &dipho_PToM );
+        treeS->SetBranchAddress( "leadPho_PToM"    , &leadPho_PToM );
+        treeS->SetBranchAddress( "sublPho_PToM"    , &sublPho_PToM );
+        treeS->SetBranchAddress( "dijet_dPhi_trunc", &dijet_dPhi_trunc );
     }
 
 
     // Create a new root output file.
-    string outputFileName;
+    TString outputFileName;
     if( Level == "VBF" ) {
-        outputFileName = "Flashgg_VBF";
+        outputFileName = "Flashgg_VBF_" + JetPUType;
     } else {
-        outputFileName = "Flashgg_DiPhoDiJet";
+        outputFileName = "Flashgg_DiPhoDiJet_" + JetPUType;
     }
 
     // -- reader
-    TFile *outputFile = TFile::Open( ( outputFileName + ".root" ).c_str(), "RECREATE" );
-    TMVA::Factory *factory = new TMVA::Factory( outputFileName.c_str(), outputFile,
+    TFile *outputFile = TFile::Open( ( outputFileName + ".root" ).Data(), "RECREATE" );
+    TMVA::Factory *factory = new TMVA::Factory( outputFileName.Data(), outputFile,
             "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
     // -- variables
     if( Level == "VBFDiPhoDiJet" ) {
@@ -110,10 +125,10 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
 
 
     // ====== register trees ====================================================
-    factory->AddSignalTree( treeS, signalWeight    , "Training" );
-    factory->AddSignalTree( treeS, signalWeight    , "Test" );
-    factory->AddBackgroundTree( treeB, backgroundWeight, "Training" );
-    factory->AddBackgroundTree( treeB, backgroundWeight, "Test" );
+    factory->AddSignalTree( treeS, signalWeight         , "Training" );
+    factory->AddSignalTree( treeS, signalWeight         , "Test" );
+    factory->AddBackgroundTree( treeB, backgroundWeight , "Training" );
+    factory->AddBackgroundTree( treeB, backgroundWeight , "Test" );
 
 
     // == supress the the negative points on the input variables
@@ -151,7 +166,7 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
     std::cout << "==> TMVAClassification is done!" << std::endl;
     delete factory;
 
-//	if (!gROOT->IsBatch()) TMVAGui( (outputFileName+".root").c_str() );
+    //if (!gROOT->IsBatch()) TMVAGui( (outputFileName+".root").c_str() );
 }
 // Local Variables:
 // mode:c++

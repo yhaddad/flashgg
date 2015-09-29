@@ -19,8 +19,8 @@ void DiPhotonMVA_Training( TString Nevent = "1000", TString Level = "DiPhoton", 
     path = "{WORKSPACE}/test_dipho_training/";
     path = "test_dipho_training/";
     bool useDiphotonPt = 0;
-    bool usePhotonsPt = true;
-    int nEvents = std::atoi( Nevent.Data() );
+    bool usePhotonsPt  = true;
+    int  nEvents       = std::atoi( Nevent.Data() );
 
     TFile *inputS1 = TFile::Open( path + "output_GluGluToHToGG_M-125_13TeV-powheg-pythia6_numEvent" + Nevent + "_histos.root" );
     TFile *inputS2 = TFile::Open( path + "output_TTbarH_HToGG_M-125_13TeV_amcatnlo-pythia8-tauola_numEvent" + Nevent + "_histos.root" );
@@ -86,8 +86,8 @@ void DiPhotonMVA_Training( TString Nevent = "1000", TString Level = "DiPhoton", 
 
     // == supress the the negative points on the input variables
     // == this high correlation between variables
-    TCut mycuts = ""; // " leadPho_PToM > (60./120.) && sublPho_PToM> (30./120.)";
-    TCut mycutb = ""; // " leadPho_PToM> (60./120.) && sublPho_PToM> (30./120.)";
+    TCut mycuts = ""; // " leadPho_PToM > (60./120.) && sublPho_PToM > (30./120.)";
+    TCut mycutb = ""; // " leadPho_PToM > (60./120.) && sublPho_PToM > (30./120.)";
     // tell the factory to use all remaining events in the trees after training for testing:
     factory->PrepareTrainingAndTestTree( mycuts, mycutb,
                                          "SplitMode=Random:NormMode=NumEvents:!V" );
@@ -96,19 +96,16 @@ void DiPhotonMVA_Training( TString Nevent = "1000", TString Level = "DiPhoton", 
                          "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=20:NNodesMax=5:MaxDepth=3" );
     factory->BookMethod( TMVA::Types::kBDT, "BDT",
                          "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
-//"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=20:NNodesMax=15:MaxDepth=5" );
-// book Cuts
-//factory->BookMethod( TMVA::Types::kCuts, "CutsGA",
-// "H:!V:FitMethod=GA:CutRangeMin[0]=20:CutRangeMax[0]=500:CutRangeMin[1]=20:CutRangeMax[1]=500:VarProp=FSmart:VarProp[4]=FMin:EffSel:Steps=30:Cycles=3:PopSize=500:SC_steps=10:SC_rate=5:SC_factor=0.95" );
-// ---- Now you can tell the factory to train, test, and evaluate the MVAs
-// Train MVAs using the set of training events
+
+    // ---- Now you can tell the factory to train, test, and evaluate the MVAs
+    // ---- Train MVAs using the set of training events
     factory->TrainAllMethods();
-// ---- Evaluate all MVAs using the set of test events
+    // ---- Evaluate all MVAs using the set of test events
     factory->TestAllMethods();
-// ----- Evaluate and compare performance of all configured MVAs
+    // ---- Evaluate and compare performance of all configured MVAs
     factory->EvaluateAllMethods();
-// --------------------------------------------------------------
-// Save the output
+    // --------------------------------------------------------------
+    // Save the output
     outputFile->Close();
     std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
     std::cout << "==> TMVAClassification is done!" << std::endl;
