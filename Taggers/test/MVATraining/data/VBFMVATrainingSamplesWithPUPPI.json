@@ -1,0 +1,11 @@
+{    
+    "processes" : {
+        "vbf_m125" : [ "VBFHToGG_M-125_13TeV_powheg_pythia8" ],
+	"ggf_m125" : [ "GluGluHToGG_M-125_13TeV_powheg_pythia8"],
+	"gamJet"   : [
+	    "GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8",
+	    "GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8"
+	]
+    },
+    "cmdLine" : "campaign=flashggMicroAODSpring15"
+}

@@ -1,8 +1,0 @@
-{    
-    "processes" : {
-        "vbf_m125" : [ "VBFHToGG_M-125_13TeV_powheg_pythia8" ],
-        "gamJet"   : [ "GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8" ]
-    },
-    "_comment": "the old name : campaign=HggPhys14-Phys14MicroAODV4",
-    "cmdLine" : "campaign=flashggMicroAODSpring15"
-}

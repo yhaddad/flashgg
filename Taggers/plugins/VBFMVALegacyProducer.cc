@@ -14,31 +14,29 @@
 #include "TMVA/Reader.h"
 #include "TMath.h"
 
-#include <string>
-
 using namespace std;
 using namespace edm;
 
 namespace flashgg {
 
-    class VBFMVAProducer : public EDProducer
+    class VBFMVALegacyProducer : public EDProducer
     {
 
     public:
-        VBFMVAProducer( const ParameterSet & );
+        VBFMVALegacyProducer( const ParameterSet & );
     private:
         void produce( Event &, const EventSetup & ) override;
-        
+
         EDGetTokenT<View<DiPhotonCandidate> > diPhotonToken_;
         //EDGetTokenT<View<flashgg::Jet> > jetTokenDz_;
         std::vector<edm::InputTag> inputTagJets_;
 
         unique_ptr<TMVA::Reader>VbfMva_;
         FileInPath vbfMVAweightfile_;
-        string     _MVAMethod;
-        bool       _usePuJetID;
-        double     _minDijetMinv;
-        
+        bool _isLegacyMVA;
+        bool _usePuJetID;
+        double _minDijetMinv;
+
         typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
 
         float dijet_leadEta_;
@@ -52,17 +50,17 @@ namespace flashgg {
         float dipho_PToM_;
         float leadPho_PToM_;
         float sublPho_PToM_;
-        
+
 
     };
 
-    VBFMVAProducer::VBFMVAProducer( const ParameterSet &iConfig ) :
+    VBFMVALegacyProducer::VBFMVALegacyProducer( const ParameterSet &iConfig ) :
         diPhotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( iConfig.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
         //jetTokenDz_( consumes<View<flashgg::Jet> >( iConfig.getParameter<InputTag>( "JetTag" ) ) ),
-        inputTagJets_ ( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
-        _MVAMethod    ( iConfig.getUntrackedParameter<string>( "MVAMethod" , "BDT") ),
-        _usePuJetID   ( iConfig.getUntrackedParameter<bool>( "UsePuJetID" , false ) ),
-        _minDijetMinv ( iConfig.getParameter<double>( "MinDijetMinv" ) )
+        inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
+        _isLegacyMVA( iConfig.getUntrackedParameter<bool>( "UseLegacyMVA" , false ) ),
+        _usePuJetID( iConfig.getUntrackedParameter<bool>( "UsePuJetID" , false ) ),
+        _minDijetMinv( iConfig.getParameter<double>( "MinDijetMinv" ) )
     {
 
         vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vbfMVAweightfile" );
@@ -79,36 +77,59 @@ namespace flashgg {
         leadPho_PToM_ = -999.;
         sublPho_PToM_ = -999.;
 
-        
+
         VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
-        
-        VbfMva_->AddVariable( "dijet_LeadJPt"   , &dijet_LeadJPt_   );
-        VbfMva_->AddVariable( "dijet_SubJPt"    , &dijet_SubJPt_    );
-        VbfMva_->AddVariable( "dijet_abs_dEta"  , &dijet_abs_dEta_  );
-        VbfMva_->AddVariable( "dijet_Mjj"       , &dijet_Mjj_       );
-        VbfMva_->AddVariable( "dijet_Zep"       , &dijet_Zep_       );
-        VbfMva_->AddVariable( "dijet_dPhi_trunc", &dijet_dPhi_trunc_);
-        VbfMva_->AddVariable( "leadPho_PToM"    , &leadPho_PToM_    );
-        VbfMva_->AddVariable( "sublPho_PToM"    , &sublPho_PToM_    );
-        
-        VbfMva_->BookMVA( _MVAMethod.c_str() , vbfMVAweightfile_.fullPath() );
-        
+
+        if( _isLegacyMVA ) {
+            // legacy input var
+            VbfMva_->AddVariable( "dijet_leadEta", &dijet_leadEta_ );
+            VbfMva_->AddVariable( "dijet_subleadEta", &dijet_subleadEta_ );
+            VbfMva_->AddVariable( "dijet_LeadJPt", &dijet_LeadJPt_ );
+            VbfMva_->AddVariable( "dijet_SubJPt", &dijet_SubJPt_ );
+            VbfMva_->AddVariable( "dijet_Zep", &dijet_Zep_ );
+            VbfMva_->AddVariable( "min(dijet_dPhi,2.916)", &dijet_dPhi_trunc_ );
+            VbfMva_->AddVariable( "dijet_Mjj", &dijet_Mjj_ );
+            VbfMva_->AddVariable( "dipho_pt/mass", &dipho_PToM_ );
+            VbfMva_->BookMVA( "BDTG", vbfMVAweightfile_.fullPath() );
+        } else {
+            // new flashgg var
+            VbfMva_->AddVariable( "dijet_LeadJPt" , &dijet_LeadJPt_ );
+            VbfMva_->AddVariable( "dijet_SubJPt" , &dijet_SubJPt_ );
+            VbfMva_->AddVariable( "dijet_abs_dEta" , &dijet_abs_dEta_ );
+            VbfMva_->AddVariable( "dijet_Mjj" , &dijet_Mjj_ );
+            VbfMva_->AddVariable( "dijet_Zep" , &dijet_Zep_ );
+            VbfMva_->AddVariable( "dijet_dPhi_trunc", &dijet_dPhi_trunc_ );
+            //VbfMva_->AddVariable("dipho_pt/mass", &dipho_PToM_);
+            VbfMva_->AddVariable( "leadPho_PToM", &leadPho_PToM_ );
+            VbfMva_->AddVariable( "sublPho_PToM", &sublPho_PToM_ );
+            VbfMva_->BookMVA( "BDT", vbfMVAweightfile_.fullPath() );
+        }
+
+
         produces<vector<VBFMVAResult> >();
 
     }
 
-    void VBFMVAProducer::produce( Event &evt, const EventSetup & )
+    void VBFMVALegacyProducer::produce( Event &evt, const EventSetup & )
     {
         Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
         evt.getByToken( diPhotonToken_, diPhotons );
-        
+        // const PtrVector<flashgg::DiPhotonCandidate>& diPhotonPointers = diPhotons->ptrVector();
+        //Handle<View<flashgg::Jet> > jetsDz;
+        //evt.getByToken( jetTokenDz_, jetsDz );
+        //	const PtrVector<flashgg::Jet>& jetPointersDz = jetsDz->ptrVector();
+        // get the iso deposits
+        //IsoDepositMaps electronIso(inputTagElectronIsoDeposits_.size());
+        //IsoDepositMaps photonIsoDep(inputTagPhotonIsoDeposits_.size());
+
         JetCollectionVector Jets( inputTagJets_.size() );
         for( size_t j = 0; j < inputTagJets_.size(); ++j ) {
             evt.getByLabel( inputTagJets_[j], Jets[j] );
         }
 
         std::auto_ptr<vector<VBFMVAResult> > vbf_results( new vector<VBFMVAResult> );
-        
+
+
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
 
             flashgg::VBFMVAResult mvares;
@@ -215,36 +236,45 @@ namespace flashgg {
                 //	std::cout<<"jet indices: " <<  dijet_indices.first << "	" << dijet_indices.second << std::endl;
                 mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
-                
+
+
                 //debug stuff
                 //std::cout << mvares.leadJet.eta() << std::endl;
                 //std::cout << mvares.subleadJet.eta() << std::endl;
+
             }
             
-            mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( _MVAMethod.c_str() );
+            if( _isLegacyMVA ) {
+                mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( "BDTG" );
+            } else {
+                mvares.vbfMvaResult_value      = VbfMva_->EvaluateMVA( "BDT" );
+                mvares.vbfMvaResult_value_bdt  = mvares.vbfMvaResult_value;
+                mvares.vbfMvaResult_value_bdtg = VbfMva_->EvaluateMVA( "BDTG" );
+            }
             
             //	mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDT");
             //std::cout <<" debug mva " <<  mvares.vbfMvaResult_value << std::endl;
-            mvares.dijet_leadEta    = dijet_leadEta_ ;
+            mvares.dijet_leadEta = dijet_leadEta_ ;
             mvares.dijet_subleadEta = dijet_subleadEta_ ;
-            mvares.dijet_abs_dEta   = dijet_abs_dEta_ ;
-            mvares.dijet_LeadJPt    = dijet_LeadJPt_ ;
-            mvares.dijet_SubJPt     = dijet_SubJPt_ ;
-            mvares.dijet_Zep        = dijet_Zep_ ;
+            mvares.dijet_abs_dEta = dijet_abs_dEta_ ;
+            mvares.dijet_LeadJPt = dijet_LeadJPt_ ;
+            mvares.dijet_SubJPt = dijet_SubJPt_ ;
+            mvares.dijet_Zep =    dijet_Zep_ ;
             mvares.dijet_dPhi_trunc = dijet_dPhi_trunc_ ;
-            mvares.dijet_Mjj        = dijet_Mjj_ ;
-            mvares.dipho_PToM       = dipho_PToM_ ;
-            mvares.sublPho_PToM     = sublPho_PToM_ ;
-            mvares.leadPho_PToM     = leadPho_PToM_ ;
-            
+            mvares.dijet_Mjj =    dijet_Mjj_ ;
+            mvares.dipho_PToM =   dipho_PToM_ ;
+            mvares.sublPho_PToM = sublPho_PToM_ ;
+            mvares.leadPho_PToM = leadPho_PToM_ ;
+
             vbf_results->push_back( mvares );
+
         }
         evt.put( vbf_results );
     }
 }
 
-typedef flashgg::VBFMVAProducer FlashggVBFMVAProducer;
-DEFINE_FWK_MODULE( FlashggVBFMVAProducer );
+typedef flashgg::VBFMVALegacyProducer FlashggVBFMVALegacyProducer;
+DEFINE_FWK_MODULE( FlashggVBFMVALegacyProducer );
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil
