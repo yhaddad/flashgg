@@ -87,7 +87,7 @@ preselection_cut="dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && di
 # setup the dumpers
 cfgTools.addCategories(process.VBFMVADumper,
                        [## cuts are applied in cascade
-                           ("PreselVBFDiJet", "%s" % preselection_cut,0),
+                           ("PreselVBFDiJet","%s" % preselection_cut ,0),
                            ("VBFDiJet"      ,"dijet_LeadJPt > 0"     ,0),
                            ("excluded"      ,"1"                     ,0) # really importent to avoid having an error
                        ],
