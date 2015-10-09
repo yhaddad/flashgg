@@ -8,7 +8,7 @@ from PhysicsTools.PatAlgos.tools.jetTools        import addJetCollection
 import os
 
 flashggBTag = 'pfCombinedInclusiveSecondaryVertexV2BJetTags'
-maxJetCollections = 8
+maxJetCollections = 10
 
 def addFlashggPFCHSJets(process, vertexIndex = 0, doQGTagging = True, label ='', debug = False):
   setattr(process, 'selectedMuons' + label, cms.EDFilter("CandPtrSelector", 
@@ -104,21 +104,18 @@ def addFlashggPFCHSJets(process, vertexIndex = 0, doQGTagging = True, label ='',
   setattr( process, 'flashggSelectedPFCHSJets'+label, flashggSelectedJets )
 
 
-
-
-
   
 def addFlashggPuppiJets(process,
                         vertexIndex = 0,
                         doQGTagging = True,
-                        label       ='',
+                        label       = '',
                         useLocalJEC = True,
-                        dbfile      = 'flashgg/MetaData/data/PuppiJEC/PY8_RunIISpring15DR74_bx50_MC.db',
+                        dbfile      = 'PY8_RunIISpring15DR74_bx50_MC.db',
                         debug       = False):
-    
+  
   from CommonTools.PileupAlgos.flashggPuppi_cff          import flashggPuppi 
   from RecoJets.JetProducers.ak4PFJets_cfi               import ak4PFJets
-
+  
   # fill the puppi parameters
   setattr(process, 'flashggPuppi' + label,
           flashggPuppi.clone( candName              = cms.InputTag('packedPFCandidates'),
@@ -139,7 +136,8 @@ def addFlashggPuppiJets(process,
     
     from flashgg.MicroAOD.flashggJetTools_cfi import loadLocalJECDBfile
     loadLocalJECDBfile(process,
-                       dbfile = os.environ['CMSSW_BASE'] + '/src/' + dbfile,
+                       #dbfile = os.environ['CMSSW_BASE'] + '/src/' + dbfile,
+                       dbfile =  dbfile,
                        tag    = 'JetCorrectorParametersCollection_PY8_RunIISpring15DR74_bx50_MC_AK4PUPPI',
                        label  = 'AK4PFPuppi')
     
