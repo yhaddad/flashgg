@@ -22,7 +22,7 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
 
     bool useDiphotonPt = 0;
     bool usePhotonsPt = true;
-
+    
     if (JetPUType == "CHS") JetPUType = ""; // yeah !! 
     
     std::map<TString, TString> samples_name;
@@ -96,23 +96,21 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
         factory->AddVariable( "dipho_mva" );
         factory->AddVariable( "dijet_mva" );
         factory->AddVariable( "dipho_PToM" );
+    
     } else  if( Level == "VBF" ) {
-
+        
         factory->AddVariable( "dijet_LeadJPt" );
         factory->AddVariable( "dijet_SubJPt" );
         factory->AddVariable( "dijet_abs_dEta" );
         factory->AddVariable( "dijet_Mjj" );
         factory->AddVariable( "dijet_Zep" );
         factory->AddVariable( "dijet_dPhi_trunc" );
-
-        if( useDiphotonPt ) {
-            factory->AddVariable( "dipho_PToM" );
-        }
-
-        if( usePhotonsPt ) {
-            factory->AddVariable( "leadPho_PToM" );
-            factory->AddVariable( "sublPho_PToM" );
-        }
+        
+        //if( useDiphotonPt ) {
+        factory->AddVariable( "dipho_PToM" );
+        factory->AddVariable( "leadPho_PToM" );
+        factory->AddVariable( "sublPho_PToM" );
+        //}
     }
     
     

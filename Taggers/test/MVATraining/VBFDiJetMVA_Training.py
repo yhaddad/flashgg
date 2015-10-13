@@ -37,8 +37,8 @@ import flashgg.Taggers.dumperConfigTools as cfgTools
 
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
-process.flashggVBFMVA.MVAMethod      = cms.untracked.string("BDTG")
-process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("BDTG")
+process.flashggVBFMVA.MVAMethod      = cms.untracked.string("")
+process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("")
 
 
 process.load("flashgg.Taggers.VBFMVADumperPUPPI_cff")
@@ -62,8 +62,16 @@ VBFMVAvariables=[
     "dipho_PToM          :=  dipho_PToM       ",
     "leadPho_PToM        :=  leadPho_PToM     ",
     "sublPho_PToM        :=  sublPho_PToM     ",
-    "dijet_dPhi_trunc    :=  dijet_dPhi_trunc ",
-]
+    "dijet_dPhi_trunc    :=  dijet_dPhi_trunc "#,
+    #"leadjet_y           :=  leadJet.y ",
+    #"subljet_y           :=  subleadJet.y ",
+    #"leadjet_px          :=  leadJet.px ",
+    #"subljet_px          :=  subleadJet.px ",
+    #"leadjet_py          :=  leadJet.py ",
+    #"subljet_py          :=  subleadJet.py ",
+    #"leadjet_pz          :=  leadJet.pz ",
+    #"subljet_pz          :=  subleadJet.pz "
+    ]
 
 preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && dijet_leadEta > -4.7 && dijet_subleadEta < 4.7 && dijet_subleadEta > -4.7 && dijet_Mjj> 250 && leadPho_PToM  > 0.5"
 

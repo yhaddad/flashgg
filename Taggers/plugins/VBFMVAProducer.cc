@@ -37,10 +37,12 @@ namespace flashgg {
         FileInPath vbfMVAweightfile_;
         string     _MVAMethod;
         bool       _usePuJetID;
+        bool       _useJetID;
+        string     _JetIDLevel;
         double     _minDijetMinv;
         
         typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
-
+        
         float dijet_leadEta_;
         float dijet_subleadEta_;
         float dijet_abs_dEta_;
@@ -61,12 +63,14 @@ namespace flashgg {
         //jetTokenDz_( consumes<View<flashgg::Jet> >( iConfig.getParameter<InputTag>( "JetTag" ) ) ),
         inputTagJets_ ( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
         _MVAMethod    ( iConfig.getUntrackedParameter<string>( "MVAMethod" , "BDT") ),
-        _usePuJetID   ( iConfig.getUntrackedParameter<bool>( "UsePuJetID" , false ) ),
+        _usePuJetID   ( iConfig.getUntrackedParameter<bool>( "UsePuJetID"  , false ) ),
+        _useJetID     ( iConfig.getUntrackedParameter<bool>( "UseJetID"    , false ) ),
+        _JetIDLevel   ( iConfig.getUntrackedParameter<string>( "JetIDLevel", "Loose" ) ), // Loose == 0, Tight == 1
         _minDijetMinv ( iConfig.getParameter<double>( "MinDijetMinv" ) )
     {
-
+        
         vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vbfMVAweightfile" );
-
+        
         dijet_leadEta_ = -999.;
         dijet_subleadEta_ = -999.;
         dijet_abs_dEta_ = -999.;
@@ -79,20 +83,20 @@ namespace flashgg {
         leadPho_PToM_ = -999.;
         sublPho_PToM_ = -999.;
 
-        
-        VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
-        
-        VbfMva_->AddVariable( "dijet_LeadJPt"   , &dijet_LeadJPt_   );
-        VbfMva_->AddVariable( "dijet_SubJPt"    , &dijet_SubJPt_    );
-        VbfMva_->AddVariable( "dijet_abs_dEta"  , &dijet_abs_dEta_  );
-        VbfMva_->AddVariable( "dijet_Mjj"       , &dijet_Mjj_       );
-        VbfMva_->AddVariable( "dijet_Zep"       , &dijet_Zep_       );
-        VbfMva_->AddVariable( "dijet_dPhi_trunc", &dijet_dPhi_trunc_);
-        VbfMva_->AddVariable( "leadPho_PToM"    , &leadPho_PToM_    );
-        VbfMva_->AddVariable( "sublPho_PToM"    , &sublPho_PToM_    );
-        
-        VbfMva_->BookMVA( _MVAMethod.c_str() , vbfMVAweightfile_.fullPath() );
-        
+        if (_MVAMethod != ""){
+            VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
+            
+            VbfMva_->AddVariable( "dijet_LeadJPt"   , &dijet_LeadJPt_   );
+            VbfMva_->AddVariable( "dijet_SubJPt"    , &dijet_SubJPt_    );
+            VbfMva_->AddVariable( "dijet_abs_dEta"  , &dijet_abs_dEta_  );
+            VbfMva_->AddVariable( "dijet_Mjj"       , &dijet_Mjj_       );
+            VbfMva_->AddVariable( "dijet_Zep"       , &dijet_Zep_       );
+            VbfMva_->AddVariable( "dijet_dPhi_trunc", &dijet_dPhi_trunc_);
+            VbfMva_->AddVariable( "leadPho_PToM"    , &leadPho_PToM_    );
+            VbfMva_->AddVariable( "sublPho_PToM"    , &sublPho_PToM_    );
+            std::cout << "VBFMVA Method ::" <<_MVAMethod.c_str() << " file::"<<vbfMVAweightfile_.fullPath()<<std::endl;
+            VbfMva_->BookMVA( _MVAMethod.c_str() , vbfMVAweightfile_.fullPath() );
+        }
         produces<vector<VBFMVAResult> >();
 
     }
@@ -106,11 +110,11 @@ namespace flashgg {
         for( size_t j = 0; j < inputTagJets_.size(); ++j ) {
             evt.getByLabel( inputTagJets_[j], Jets[j] );
         }
-
+        
         std::auto_ptr<vector<VBFMVAResult> > vbf_results( new vector<VBFMVAResult> );
         
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
-
+            
             flashgg::VBFMVAResult mvares;
 
             dijet_leadEta_ = -999.;
@@ -127,7 +131,7 @@ namespace flashgg {
 
 
             // First find dijet by looking for highest-pt jets...
-            std::pair <int, int> dijet_indices( -1, -1 );
+            std::pair <int, int>     dijet_indices( -1, -1 );
             std::pair <float, float> dijet_pts( -1., -1. );
             //			float PuIDCutoff = 0.8;
             float dr2pho = 0.5;
@@ -141,14 +145,17 @@ namespace flashgg {
 
             // take the jets corresponding to the diphoton candidate
             unsigned int jetCollectionIndex = diPhotons->ptrAt( candIndex )->jetCollectionIndex();
-
+            
             for( UInt_t jetLoop = 0; jetLoop < Jets[jetCollectionIndex]->size() ; jetLoop++ ) {
-
                 Ptr<flashgg::Jet> jet  = Jets[jetCollectionIndex]->ptrAt( jetLoop );
-
+                
                 //pass PU veto??
                 //if (jet->puJetId(diPhotons[candIndex]) <  PuIDCutoff) {continue;}
                 if( _usePuJetID && !jet->passesPuJetId( diPhotons->ptrAt( candIndex ) ) ) { continue; }
+                if( _useJetID   ){
+                    if( _JetIDLevel == "Loose" && !jet->passesJetID  ( flashgg::Loose ) ) continue;
+                    if( _JetIDLevel == "Tight" && !jet->passesJetID  ( flashgg::Tight ) ) continue;
+                }
                 // within eta 4.7?
                 if( fabs( jet->eta() ) > 4.7 ) { continue; }
                 // close to lead photon?
@@ -168,7 +175,8 @@ namespace flashgg {
                     // .. and put the new jet as the lead jet.
                     dijet_indices.first = jetLoop;
                     dijet_pts.first = jet->pt();
-                } else if( jet->pt() > dijet_pts.second ) {
+                } else if( jet->pt() > dijet_pts.second && 
+                           (jet->eta()*Jets[jetCollectionIndex]->ptrAt( dijet_indices.first )->eta()) < 0) { // this condition is added here to force to have the leading and subleading jets in two different hemispheres 
                     // if the jet's pt isn't as high as the lead jet's but i higher than the sublead jet's
                     // The replace the sublead jet by this new jet.
                     dijet_indices.second = jetLoop;
@@ -221,7 +229,8 @@ namespace flashgg {
                 //std::cout << mvares.subleadJet.eta() << std::endl;
             }
             
-            mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( _MVAMethod.c_str() );
+            if (_MVAMethod != "") 
+                mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( _MVAMethod.c_str() );
             
             //	mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDT");
             //std::cout <<" debug mva " <<  mvares.vbfMvaResult_value << std::endl;
