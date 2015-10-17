@@ -110,6 +110,9 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
         factory->AddVariable( "dipho_PToM" );
         factory->AddVariable( "leadPho_PToM" );
         factory->AddVariable( "sublPho_PToM" );
+        // new var
+        factory->AddVariable( "dijet_dy" );
+        factory->AddVariable( "minDRJetPho" );
         //}
     }
     

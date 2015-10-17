@@ -40,6 +40,8 @@ process.load("flashgg.Taggers.flashggTagTester_cfi")
 process.flashggVBFMVA.MVAMethod      = cms.untracked.string("")
 process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("")
 
+process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
+process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
 
 process.load("flashgg.Taggers.VBFMVADumperPUPPI_cff")
 process.VBFMVADumperPUPPI.dumpTrees     = True
@@ -62,15 +64,9 @@ VBFMVAvariables=[
     "dipho_PToM          :=  dipho_PToM       ",
     "leadPho_PToM        :=  leadPho_PToM     ",
     "sublPho_PToM        :=  sublPho_PToM     ",
-    "dijet_dPhi_trunc    :=  dijet_dPhi_trunc "#,
-    #"leadjet_y           :=  leadJet.y ",
-    #"subljet_y           :=  subleadJet.y ",
-    #"leadjet_px          :=  leadJet.px ",
-    #"subljet_px          :=  subleadJet.px ",
-    #"leadjet_py          :=  leadJet.py ",
-    #"subljet_py          :=  subleadJet.py ",
-    #"leadjet_pz          :=  leadJet.pz ",
-    #"subljet_pz          :=  subleadJet.pz "
+    "dijet_dPhi_trunc    :=  dijet_dPhi_trunc ",
+    "dijet_dy            :=  dijet_dy ",
+    "minDRJetPho         :=  minDRJetPho "
     ]
 
 preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && dijet_leadEta > -4.7 && dijet_subleadEta < 4.7 && dijet_subleadEta > -4.7 && dijet_Mjj> 250 && leadPho_PToM  > 0.5"

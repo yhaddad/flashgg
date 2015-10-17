@@ -38,6 +38,9 @@ process.load("flashgg.Taggers.flashggTagTester_cfi")
 process.flashggVBFMVA.MVAMethod      = cms.untracked.string("BDTG")
 process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("BDTG")
 
+process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
+process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
+
 process.flashggVBFMVA.vbfMVAweightfile      = cms.FileInPath("flashgg/Taggers/test/MVATraining/weights/Flashgg_VBF_CHS_BDTG.weights.xml")
 process.flashggVBFMVAPUPPI.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/test/MVATraining/weights/Flashgg_VBF_PUPPI_BDTG.weights.xml")
 
@@ -63,7 +66,9 @@ VBFMVAvariables=[
     "leadPho_PToM        :=  leadPho_PToM     ",
     "sublPho_PToM        :=  sublPho_PToM     ",
     "dijet_dPhi_trunc    :=  dijet_dPhi_trunc ",
-    "vbfMvaResult_value  :=  vbfMvaResult_value",
+    "dijet_dy            :=  dijet_dy         ",
+    "minDRJetPho         :=  minDRJetPho      ",
+    "vbfMvaResult_value  :=  vbfMvaResult_value"
 ]
 
 VBFMVAHistograms=[
@@ -92,10 +97,10 @@ cfgTools.addCategories(process.VBFMVADumper,
                            ("excluded"      ,"1"                     ,0) # really importent to avoid having an error
                        ],
                        variables  = VBFMVAvariables, 
-                       histograms = VBFMVAHistograms
-                       #[
-                       #    "vbfMvaResult_value>>outputBDT(400,-1,1)",
-                       #]
+                       histograms = 
+                       [
+                           "vbfMvaResult_value>>outputBDT(400,-1,1)",
+                       ]
 )
 
 process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
@@ -106,10 +111,10 @@ cfgTools.addCategories(process.VBFMVADumperPUPPI,
                            ("excluded"      ,"1"                     ,0)
                        ],
                        variables  = VBFMVAvariables, 
-                       histograms = VBFMVAHistograms
-                       #[
-                       #    "vbfMvaResult_value>>outputBDT(400,-1,1)",
-                       #]
+                       histograms = 
+                       [
+                           "vbfMvaResult_value>>outputBDT(400,-1,1)",
+                       ]
 )
 process.VBFMVADumperPUPPI.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 #

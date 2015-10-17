@@ -1,0 +1,957 @@
+
+##################################################
+######     RETRAINING VBF DIJET MVA         ######
+##################################################
+
+
++++++++++++ Create working directories  ++++++++++#
+
+ln: creating symbolic link `test_diphodijet_training/test_diphodijet_training': File exists
+ln: creating symbolic link `test_diphodijet_compare/test_diphodijet_compare': File exists
+test_diphodijet_compare
+test_diphodijet_training
+
+
+INFO: We are at 'cern.ch', so we will use 'lsf' as bacth system.
+     Please specify the batch system on the command line if you are not happy with this.
+
+Will stage output to /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare using the command 'cp -pv'
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=40000 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root
+256 Traceback (most recent call last):
+  File "/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py", line 100, in <module>
+    histograms = VBFMVAHistograms
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 7, in addCategories
+    addCategory(pset,*cat,variables=variables,histograms=histograms,mvas=mvas)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 21, in addCategory
+    addVariables( catDef.variables, variables )
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 82, in addVariables
+    addVariable(vpset,var)
+  File "/afs/cern.ch/user/y/yhaddad/CMSSW_7_4_12/python/flashgg/Taggers/dumperConfigTools.py", line 41, in addVariable
+    name,expr=toks
+ValueError: too many values to unpack
+
+##################################################
+######          RETRAINING COMPLETE         ######
+##################################################
+
+
+##################################################
+######     RETRAINING VBF DIJET MVA         ######
+##################################################
+
+
++++++++++++ Create working directories  ++++++++++#
+
+ln: creating symbolic link `test_diphodijet_training/test_diphodijet_training': File exists
+ln: creating symbolic link `test_diphodijet_compare/test_diphodijet_compare': File exists
+test_diphodijet_compare
+test_diphodijet_training
+
+
+INFO: We are at 'cern.ch', so we will use 'lsf' as bacth system.
+     Please specify the batch system on the command line if you are not happy with this.
+
+Will stage output to /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare using the command 'cp -pv'
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root
+
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709638893]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709638893]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:12:25 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:53 KSI2K hours (53 KSI2K seconds)
+                 This process corresponds to     : 0:03:29 HS06  hours (209 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 10)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709638900]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709638900]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4.log
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 11)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709638899]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709638899]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:13:37 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:41 KSI2K hours (101 KSI2K seconds)
+                 This process corresponds to     : 0:06:36 HS06  hours (396 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 12)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709638895]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709638895]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:14:35 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:25 KSI2K hours (85 KSI2K seconds)
+                 This process corresponds to     : 0:05:32 HS06  hours (332 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 13)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709638894]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709638894]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:14:05 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:09 KSI2K hours (69 KSI2K seconds)
+                 This process corresponds to     : 0:04:30 HS06  hours (270 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 14)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709638902]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709638902]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:15:09 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:45 KSI2K hours (45 KSI2K seconds)
+                 This process corresponds to     : 0:02:57 HS06  hours (177 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 15)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709638904]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709638904]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:15:09 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:46 KSI2K hours (46 KSI2K seconds)
+                 This process corresponds to     : 0:03:00 HS06  hours (180 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 16)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709638903]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709638903]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:15:09 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:45 KSI2K hours (45 KSI2K seconds)
+                 This process corresponds to     : 0:02:57 HS06  hours (177 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7.log
+
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 17)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709639359]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709639359]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:16:42 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:00 KSI2K hours (60 KSI2K seconds)
+                 This process corresponds to     : 0:03:54 HS06  hours (234 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 18)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709639532]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709639532]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:17:16 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:01 KSI2K hours (61 KSI2K seconds)
+                 This process corresponds to     : 0:04:01 HS06  hours (241 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 19)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709639558]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709639558]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:16:42 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:59 KSI2K hours (59 KSI2K seconds)
+                 This process corresponds to     : 0:03:50 HS06  hours (230 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 20)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709639561]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709639561]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:17:22 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:48 KSI2K hours (48 KSI2K seconds)
+                 This process corresponds to     : 0:03:08 HS06  hours (188 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 21)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709639560]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709639560]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:17:29 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:56 KSI2K hours (56 KSI2K seconds)
+                 This process corresponds to     : 0:03:38 HS06  hours (218 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 22)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709638901]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709638901]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5.log
+
+
+Job failed. Number of resubmissions: 0 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 23)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709639780]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709639780]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:18:44 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:52 KSI2K hours (52 KSI2K seconds)
+                 This process corresponds to     : 0:03:22 HS06  hours (202 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 24)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709639828]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709639828]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:13 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:59 KSI2K hours (59 KSI2K seconds)
+                 This process corresponds to     : 0:03:51 HS06  hours (231 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 25)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709639858]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709639858]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:16 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:53 KSI2K hours (53 KSI2K seconds)
+                 This process corresponds to     : 0:03:28 HS06  hours (208 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 26)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709639215]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709639215]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:51 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:51 KSI2K hours (51 KSI2K seconds)
+                 This process corresponds to     : 0:03:20 HS06  hours (200 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 27)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709639207]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709639207]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:51 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:51 KSI2K hours (51 KSI2K seconds)
+                 This process corresponds to     : 0:03:19 HS06  hours (199 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 28)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709639871]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2] [709639871]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:20:12 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:46 KSI2K hours (46 KSI2K seconds)
+                 This process corresponds to     : 0:03:02 HS06  hours (182 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs2.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 28)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709639814]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709639814]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:10 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:02 KSI2K hours (62 KSI2K seconds)
+                 This process corresponds to     : 0:04:05 HS06  hours (245 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 29)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709639813]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709639813]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:10 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:04 KSI2K hours (64 KSI2K seconds)
+                 This process corresponds to     : 0:04:09 HS06  hours (249 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 30)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709639705]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709639705]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:20:16 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:30 KSI2K hours (90 KSI2K seconds)
+                 This process corresponds to     : 0:05:51 HS06  hours (351 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 31)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709639559]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709639559]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:20:13 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:05:33 KSI2K hours (333 KSI2K seconds)
+                 This process corresponds to     : 0:21:42 HS06  hours (1302 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6.log
+
+
+
+Job failed. Number of resubmissions: 1 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 32)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709639927]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709639927]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:21:44 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:01 KSI2K hours (61 KSI2K seconds)
+                 This process corresponds to     : 0:03:59 HS06  hours (239 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 33)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709639904]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709639904]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:21:43 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:12 KSI2K hours (72 KSI2K seconds)
+                 This process corresponds to     : 0:04:42 HS06  hours (282 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 34)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709640033]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7] [709640033]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:10 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:02 KSI2K hours (62 KSI2K seconds)
+                 This process corresponds to     : 0:04:05 HS06  hours (245 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs7.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 7. Total jobs: 9 (total submissions: 34)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709639931]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709639931]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:19:51 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:51 KSI2K hours (51 KSI2K seconds)
+                 This process corresponds to     : 0:03:19 HS06  hours (199 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 7. Total jobs: 9 (total submissions: 35)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709639903]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8] [709639903]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:22:20 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:00 KSI2K hours (60 KSI2K seconds)
+                 This process corresponds to     : 0:03:55 HS06  hours (235 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs8.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 6. Total jobs: 9 (total submissions: 35)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709640069]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3] [709640069]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:22:33 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:16 KSI2K hours (76 KSI2K seconds)
+                 This process corresponds to     : 0:04:59 HS06  hours (299 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs3.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 5. Total jobs: 9 (total submissions: 35)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709640326]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4] [709640326]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:24:35 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:04 KSI2K hours (64 KSI2K seconds)
+                 This process corresponds to     : 0:04:12 HS06  hours (252 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs4.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 4. Total jobs: 9 (total submissions: 35)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709640489]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0] [709640489]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:26:01 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:02 KSI2K hours (62 KSI2K seconds)
+                 This process corresponds to     : 0:04:03 HS06  hours (243 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs0.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 3. Total jobs: 9 (total submissions: 35)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709640346]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5] [709640346]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:26:58 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:01:11 KSI2K hours (71 KSI2K seconds)
+                 This process corresponds to     : 0:04:36 HS06  hours (276 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs5.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 2. Total jobs: 9 (total submissions: 35)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709640071]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709640071]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:27:45 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:09:13 KSI2K hours (553 KSI2K seconds)
+                 This process corresponds to     : 0:35:59 HS06  hours (2159 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6.log
+
+
+
+Job failed. Number of resubmissions: 2 / 3.  Resubmitting.
+------------
+
+--- Running jobs: 2. Total jobs: 9 (total submissions: 36)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709640035]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1] [709640035]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:27:45 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:09:16 KSI2K hours (556 KSI2K seconds)
+                 This process corresponds to     : 0:36:11 HS06  hours (2171 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs1.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+--- Running jobs: 1. Total jobs: 9 (total submissions: 36)
+
+Job finished: 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709641400]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+------------
+Job finished: (exit code -1) 'TarballJob: [LsfJob: [1nh] [/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6] [709641400]]' 'cmsRun /afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/VBFDiJetMVA_Compare.py maxEvents=-1 campaign=RunIISpring15-50ns processIdMap=/afs/cern.ch/work/y/yhaddad/test_diphodijet_compare/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root lastAttempt=1'
+Job output: 
+
+--- <FATAL> BDTG                     : You declared 10 variables in the Reader while there are 8 variables declared in the file
+***> abort program execution
+
+Job finished at Sat Oct 17 12:31:22 CEST 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.7 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:31 KSI2K hours (31 KSI2K seconds)
+                 This process corresponds to     : 0:02:03 HS06  hours (123 HS06  seconds)
+/afs/cern.ch/work/y/yhaddad//test_diphodijet_compare/runJobs6.log
+
+
+
+Job failed. Number of resubmissions: 3 / 3.  Giving up.
+------------
+
+##################################################
+######          RETRAINING COMPLETE         ######
+##################################################
+
