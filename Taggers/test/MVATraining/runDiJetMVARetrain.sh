@@ -36,35 +36,35 @@ else
     ls ${PWD} | grep test_diphodijet_
 fi 
 
-#echo 
-#echo -e "+++++++++++ Generate the Training Trees ++++++++++"
-#echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
-#echo 
-#
-#echo -e "+++++++++++ Generate VBF Traininigs +++++++++++++"
+echo 
+echo -e "+++++++++++ Generate the Training Trees ++++++++++"
+echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
+echo 
+
+echo -e "+++++++++++ Generate VBF Traininigs +++++++++++++"
 #fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
 #    -d ${WORKSPACE}/test_diphodijet_training \
 #    -x cmsRun VBFDiJetMVA_Training.py maxEvents=${NEvent}  \
 #    -q 1nh --no-use-tarball #useAAA=1 
-#echo 
-#echo -e "+++++++++++ Run the training macro ++++++++++++++"
-#echo
+echo 
+echo -e "+++++++++++ Run the training macro ++++++++++++++"
+echo
 #
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"CHS\"\)
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"PUPPI\"\)
-#
-#echo 
-#echo -e "+++++++++++ Applying the MVA +++++++++++++++++"
+
+echo 
+echo -e "+++++++++++ Applying the MVA +++++++++++++++++"
 echo
 
 fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
     -d ${WORKSPACE}/test_diphodijet_compare \
-    -x cmsRun VBFDiJetMVA_Compare.py maxEvents=-1  \
+    -x cmsRun VBFDiJetMVA_Compare.py maxEvents=${NEvent}  \
     -q 1nh --no-use-tarball #useAAA=1 
 
-#echo 
-#echo -e "+++++++++++ Generating ROC curves ++++++++++++++++"
-#echo
+echo 
+echo -e "+++++++++++ Generating ROC curves ++++++++++++++++"
+echo
 #
 ##
 ##root -l macro/makeROC_CHS_PUPPI.cc++\(\"${NEvent}\",\"VBF\"\)

@@ -16,11 +16,10 @@ namespace flashgg {
         //  VBFMVAResult(const VBFMVAResult&) = default;  // C++11 only? Should happen automagically anyway
         VBFMVAResult( edm::Ptr<VBFMVAResult> );
         // diJet Info
-
+        
         Jet leadJet;
         Jet subleadJet;
-
-
+        
         // Input variables
         float dijet_leadEta ;
         float dijet_subleadEta;
@@ -28,12 +27,19 @@ namespace flashgg {
         float dijet_LeadJPt ;
         float dijet_SubJPt;
         float dijet_Zep;
-        float dijet_dPhi_trunc;
+        float dijet_dphi_trunc;
+        float dijet_dipho_dphi;
         float dijet_Mjj;
+        float dijet_dy;
+        float dijet_leady ;
+        float dijet_subleady;
+        float dijet_dipho_pt;
         float dipho_PToM;
         float leadPho_PToM;
         float sublPho_PToM;
-
+        float minDRJetPho;
+        
+        
         float VBFMVAValue() const {return vbfMvaResult_value;}
 
         // Output

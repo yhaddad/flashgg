@@ -57,6 +57,8 @@ VBFMVAvariables=[
     "dijet_abs_dEta      :=  dijet_abs_dEta   ",
     "dijet_leadEta       :=  dijet_leadEta    ",
     "dijet_subleadEta    :=  dijet_subleadEta ",
+    "dijet_leady         :=  dijet_leady      ",
+    "dijet_subleady      :=  dijet_subleady   ",
     "dijet_LeadJPt       :=  dijet_LeadJPt    ",
     "dijet_SubJPt        :=  dijet_SubJPt     ",
     "dijet_Zep           :=  dijet_Zep        ",
@@ -64,7 +66,9 @@ VBFMVAvariables=[
     "dipho_PToM          :=  dipho_PToM       ",
     "leadPho_PToM        :=  leadPho_PToM     ",
     "sublPho_PToM        :=  sublPho_PToM     ",
-    "dijet_dPhi_trunc    :=  dijet_dPhi_trunc ",
+    "dijet_dphi_trunc    :=  dijet_dphi_trunc ",
+    "dijet_dipho_dphi    :=  dijet_dipho_dphi ",
+    "dijet_dipho_pt      :=  dijet_dipho_pt   ",
     "dijet_dy            :=  dijet_dy ",
     "minDRJetPho         :=  minDRJetPho "
     ]
@@ -88,8 +92,8 @@ process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 cfgTools.addCategories(process.VBFMVADumperPUPPI,
                        [
                            ("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
-                           ("VBFDiJet"            ,"dijet_LeadJPt > 0",0),
-                           ("excluded"            ,"1"                ,0) 
+                           ("VBFDiJet"            ,"dijet_LeadJPt > 0"     ,0),
+                           ("excluded"            ,"1"                     ,0) 
                        ],
                        variables  = VBFMVAvariables ,
                        histograms = []

@@ -254,17 +254,17 @@ namespace flashgg {
             
             //	mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA("BDT");
             //std::cout <<" debug mva " <<  mvares.vbfMvaResult_value << std::endl;
-            mvares.dijet_leadEta = dijet_leadEta_ ;
+            mvares.dijet_leadEta    = dijet_leadEta_ ;
             mvares.dijet_subleadEta = dijet_subleadEta_ ;
-            mvares.dijet_abs_dEta = dijet_abs_dEta_ ;
-            mvares.dijet_LeadJPt = dijet_LeadJPt_ ;
-            mvares.dijet_SubJPt = dijet_SubJPt_ ;
-            mvares.dijet_Zep =    dijet_Zep_ ;
-            mvares.dijet_dPhi_trunc = dijet_dPhi_trunc_ ;
-            mvares.dijet_Mjj =    dijet_Mjj_ ;
-            mvares.dipho_PToM =   dipho_PToM_ ;
-            mvares.sublPho_PToM = sublPho_PToM_ ;
-            mvares.leadPho_PToM = leadPho_PToM_ ;
+            mvares.dijet_abs_dEta   = dijet_abs_dEta_ ;
+            mvares.dijet_LeadJPt    = dijet_LeadJPt_ ;
+            mvares.dijet_SubJPt     = dijet_SubJPt_ ;
+            mvares.dijet_Zep        = dijet_Zep_ ;
+            mvares.dijet_dipho_dphi = dijet_dPhi_trunc_ ;
+            mvares.dijet_Mjj        = dijet_Mjj_ ;
+            mvares.dipho_PToM       = dipho_PToM_ ;
+            mvares.sublPho_PToM     = sublPho_PToM_ ;
+            mvares.leadPho_PToM     = leadPho_PToM_ ;
 
             vbf_results->push_back( mvares );
 

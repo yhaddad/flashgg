@@ -15,15 +15,16 @@
 using namespace std;
 
 // --------- MAIN -------------------
-void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDiPhoDiJet", TString JetPUType = "CHS", bool skipEvtWNoVBF = true )
+void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBF", TString JetPUTypeName = "CHS", bool skipEvtWNoVBF = true )
 {
     // you must define $WORKSPACE first
     TString path= "./test_diphodijet_training/";
-
+    
     bool useDiphotonPt = 0;
     bool usePhotonsPt = true;
-    
-    if (JetPUType == "CHS") JetPUType = ""; // yeah !! 
+
+    TString JetPUType = JetPUTypeName;
+    if (JetPUTypeName == "CHS"  ) JetPUType = ""; // yeah !! 
     
     std::map<TString, TString> samples_name;
     std::map<TString, TTree*> inputTrees;
@@ -31,60 +32,27 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
     
     // the file sample names
     samples_name["vbf_m125_13TeV"     ] =  path + "output_VBFHToGG_M-125_13TeV_powheg_pythia8_numEvent" + Nevent + "_histos.root";
-    samples_name["gamJet40toInf_13TeV"] =  path + "output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
-    samples_name["gamJet20to40_13TeV" ] =  path + "output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
+    samples_name["gamJet_13TeV"       ] =  path + "output_GJet_DoubleEMEnriched_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
     samples_name["ggf_m125_13TeV"     ] =  path + "output_GluGluHToGG_M-125_13TeV_powheg_pythia8_numEvent" + Nevent + "_histos.root";
     samples_name["dy_toll_m50_13TeV"  ] =  path + "output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_numEvent" + Nevent + "_histos.root";
     samples_name["gamgamjetbox_13TeV" ] =  path + "output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa_numEvent" + Nevent + "_histos.root";
-    samples_name["qcd_30to40_13TeV"   ] =  path + "output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
-    samples_name["qcd_30toInf_13TeV"  ] =  path + "output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
-    samples_name["qcd_40toInf_13TeV"  ] =  path + "output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
+    samples_name["qcd_13TeV"          ] =  path + "output_QCD_DoubleEMEnriched_TuneCUETP8M1_13TeV_Pythia8_numEvent" + Nevent + "_histos.root";
+    
     for(std::map<TString, TString>::iterator it = samples_name.begin();
         it != samples_name.end(); it++){
         inputFiles[it->first] = TFile::Open( it->second );
-        inputTrees[it->first] = (TTree*)inputFiles[it->first]->Get( Level + "MVADumper" + JetPUType + "/trees/" + it->first + "_PreselVBFDiJet" );
+        inputTrees[it->first] = (TTree*) inputFiles[it->first]->Get( Level + "MVADumper" + JetPUType + "/trees/" + it->first + "_PreselVBFDiJet" );
+        
+        std::cout << "test :: " << (Level + "MVADumper" + JetPUType + "/trees/" + it->first + "_PreselVBFDiJet")<< "=="<<  inputTrees[it->first] << std::endl;
+        
     }
-    
-    // Declaration of leaf types
-    // float dijet_mva       ;
-    // float dipho_mva       ;
-    // float dipho_PToM      ;
-    // float dijet_abs_dEta  ;
-    // float dijet_leadEta   ;
-    // float dijet_subleadEta;
-    // float dijet_LeadJPt   ;
-    // float dijet_SubJPt    ;
-    // float dijet_Zep       ;
-    // float dijet_Mjj       ;
-    // float leadPho_PToM    ;
-    // float sublPho_PToM    ;
-    // float dijet_dPhi_trunc;
-    
-    //if( Level == "VBFDiPhoDiJet" ) {
-    //    treeS->SetBranchAddress( "dipho_mva"       , &dipho_mva );
-    //    treeS->SetBranchAddress( "dijet_mva"       , &dijet_mva );
-    //    treeS->SetBranchAddress( "dipho_PToM"      , &dipho_PToM );
-    //} else  if( Level == "VBF" ) {
-    //    treeS->SetBranchAddress( "dijet_abs_dEta"  , &dijet_abs_dEta );
-    //    treeS->SetBranchAddress( "dijet_leadEta"   , &dijet_leadEta );
-    //    treeS->SetBranchAddress( "dijet_subleadEta", &dijet_subleadEta );
-    //    treeS->SetBranchAddress( "dijet_LeadJPt"   , &dijet_LeadJPt );
-    //    treeS->SetBranchAddress( "dijet_SubJPt"    , &dijet_SubJPt );
-    //    treeS->SetBranchAddress( "dijet_Zep"       , &dijet_Zep );
-    //    treeS->SetBranchAddress( "dijet_Mjj"       , &dijet_Mjj );
-    //    treeS->SetBranchAddress( "dipho_PToM"      , &dipho_PToM );
-    //    treeS->SetBranchAddress( "leadPho_PToM"    , &leadPho_PToM );
-    //    treeS->SetBranchAddress( "sublPho_PToM"    , &sublPho_PToM );
-    //    treeS->SetBranchAddress( "dijet_dPhi_trunc", &dijet_dPhi_trunc );
-    //}
-
 
     // Create a new root output file.
     TString outputFileName;
     if( Level == "VBF" ) {
-        outputFileName = "Flashgg_VBF_" + JetPUType;
+        outputFileName = "Flashgg_VBF_" + JetPUTypeName;
     } else {
-        outputFileName = "Flashgg_DiPhoDiJet_" + JetPUType;
+        outputFileName = "Flashgg_DiPhoDiJet_" + JetPUTypeName;
     }
 
     // -- reader
@@ -93,35 +61,25 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
             "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
     // -- variables
     if( Level == "VBFDiPhoDiJet" ) {
-        factory->AddVariable( "dipho_mva" );
-        factory->AddVariable( "dijet_mva" );
-        factory->AddVariable( "dipho_PToM" );
-    
+        factory->AddVariable( "dipho_mva"  ,"BDT_{#gamma#gamma}","");
+        factory->AddVariable( "dijet_mva"  ,"BDT_{jj}","");
+        factory->AddVariable( "dipho_PToM" ,"p_{t}(#gamma#gamma)/m_{#gamma#gamma}","");
     } else  if( Level == "VBF" ) {
-        
-        factory->AddVariable( "dijet_LeadJPt" );
-        factory->AddVariable( "dijet_SubJPt" );
-        factory->AddVariable( "dijet_abs_dEta" );
-        factory->AddVariable( "dijet_Mjj" );
-        factory->AddVariable( "dijet_Zep" );
-        factory->AddVariable( "dijet_dPhi_trunc" );
-        
-        //if( useDiphotonPt ) {
-        factory->AddVariable( "dipho_PToM" );
-        factory->AddVariable( "leadPho_PToM" );
-        factory->AddVariable( "sublPho_PToM" );
-        // new var
-        factory->AddVariable( "dijet_dy" );
-        factory->AddVariable( "minDRJetPho" );
-        //}
+        factory->AddVariable( "dijet_LeadJPt"    ,"p_{t}(j_{1})"   ,"");
+        factory->AddVariable( "dijet_SubJPt"     ,"p_{t}(j_{2})"   ,"");
+        factory->AddVariable( "dijet_abs_dEta"   ,"|#Delta#eta|"   ,"");
+        factory->AddVariable( "dijet_dy"         ,"|#Delta y|"     ,"");
+        factory->AddVariable( "dijet_Mjj"        ,"m_{jj}"         ,"");
+        factory->AddVariable( "dijet_Zep"        ,"|#eta^*|"       ,"");
+        factory->AddVariable( "minDRJetPho"      ,"#Delta#it{R}_{min}(#gamma,jet)"      ,"");
+        factory->AddVariable( "dijet_dipho_dphi" ,"#Delta#phi(#gamma#gamma,jj)"         ,"");
+        factory->AddVariable( "dipho_PToM"       ,"p_{t}(#gamma#gamma)/m_{#gamma#gamma}","");
     }
-    
-    
+        
     //event weights per tree (see below for setting event-wise weights)
     Double_t signalWeight = 1.0;
     Double_t backgroundWeight = 1.0;
-
-
+    
     // ====== register trees ====================================================
     factory->AddSignalTree( inputTrees["vbf_m125_13TeV"], signalWeight         , "Training" );
     factory->AddSignalTree( inputTrees["vbf_m125_13TeV"], signalWeight         , "Test" );
@@ -142,7 +100,7 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
         mycuts += TCut("dipho_PToM>=0"); // Skip the event with -999
         mycutb += TCut("dipho_PToM>=0"); //
     }
-    
+
     // tell the factory to use all remaining events in the trees after training for testing:
     factory->PrepareTrainingAndTestTree( mycuts, mycutb,
                                          "SplitMode=Random:NormMode=NumEvents:!V" );
@@ -168,7 +126,6 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBFDi
     std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
     std::cout << "==> TMVAClassification is done!" << std::endl;
     delete factory;
-
     //if (!gROOT->IsBatch()) TMVAGui( (outputFileName+".root").c_str() );
 }
 // Local Variables:

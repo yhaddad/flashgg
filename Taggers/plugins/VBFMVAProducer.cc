@@ -43,20 +43,23 @@ namespace flashgg {
         
         typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
         
-        float dijet_leadEta_;
+        float dijet_leadEta_   ;
         float dijet_subleadEta_;
         float dijet_abs_dEta_;
-        float dijet_LeadJPt_;
-        float dijet_SubJPt_;
-        float dijet_Zep_;
-        float dijet_dPhi_trunc_;
-        float dijet_Mjj_;
-        float dipho_PToM_;
+        float dijet_LeadJPt_ ;
+        float dijet_SubJPt_  ;
+        float dijet_Zep_     ;
+        float dijet_dphi_trunc_;
+        float dijet_dipho_dphi_;
+        float dijet_Mjj_   ;
+        float dipho_PToM_  ;
         float leadPho_PToM_;
         float sublPho_PToM_;
-        float minDRJetPho_;
-        float dijet_dy_;
-
+        float minDRJetPho_ ;
+        float dijet_dy_    ;
+        float dijet_leady_    ;
+        float dijet_subleady_ ;
+        float dijet_dipho_pt_ ;
     };
 
     VBFMVAProducer::VBFMVAProducer( const ParameterSet &iConfig ) :
@@ -67,45 +70,46 @@ namespace flashgg {
         _usePuJetID   ( iConfig.getUntrackedParameter<bool>  ( "UsePuJetID"  , false ) ),
         _useJetID     ( iConfig.getUntrackedParameter<bool>  ( "UseJetID"    , false ) ),
         _JetIDLevel   ( iConfig.getUntrackedParameter<string>( "JetIDLevel", "Loose" ) ), // Loose == 0, Tight == 1
-        _minDijetMinv ( iConfig.getParameter<double>( "MinDijetMinv" ) )
+        _minDijetMinv ( iConfig.getParameter<double>         ( "MinDijetMinv" ) )
     {
         
         vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vbfMVAweightfile" );
         
-        dijet_leadEta_ = -999.;
+        dijet_leadEta_    = -999.;
         dijet_subleadEta_ = -999.;
-        dijet_abs_dEta_ = -999.;
-        dijet_LeadJPt_ = -999.;
-        dijet_SubJPt_ = -999.;
-        dijet_Zep_ = -999.;
-        dijet_dPhi_trunc_ = -999.;
-        dijet_Mjj_ = -999.;
-        dijet_dy_ = -999.;
-        dipho_PToM_ = -999.;
-        leadPho_PToM_ = -999.;
-        sublPho_PToM_ = -999.;
-        minDRJetPho_  = -999;
+        dijet_abs_dEta_   = -999.;
+        dijet_LeadJPt_    = -999.;
+        dijet_SubJPt_     = -999.;
+        dijet_Zep_        = -999.;
+        dijet_dphi_trunc_ = -999.;
+        dijet_dipho_dphi_ = -999.;
+        dijet_Mjj_        = -999.;
+        dijet_dy_         = -999.;
+        dipho_PToM_       = -999.;
+        leadPho_PToM_     = -999.;
+        sublPho_PToM_     = -999.;
+        minDRJetPho_      = -999.;
+        dijet_dipho_pt_   = -999.;
+        dijet_leady_      = -999.;
+        dijet_subleady_   = -999.;
+        
         if (_MVAMethod != ""){
             VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
-            
-            VbfMva_->AddVariable( "dijet_LeadJPt"   , &dijet_LeadJPt_   );
-            VbfMva_->AddVariable( "dijet_SubJPt"    , &dijet_SubJPt_    );
-            VbfMva_->AddVariable( "dijet_abs_dEta"  , &dijet_abs_dEta_  );
-            VbfMva_->AddVariable( "dijet_Mjj"       , &dijet_Mjj_       );
-            VbfMva_->AddVariable( "dijet_Zep"       , &dijet_Zep_       );
-            VbfMva_->AddVariable( "dijet_dPhi_trunc", &dijet_dPhi_trunc_);
-            VbfMva_->AddVariable( "leadPho_PToM"    , &leadPho_PToM_    );
-            VbfMva_->AddVariable( "sublPho_PToM"    , &sublPho_PToM_    );
-            
+            // set of VBF variables
+            VbfMva_->AddVariable( "dijet_LeadJPt"   , &dijet_LeadJPt_    );
+            VbfMva_->AddVariable( "dijet_SubJPt"    , &dijet_SubJPt_     );
+            VbfMva_->AddVariable( "dijet_abs_dEta"  , &dijet_abs_dEta_   );
+            VbfMva_->AddVariable( "dijet_dy"        , &dijet_dy_         );
+            VbfMva_->AddVariable( "dijet_Mjj"       , &dijet_Mjj_        );
+            VbfMva_->AddVariable( "dijet_Zep"       , &dijet_Zep_        );
+            VbfMva_->AddVariable( "minDRJetPho"     , &minDRJetPho_      );
+            VbfMva_->AddVariable( "dijet_dipho_dphi", &dijet_dipho_dphi_ );
+            VbfMva_->AddVariable( "dipho_PToM"      , &dipho_PToM_       );
             //new variables
-            VbfMva_->AddVariable( "minDRJetPho"    , &minDRJetPho_    );
-            VbfMva_->AddVariable( "dijet_dy"       , &dijet_dy_    );
-            
-            std::cout << "VBFMVA Method ::" <<_MVAMethod.c_str() << " file::"<<vbfMVAweightfile_.fullPath()<<std::endl;
             VbfMva_->BookMVA( _MVAMethod.c_str() , vbfMVAweightfile_.fullPath() );
         }
         produces<vector<VBFMVAResult> >();
-
+        
     }
 
     void VBFMVAProducer::produce( Event &evt, const EventSetup & )
@@ -120,24 +124,31 @@ namespace flashgg {
         
         std::auto_ptr<vector<VBFMVAResult> > vbf_results( new vector<VBFMVAResult> );
         
+        
+        if (diPhotons->size()==0) std::cout << " --> no diphoton " << std::endl;
+        
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
             
             flashgg::VBFMVAResult mvares;
 
-            dijet_leadEta_ = -999.;
+            dijet_leadEta_    = -999.;
             dijet_subleadEta_ = -999.;
-            dijet_abs_dEta_ = -999.;
-            dijet_LeadJPt_ = -999.;
-            dijet_SubJPt_ = -999.;
-            dijet_Zep_ = -999.;
-            dijet_dPhi_trunc_ = -999.;
-            dijet_Mjj_ = -999.;
-            dijet_dy_ = -999.;
-            dipho_PToM_ = -999.;
-            leadPho_PToM_ = -999.;
-            sublPho_PToM_ = -999.;
-            minDRJetPho_  = -999.;
-
+            dijet_abs_dEta_   = -999.;
+            dijet_LeadJPt_    = -999.;
+            dijet_SubJPt_     = -999.;
+            dijet_Zep_        = -999.;
+            dijet_dphi_trunc_ = -999.;
+            dijet_dipho_dphi_ = -999.;
+            dijet_Mjj_        = -999.;
+            dijet_dy_         = -999.;
+            dipho_PToM_       = -999.;
+            leadPho_PToM_     = -999.;
+            sublPho_PToM_     = -999.;
+            minDRJetPho_      = -999.;
+            dijet_dipho_pt_   = -999.;
+            dijet_leady_      = -999.;
+            dijet_subleady_   = -999.;
+            
             // First find dijet by looking for highest-pt jets...
             std::pair <int, int>     dijet_indices( -1, -1 );
             std::pair <float, float> dijet_pts( -1., -1. );
@@ -214,25 +225,27 @@ namespace flashgg {
                 auto leadJet_p4 =  dijet.first->p4();
                 auto sublJet_p4 =  dijet.second->p4();
                 
-                auto diphoton_p4 = leadPho_p4 + sublPho_p4;
-                auto dijet_p4    = leadJet_p4 + sublJet_p4;
-                float dijet_dPhi_ = fabs( dijet_p4.Phi() - diphoton_p4.Phi() );
+                auto diphoton_p4  = leadPho_p4 + sublPho_p4;
+                auto dijet_p4     = leadJet_p4 + sublJet_p4;
+                //float dijet_dPhi_ = fabs( dijet_p4.Phi() - diphoton_p4.Phi() );
                 
-                dijet_dPhi_trunc_ = std::min( dijet_dPhi_, ( float ) 2.916 );
-                dijet_Zep_   = fabs(diphoton_p4.Eta() - 0.5 * ( leadJet_p4.Eta() + sublJet_p4.Eta()));
-                dijet_dPhi_   = deltaPhi( dijet_p4.Phi(), diphoton_p4.Phi() );
-                dijet_Mjj_    = dijet_p4.M();
-                dipho_PToM_   = diphoton_p4.Pt()/diphoton_p4.M();
-                leadPho_PToM_ = diPhotons->ptrAt(candIndex)->leadingPhoton()->pt()/diphoton_p4.M();
-                sublPho_PToM_ = diPhotons->ptrAt(candIndex)->subLeadingPhoton()->pt()/diphoton_p4.M();
+                dijet_dphi_trunc_ = std::min((float) abs(dijet.first->phi() - dijet.second->phi()), (float) 2.916);
+                dijet_dipho_dphi_ = std::min((float) abs(dijet_p4.Phi() -diphoton_p4.Phi()), (float) 2.916 );
+                dijet_Zep_        = fabs(diphoton_p4.Eta() - 0.5 * ( leadJet_p4.Eta() + sublJet_p4.Eta()));
+                dijet_Mjj_        = dijet_p4.M();
+                dipho_PToM_       = diphoton_p4.Pt()/diphoton_p4.M();
+                leadPho_PToM_     = diPhotons->ptrAt(candIndex)->leadingPhoton()->pt()/diphoton_p4.M();
+                sublPho_PToM_     = diPhotons->ptrAt(candIndex)->subLeadingPhoton()->pt()/diphoton_p4.M();
                 
-                minDRJetPho_  = std::min( std::min(reco::deltaR( leadJet_p4,leadPho_p4 ),
-                                                   reco::deltaR( sublJet_p4,leadPho_p4 )),
-                                          std::min(reco::deltaR( leadJet_p4,sublPho_p4 ),
-                                                   reco::deltaR( sublJet_p4,sublPho_p4 ))
-                                          );
-                dijet_dy_     = std::fabs(leadJet_p4.Rapidity() - sublPho_p4.Rapidity());
+                minDRJetPho_      = std::min( std::min(reco::deltaR( leadJet_p4,leadPho_p4 ),
+                                                       reco::deltaR( sublJet_p4,leadPho_p4 )),
+                                              std::min(reco::deltaR( leadJet_p4,sublPho_p4 ),
+                                                       reco::deltaR( sublJet_p4,sublPho_p4 ))
+                                              );
                 
+                dijet_dy_         = std::fabs(leadJet_p4.Rapidity() - sublPho_p4.Rapidity());
+                dijet_leady_      = leadJet_p4.Rapidity();
+                dijet_subleady_   = sublJet_p4.Rapidity();
                 mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
             }
@@ -246,13 +259,17 @@ namespace flashgg {
             mvares.dijet_LeadJPt    = dijet_LeadJPt_ ;
             mvares.dijet_SubJPt     = dijet_SubJPt_ ;
             mvares.dijet_Zep        = dijet_Zep_ ;
-            mvares.dijet_dPhi_trunc = dijet_dPhi_trunc_ ;
+            mvares.dijet_dphi_trunc = dijet_dphi_trunc_ ;
+            mvares.dijet_dipho_dphi = dijet_dipho_dphi_ ;
             mvares.dijet_Mjj        = dijet_Mjj_ ;
             mvares.dipho_PToM       = dipho_PToM_ ;
             mvares.sublPho_PToM     = sublPho_PToM_ ;
             mvares.leadPho_PToM     = leadPho_PToM_ ;
             mvares.minDRJetPho      = minDRJetPho_;
             mvares.dijet_dy         = dijet_dy_;
+            mvares.dijet_dipho_pt   = dijet_dipho_pt_ ;
+            mvares.dijet_leady      = dijet_leady_   ;
+            mvares.dijet_subleady   = dijet_subleady_;
             vbf_results->push_back( mvares );
         }
         evt.put( vbf_results );
