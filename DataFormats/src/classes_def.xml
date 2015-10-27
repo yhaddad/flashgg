@@ -14,9 +14,9 @@
 </class>
 <class name="std::vector<flashgg::DiPhotonMVAResult>"/>
 <class name="edm::Wrapper<std::vector<flashgg::DiPhotonMVAResult> >"/>
-<class name="flashgg::VBFMVAResult" ClassVersion="11">
+<class name="flashgg::VBFMVAResult" ClassVersion="13">
   <!--version ClassVersion="10" checksum="3407874632"/-->
-  <version ClassVersion="11" checksum="494741373"/>
+  <version ClassVersion="13" checksum="1780061012"/>
 </class>
 <class name="std::vector<flashgg::VBFMVAResult>"/>
 <class name="edm::Wrapper<std::vector<flashgg::VBFMVAResult> >"/>

@@ -37,9 +37,11 @@ import flashgg.Taggers.dumperConfigTools as cfgTools
 
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
-process.flashggVBFMVA.MVAMethod      = cms.untracked.string("BDTG")
-process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("BDTG")
+process.flashggVBFMVA.MVAMethod      = cms.untracked.string("")
+process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("")
 
+process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
+process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
 
 process.load("flashgg.Taggers.VBFMVADumperPUPPI_cff")
 process.VBFMVADumperPUPPI.dumpTrees     = True
@@ -55,6 +57,8 @@ VBFMVAvariables=[
     "dijet_abs_dEta      :=  dijet_abs_dEta   ",
     "dijet_leadEta       :=  dijet_leadEta    ",
     "dijet_subleadEta    :=  dijet_subleadEta ",
+    "dijet_leady         :=  dijet_leady      ",
+    "dijet_subleady      :=  dijet_subleady   ",
     "dijet_LeadJPt       :=  dijet_LeadJPt    ",
     "dijet_SubJPt        :=  dijet_SubJPt     ",
     "dijet_Zep           :=  dijet_Zep        ",
@@ -62,8 +66,13 @@ VBFMVAvariables=[
     "dipho_PToM          :=  dipho_PToM       ",
     "leadPho_PToM        :=  leadPho_PToM     ",
     "sublPho_PToM        :=  sublPho_PToM     ",
-    "dijet_dPhi_trunc    :=  dijet_dPhi_trunc ",
-]
+    "dijet_dphi_trunc    :=  dijet_dphi_trunc ",
+    "dijet_dipho_dphi    :=  dijet_dipho_dphi ",
+    "dijet_dipho_pt      :=  dijet_dipho_pt   ",
+    "dijet_dy            :=  dijet_dy         ",
+    "test_pt             :=  leadJet.pt       ",
+    "minDRJetPho         :=  minDRJetPho      "
+    ]
 
 preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && dijet_leadEta > -4.7 && dijet_subleadEta < 4.7 && dijet_subleadEta > -4.7 && dijet_Mjj> 250 && leadPho_PToM  > 0.5"
 
@@ -84,8 +93,8 @@ process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 cfgTools.addCategories(process.VBFMVADumperPUPPI,
                        [
                            ("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
-                           ("VBFDiJet"            ,"dijet_LeadJPt > 0",0),
-                           ("excluded"            ,"1"                ,0) 
+                           ("VBFDiJet"            ,"dijet_LeadJPt > 0"     ,0),
+                           ("excluded"            ,"1"                     ,0) 
                        ],
                        variables  = VBFMVAvariables ,
                        histograms = []
