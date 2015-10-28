@@ -37,6 +37,12 @@ const Jet VBFTag::subLeadingJet() const
     return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet;
 }
 
+const Jet VBFTag::subSubLeadingJet() const
+{
+    //! adding a third jets for the VBF studies
+    return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subsubleadJet;
+}
+
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil

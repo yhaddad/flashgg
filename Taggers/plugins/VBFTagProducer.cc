@@ -52,8 +52,8 @@ namespace flashgg {
         vbfDiPhoDiJetMvaResultToken_( consumes<View<flashgg::VBFDiPhoDiJetMVAResult> >( iConfig.getParameter<InputTag> ( "VBFDiPhoDiJetMVAResultTag" ) ) ),
         mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ),
         genPartToken_( consumes<View<reco::GenParticle> >( iConfig.getParameter<InputTag> ( "GenParticleTag" ) ) ),
-        genJetToken_( consumes<View<reco::GenJet> >( iConfig.getParameter<InputTag> ( "GenJetTag" ) ) ),
-        systLabel_( iConfig.getParameter<string> ( "SystLabel" ) )
+        genJetToken_ ( consumes<View<reco::GenJet> >( iConfig.getParameter<InputTag> ( "GenJetTag" ) ) ),
+        systLabel_   ( iConfig.getParameter<string> ( "SystLabel" ) )
     {
         vector<double> default_boundaries;
         default_boundaries.push_back( 0.52 );
@@ -64,9 +64,8 @@ namespace flashgg {
 
         // getUntrackedParameter<vector<float> > has no library, so we use double transiently
         boundaries = iConfig.getUntrackedParameter<vector<double > >( "Boundaries", default_boundaries );
-
         assert( is_sorted( boundaries.begin(), boundaries.end() ) ); // we are counting on ascending order - update this to give an error message or exception
-
+        
         produces<vector<VBFTag> >();
         produces<vector<VBFTagTruth> >();
     }
@@ -80,13 +79,13 @@ namespace flashgg {
         }
         return -1; // Does not pass, object will not be produced
     }
-
+    
     void VBFTagProducer::produce( Event &evt, const EventSetup & )
     {
 
         Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
         evt.getByToken( diPhotonToken_, diPhotons );
-
+        
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
 
@@ -145,9 +144,9 @@ namespace flashgg {
 
             VBFTag tag_obj( dipho, mvares, vbfdipho_mvares );
             tag_obj.setDiPhotonIndex( candIndex );
-
+            
             tag_obj.setSystLabel( systLabel_ );
-
+            
             int catnum = chooseCategory( vbfdipho_mvares->vbfDiPhoDiJetMvaResult );
             tag_obj.setCategoryNumber( catnum );
             unsigned int index_gp_leadjet = std::numeric_limits<unsigned int>::max();
@@ -156,12 +155,14 @@ namespace flashgg {
             unsigned int index_gp_subleadphoton = std::numeric_limits<unsigned int>::max();
             unsigned int index_gj_leadjet = std::numeric_limits<unsigned int>::max();
             unsigned int index_gj_subleadjet = std::numeric_limits<unsigned int>::max();
+            
             float dr_gp_leadjet = 999.;
             float dr_gp_subleadjet = 999.;
             float dr_gp_leadphoton = 999.;
             float dr_gp_subleadphoton = 999.;
             float dr_gj_leadjet = 999.;
             float dr_gj_subleadjet = 999.;
+            
             VBFTagTruth truth_obj;
             if( ! evt.isRealData() ) {
                 for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
@@ -209,7 +210,7 @@ namespace flashgg {
                 }
                 if( index_gj_leadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestGenJetToLeadingJet( genJets->ptrAt( index_gj_leadjet ) ); }
                 if( index_gj_subleadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestGenJetToSubLeadingJet( genJets->ptrAt( index_gj_subleadjet ) ); }
-
+                
                 if( index_leadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setLeadingParton( genParticles->ptrAt( index_leadq ) ); }
                 if( index_subleadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setSubLeadingParton( genParticles->ptrAt( index_subleadq ) ); }
             }
@@ -222,7 +223,7 @@ namespace flashgg {
                 }
             }
         }
-
+        
         evt.put( tags );
         evt.put( truths );
     }

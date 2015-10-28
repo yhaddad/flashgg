@@ -18,11 +18,13 @@ namespace flashgg {
         // diJet Info
         flashgg::Jet leadJet;
         flashgg::Jet subleadJet;
-        flashgg::Jet subSubleadJet; // the third jet
-
+        // 3rd jet
+        flashgg::Jet subsubleadJet; 
+        bool hasValidVBFTriJet;
+        
         // di-photon info 
         flashgg::DiPhotonCandidate diphoton;
-
+        
         // event based variables
         int  n_rec_jets;
         int  n_gen_jets;
@@ -42,12 +44,14 @@ namespace flashgg {
         float dijet_leady ;
         float dijet_subleady;
         float dijet_dipho_pt;
+        float dijet_minDRJetPho;
+        
         float dipho_PToM;
         float leadPho_PToM;
         float sublPho_PToM;
-        float minDRJetPho;
         
         // some 3-jet based variables 
+        
         float VBFMVAValue() const {return vbfMvaResult_value;}
         
         // Output
@@ -57,7 +61,7 @@ namespace flashgg {
     };
     
     typedef std::map<edm::Ptr<DiPhotonCandidate>, VBFMVAResult> VBFMVAResultMap;
-
+    
 }
 
 #endif

@@ -87,9 +87,9 @@ namespace flashgg {
     //MVA vars
         //Hemispheres
         //Flashgg jets
-        int hemisphere_J1() const { if (numberOfFggJets() > 1) { return ( ptOrderedFggJets()[0]->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
-        int hemisphere_J2() const { if (numberOfFggJets() > 1) { return ( ptOrderedFggJets()[1]->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
-        int hemisphere_J3() const { if (numberOfFggJets() > 2) { return ( ptOrderedFggJets()[2]->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
+        int hemisphere_J1() const { if (hasLeadingJet()) { return ( leadingJet()->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
+        int hemisphere_J2() const { if (hasSubLeadingJet()) { return ( subLeadingJet()->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
+        int hemisphere_J3() const { if (hasSubSubLeadingJet()) { return ( subSubLeadingJet()->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
         //GenJets
         int hemisphere_J1_GenJet() const { if (hasClosestGenJetToLeadingJet()) { return ( closestGenJetToLeadingJet()->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
         int hemisphere_J2_GenJet() const { if (hasClosestGenJetToSubLeadingJet()) { return ( closestGenJetToSubLeadingJet()->eta() > 0 ? 1 : -1 ); }else{ return 0;}}
@@ -123,12 +123,12 @@ namespace flashgg {
         int oppHemispheres_P23() const { if (hasSubLeadingParton() && hasSubSubLeadingParton()) {return hemisphere_P2()*hemisphere_P3();}else{return 0;}}
 
         //Delta Rs between jets
-        float dR_J1J2_FggJet() const {if(numberOfFggJets() > 1) {return deltaR(ptOrderedFggJets()[0]->eta(),ptOrderedFggJets()[0]->phi(),
-                                                                               ptOrderedFggJets()[1]->eta(),ptOrderedFggJets()[1]->phi()); }else{return -999.;}}
-        float dR_J1J3_FggJet() const {if(numberOfFggJets() > 2) {return deltaR(ptOrderedFggJets()[0]->eta(),ptOrderedFggJets()[0]->phi(),
-                                                                               ptOrderedFggJets()[2]->eta(),ptOrderedFggJets()[2]->phi()); }else{return -999.;}}
-        float dR_J2J3_FggJet() const {if(numberOfFggJets() > 2) {return deltaR(ptOrderedFggJets()[1]->eta(),ptOrderedFggJets()[1]->phi(),
-                                                                               ptOrderedFggJets()[2]->eta(),ptOrderedFggJets()[2]->phi()); }else{return -999.;}}
+        float dR_J1J2_FggJet() const {if(hasLeadingJet() && hasSubLeadingJet()) {return deltaR(leadingJet()->eta(),leadingJet()->phi(),
+                                                                               subLeadingJet()->eta(),subLeadingJet()->phi()); }else{return -999.;}}
+        float dR_J1J3_FggJet() const {if(hasLeadingJet() && hasSubSubLeadingJet()) {return deltaR(leadingJet()->eta(),leadingJet()->phi(),
+                                                                               subSubLeadingJet()->eta(),subSubLeadingJet()->phi()); }else{return -999.;}}
+        float dR_J2J3_FggJet() const {if(hasSubLeadingJet() && hasSubSubLeadingJet()) {return deltaR(subLeadingJet()->eta(),subLeadingJet()->phi(),
+                                                                               subSubLeadingJet()->eta(),subSubLeadingJet()->phi()); }else{return -999.;}}
         float dR_J1J2_GenJet() const {if(hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet()) {
                                                                  return deltaR(closestGenJetToLeadingJet()->eta(),closestGenJetToLeadingJet()->phi(),
                                                                                closestGenJetToSubLeadingJet()->eta(),closestGenJetToSubLeadingJet()->phi());
@@ -165,9 +165,9 @@ namespace flashgg {
        
         //Invariant Masses 
         //(mjj)
-        float mjj_J1J2_FggJet() const {if (numberOfFggJets() > 1) { return (ptOrderedFggJets()[0]->p4() + ptOrderedFggJets()[1]->p4()).mass(); }else{return -999.;}}
-        float mjj_J1J3_FggJet() const {if (numberOfFggJets() > 2) { return (ptOrderedFggJets()[0]->p4() + ptOrderedFggJets()[2]->p4()).mass(); }else{return -999.;}}
-        float mjj_J2J3_FggJet() const {if (numberOfFggJets() > 2) { return (ptOrderedFggJets()[1]->p4() + ptOrderedFggJets()[2]->p4()).mass(); }else{return -999.;}}
+        float mjj_J1J2_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet()) { return (leadingJet()->p4() + subLeadingJet()->p4()).mass(); }else{return -999.;}}
+        float mjj_J1J3_FggJet() const {if (hasLeadingJet() && hasSubSubLeadingJet()) { return (leadingJet()->p4() + subSubLeadingJet()->p4()).mass(); }else{return -999.;}}
+        float mjj_J2J3_FggJet() const {if (hasSubLeadingJet() && hasSubSubLeadingJet()) { return (subSubLeadingJet()->p4() + subSubLeadingJet()->p4()).mass(); }else{return -999.;}}
         float mjj_J1J2_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet()) {
                                             return (closestGenJetToLeadingJet()->p4() + closestGenJetToSubLeadingJet()->p4()).mass(); }else{return -999.;}}
         float mjj_J1J3_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) {
@@ -187,7 +187,8 @@ namespace flashgg {
         float mjj_P2P3_Partons() const {if (hasSubLeadingParton() && hasSubSubLeadingParton()) {
                                             return (subLeadingParton()->p4() + subSubLeadingParton()->p4()).mass();}else{return -999.;}}
         //(mjjj)
-        float mjjj_FggJet() const {if (numberOfFggJets() > 2) {return (ptOrderedFggJets()[0]->p4() + ptOrderedFggJets()[1]->p4() + ptOrderedFggJets()[2]->p4()).mass(); 
+        float mjjj_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {
+                                    return (leadingJet()->p4() + subLeadingJet()->p4() + subSubLeadingJet()->p4()).mass(); 
                                     }else{return -999.;}}
         float mjjj_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) {
                                             return (closestGenJetToLeadingJet()->p4() + closestGenJetToSubLeadingJet()->p4() + closestGenJetToSubSubLeadingJet()->p4()).mass(); 
@@ -200,9 +201,9 @@ namespace flashgg {
                                     }else{return -999.;}}
 
         //dEtas
-        float dEta_J1J2_FggJet() const {if (numberOfFggJets() > 1) { return fabs(ptOrderedFggJets()[0]->eta()-ptOrderedFggJets()[1]->eta()); }else{return -999.;}}
-        float dEta_J1J3_FggJet() const {if (numberOfFggJets() > 2) { return fabs(ptOrderedFggJets()[0]->eta()-ptOrderedFggJets()[2]->eta()); }else{return -999.;}}
-        float dEta_J2J3_FggJet() const {if (numberOfFggJets() > 2) { return fabs(ptOrderedFggJets()[1]->eta()-ptOrderedFggJets()[2]->eta()); }else{return -999.;}}
+        float dEta_J1J2_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet()) { return fabs(leadingJet()->eta()-subLeadingJet()->eta()); }else{return -999.;}}
+        float dEta_J1J3_FggJet() const {if (hasLeadingJet() && hasSubSubLeadingJet()) { return fabs(leadingJet()->eta()-subSubLeadingJet()->eta()); }else{return -999.;}}
+        float dEta_J2J3_FggJet() const {if (hasSubLeadingJet() && hasSubSubLeadingJet()) { return fabs(subLeadingJet()->eta()-subSubLeadingJet()->eta()); }else{return -999.;}}
         float dEta_J1J2_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet()) {
                                             return fabs(closestGenJetToLeadingJet()->eta() - closestGenJetToSubLeadingJet()->eta()); }else{return -999.;}}
         float dEta_J1J3_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) {
@@ -223,12 +224,12 @@ namespace flashgg {
                                             return fabs(subLeadingParton()->eta() - subSubLeadingParton()->eta()); }else{return -999.;}}
         //Zeppenfelds
         //(Zepjj)
-        float zepjj_J1J2_FggJet() const {if (numberOfFggJets() > 1) {
-                                            return fabs(diPhoton()->eta() - 0.5*(ptOrderedFggJets()[0]->eta() + ptOrderedFggJets()[1]->eta())); }else{return -999.;}}
-        float zepjj_J1J3_FggJet() const {if (numberOfFggJets() > 2) {
-                                            return fabs(diPhoton()->eta() - 0.5*(ptOrderedFggJets()[0]->eta() + ptOrderedFggJets()[2]->eta())); }else{return -999.;}}
-        float zepjj_J2J3_FggJet() const {if (numberOfFggJets() > 2) {
-                                            return fabs(diPhoton()->eta() - 0.5*(ptOrderedFggJets()[1]->eta() + ptOrderedFggJets()[2]->eta())); }else{return -999.;}}
+        float zepjj_J1J2_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet()) {
+                                            return fabs(diPhoton()->eta() - 0.5*(leadingJet()->eta() + subLeadingJet()->eta())); }else{return -999.;}}
+        float zepjj_J1J3_FggJet() const {if (hasLeadingJet() && hasSubSubLeadingJet()) {
+                                            return fabs(diPhoton()->eta() - 0.5*(leadingJet()->eta() + subSubLeadingJet()->eta())); }else{return -999.;}}
+        float zepjj_J2J3_FggJet() const {if (hasSubLeadingJet() && hasSubSubLeadingJet()) {
+                                            return fabs(diPhoton()->eta() - 0.5*(subLeadingJet()->eta() + subSubLeadingJet()->eta())); }else{return -999.;}}
         float zepjj_J1J2_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet()) {
                                             return fabs(diPhoton()->eta() - 0.5*(closestGenJetToLeadingJet()->eta() + closestGenJetToSubLeadingJet()->eta())); 
                                          }else{return -999.;}}
@@ -254,8 +255,8 @@ namespace flashgg {
         float zepjj_P2P3_Partons() const {if (hasSubLeadingParton() && hasSubSubLeadingParton()) {
                                             return fabs(diPhoton()->eta() - 0.5*(subLeadingParton()->eta() + subSubLeadingParton()->eta())); }else{return -999.;}}
         //(Zepjjj)
-        float zepjjj_FggJet() const {if (numberOfFggJets() > 2) {
-                                            return fabs(diPhoton()->eta() - (ptOrderedFggJets()[0]->eta() + ptOrderedFggJets()[1]->eta() + ptOrderedFggJets()[2]->eta())/3 ); 
+        float zepjjj_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {
+                                            return fabs(diPhoton()->eta() - (leadingJet()->eta() + subLeadingJet()->eta() + subSubLeadingJet()->eta())/3 ); 
                                     }else{return -999.;}}
         float zepjjj_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) {
                                             return fabs(diPhoton()->eta() - (closestGenJetToLeadingJet()->eta() + closestGenJetToSubLeadingJet()->eta() 
@@ -268,12 +269,12 @@ namespace flashgg {
                                       }else{return -999.;}}
         //dPhi
         //(jj)
-        float dPhijj_J1J2_FggJet() const {if (numberOfFggJets() > 1) {
-                                            return fabs(deltaPhi(diPhoton()->phi(),(ptOrderedFggJets()[0]->p4()+ptOrderedFggJets()[1]->p4()).phi())); }else{return -999.;}}       
-        float dPhijj_J1J3_FggJet() const {if (numberOfFggJets() > 2) {
-                                            return fabs(deltaPhi(diPhoton()->phi(),(ptOrderedFggJets()[0]->p4()+ptOrderedFggJets()[2]->p4()).phi())); }else{return -999.;}}       
-        float dPhijj_J2J3_FggJet() const {if (numberOfFggJets() > 2) {
-                                            return fabs(deltaPhi(diPhoton()->phi(),(ptOrderedFggJets()[2]->p4()+ptOrderedFggJets()[2]->p4()).phi())); }else{return -999.;}}       
+        float dPhijj_J1J2_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet()) {
+                                            return fabs(deltaPhi(diPhoton()->phi(),(leadingJet()->p4()+subLeadingJet()->p4()).phi())); }else{return -999.;}}       
+        float dPhijj_J1J3_FggJet() const {if (hasLeadingJet() && hasSubSubLeadingJet()) {
+                                            return fabs(deltaPhi(diPhoton()->phi(),(leadingJet()->p4()+subSubLeadingJet()->p4()).phi())); }else{return -999.;}}       
+        float dPhijj_J2J3_FggJet() const {if (hasSubLeadingJet() && hasSubSubLeadingJet()) {
+                                            return fabs(deltaPhi(diPhoton()->phi(),(subLeadingJet()->p4()+subSubLeadingJet()->p4()).phi())); }else{return -999.;}}       
         float dPhijj_J1J2_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet()) {
                                             return fabs(deltaPhi(diPhoton()->phi(),(closestGenJetToLeadingJet()->p4() + closestGenJetToSubLeadingJet()->p4()).phi())); 
                                           }else{return -999.;}}
@@ -299,8 +300,8 @@ namespace flashgg {
         float dPhijj_P2P3_Partons()  const {if (hasSubLeadingParton() && hasSubSubLeadingParton()) {
                                             return fabs(deltaPhi(diPhoton()->phi(),(subLeadingParton()->p4() + subSubLeadingParton()->p4()).phi())); }else{return -999.;}}
         //(jjj)
-        float dPhijjj_FggJet() const {if (numberOfFggJets() > 2) {  
-                                            return fabs(deltaPhi(diPhoton()->phi(),(ptOrderedFggJets()[0]->p4()+ptOrderedFggJets()[1]->p4()+ptOrderedFggJets()[2]->p4()).phi()));
+        float dPhijjj_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {
+                                            return fabs(deltaPhi(diPhoton()->phi(),(leadingJet()->p4()+subLeadingJet()->p4()+subSubLeadingJet()->p4()).phi()));
                                       }else{return -999.;}}       
         float dPhijjj_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) {
                                             return fabs(deltaPhi(diPhoton()->phi(),(closestGenJetToLeadingJet()->p4() + closestGenJetToSubLeadingJet()->p4()

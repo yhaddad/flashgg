@@ -5,7 +5,8 @@ namespace flashgg {
     VBFMVAResult::VBFMVAResult () :
         leadJet                (),
         subleadJet             (),
-        subSubleadJet          (),
+        subsubleadJet          (),
+        hasValidVBFTriJet      (  0),
         n_rec_jets             ( -1),
         n_gen_jets             ( -1),
         n_diphotons            ( -1),
@@ -22,10 +23,12 @@ namespace flashgg {
         dijet_leady            ( -9999. ),
         dijet_subleady         ( -9999. ),
         dijet_dipho_pt         ( -9999. ),
+        dijet_minDRJetPho      ( -9999. ),
+        
         dipho_PToM             ( -9999. ),
         leadPho_PToM           ( -9999. ),
         sublPho_PToM           ( -9999. ),
-        minDRJetPho            ( -9999. ),
+        
         vbfMvaResult_value     ( -9999. ),
         vbfMvaResult_value_bdt ( -9999. ),
         vbfMvaResult_value_bdtg( -9999. )
@@ -35,8 +38,7 @@ namespace flashgg {
     {
         leadJet          = x->leadJet;
         subleadJet       = x->subleadJet;
-        subSubleadJet    = x->subSubleadJet;
-
+        
         n_rec_jets       = x->n_rec_jets;
         n_gen_jets       = x->n_gen_jets;
         n_diphotons      = x->n_diphotons;
@@ -57,12 +59,18 @@ namespace flashgg {
         dipho_PToM       = x->dipho_PToM     ;
         leadPho_PToM     = x->leadPho_PToM   ;
         sublPho_PToM     = x->sublPho_PToM   ;
-        minDRJetPho      = x->minDRJetPho    ;
+        dijet_minDRJetPho= x->dijet_minDRJetPho    ;
         
         dijet_leady      = x->dijet_leady    ;
         dijet_subleady   = x->dijet_subleady ;
-        dijet_dy         = x->dijet_dy       ;
+        dijet_dy         = x->dijet_dy;
         
+        // 3-jets additional variables
+        subsubleadJet    = x->subsubleadJet;
+        hasValidVBFTriJet   = x->hasValidVBFTriJet;
+        
+        // VBF MVA results different methods
+        // need to be remove at some point ?
         vbfMvaResult_value      = x->vbfMvaResult_value;
         vbfMvaResult_value_bdt  = x->vbfMvaResult_value_bdt;
         vbfMvaResult_value_bdtg = x->vbfMvaResult_value_bdtg;

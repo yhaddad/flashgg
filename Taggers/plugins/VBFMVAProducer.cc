@@ -52,14 +52,16 @@ namespace flashgg {
         float dijet_dphi_trunc_;
         float dijet_dipho_dphi_;
         float dijet_Mjj_   ;
-        float dipho_PToM_  ;
-        float leadPho_PToM_;
-        float sublPho_PToM_;
-        float minDRJetPho_ ;
+        float dijet_minDRJetPho_ ;
         float dijet_dy_    ;
         float dijet_leady_    ;
         float dijet_subleady_ ;
         float dijet_dipho_pt_ ;
+        
+        float dipho_PToM_  ;
+        float leadPho_PToM_;
+        float sublPho_PToM_;
+        
     };
 
     VBFMVAProducer::VBFMVAProducer( const ParameterSet &iConfig ) :
@@ -88,7 +90,7 @@ namespace flashgg {
         dipho_PToM_       = -999.;
         leadPho_PToM_     = -999.;
         sublPho_PToM_     = -999.;
-        minDRJetPho_      = -999.;
+        dijet_minDRJetPho_= -999.;
         dijet_dipho_pt_   = -999.;
         dijet_leady_      = -999.;
         dijet_subleady_   = -999.;
@@ -96,22 +98,23 @@ namespace flashgg {
         if (_MVAMethod != ""){
             VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
             // set of VBF variables
-            VbfMva_->AddVariable( "dijet_LeadJPt"   , &dijet_LeadJPt_    );
-            VbfMva_->AddVariable( "dijet_SubJPt"    , &dijet_SubJPt_     );
-            VbfMva_->AddVariable( "dijet_abs_dEta"  , &dijet_abs_dEta_   );
-            VbfMva_->AddVariable( "dijet_dy"        , &dijet_dy_         );
-            VbfMva_->AddVariable( "dijet_Mjj"       , &dijet_Mjj_        );
-            VbfMva_->AddVariable( "dijet_Zep"       , &dijet_Zep_        );
-            VbfMva_->AddVariable( "minDRJetPho"     , &minDRJetPho_      );
-            VbfMva_->AddVariable( "dijet_dipho_dphi", &dijet_dipho_dphi_ );
-            VbfMva_->AddVariable( "dipho_PToM"      , &dipho_PToM_       );
+            VbfMva_->AddVariable( "dijet_LeadJPt"     , &dijet_LeadJPt_    );
+            VbfMva_->AddVariable( "dijet_SubJPt"      , &dijet_SubJPt_     );
+            VbfMva_->AddVariable( "dijet_abs_dEta"    , &dijet_abs_dEta_   );
+            VbfMva_->AddVariable( "dijet_dy"          , &dijet_dy_         );
+            VbfMva_->AddVariable( "dijet_Mjj"         , &dijet_Mjj_        );
+            VbfMva_->AddVariable( "dijet_Zep"         , &dijet_Zep_        );
+            VbfMva_->AddVariable( "dijet_minDRJetPho" , &dijet_minDRJetPho_);
+            VbfMva_->AddVariable( "dijet_dipho_dphi"  , &dijet_dipho_dphi_ );
+            VbfMva_->AddVariable( "dipho_PToM"        , &dipho_PToM_       );
+            
             //new variables
             VbfMva_->BookMVA( _MVAMethod.c_str() , vbfMVAweightfile_.fullPath() );
         }
         produces<vector<VBFMVAResult> >();
         
     }
-
+    
     void VBFMVAProducer::produce( Event &evt, const EventSetup & )
     {
         Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
@@ -124,13 +127,11 @@ namespace flashgg {
         
         std::auto_ptr<vector<VBFMVAResult> > vbf_results( new vector<VBFMVAResult> );
         
-        
         if (diPhotons->size()==0) std::cout << " --> no diphoton " << std::endl;
-        
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
             
             flashgg::VBFMVAResult mvares;
-
+            
             dijet_leadEta_    = -999.;
             dijet_subleadEta_ = -999.;
             dijet_abs_dEta_   = -999.;
@@ -141,18 +142,21 @@ namespace flashgg {
             dijet_dipho_dphi_ = -999.;
             dijet_Mjj_        = -999.;
             dijet_dy_         = -999.;
-            dipho_PToM_       = -999.;
-            leadPho_PToM_     = -999.;
-            sublPho_PToM_     = -999.;
-            minDRJetPho_      = -999.;
+            dijet_minDRJetPho_= -999.;
             dijet_dipho_pt_   = -999.;
             dijet_leady_      = -999.;
             dijet_subleady_   = -999.;
             
+            dipho_PToM_       = -999.;
+            leadPho_PToM_     = -999.;
+            sublPho_PToM_     = -999.;
+            
             // First find dijet by looking for highest-pt jets...
             std::pair <int, int>     dijet_indices( -1, -1 );
             std::pair <float, float> dijet_pts( -1., -1. );
-            //			float PuIDCutoff = 0.8;
+            int jet_3_index = -1;
+            int jet_3_pt    = -1;
+            // float PuIDCutoff = 0.8;
             float dr2pho = 0.5;
 
             float phi1 = diPhotons->ptrAt( candIndex )->leadingPhoton()->phi();
@@ -160,14 +164,14 @@ namespace flashgg {
             float phi2 = diPhotons->ptrAt( candIndex )->subLeadingPhoton()->phi();
             float eta2 = diPhotons->ptrAt( candIndex )->subLeadingPhoton()->eta();
 
-            bool hasValidVBFDijet = 0;
-
+            bool hasValidVBFDiJet  = 0;
+            bool hasValidVBFTriJet = 0;
+            
+            int  n_jets_count = 0;
             // take the jets corresponding to the diphoton candidate
             unsigned int jetCollectionIndex = diPhotons->ptrAt( candIndex )->jetCollectionIndex();
-            
             for( UInt_t jetLoop = 0; jetLoop < Jets[jetCollectionIndex]->size() ; jetLoop++ ) {
                 Ptr<flashgg::Jet> jet  = Jets[jetCollectionIndex]->ptrAt( jetLoop );
-                
                 //pass PU veto??
                 //if (jet->puJetId(diPhotons[candIndex]) <  PuIDCutoff) {continue;}
                 if( _usePuJetID && !jet->passesPuJetId(diPhotons->ptrAt( candIndex ))){ continue;}
@@ -190,10 +194,14 @@ namespace flashgg {
                     // if pt of this jet is higher than the one currently in lead position
                     // then shift back lead jet into sublead position...
                     dijet_indices.second = dijet_indices.first;
-                    dijet_pts.second = dijet_pts.first;
+                    dijet_pts.second     = dijet_pts.first;
                     // .. and put the new jet as the lead jet.
                     dijet_indices.first = jetLoop;
                     dijet_pts.first     = jet->pt();
+                    
+                    // trijet indicies
+                    jet_3_index = dijet_indices.second;
+                    jet_3_pt    = dijet_pts.second;
                 } else if( jet->pt() > dijet_pts.second ) { 
                     // this condition is added here to force to have the leading 
                     // and subleading jets in two different hemispheres 
@@ -201,14 +209,22 @@ namespace flashgg {
                     // than the sublead jet's The replace the sublead jet by this new jet.
                     dijet_indices.second = jetLoop;
                     dijet_pts.second     = jet->pt();
+                    
+                    // for the 3rd jets
+                    jet_3_index = dijet_indices.second;
+                    jet_3_pt    = dijet_pts.second;
+                }else if( jet->pt() > jet_3_pt ){
+                    jet_3_index = jetLoop;
+                    jet_3_pt    = jet->pt();
                 }
+                n_jets_count++;
                 // if the jet's pt is neither higher than the lead jet or sublead jet, then forget it!
-                if( dijet_indices.first != -1 && dijet_indices.second != -1 ) {hasValidVBFDijet = 1;}
-
+                if( dijet_indices.first != -1 && dijet_indices.second != -1 ) {hasValidVBFDiJet = 1;}
+                if( hasValidVBFDiJet && jet_3_index != -1) {hasValidVBFTriJet = 1;}
             }
             //std::cout << "[VBF] has valid VBF Dijet ? "<< hasValidVBFDijet<< std::endl;
-            if( hasValidVBFDijet ) {
-
+            if( hasValidVBFDiJet ) {
+                
                 std::pair < Ptr<flashgg::Jet>, Ptr<flashgg::Jet> > dijet;
                 // fill dijet pair with lead jet as first, sublead as second.
                 dijet.first  =  Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
@@ -227,17 +243,18 @@ namespace flashgg {
                 
                 auto diphoton_p4  = leadPho_p4 + sublPho_p4;
                 auto dijet_p4     = leadJet_p4 + sublJet_p4;
-                //float dijet_dPhi_ = fabs( dijet_p4.Phi() - diphoton_p4.Phi() );
                 
                 dijet_dphi_trunc_ = std::min((float) abs(dijet.first->phi() - dijet.second->phi()), (float) 2.916);
                 dijet_dipho_dphi_ = std::min((float) abs(dijet_p4.Phi() -diphoton_p4.Phi()), (float) 2.916 );
+                
+                dijet_dipho_pt_   = (dijet_p4 + diphoton_p4).Pt();
                 dijet_Zep_        = fabs(diphoton_p4.Eta() - 0.5 * ( leadJet_p4.Eta() + sublJet_p4.Eta()));
                 dijet_Mjj_        = dijet_p4.M();
                 dipho_PToM_       = diphoton_p4.Pt()/diphoton_p4.M();
                 leadPho_PToM_     = diPhotons->ptrAt(candIndex)->leadingPhoton()->pt()/diphoton_p4.M();
                 sublPho_PToM_     = diPhotons->ptrAt(candIndex)->subLeadingPhoton()->pt()/diphoton_p4.M();
                 
-                minDRJetPho_      = std::min( std::min(reco::deltaR( leadJet_p4,leadPho_p4 ),
+                dijet_minDRJetPho_= std::min( std::min(reco::deltaR( leadJet_p4,leadPho_p4 ),
                                                        reco::deltaR( sublJet_p4,leadPho_p4 )),
                                               std::min(reco::deltaR( leadJet_p4,sublPho_p4 ),
                                                        reco::deltaR( sublJet_p4,sublPho_p4 ))
@@ -246,8 +263,19 @@ namespace flashgg {
                 dijet_dy_         = std::fabs(leadJet_p4.Rapidity() - sublPho_p4.Rapidity());
                 dijet_leady_      = leadJet_p4.Rapidity();
                 dijet_subleady_   = sublJet_p4.Rapidity();
+                
                 mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
+                mvares.diphoton   = *diPhotons->ptrAt( candIndex );
+            }
+            // TriJet variables here
+            if ( hasValidVBFDiJet && hasValidVBFTriJet){
+                mvares.leadJet       = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
+                mvares.subleadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
+                mvares.subsubleadJet = *Jets[jetCollectionIndex]->ptrAt( jet_3_index );
+                
+                // for complex trijet variables define it here :
+                mvares.hasValidVBFTriJet = 1;
             }
             
             if (_MVAMethod != "") 
@@ -265,11 +293,12 @@ namespace flashgg {
             mvares.dipho_PToM       = dipho_PToM_ ;
             mvares.sublPho_PToM     = sublPho_PToM_ ;
             mvares.leadPho_PToM     = leadPho_PToM_ ;
-            mvares.minDRJetPho      = minDRJetPho_;
+            mvares.dijet_minDRJetPho= dijet_minDRJetPho_;
             mvares.dijet_dy         = dijet_dy_;
             mvares.dijet_dipho_pt   = dijet_dipho_pt_ ;
             mvares.dijet_leady      = dijet_leady_   ;
             mvares.dijet_subleady   = dijet_subleady_;
+            
             vbf_results->push_back( mvares );
         }
         evt.put( vbf_results );

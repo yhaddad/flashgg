@@ -116,9 +116,9 @@ void VBFTruthProducer::produce(  unsigned int diPhotonIndex,
             if( jet->pt() <= ptOrderedFggJets[i]->pt() && jet != ptOrderedFggJets[i] ) { insertionIndex = i + 1; }
         }
         //Remove photons and pileup
-        float dr_leadPhoton = deltaR( jet->eta(), jet->phi(),diPhoton->leadingPhoton()->eta(),diPhoton->leadingPhoton()->phi() ); 
+        float dr_leadPhoton    = deltaR( jet->eta(), jet->phi(),diPhoton->leadingPhoton()->eta(),diPhoton->leadingPhoton()->phi() ); 
         float dr_subLeadPhoton = deltaR( jet->eta(), jet->phi(),diPhoton->subLeadingPhoton()->eta(),diPhoton->subLeadingPhoton()->phi() ); 
-        bool pileupRejection = true;
+        bool  pileupRejection  = true;
         if( dr_leadPhoton > 0.1 && dr_subLeadPhoton > 0.1 ) {
             if (pileupRejection && jet->passesPuJetId(diPhoton)) { 
                 ptOrderedFggJets.insert( ptOrderedFggJets.begin() + insertionIndex, jet );
