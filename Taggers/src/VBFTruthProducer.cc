@@ -12,7 +12,7 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "DataFormats/Common/interface/Handle.h"
 
-#include "flashgg/DataFormats/interface/VBFTruthProducer.h"
+#include "flashgg/Taggers/interface/VBFTruthProducer.h"
 #include "DataFormats/JetReco/interface/GenJet.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/Common/interface/Ptr.h"
@@ -24,11 +24,11 @@ using namespace edm;
 using namespace flashgg;
 
 void VBFTruthProducer::produce(  unsigned int diPhotonIndex,
-                                        Handle<View<reco::GenParticle> > genParticles,
-                                        Handle<View<reco::GenJet> > GenJets,
-                                        Handle<View<flashgg::DiPhotonCandidate> > diPhotonCollection,
-                                        std::vector<edm::Handle<edm::View<flashgg::Jet> > > jetCollections ) {
-
+				 Handle<View<reco::GenParticle> > genParticles,
+				 Handle<View<reco::GenJet> > GenJets,
+				 Handle<View<flashgg::DiPhotonCandidate> > diPhotonCollection,
+				 std::vector<edm::Handle<edm::View<flashgg::Jet> > > jetCollections ) {
+  
     VBFTagTruth truthObject;
     //The diphoton
     edm::Ptr<flashgg::DiPhotonCandidate> diPhoton = diPhotonCollection->ptrAt(diPhotonIndex);
@@ -69,9 +69,9 @@ void VBFTruthProducer::produce(  unsigned int diPhotonIndex,
         ptOrderedPartons[mergerIndices.first]->setPdgId(999);
         ptOrderedPartons.erase(ptOrderedPartons.begin()+mergerIndices.second);
         if (ptOrderedPartons[0]->pt() < ptOrderedPartons[1]->pt()) {std::swap(ptOrderedPartons[0],ptOrderedPartons[1]);}
-    } 
+	} 
 */
-
+    
     //Add to truth object
     truthObject.setPtOrderedPartons(ptOrderedPartons);
     if (ptOrderedPartons.size() == 1) {truthObject.setLeadingParton(ptOrderedPartons[0]);}

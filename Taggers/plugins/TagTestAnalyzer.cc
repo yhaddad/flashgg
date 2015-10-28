@@ -31,8 +31,8 @@
 #include "flashgg/DataFormats/interface/VHLooseTag.h"
 #include "flashgg/DataFormats/interface/VHHadronicTag.h"
 #include "flashgg/DataFormats/interface/VBFTagTruth.h"
-#include "flashgg/DataFormats/interface/VBFTruthProducer.h"
-#include "flashgg/DataFormats/interface/VBFPlotProducer.h"
+#include "flashgg/Taggers/interface/VBFTruthProducer.h"
+//#include "flashgg/DataFormats/interface/VBFPlotProducer.h"
 
 #include "TTree.h"
 

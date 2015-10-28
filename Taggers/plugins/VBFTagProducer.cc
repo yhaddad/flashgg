@@ -210,8 +210,8 @@ namespace flashgg {
                 if( index_gj_leadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestGenJetToLeadingJet( genJets->ptrAt( index_gj_leadjet ) ); }
                 if( index_gj_subleadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestGenJetToSubLeadingJet( genJets->ptrAt( index_gj_subleadjet ) ); }
 
-                if( index_leadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setLeadingQuark( genParticles->ptrAt( index_leadq ) ); }
-                if( index_subleadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setSubLeadingQuark( genParticles->ptrAt( index_subleadq ) ); }
+                if( index_leadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setLeadingParton( genParticles->ptrAt( index_leadq ) ); }
+                if( index_subleadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setSubLeadingParton( genParticles->ptrAt( index_subleadq ) ); }
             }
             truth_obj.setGenPV( higgsVtx );
             if( tag_obj.categoryNumber() >= 0 ) {
