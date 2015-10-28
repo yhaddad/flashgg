@@ -26,9 +26,9 @@ VBFTagTruth *VBFTagTruth::clone() const
 {
     //    return (new VBFTagTruth(*this));
     VBFTagTruth *result = new VBFTagTruth;
-    result->setClosestGenJetToLeadingJet( closestGenJetToLeadingJet() );
-    result->setClosestGenJetToSubLeadingJet( closestGenJetToSubLeadingJet() );
-    result->setClosestParticleToLeadingJet( closestParticleToLeadingJet() );
+    result->setClosestGenJetToLeadingJet     ( closestGenJetToLeadingJet() );
+    result->setClosestGenJetToSubLeadingJet  ( closestGenJetToSubLeadingJet() );
+    result->setClosestParticleToLeadingJet   ( closestParticleToLeadingJet() );
     result->setClosestParticleToSubLeadingJet( closestParticleToSubLeadingJet() );
     result->setClosestParticleToLeadingPhoton( closestParticleToLeadingPhoton() );
     result->setClosestParticleToSubLeadingPhoton( closestParticleToSubLeadingPhoton() );

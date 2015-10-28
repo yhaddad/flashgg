@@ -5,6 +5,10 @@ namespace flashgg {
     VBFMVAResult::VBFMVAResult () :
         leadJet                (),
         subleadJet             (),
+        subSubleadJet          (),
+        n_rec_jets             ( -1),
+        n_gen_jets             ( -1),
+        n_diphotons            ( -1),
         dijet_leadEta          ( -9999. ),
         dijet_subleadEta       ( -9999. ),
         dijet_abs_dEta         ( -9999. ),
@@ -31,18 +35,24 @@ namespace flashgg {
     {
         leadJet          = x->leadJet;
         subleadJet       = x->subleadJet;
-        dijet_leadEta    = x->dijet_leadEta    ;
-        dijet_leadEta    = x->dijet_leadEta    ;
+        subSubleadJet    = x->subSubleadJet;
 
+        n_rec_jets       = x->n_rec_jets;
+        n_gen_jets       = x->n_gen_jets;
+        n_diphotons      = x->n_diphotons;
+        
+        dijet_leadEta    = x->dijet_leadEta    ;
+        dijet_leadEta    = x->dijet_leadEta    ;
+        
         dijet_subleadEta = x->dijet_subleadEta ;
-        dijet_LeadJPt    = x->dijet_LeadJPt ;
-        dijet_SubJPt     = x->dijet_SubJPt  ; 
-        dijet_Zep        = x->dijet_Zep     ;
+        dijet_LeadJPt    = x->dijet_LeadJPt    ;
+        dijet_SubJPt     = x->dijet_SubJPt     ; 
+        dijet_Zep        = x->dijet_Zep        ;
         
         dijet_dphi_trunc = x->dijet_dphi_trunc ;
         dijet_dipho_dphi = x->dijet_dipho_dphi ;
-        dijet_dipho_pt   = x->dijet_dipho_pt ;
-        dijet_Mjj        = x->dijet_Mjj      ;
+        dijet_dipho_pt   = x->dijet_dipho_pt   ;
+        dijet_Mjj        = x->dijet_Mjj        ;
         
         dipho_PToM       = x->dipho_PToM     ;
         leadPho_PToM     = x->leadPho_PToM   ;

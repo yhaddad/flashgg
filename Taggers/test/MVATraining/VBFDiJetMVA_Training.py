@@ -69,7 +69,8 @@ VBFMVAvariables=[
     "dijet_dphi_trunc    :=  dijet_dphi_trunc ",
     "dijet_dipho_dphi    :=  dijet_dipho_dphi ",
     "dijet_dipho_pt      :=  dijet_dipho_pt   ",
-    "dijet_dy            :=  dijet_dy         ",
+    "dijet_dphi          :=  abs(leadJet.phi - subleadJet.phi)",
+    "dijet_etaeta        :=  (leadJet.phi * subleadJet.eta)",
     "test_pt             :=  leadJet.pt       ",
     "minDRJetPho         :=  minDRJetPho      "
     ]
@@ -80,7 +81,7 @@ preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && 
 # setup the dumpers
 cfgTools.addCategories(process.VBFMVADumper,
                        [
-                           ("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
+                           #("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
                            ("VBFDiJet"            ,"dijet_LeadJPt > 0"     ,0),
                            ("excluded"            ,"1"                     ,0) 
                        ],
@@ -92,7 +93,7 @@ cfgTools.addCategories(process.VBFMVADumper,
 process.VBFMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 cfgTools.addCategories(process.VBFMVADumperPUPPI,
                        [
-                           ("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
+                           #("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
                            ("VBFDiJet"            ,"dijet_LeadJPt > 0"     ,0),
                            ("excluded"            ,"1"                     ,0) 
                        ],

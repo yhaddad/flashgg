@@ -7,18 +7,26 @@
 
 
 namespace flashgg {
-
+    
     class VBFMVAResult
     {
-
+        
     public:
         VBFMVAResult();
-        //  VBFMVAResult(const VBFMVAResult&) = default;  // C++11 only? Should happen automagically anyway
         VBFMVAResult( edm::Ptr<VBFMVAResult> );
-        // diJet Info
         
-        Jet leadJet;
-        Jet subleadJet;
+        // diJet Info
+        flashgg::Jet leadJet;
+        flashgg::Jet subleadJet;
+        flashgg::Jet subSubleadJet; // the third jet
+
+        // di-photon info 
+        flashgg::DiPhotonCandidate diphoton;
+
+        // event based variables
+        int  n_rec_jets;
+        int  n_gen_jets;
+        int  n_diphotons;
         
         // Input variables
         float dijet_leadEta ;
@@ -39,16 +47,15 @@ namespace flashgg {
         float sublPho_PToM;
         float minDRJetPho;
         
-        
+        // some 3-jet based variables 
         float VBFMVAValue() const {return vbfMvaResult_value;}
-
+        
         // Output
         float vbfMvaResult_value;
-        // specify the bdt value here, this is
         float vbfMvaResult_value_bdt;
         float vbfMvaResult_value_bdtg;
     };
-
+    
     typedef std::map<edm::Ptr<DiPhotonCandidate>, VBFMVAResult> VBFMVAResultMap;
 
 }

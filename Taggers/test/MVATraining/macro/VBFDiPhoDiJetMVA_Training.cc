@@ -106,7 +106,7 @@ void VBFDiPhoDiJetMVA_Training( TString Nevent = "10000", TString Level = "VBF",
                                          "SplitMode=Random:NormMode=NumEvents:!V" );
     // Boosted Decision Trees: use BDTG ( Gradient Boost )
     factory->BookMethod( TMVA::Types::kBDT, "BDTG",
-                         "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=20:NNodesMax=5:MaxDepth=3" );
+                         "!H:!V:NTrees=2000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=20:NNodesMax=100000:MaxDepth=3" );
     factory->BookMethod( TMVA::Types::kBDT, "BDT",
                          "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
     //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=20:NNodesMax=15:MaxDepth=5" );

@@ -103,12 +103,15 @@ bool Jet::passesJetID( JetIDLevel level) const
     return 0;
     
 }
+
 float Jet::deltaR( const pat::Jet inJet ) const
 {
     float deta = this->eta() - inJet.eta();
     float dphi = this->phi() - inJet.phi();
     return sqrt(deta*deta + dphi*dphi);
 }
+
+
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil
