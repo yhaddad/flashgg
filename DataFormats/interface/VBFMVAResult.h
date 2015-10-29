@@ -19,7 +19,13 @@ namespace flashgg {
         flashgg::Jet leadJet;
         flashgg::Jet subleadJet;
         // 3rd jet
-        flashgg::Jet subsubleadJet; 
+        flashgg::Jet subsubleadJet;
+
+        edm::Ptr<flashgg::Jet> leadJet_ptr;
+        edm::Ptr<flashgg::Jet> subleadJet_ptr;
+        // 3rd jet
+        edm::Ptr<flashgg::Jet> subsubleadJet_ptr; 
+
         bool hasValidVBFTriJet;
         
         // di-photon info 

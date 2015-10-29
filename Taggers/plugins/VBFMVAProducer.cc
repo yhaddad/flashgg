@@ -266,13 +266,19 @@ namespace flashgg {
                 
                 mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
+                
+                mvares.leadJet_ptr    = Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
+                mvares.subleadJet_ptr = Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
+                
                 mvares.diphoton   = *diPhotons->ptrAt( candIndex );
             }
             // TriJet variables here
             if ( hasValidVBFDiJet && hasValidVBFTriJet){
-                mvares.leadJet       = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
-                mvares.subleadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
-                mvares.subsubleadJet = *Jets[jetCollectionIndex]->ptrAt( jet_3_index );
+                //mvares.leadJet       = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
+                //mvares.subleadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
+                
+                mvares.subsubleadJet     = *Jets[jetCollectionIndex]->ptrAt( jet_3_index );
+                mvares.subsubleadJet_ptr =  Jets[jetCollectionIndex]->ptrAt( jet_3_index );
                 
                 // for complex trijet variables define it here :
                 mvares.hasValidVBFTriJet = 1;

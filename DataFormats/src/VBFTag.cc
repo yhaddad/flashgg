@@ -43,6 +43,22 @@ const Jet VBFTag::subSubLeadingJet() const
     return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subsubleadJet;
 }
 
+const edm::Ptr<Jet> VBFTag::leadingJet_ptr() const
+{
+    return vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr;
+}
+
+const edm::Ptr<Jet> VBFTag::subLeadingJet_ptr() const
+{
+    return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr;
+}
+
+const edm::Ptr<Jet> VBFTag::subSubLeadingJet_ptr() const
+{
+    //! adding a third jets for the VBF studies
+    return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subsubleadJet_ptr;
+}
+
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil

@@ -72,7 +72,7 @@ VBFMVAvariables=[
     "dijet_dphi          :=  abs(leadJet.phi - subleadJet.phi)",
     "dijet_etaeta        :=  (leadJet.phi * subleadJet.eta)",
     "test_pt             :=  leadJet.pt       ",
-    "minDRJetPho         :=  minDRJetPho      "
+    "dijet_minDRJetPho   :=  dijet_minDRJetPho      "
     ]
 
 preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && dijet_leadEta > -4.7 && dijet_subleadEta < 4.7 && dijet_subleadEta > -4.7 && dijet_Mjj> 250 && leadPho_PToM  > 0.5"
@@ -81,10 +81,10 @@ preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && 
 # setup the dumpers
 cfgTools.addCategories(process.VBFMVADumper,
                        [
-                           #("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
-                           ("VBFDiJet"            ,"dijet_LeadJPt > 0"     ,0),
-                           ("excluded"            ,"1"                     ,0) 
-                       ],
+        #("PreselVBFDiJet"      ,"%s" % preselection_cut ,0),
+        ("VBFDiJet"            ,"dijet_LeadJPt > 0"     ,0),
+        ("excluded"            ,"1"                     ,0) 
+        ],
                        variables  = VBFMVAvariables ,
                        histograms = []
 )

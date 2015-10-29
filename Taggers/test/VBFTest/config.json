@@ -1,0 +1,46 @@
+{
+    "cont": false, 
+    "verbose": false, 
+    "hadd": false, 
+    "njobs": 0, 
+    "jobExe": "cmsRun", 
+    "cmdLine": "campaign=RunIISpring15-50ns", 
+    "stageCmd": "guess", 
+    "outputDir": "/home/hep/yhaddad/CMSSW_7_4_12/src/flashgg/Taggers/test/VBFTest", 
+    "asyncLsf": true, 
+    "maxResub": 3, 
+    "ncpu": 8, 
+    "processes": {
+        "vbf_m125": [
+            "VBFHToGG_M-125_13TeV_powheg_pythia8"
+        ], 
+        "dy_toll_m50": [
+            "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8"
+        ], 
+        "gamgamjetbox": [
+            "DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa"
+        ], 
+        "qcd": [
+            "QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8", 
+            "QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8", 
+            "QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8"
+        ], 
+        "gamJet": [
+            "GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8", 
+            "GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8"
+        ], 
+        "ggf_m125": [
+            "GluGluHToGG_M-125_13TeV_powheg_pythia8"
+        ]
+    }, 
+    "useTarball": false, 
+    "__opts__": null, 
+    "stageTo": "/home/hep/yhaddad/CMSSW_7_4_12/src/flashgg/Taggers/test/VBFTest", 
+    "hadd_dataset": false, 
+    "use_tarball": true, 
+    "__opts___src": "VBFMVATrainingSamplesWithPUPPI.json", 
+    "queue": "hepmedium.q", 
+    "hadd_process": false, 
+    "batchSystem": "auto", 
+    "output": "output.root"
+}
