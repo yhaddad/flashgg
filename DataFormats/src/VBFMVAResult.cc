@@ -41,9 +41,14 @@ namespace flashgg {
     {
         leadJet          = x->leadJet;
         subleadJet       = x->subleadJet;
-
+    
         leadJet_ptr      = x->leadJet_ptr;
         subleadJet_ptr   = x->subleadJet_ptr;
+        
+        // 3-jets additional variables
+        subsubleadJet     = x->subsubleadJet;
+        subsubleadJet_ptr = x->subsubleadJet_ptr;
+        hasValidVBFTriJet = x->hasValidVBFTriJet;
         
         n_rec_jets       = x->n_rec_jets;
         n_gen_jets       = x->n_gen_jets;
@@ -71,9 +76,6 @@ namespace flashgg {
         dijet_subleady   = x->dijet_subleady ;
         dijet_dy         = x->dijet_dy;
         
-        // 3-jets additional variables
-        subsubleadJet    = x->subsubleadJet;
-        hasValidVBFTriJet   = x->hasValidVBFTriJet;
         
         // VBF MVA results different methods
         // need to be remove at some point ?

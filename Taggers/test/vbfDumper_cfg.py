@@ -35,7 +35,7 @@ from flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
 process.vbfTagDumper = createTagDumper("VBFTag")
-process.vbfTagDumper.dumpTrees = True
+process.vbfTagDumper.dumpTrees  = True
 process.vbfTagDumper.dumpHistos = True
 
 dipho_variables=["dipho_sumpt      := diPhoton.sumPt",

@@ -23,19 +23,19 @@ echo
 echo 
 echo -e "+++++++++++ Create working directories  ++++++++++"#
 echo 
-
-if [ ! -d test_diphodijet_puppi_training ]; then 
-    mkdir -p ${WORKSPACE}/test_diphodijet_training
-    mkdir -p ${WORKSPACE}/test_diphodijet_compare
-    
-    ln -s ${WORKSPACE}/test_diphodijet_training  test_diphodijet_training
-    ln -s ${WORKSPACE}/test_diphodijet_compare   test_diphodijet_compare
-    
-    ls ${PWD} | grep test_diphodijet_
-else
-    ls ${PWD} | grep test_diphodijet_
-fi 
-
+#
+#if [ ! -d test_diphodijet_puppi_training ]; then 
+#    mkdir -p ${WORKSPACE}/test_diphodijet_training
+#    mkdir -p ${WORKSPACE}/test_diphodijet_compare
+#    
+#    ln -s ${WORKSPACE}/test_diphodijet_training  test_diphodijet_training
+#    ln -s ${WORKSPACE}/test_diphodijet_compare   test_diphodijet_compare
+#    
+#    ls ${PWD} | grep test_diphodijet_
+#else
+#    ls ${PWD} | grep test_diphodijet_
+#fi 
+#
 echo 
 echo -e "+++++++++++ Generate the Training Trees ++++++++++"
 echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
@@ -53,26 +53,26 @@ echo
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"CHS\"\)
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"PUPPI\"\)
 
-echo 
-echo -e "+++++++++++ Applying the MVA +++++++++++++++++"
-echo
-
-#fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
-#    -d ${WORKSPACE}/test_diphodijet_compare \
-#    -x cmsRun VBFDiJetMVA_Compare.py maxEvents=${NEvent}  \
-#    -q 1nh --no-use-tarball #useAAA=1 
+#echo 
+#echo -e "+++++++++++ Applying the MVA +++++++++++++++++"
+#echo
 #
-echo 
-echo -e "+++++++++++ Generating ROC curves ++++++++++++++++"
-echo
-#
+##fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
+##    -d ${WORKSPACE}/test_diphodijet_compare \
+##    -x cmsRun VBFDiJetMVA_Compare.py maxEvents=${NEvent}  \
+##    -q 1nh --no-use-tarball #useAAA=1 
 ##
-##root -l macro/makeROC_CHS_PUPPI.cc++\(\"${NEvent}\",\"VBF\"\)
+#echo 
+#echo -e "+++++++++++ Generating ROC curves ++++++++++++++++"
+#echo
 ##
-#
-echo 
-echo -e "##################################################"
-echo -e "######          RETRAINING COMPLETE         ######"
+###
+###root -l macro/makeROC_CHS_PUPPI.cc++\(\"${NEvent}\",\"VBF\"\)
+###
+##
+#echo 
+#echo -e "##################################################"
+#echo -e "######          RETRAINING COMPLETE         ######"
 echo -e "##################################################"
 echo
 #echo -e " You can retrieve your ROC curve for this training from plots/VBF_ROCs.pdf

@@ -59,6 +59,11 @@ const edm::Ptr<Jet> VBFTag::subSubLeadingJet_ptr() const
     return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subsubleadJet_ptr;
 }
 
+const bool VBFTag::hasValidVBFTriJet() const
+{
+    return vbfDiPhoDiJet_mva_result_.vbfMvaResult.hasValidVBFTriJet;
+}
+
 // Local Variables:
 // mode:c++
 // indent-tabs-mode:nil

@@ -60,8 +60,7 @@ namespace flashgg {
         default_boundaries.push_back( 0.85 );
         default_boundaries.push_back( 0.915 );
         default_boundaries.push_back( 1 ); // from here
-        //https://github.com/h2gglobe/h2gglobe/blob/master/AnalysisScripts/massfac_mva_binned/massfactorizedmvaanalysis.dat#L32
-
+                
         // getUntrackedParameter<vector<float> > has no library, so we use double transiently
         boundaries = iConfig.getUntrackedParameter<vector<double > >( "Boundaries", default_boundaries );
         assert( is_sorted( boundaries.begin(), boundaries.end() ) ); // we are counting on ascending order - update this to give an error message or exception
@@ -88,7 +87,7 @@ namespace flashgg {
         
         Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
         evt.getByToken( mvaResultToken_, mvaResults );
-
+        
         Handle<View<flashgg::VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResults;
         evt.getByToken( vbfDiPhoDiJetMvaResultToken_, vbfDiPhoDiJetMvaResults );
 
@@ -109,6 +108,8 @@ namespace flashgg {
         unsigned int index_subsubleadq = std::numeric_limits<unsigned int>::max();
         float pt_leadq = 0., pt_subleadq = 0., pt_subsubleadq = 0.;
         Point higgsVtx;
+        
+        //std::cout << "VBFTagProducer:: ndiphoton =="<< diPhotons->size() << std::endl;
         
         if( ! evt.isRealData() ) {
             for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
@@ -142,17 +143,16 @@ namespace flashgg {
         }
         // We are relying on corresponding sets - update this to give an error/exception
         assert( diPhotons->size() == vbfDiPhoDiJetMvaResults->size() ); 
-        assert( diPhotons->size() ==
-                mvaResults->size() ); // We are relying on corresponding sets - update this to give an error/exception
-        
+        assert( diPhotons->size() == mvaResults->size() ); // We are relying on corresponding sets - update this to give an error/exception
+        //std::cout << "-----------------------------------------------------" << std::endl;
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
             edm::Ptr<flashgg::VBFDiPhoDiJetMVAResult> vbfdipho_mvares = vbfDiPhoDiJetMvaResults->ptrAt( candIndex );
-            edm::Ptr<flashgg::DiPhotonMVAResult> mvares = mvaResults->ptrAt( candIndex );
-            edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( candIndex );
+            edm::Ptr<flashgg::DiPhotonMVAResult>      mvares          = mvaResults->ptrAt( candIndex );
+            edm::Ptr<flashgg::DiPhotonCandidate>      dipho           = diPhotons->ptrAt( candIndex );
             
             VBFTag tag_obj( dipho, mvares, vbfdipho_mvares );
             tag_obj.setDiPhotonIndex( candIndex );
-            tag_obj.setSystLabel( systLabel_ );
+            tag_obj.setSystLabel    ( systLabel_ );
             
             int catnum = chooseCategory( vbfdipho_mvares->vbfDiPhoDiJetMvaResult );
             tag_obj.setCategoryNumber( catnum );
@@ -169,7 +169,6 @@ namespace flashgg {
             float dr_gp_subleadphoton = 999.;
             float dr_gj_leadjet = 999.;
             float dr_gj_subleadjet = 999.;
-            
             VBFTagTruth truth_obj;
             if( ! evt.isRealData() ) {
                 for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
@@ -224,7 +223,6 @@ namespace flashgg {
                 if( index_subsubleadq < std::numeric_limits<unsigned int>::max()) { truth_obj.setSubSubLeadingParton( genParticles->ptrAt( index_subsubleadq ));}
             }
             truth_obj.setGenPV( higgsVtx );
-            
             // Yacine: filling tagTruth Tag with 3 jets matchings
             // the idea is to fill the truth_obj using Jack's 
             // implementation
@@ -259,61 +257,53 @@ namespace flashgg {
                 truth_obj.setSubSubLeadingGenJet(ptOrderedgenJets[2]);
             }
             
-            truth_obj.setLeadingJet( tag_obj.leadingJet_ptr() );
-            truth_obj.setSubLeadingJet(tag_obj.subLeadingJet_ptr() );
-            if ( tag_obj.VBFMVA().hasValidVBFTriJet ) {truth_obj.setSubSubLeadingJet(tag_obj.subSubLeadingJet_ptr());}
+            //std::cout << "DEBUG tag_obj.subSubLeadingJet_ptr()->pt() == " << tag_obj.subSubLeadingJet_ptr()->pt() << std::endl;
+            truth_obj.setLeadingJet      ( tag_obj.leadingJet_ptr() );
+            truth_obj.setSubLeadingJet   ( tag_obj.subLeadingJet_ptr() );
+            truth_obj.setSubSubLeadingJet( tag_obj.subSubLeadingJet_ptr() );
             
-            std::cout << " ::lead_pt"       << truth_obj.leadingJet()->pt()
-                      << " ::sublead_pt"    << truth_obj.subLeadingJet()->pt()
-                      << " ::subsublead_pt" << truth_obj.subSubLeadingJet()->pt()
-                      << std::endl;
-            std::cout << " ::lead_pt"       << truth_obj.hasClosestParticleToLeadingJet()
-                      << " ::sublead_pt"    << truth_obj.hasClosestParticleToSubLeadingJet() 
-                      << " ::subsublead_pt" << truth_obj.hasClosestParticleToSubSubLeadingJet() 
-                      << std::endl;
             //-------------------
             // GenParticles matching
-            if ( genParticles->size() > 0) {
+            if ( genParticles->size() > 0 ) {
                 float dr(999.0);
                 unsigned gpIndex(0);
                 for (unsigned partLoop(0);partLoop<genParticles->size();partLoop++) {
                     edm::Ptr<reco::GenParticle> particle = genParticles->ptrAt(partLoop);
-                    float deltaR_temp = deltaR(tag_obj.leadingJet_ptr()->eta(),tag_obj.leadingJet_ptr()->phi(),particle->eta(),particle->phi());
+                    float deltaR_temp = deltaR(tag_obj.leadingJet().eta(),tag_obj.leadingJet().phi(),particle->eta(),particle->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; gpIndex = partLoop;}
                 }
                 truth_obj.setClosestParticleToLeadingJet(genParticles->ptrAt(gpIndex));
             }
-            //Sublead
+            ////Sublead
             if (genParticles->size() > 0) {
                 float dr(999.0);
                 unsigned gpIndex(0);
                 for (unsigned partLoop(0);partLoop<genParticles->size();partLoop++) {
                     edm::Ptr<reco::GenParticle> particle = genParticles->ptrAt(partLoop);
-                    float deltaR_temp = deltaR(tag_obj.subLeadingJet_ptr()->eta(),tag_obj.subLeadingJet_ptr()->phi(),particle->eta(),particle->phi());
+                    float deltaR_temp = deltaR(tag_obj.subLeadingJet().eta(),tag_obj.subLeadingJet().phi(),particle->eta(),particle->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; gpIndex = partLoop;}
                 }
                 truth_obj.setClosestParticleToSubLeadingJet(genParticles->ptrAt(gpIndex));
             }
-            //Subsublead
+            //////Subsublead
             if (genParticles->size() > 0 &&  tag_obj.VBFMVA().hasValidVBFTriJet ) {
                 float dr(999.0);
                 unsigned gpIndex(0);
                 for (unsigned partLoop(0);partLoop<genParticles->size();partLoop++) {
                     edm::Ptr<reco::GenParticle> particle = genParticles->ptrAt(partLoop);
-                    float deltaR_temp = deltaR(tag_obj.subSubLeadingJet_ptr()->eta(),tag_obj.subSubLeadingJet_ptr()->phi(),particle->eta(),particle->phi());
+                    float deltaR_temp = deltaR(tag_obj.subSubLeadingJet().eta(),tag_obj.subSubLeadingJet().phi(),particle->eta(),particle->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; gpIndex = partLoop;}
                 }
                 truth_obj.setClosestParticleToSubSubLeadingJet(genParticles->ptrAt(gpIndex));
             } 
-
-            //----------------
-            // GetJet matching
+            ////----------------
+            //// GetJet matching
             if ( ptOrderedgenJets.size() > 0) {
                 float dr(999.0);
                 unsigned gpIndex(0);
                 for (unsigned partLoop(0);partLoop<ptOrderedgenJets.size();partLoop++) {
                     edm::Ptr<reco::GenJet> particle = ptOrderedgenJets[partLoop];
-                    float deltaR_temp = deltaR(tag_obj.leadingJet_ptr()->eta(),tag_obj.leadingJet_ptr()->phi(),particle->eta(),particle->phi());
+                    float deltaR_temp = deltaR(tag_obj.leadingJet().eta(),tag_obj.leadingJet().phi(),particle->eta(),particle->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; gpIndex = partLoop;}
                 }
                 truth_obj.setClosestGenJetToLeadingJet(ptOrderedgenJets[gpIndex]);
@@ -324,7 +314,7 @@ namespace flashgg {
                 unsigned gpIndex(0);
                 for (unsigned partLoop(0);partLoop<ptOrderedgenJets.size();partLoop++) {
                     edm::Ptr<reco::GenJet> particle = ptOrderedgenJets[partLoop];
-                    float deltaR_temp = deltaR(tag_obj.subLeadingJet_ptr()->eta(),tag_obj.subLeadingJet_ptr()->phi(),particle->eta(),particle->phi());
+                    float deltaR_temp = deltaR(tag_obj.subLeadingJet().eta(),tag_obj.subLeadingJet().phi(),particle->eta(),particle->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; gpIndex = partLoop;}
                 }
                 truth_obj.setClosestGenJetToSubLeadingJet(ptOrderedgenJets[gpIndex]);
@@ -335,11 +325,11 @@ namespace flashgg {
                 unsigned gpIndex(0);
                 for (unsigned partLoop(0);partLoop<ptOrderedgenJets.size();partLoop++) {
                     edm::Ptr<reco::GenJet> particle = ptOrderedgenJets[partLoop];
-                    float deltaR_temp = deltaR(tag_obj.subSubLeadingJet_ptr()->eta(),tag_obj.subSubLeadingJet_ptr()->phi(),particle->eta(),particle->phi());
+                    float deltaR_temp = deltaR(tag_obj.subSubLeadingJet().eta(),tag_obj.subSubLeadingJet().phi(),particle->eta(),particle->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; gpIndex = partLoop;}
                 }
                 truth_obj.setClosestGenJetToSubSubLeadingJet(ptOrderedgenJets[gpIndex]);
-            } 
+            }
             // --------
             //Partons
             //Lead
@@ -360,7 +350,7 @@ namespace flashgg {
                 float dr(999.0);
                 unsigned pIndex(0);
                 for (unsigned partLoop(0);partLoop<ptOrderedPartons.size();partLoop++) {
-                    float deltaR_temp = deltaR(tag_obj.leadingJet_ptr()->eta(),tag_obj.leadingJet_ptr()->phi(),
+                    float deltaR_temp = deltaR(tag_obj.leadingJet().eta(),tag_obj.leadingJet().phi(),
                                                ptOrderedPartons[partLoop]->eta(),ptOrderedPartons[partLoop]->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; pIndex = partLoop;}
                 }
@@ -371,7 +361,7 @@ namespace flashgg {
                 float dr(999.0);
                 unsigned pIndex(0);
                 for (unsigned partLoop(0);partLoop<ptOrderedPartons.size();partLoop++) {
-                    float deltaR_temp = deltaR(tag_obj.subLeadingJet_ptr()->eta(),tag_obj.subLeadingJet_ptr()->phi(),
+                    float deltaR_temp = deltaR(tag_obj.subLeadingJet().eta(),tag_obj.subLeadingJet().phi(),
                                                ptOrderedPartons[partLoop]->eta(),ptOrderedPartons[partLoop]->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; pIndex = partLoop;}
                 }
@@ -382,7 +372,7 @@ namespace flashgg {
                 float dr(999.0);
                 unsigned pIndex(0);
                 for (unsigned partLoop(0);partLoop<ptOrderedPartons.size();partLoop++) {
-                    float deltaR_temp = deltaR(tag_obj.subSubLeadingJet_ptr()->eta(),tag_obj.subSubLeadingJet_ptr()->phi(),
+                    float deltaR_temp = deltaR(tag_obj.subSubLeadingJet().eta(),tag_obj.subSubLeadingJet().phi(),
                                                ptOrderedPartons[partLoop]->eta(),ptOrderedPartons[partLoop]->phi());
                     if (deltaR_temp < dr) {dr = deltaR_temp; pIndex = partLoop;}
                 }

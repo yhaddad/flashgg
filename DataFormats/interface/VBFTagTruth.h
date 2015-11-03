@@ -730,8 +730,8 @@ namespace flashgg {
         void setLeadingParton( const edm::Ptr<reco::GenParticle> &val ) { leadingParton_ = val; }
         void setSubLeadingParton( const edm::Ptr<reco::GenParticle> &val ) { subLeadingParton_ = val; }
         void setSubSubLeadingParton( const edm::Ptr<reco::GenParticle> &val ) { subSubLeadingParton_ = val; }
-        void setLeadingJet( const edm::Ptr<flashgg::Jet> &val ) { leadingJet_ = val; }
-        void setSubLeadingJet( const edm::Ptr<flashgg::Jet> &val ) { subLeadingJet_ = val; }
+        void setLeadingJet      ( const edm::Ptr<flashgg::Jet> &val ) { leadingJet_       = val; }
+        void setSubLeadingJet   ( const edm::Ptr<flashgg::Jet> &val ) { subLeadingJet_    = val; }
         void setSubSubLeadingJet( const edm::Ptr<flashgg::Jet> &val ) { subSubLeadingJet_ = val; }
         void setLeadingGenJet( const edm::Ptr<reco::GenJet> &val ) { leadingGenJet_ = val; }
         void setSubLeadingGenJet( const edm::Ptr<reco::GenJet> &val ) { subLeadingGenJet_ = val; }
