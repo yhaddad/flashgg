@@ -5,8 +5,8 @@
 // * Useful for quick tests of code changes, and should be kept up-to-date as tags are added/changed
 // * Should NOT be included in productions
 //
-// Adapted from globelikePlotMakerWithTagSorter code by L. D. Corpe, which was
-// Adapted from the flashggCommissioning plot maker code  by C. Favaro et al.
+// Adapted from globelikeTreeMakerWithTagSorter code by L. D. Corpe, which was
+// Adapted from the flashggCommissioning tree maker code  by C. Favaro et al.
 
 #include <memory>
 
@@ -31,10 +31,6 @@
 #include "flashgg/DataFormats/interface/VHLooseTag.h"
 #include "flashgg/DataFormats/interface/VHHadronicTag.h"
 #include "flashgg/DataFormats/interface/VBFTagTruth.h"
-#include "flashgg/Taggers/interface/VBFTruthProducer.h"
-//#include "flashgg/DataFormats/interface/VBFPlotProducer.h"
-
-#include "TTree.h"
 
 using namespace std;
 using namespace edm;
@@ -61,30 +57,6 @@ namespace flashgg {
         virtual void endJob() override;
 
         edm::EDGetTokenT<edm::OwnVector<flashgg::DiPhotonTagBase> > TagSorterToken_;
-        edm::EDGetTokenT<View<reco::GenParticle> > genPartToken_;
-        edm::EDGetTokenT<View<reco::GenJet> > genJetToken_;
-        EDGetTokenT<View<DiPhotonCandidate> > diPhotonToken_;
-        std::vector<edm::InputTag> inputTagJets_;
-
-        typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
-
-        TFile *outputFile;
-
-        TTree *jjjTree;
-        TTree *jjfTree;
-        TTree *jffTree;
-        TTree *fffTree;
-        TTree *jjTree;
-        TTree *jfTree;
-        TTree *ffTree;
-
-        VBFTagTruth truth;
-
-        MVAVarStruct recoLevel;
-        MVAVarStruct genJetLevel;
-        MVAVarStruct genParticleLevel;
-        MVAVarStruct partonLevel;
-
     };
 
 // ******************************************************************************************
@@ -102,11 +74,7 @@ namespace flashgg {
 // constructors and destructor
 //
     TagTestAnalyzer::TagTestAnalyzer( const edm::ParameterSet &iConfig ):
-        TagSorterToken_( consumes<edm::OwnVector<flashgg::DiPhotonTagBase> >( iConfig.getParameter<InputTag> ( "TagSorter" ) ) ),
-        genPartToken_( consumes<View<reco::GenParticle> >( iConfig.getUntrackedParameter<InputTag> ( "GenParticleTag", InputTag( "flashggPrunedGenParticles" ) ) ) ),
-        genJetToken_( consumes<View<reco::GenJet> >( iConfig.getUntrackedParameter<InputTag> ( "GenJetTag", InputTag( "slimmedGenJets" ) ) ) ),
-        diPhotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( iConfig.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
-        inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) )
+        TagSorterToken_( consumes<edm::OwnVector<flashgg::DiPhotonTagBase> >( iConfig.getParameter<InputTag> ( "TagSorter" ) ) )
     {
     }
 
@@ -119,28 +87,107 @@ namespace flashgg {
     TagTestAnalyzer::analyze( const edm::Event &iEvent, const edm::EventSetup &iSetup )
     {
 
-        bool debug = false;
-        float dRCut = 0.5;
-
         // ********************************************************************************
         // access edm objects
 
         Handle<edm::OwnVector<flashgg::DiPhotonTagBase> > TagSorter;
         iEvent.getByToken( TagSorterToken_, TagSorter );
 
-        Handle<View<reco::GenParticle> > genParticles;
-        iEvent.getByToken( genPartToken_, genParticles );
+        if( TagSorter.product()->size() > 0 ) {
+            const flashgg::DiPhotonTagBase *chosenTag = &*( TagSorter.product()->begin() );
 
-        Handle<View<reco::GenJet> > genJets;
-        iEvent.getByToken( genJetToken_, genJets );
+            const	UntaggedTag *untagged = dynamic_cast<const UntaggedTag *>( chosenTag );
+            if( untagged != NULL ) {
+                std::cout << "[UNTAGGED] category " << untagged->categoryNumber() << " mass=" << untagged->diPhoton()->mass() <<
+                          ", systLabel " << untagged->systLabel() <<  std::endl;
+                if( untagged->tagTruth().isNonnull() ) {
+                    std::cout << "\t[UNTAGGED TRUTH]: genPV=" << untagged->tagTruth()->genPV() << std::endl;
+                }
+            }
 
-        Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
-        iEvent.getByToken( diPhotonToken_, diPhotons );
+            const	VBFTag *vbftag = dynamic_cast<const VBFTag *>( chosenTag );
+            if( vbftag != NULL ) {
+                std::cout << "[VBF] Category " << vbftag->categoryNumber() << " with lead jet pt eta "
+                          << vbftag->leadingJet().pt() << " " << vbftag->leadingJet().eta()
+                          << " and sublead jet eta " << vbftag->subLeadingJet().pt() << " " << vbftag->subLeadingJet().eta() << " mass=" << vbftag->diPhoton()->mass()
+                          << ", systLabel " << vbftag->systLabel() << std::endl;
+                if( vbftag->tagTruth().isNonnull() ) {
+                    const VBFTagTruth *truth = dynamic_cast<const VBFTagTruth *>( &*vbftag->tagTruth() );
+                    assert( truth != NULL );  // If we stored a VBFTag with a nonnull pointer, we either have VBFTagTruth or a nutty bug
 
-        JetCollectionVector Jets( inputTagJets_.size() );
-        for ( size_t j=0;j < inputTagJets_.size(); j++ ) {
-            iEvent.getByLabel( inputTagJets_[j], Jets[j] );
-        }
+                    // FIXME Needs to be rewritten for new Truth accessors
+                    /*
+                    std::cout << "\t[VBF TRUTH]: genPV=" << truth->genPV() << std::endl;
+                    std::cout << "\t\t------------------------------------------" << std::endl;
+                    if( truth->closestGenJetToLeadingJet().isNonnull() ) {
+                        std::cout << "\t\tclosestGenJetToLeadingJet pt eta " << truth->closestGenJetToLeadingJet()->pt() << " " << truth->closestGenJetToLeadingJet()->eta() <<
+                                  std::endl;
+                    }
+                    if( truth->closestParticleToLeadingJet().isNonnull() ) {
+                        std::cout << "\t\tclosestParticleToLeadingJet pt eta id "   << truth->closestParticleToLeadingJet()->pt() << " " << truth->closestParticleToLeadingJet()->eta()
+                                  << " " << truth->closestParticleToLeadingJet()->pdgId() << std::endl;
+                    }
+                    std::cout << "\t\t------------------------------------------" << std::endl;
+                    if( truth->closestGenJetToSubLeadingJet().isNonnull() ) {
+                        std::cout << "\t\tclosestGenJetToSubLeadingJet pt eta id " << truth->closestGenJetToSubLeadingJet()->pt() << " " << truth->closestGenJetToSubLeadingJet()->eta()
+                                  << std::endl;
+                    }
+                    if( truth->closestParticleToSubLeadingJet().isNonnull() ) {
+                        std::cout << "\t\tclosestParticleToSubLeadingJet pt eta " << truth->closestParticleToSubLeadingJet()->pt() << " " <<
+                                  truth->closestParticleToSubLeadingJet()->eta()
+                                  << " " << truth->closestParticleToSubLeadingJet()->pdgId() << std::endl;
+                    }
+                    std::cout << "\t\t------------------------------------------" << std::endl;
+                    if( truth->closestParticleToLeadingPhoton().isNonnull() ) {
+                        std::cout << "\t\tclosestParticleToLeadingPhoton pt eta id " << truth->closestParticleToLeadingPhoton()->pt() << " " <<
+                                  truth->closestParticleToLeadingPhoton()->eta()
+                                  << " " << truth->closestParticleToLeadingPhoton()->pdgId() << std::endl;
+                    }
+                    std::cout << "\t\t------------------------------------------" << std::endl;
+                    if( truth->closestParticleToSubLeadingPhoton().isNonnull() ) {
+                        std::cout << "\t\tclosestParticleToSubLeadingPhoton pt eta id " << truth->closestParticleToSubLeadingPhoton()->pt() << " " <<
+                                  truth->closestParticleToSubLeadingPhoton()->eta()
+                                  << " " << truth->closestParticleToSubLeadingPhoton()->pdgId() << std::endl;
+                    }
+                    std::cout << "\t\t------------------------------------------" << std::endl;
+                    if( truth->leadingQuark().isNonnull() ) {
+                        std::cout << "\t\tleadingQuark pt eta id " << truth->leadingQuark()->pt() << " " << truth->leadingQuark()->eta()
+                                  << " " << truth->leadingQuark()->pdgId() << std::endl;
+                    }
+                    if( truth->subLeadingQuark().isNonnull() ) {
+                        std::cout << "\t\tsubLeadingQuark pt eta id "  << truth->subLeadingQuark()->pt() << " " << truth->subLeadingQuark()->eta()
+                                  << " " << truth->subLeadingQuark()->pdgId() << std::endl;
+                    }
+                    if( truth->leadingQuark().isNonnull() && truth->subLeadingQuark().isNonnull() ) {
+                        std::cout << "\t\tDiquark mass: " << ( truth->leadingQuark()->p4() + truth->subLeadingQuark()->p4() ).mass() << std::endl;
+                    }
+                    */
+                }
+            }
+
+            const   TTHHadronicTag *tthhadronictag = dynamic_cast<const TTHHadronicTag *>( chosenTag );
+            if( tthhadronictag != NULL ) {
+                std::cout << "[TTHhadronic] Category " << tthhadronictag->categoryNumber()
+                          << " with NJet=" << tthhadronictag->jetVector().size()
+                          << " and NBLoose= " << tthhadronictag->nBLoose()
+                          << " and NBMedium= " << tthhadronictag->nBMedium()
+                          << std::endl;
+            }
+
+            const   TTHLeptonicTag *tthleptonictag = dynamic_cast<const TTHLeptonicTag *>( chosenTag );
+            if( tthleptonictag != NULL ) {
+                std::cout << "[TTHleptonic] Category " << tthleptonictag->categoryNumber()
+                          << " nelectrons=" << tthleptonictag->electrons().size()
+                          << " nmuons=" << tthleptonictag->muons().size()
+                          << std::endl;
+            }
+
+            const   VHTightTag *vhtighttag = dynamic_cast<const VHTightTag *>( chosenTag );
+            if( vhtighttag != NULL ) {
+                std::cout << "[VHtight] Category " << vhtighttag->categoryNumber()
+                          << " nmuons=" << vhtighttag->muons().size()
+                          << std::endl;
+            }
 
             const   VHLooseTag *vhloosetag = dynamic_cast<const VHLooseTag *>( chosenTag );
             if( vhloosetag != NULL ) {
@@ -151,150 +198,40 @@ namespace flashgg {
                           << std::endl;
             }
 
-        if (diPhotons->size() == 0) {if (debug) {std::cout << "There are no preselected diphotons!" << std::endl;} return;}
-        if (genParticles->size() == 0) {if (debug) {std::cout << "There are no GenParticles" << std::endl;} return; }        
-        if (genJets->size() == 0) {if (debug) {std::cout << "There are no GenJets" << std::endl;} return; }        
-
-        unsigned candIndex(0);
-        for (unsigned int dpIndex(0);dpIndex<diPhotons->size();dpIndex++) {
-            if (diPhotons->ptrAt(dpIndex)->sumPt() > diPhotons->ptrAt(candIndex)->sumPt()) {candIndex = dpIndex;}
-        }
-        if (Jets[diPhotons->ptrAt(candIndex)->jetCollectionIndex()]->size() == 0) {std::cout << "There are no FLASHgg jets" << std::endl; return;}
-
-        VBFTruthProducer truthProducer;
-        truthProducer.produce(candIndex,genParticles,genJets,diPhotons,Jets);
-        truth = truthProducer.truthObject();
-
-        if (!truth.hasDijet()) {if (debug) {std::cout << "No dijet" << std::endl;} return;}
-
-        recoLevel = truthProducer.recoLevelMVAVars();
-        genJetLevel = truthProducer.genJetLevelMVAVars();
-        genParticleLevel = truthProducer.genParticleLevelMVAVars();
-        partonLevel = truthProducer.partonLevelMVAVars();
-
-        unsigned matchesPostDRCut = truth.numberOfMatchesAfterDRCut(dRCut);
-        //Look at trijet candidates, classify by matching, fill trees
-        if (truth.hasTrijet()) {
-            if (matchesPostDRCut == 3) {
-                if (debug) {std::cout << "This is a JJJ event" << std::endl;}
-                jjjTree->Fill();
-            } else if (matchesPostDRCut == 2) {
-                if (debug) {std::cout << "This is a JJF event" << std::endl;}
-                jjfTree->Fill();
-            } else if (matchesPostDRCut == 1) {
-                if (debug) {std::cout << "This is a JFF event" << std::endl;}
-                jffTree->Fill();
-            } else if (matchesPostDRCut == 0) {
-                if (debug) {std::cout << "This is a FFF event" << std::endl;}
-                fffTree->Fill();
+            const   VHHadronicTag *vhhadronictag = dynamic_cast<const VHHadronicTag *>( chosenTag );
+            if( vhhadronictag != NULL ) {
+                std::cout << "[VHhadronic] Category "    << vhhadronictag->categoryNumber()
+                          << " with leadingJet    pt = " << vhhadronictag->leadingJet()->pt()
+                          << " and  subleadingJet pt = " << vhhadronictag->subLeadingJet()->pt()
+                          << std::endl;
             }
-        } 
-        //Look at dijet candidates, classify by matching, fill trees
-        if (truth.hasDijet() && !truth.hasTrijet()) {
-            if (matchesPostDRCut == 2) {
-                if (debug) {std::cout << "This is a JJ event" << std::endl;}
-                jjTree->Fill();
-            } else if (matchesPostDRCut == 1) {
-                if (debug) {std::cout << "This is a JF event" << std::endl;}
-                jfTree->Fill();
-            } else if (matchesPostDRCut == 0) {
-                if (debug) {std::cout << "This is a FF event" << std::endl;}
-                ffTree->Fill();
-            } 
+            const    VHEtTag *vhettag = dynamic_cast<const VHEtTag *>( chosenTag );
+            if( vhettag != NULL ) {
+                std::cout << "[VHEt] Category "      << vhettag->categoryNumber()
+                          //<< " with MEt        = "   << vhettag->met()
+                          << std::endl;
+            }
+
+            // IMPORTANT: All future Tags must be added in the way of untagged and vbftag.
+
+            if( untagged == NULL && vbftag == NULL && tthhadronictag == NULL && tthleptonictag == NULL && vhtighttag == NULL && vhloosetag == NULL &&
+                    vhhadronictag == NULL && vhettag == NULL ) {
+                std::cout << "[FAILED TO CONVERT TAG] with SumPt " << chosenTag->sumPt() << std::endl;
+            }
+
+        } else { //case where TagSorter[0] doesn't exist
+            std::cout << "[NO TAG]" << std::endl;
         }
-
-
     } // analyze
 
     void
     TagTestAnalyzer::beginJob()
     {
-
-        TString sample;
-        std::cout << "What sample is being used? ";
-        std::cin  >> sample;
-        sample    = "MVA_Var_Trees_" + sample + ".root";
-        std::cout << "Output file is " << sample << std::endl;
-        outputFile = new TFile( sample, "RECREATE" );
-
-        TString treeLeaves;
-        treeLeaves  = TString("leadingJetPt/F") + TString(":subLeadingJetPt/F") + TString(":subSubLeadingJetPt/F");
-        treeLeaves += TString(":leadingJetEta/F") + TString(":subLeadingJetEta/F") + TString(":subSubLeadingJetEta/F");
-        treeLeaves += TString(":leadingJetPhi/F") + TString(":subLeadingJetPhi/F") + TString(":subSubLeadingJetPhi/F");
-        treeLeaves += TString(":leadingJetHemisphere/I") + TString(":subLeadingJetHemisphere/I") + TString(":subSubLeadingJetHemisphere/I");
-        treeLeaves += TString(":oppHemispheres_J1J2/I")  + TString(":oppHemispheres_J1J3/I") + TString(":oppHemispheres_J2J3/I");
-        treeLeaves += TString(":dR_12/F") + TString(":dR_13/F") + TString(":dR_23/F");
-        treeLeaves += TString(":mjj_12/F") + TString(":mjj_13/F") + TString(":mjj_23/F") + TString(":mjjj/F");
-        treeLeaves += TString(":dEta_12/F") + TString(":dEta_13/F") + TString(":dEta_23/F");
-        treeLeaves += TString(":zepjj_12/F") + TString(":zepjj_13/F") + TString(":zepjj_23/F") + TString(":zepjjj/F");
-        treeLeaves += TString(":dPhijj_12/F") + TString(":dPhijj_13/F") + TString(":dPhijj_23/F") + TString(":dPhijjj/F");
-        treeLeaves += TString(":dEta_J1J2J3/F") + TString(":dEta_J2J3J1/F") + TString(":dEta_J3J1J2/F");
-        treeLeaves += TString(":mjj_d12_13_plus23/F") + TString(":mjj_d12_13/F") + TString(":mjj_d12_23/F") + TString(":mjj_d13_23/F");
-        treeLeaves += TString(":dR_DP_12/F") + TString(":dR_DP_13/F") + TString(":dR_DP_23/F");
-        treeLeaves += TString(":dR_Ph1_1/F") + TString(":dR_Ph1_2/F") + TString(":dR_Ph1_3/F"); 
-        treeLeaves += TString(":dR_Ph2_1/F") + TString(":dR_Ph2_2/F") + TString(":dR_Ph2_3/F"); 
-        treeLeaves += TString(":dR_DP_123/F");
-        treeLeaves += TString(":missingP4_dPhi_jjj/F") + TString(":missingP4_dPhi_jj/F") + TString(":missingP4_Pt_jjj/F") + TString(":missingP4_Pt_jj/F");
-        treeLeaves += TString(":missingP4_dPhi_d3J2J/F") +  TString(":missingP4_Pt_d3J2J/F");
-        treeLeaves += TString(":dPhi_12/F") + TString(":dPhi_13/F") + TString(":dPhi_23/F") + TString(":dPhi_max/F") + TString(":dPhi_min/F") + TString(":dPhi_min_max/F");
-        treeLeaves += TString(":leadingDR/F") + TString(":subLeadingDR/F") + TString(":subSubLeadingDR/F");
-
-        jjjTree = new TTree("jjj","ThreeTrueJets");
-        jjjTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        jjjTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        jjjTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        jjjTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
-        jjfTree = new TTree("jjf","TwoTrueJetsOneFake");
-        jjfTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        jjfTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        jjfTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        jjfTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
-        jffTree = new TTree("jff","OneTrueJetTwoFakes");
-        jffTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        jffTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        jffTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        jffTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
-        fffTree = new TTree("fff","ThreFakeJets");
-        fffTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        fffTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        fffTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        fffTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
-        jjTree = new TTree("jj","TwoTrueJets");
-        jjTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        jjTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        jjTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        jjTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
-        jfTree = new TTree("jf","OneTrueJetOneFake");
-        jfTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        jfTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        jfTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        jfTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
-        ffTree = new TTree("ff","TwoFakeJets");
-        ffTree->Branch("recoLevel",&recoLevel.leadingJetPt,treeLeaves);
-        ffTree->Branch("genJetLevel",&genJetLevel.leadingJetPt,treeLeaves);
-        ffTree->Branch("genParticleLevel",&genParticleLevel.leadingJetPt,treeLeaves);
-        ffTree->Branch("partonLevel",&partonLevel.leadingJetPt,treeLeaves);
-        
     }
 
     void
     TagTestAnalyzer::endJob()
     {
-        outputFile->cd();
-        jjjTree->Write();
-        jjfTree->Write();
-        jffTree->Write();
-        fffTree->Write();
-        jjTree->Write();
-        jfTree->Write();
-        ffTree->Write();
-        outputFile->Close();
     }
 
     void
