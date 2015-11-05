@@ -329,9 +329,35 @@ namespace flashgg {
                                           {return fabs(eta_genJetMatchingToJ2() - fabs (eta_genJetMatchingToJ3()-eta_genJetMatchingToJ1()));}else{return 999.;}}
         float dEta_J3J1J2_GenParticle() const {if (hasClosestParticleToLeadingJet() && hasClosestParticleToSubLeadingJet() && hasClosestParticleToSubSubLeadingJet()) 
                                           {return fabs(eta_genJetMatchingToJ3() - fabs (eta_genJetMatchingToJ1()-eta_genJetMatchingToJ2()));}else{return 999.;}}
-        float dEta_P1P2P3_Partons() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {return fabs(eta_P1()-fabs(eta_P2()-eta_P3()));}else{return -999.;}}
-        float dEta_P2P3P1_Partons() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {return fabs(eta_P2()-fabs(eta_P3()-eta_P1()));}else{return -999.;}}
-        float dEta_P3P1P2_Partons() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {return fabs(eta_P3()-fabs(eta_P1()-eta_P2()));}else{return -999.;}}
+        float dEta_P1P2P3_Partons() const {if (hasLeadingParton() && hasSubLeadingParton() && hasSubSubLeadingParton()) 
+                                          {return fabs(eta_P1()-fabs(eta_P2()-eta_P3()));}else{return -999.;}}
+        float dEta_P2P3P1_Partons() const {if (hasLeadingParton() && hasSubLeadingParton() && hasSubSubLeadingParton()) 
+                                          {return fabs(eta_P2()-fabs(eta_P3()-eta_P1()));}else{return -999.;}}
+        float dEta_P3P1P2_Partons() const {if (hasLeadingParton() && hasSubLeadingParton() && hasSubSubLeadingParton()) 
+                                          {return fabs(eta_P3()-fabs(eta_P1()-eta_P2()));}else{return -999.;}}
+
+        //3Jet eta of jet  minus mean of other two jets
+        float dEta_dJ1_J2J3_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {return fabs(eta_J1() - 0.5*(eta_J2()+eta_J3()));}else{return -999.;}}
+        float dEta_dJ2_J3J1_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {return fabs(eta_J2() - 0.5*(eta_J3()+eta_J1()));}else{return -999.;}}
+        float dEta_dJ3_J1J2_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {return fabs(eta_J3() - 0.5*(eta_J1()+eta_J2()));}else{return -999.;}}
+        float dEta_dJ1_J2J3_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) 
+                                           {return fabs(eta_genJetMatchingToJ1() - 0.5*(eta_genJetMatchingToJ2()+eta_genJetMatchingToJ3()));}else{return -999.;}}
+        float dEta_dJ2_J3J1_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) 
+                                           {return fabs(eta_genJetMatchingToJ2() - 0.5*(eta_genJetMatchingToJ3()+eta_genJetMatchingToJ1()));}else{return -999.;}}
+        float dEta_dJ3_J1J2_GenJet() const {if (hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet() && hasClosestGenJetToSubSubLeadingJet()) 
+                                           {return fabs(eta_genJetMatchingToJ3() - 0.5*(eta_genJetMatchingToJ1()+eta_genJetMatchingToJ2()));}else{return -999.;}}
+        float dEta_dJ1_J2J3_GenParticle() const {if (hasClosestParticleToLeadingJet() && hasClosestParticleToSubLeadingJet() && hasClosestParticleToSubSubLeadingJet()) 
+                                           {return fabs(eta_genJetMatchingToJ1() - 0.5*(eta_genJetMatchingToJ2()+eta_genJetMatchingToJ3()));}else{return -999.;}}
+        float dEta_dJ2_J3J1_GenParticle() const {if (hasClosestParticleToLeadingJet() && hasClosestParticleToSubLeadingJet() && hasClosestParticleToSubSubLeadingJet()) 
+                                           {return fabs(eta_genJetMatchingToJ2() - 0.5*(eta_genJetMatchingToJ3()+eta_genJetMatchingToJ1()));}else{return -999.;}}
+        float dEta_dJ3_J1J2_GenParticle() const {if (hasClosestParticleToLeadingJet() && hasClosestParticleToSubLeadingJet() && hasClosestParticleToSubSubLeadingJet()) 
+                                           {return fabs(eta_genJetMatchingToJ3() - 0.5*(eta_genJetMatchingToJ1()+eta_genJetMatchingToJ2()));}else{return -999.;}}
+        float dEta_dJ1_J2J3_Parton() const {if (hasLeadingParton() && hasSubLeadingParton() && hasSubSubLeadingParton()) 
+                                           {return fabs(eta_J1() - 0.5*(eta_J2()+eta_J3()));}else{return -999.;}}
+        float dEta_dJ2_J3J1_Parton() const {if (hasLeadingParton() && hasSubLeadingParton() && hasSubSubLeadingParton())    
+                                           {return fabs(eta_J2() - 0.5*(eta_J3()+eta_J1()));}else{return -999.;}}
+        float dEta_dJ3_J1J2_Parton() const {if (hasLeadingParton() && hasSubLeadingParton() && hasSubSubLeadingParton()) 
+                                           {return fabs(eta_J3() - 0.5*(eta_J1()+eta_J2()));}else{return -999.;}}
 
         //3Jet mjj differences
         float mjj_d12_13plus23_FggJet() const {if (hasLeadingJet() && hasSubLeadingJet() && hasSubSubLeadingJet()) {
@@ -656,7 +682,53 @@ namespace flashgg {
                                            }else{return -999.0;}}
 
         //4-Momentum simplex volume
-        
+        float simplex_volume_FggJets() const {
+            if (hasDiPhoton() && hasLeadingJet() && hasSubLeadingJet()) {
+                float volume(0.0);
+                std::vector<float> p1(4);
+                std::vector<float> p2(4);
+                std::vector<float> p3(4);
+                std::vector<float> p4(4);
+
+                p1[0]=leadingJet()->p4().T();p1[1]=leadingJet()->p4().X();p1[2]=leadingJet()->p4().Y();p1[3]=leadingJet()->p4().Z();
+                p2[0]=subLeadingJet()->p4().T();p2[1]=subLeadingJet()->p4().X();p2[2]=subLeadingJet()->p4().Y();p2[3]=subLeadingJet()->p4().Z();
+                p3[0]=diPhoton()->leadingPhoton()->p4().T();p3[1]=diPhoton()->leadingPhoton()->p4().X();
+                p3[2]=diPhoton()->leadingPhoton()->p4().Y();p3[3]=diPhoton()->leadingPhoton()->p4().Z();
+                p4[0]=diPhoton()->subLeadingPhoton()->p4().T();p4[1]=diPhoton()->subLeadingPhoton()->p4().X();
+                p4[2]=diPhoton()->subLeadingPhoton()->p4().Y();p4[3]=diPhoton()->subLeadingPhoton()->p4().Z();
+
+                for (unsigned i(0);i<4;i++) {
+                    for (unsigned j(0);j<4;j++) {                                      
+                        for (unsigned k(0);k<4;k++) {                                      
+                            for (unsigned l(0);l<4;l++) {                                      
+
+                                //Levi-Civita
+                                std::vector<unsigned> indices(4);
+                                indices[0] = i; indices[1] = j; indices[2] = k; indices[3] = l;
+                                int element(1);
+                                for (unsigned m(0);m<4;m++) {
+                                    for (unsigned n(0);n<4;n++) {
+                                        if (m <= n) continue;     
+                                        int value = indices[m]-indices[n];
+                                        if (value < 0) {element *= -1;}
+                                        else if (value == 0) {element *= 0;} 
+                                    } 
+                                }
+
+                                //Momenta elements
+                                float temp(1.0);
+                                temp *= p1[i]*p2[j]*p3[k]*p4[l];
+                                temp *= (float)element;
+
+                                volume += temp;
+                            }
+                        }
+                    }
+                }
+                return fabs((1.0/24.0)*volume);
+            }else{return -9999.0;} 
+        }
+       
 
 
 
@@ -676,6 +748,7 @@ namespace flashgg {
         bool hasClosestPartonToSubSubLeadingJet() const { return closestPartonToSubSubLeadingJet_.isNonnull(); }
         bool hasClosestParticleToLeadingPhoton() const { return closestParticleToLeadingPhoton_.isNonnull(); }
         bool hasClosestParticleToSubLeadingPhoton() const { return closestParticleToSubLeadingPhoton_.isNonnull(); }
+        bool hasDiPhoton() const { return diPhoton_.isNonnull(); }
         bool hasLeadingJet() const { return leadingJet_.isNonnull(); }
         bool hasSubLeadingJet() const { return subLeadingJet_.isNonnull(); }
         bool hasSubSubLeadingJet() const { return subSubLeadingJet_.isNonnull(); }
