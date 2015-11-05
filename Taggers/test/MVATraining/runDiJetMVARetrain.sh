@@ -44,12 +44,12 @@ echo
 echo -e "+++++++++++ Generate VBF Traininigs +++++++++++++"
 fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
 	      -d ${WORKSPACE}/test_diphodijet_training \
-	      -x cmsRun vbfDumper_cfg_new.py maxEvents=${NEvent}  \
+	      -x cmsRun vbfDumper_cfg_new.py maxEvents=-1 \
 	      -q hepmedium.q --no-use-tarball useAAA=1 
 echo 
 echo -e "+++++++++++ Run the training macro ++++++++++++++"
-echo
-#
+echo 
+
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"CHS\"\)
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"PUPPI\"\)
 

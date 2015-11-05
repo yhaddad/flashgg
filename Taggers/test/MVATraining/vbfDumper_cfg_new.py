@@ -5,15 +5,6 @@ import FWCore.Utilities.FileUtils as FileUtils
 from FWCore.ParameterSet.VarParsing import VarParsing
 from flashgg.MetaData.samples_utils import SamplesManager
 
-## CMD LINE OPTIONS ##
-#options = VarParsing('analysis')
-#print options
-
-# maxEvents is the max number of events processed of each file, not globally
-#options.maxEvents  = 1000
-#options.inputFiles = "file:myMicroAODOutputFile_1.root" 
-#options.outputFile = "VBFTagsDump.root" 
-#options.parseArguments()
 
 ## I/O SETUP ##
 process = cms.Process("VBFTagsDumper")
@@ -22,11 +13,7 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
 process.source = cms.Source ("PoolSource",
-                             #fileNames = cms.untracked.vstring(options.inputFiles))
                              fileNames = cms.untracked.vstring("file:myMicroAODOutputFile_1.root"))
-
-# if options.maxEvents > 0:
-# process.source.eventsToProcess = cms.untracked.VEventRange('1:1-1:'+str(options.maxEvents))
 
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("VBFTagsDump.root"),
@@ -39,11 +26,13 @@ from  flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
-#process.flashggVBFMVA.MVAMethod      = cms.untracked.string("")
-#process.flashggVBFMVAPUPPI.MVAMethod = cms.untracked.string("")
+
+process.flashggVBFMVA.MVAMethod     = cms.untracked.string("")
 process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
 
+# some options on the VBFTag
+process.flashggVBFTag.Boundaries    = cms.untracked.vdouble(-2,0,2)
 
 process.vbfTagDumper = createTagDumper("VBFTag")
 process.vbfTagDumper.dumpTrees     = True
@@ -104,7 +93,7 @@ dijet_variables=[
     "jet2_eta            := subLeadingJet.pt",
     "jet3_eta            := subSubLeadingJet.pt",
     # tag truth information
-    "genZ                :=tagTruth().genPV().z", # try that !!
+    "genZ                                 :=tagTruth().genPV().z", # try that !!
     "pt_genJetMatchingToJ1                := tagTruth().pt_genJetMatchingToJ1",
     "pt_genJetMatchingToJ2                := tagTruth().pt_genJetMatchingToJ2",
     "pt_genJetMatchingToJ3                := tagTruth().pt_genJetMatchingToJ3",
@@ -117,13 +106,12 @@ dijet_variables=[
     "hasClosestParticleToSubLeadingJet    := tagTruth().hasClosestParticleToSubLeadingJet",
     "hasClosestParticleToLeadingPhoton    := tagTruth().hasClosestParticleToLeadingPhoton",
     "hasClosestParticleToSubLeadingPhoton := tagTruth().hasClosestParticleToSubLeadingPhoton",
-    
-    "Mjj                 := sqrt((leadingJet.energy+subLeadingJet.energy)^2-(leadingJet.px+subLeadingJet.px)^2-(leadingJet.py+subLeadingJet.py)^2-(leadingJet.pz+subLeadingJet.pz)^2)"
-    
+    "Mjj:=sqrt((leadingJet.energy+subLeadingJet.energy)^2-(leadingJet.px+subLeadingJet.px)^2-(leadingJet.py+subLeadingJet.py)^2-(leadingJet.pz+subLeadingJet.pz)^2)"    
 ]
+
 cfgTools.addCategories(process.vbfTagDumper,
                        [
-                           ("VBFDiJet","leadingJet.pt>=0",0),
+                           ("VBFDiJet","VBFMVA.dijet_LeadJPt>=0",0),
                            ("excluded","1",0)
                        ],
                        variables= dipho_variables + dijet_variables,
@@ -134,7 +122,7 @@ cfgTools.addCategories(process.vbfTagDumper,
 process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
 
 from flashgg.MetaData.JobConfig import customize
-customize.setDefault("maxEvents",1000)
+customize.setDefault("maxEvents",10000)
 customize.setDefault("targetLumi",1.e+4)
 customize(process)
 

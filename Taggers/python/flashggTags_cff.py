@@ -24,6 +24,7 @@ flashggUntagged = cms.EDProducer("FlashggUntaggedTagProducer",
                                  MVAResultTag=cms.InputTag('flashggDiPhotonMVA'),
                                  GenParticleTag=cms.InputTag( "flashggPrunedGenParticles" ),
                                  Boundaries=cms.untracked.vdouble(0.07,0.31,0.62,0.86,0.98)
+                                 
 )
 
 flashggTTHHadronicTag = cms.EDProducer("FlashggTTHHadronicTagProducer",
@@ -48,7 +49,8 @@ flashggVBFTag = cms.EDProducer("FlashggVBFTagProducer",
                                VBFMVAResultTag=cms.InputTag('flashggVBFMVA'),
                                GenParticleTag=cms.InputTag( "flashggPrunedGenParticles" ),
                                GenJetTag = cms.InputTag("slimmedGenJets"),
-                               Boundaries=cms.untracked.vdouble(0.21,0.6,0.81)
+                               Boundaries=cms.untracked.vdouble(-2,0,2)
+                               #Boundaries=cms.untracked.vdouble(0.21,0.6,0.81) # default
 )
 
 
