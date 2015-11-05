@@ -23,8 +23,8 @@ echo
 echo 
 echo -e "+++++++++++ Create working directories  ++++++++++"#
 echo 
-#
-#if [ ! -d test_diphodijet_puppi_training ]; then 
+
+#if [ ! -d test_diphodijet_training ]; then 
 #    mkdir -p ${WORKSPACE}/test_diphodijet_training
 #    mkdir -p ${WORKSPACE}/test_diphodijet_compare
 #    
@@ -35,7 +35,7 @@ echo
 #else
 #    ls ${PWD} | grep test_diphodijet_
 #fi 
-#
+
 echo 
 echo -e "+++++++++++ Generate the Training Trees ++++++++++"
 echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
@@ -43,9 +43,9 @@ echo
 
 echo -e "+++++++++++ Generate VBF Traininigs +++++++++++++"
 fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
-    -d ${WORKSPACE}/test_diphodijet_training \
-    -x cmsRun VBFDiJetMVA_Training.py maxEvents=${NEvent}  \
-    -q hepmedium.q --no-use-tarball useAAA=1 
+	      -d ${WORKSPACE}/test_diphodijet_training \
+	      -x cmsRun vbfDumper_cfg_new.py maxEvents=${NEvent}  \
+	      -q hepmedium.q --no-use-tarball useAAA=1 
 echo 
 echo -e "+++++++++++ Run the training macro ++++++++++++++"
 echo

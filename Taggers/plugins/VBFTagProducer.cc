@@ -96,8 +96,8 @@ namespace flashgg {
 
         Handle<View<reco::GenJet> > genJets;
         evt.getByToken( genJetToken_, genJets );
-
-        std::auto_ptr<vector<VBFTag> > tags( new vector<VBFTag> );
+        
+        std::auto_ptr<vector<VBFTag> >      tags  ( new vector<VBFTag> );
         std::auto_ptr<vector<VBFTagTruth> > truths( new vector<VBFTagTruth> );
 
         unsigned int idx = 0;

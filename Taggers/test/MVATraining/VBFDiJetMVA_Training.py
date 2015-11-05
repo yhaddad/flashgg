@@ -15,6 +15,7 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag    import GlobalTag
 from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 
+
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.source    = cms.Source ("PoolSource",
                                 #fileNames = cms.untracked.vstring("/store/group/phys_higgs/cmshgg/yhaddad/flashgg/RunIISpring15-50ns/Spring15MicroAODforJetsV1/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring15-50ns-Spring15MicroAODforJetsV1-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/151005_165635/0000/myMicroAODOutputFile_4.root"))
@@ -34,7 +35,6 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1)
 # ======================================================================
 #
 import flashgg.Taggers.dumperConfigTools as cfgTools
-
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
 process.flashggVBFMVA.MVAMethod      = cms.untracked.string("")
@@ -118,7 +118,7 @@ VBFMVAvariables=[
     "dijet_dphi_trunc    :=  dijet_dphi_trunc ",
     "dijet_dipho_pt      :=  dijet_dipho_pt   ",
     "dijet_dphi          :=  abs(leadJet.phi - subleadJet.phi)",
-    "dijet_dipho_dphi    :=  dijet_dipho_dphi",#abs((leadJet.p4+subleadJet.p4).phi - diphoton.phi)",
+    "dijet_dipho_dphi    :=  dijet_dipho_dphi",
     "dijet_minDRJetPho   :=  dijet_minDRJetPho      ",
     "dijet_dipho_dphi_trunc    :=  dijet_dipho_dphi ",
     "has3Jet      := hasValidVBFTriJet",
@@ -128,7 +128,6 @@ VBFMVAvariables=[
     "jet1_eta     :=       leadJet.eta",
     "jet2_eta     :=    subleadJet.eta",
     "jet3_eta     := subsubleadJet.eta"]
-    #"trijet_mjjj  := sqrt((leadJet.energy+subleadJet.energy+subsubleadJet.energy)^2-(leadJet.px+subleadJet.px+subsubleadJet.px)^2-(leadJet.py+subleadJet.py+subsubleadJet.py)^2-(leadJet.pz+subleadJet.pz+subsubleadJet.pz)^2)"]
 
 preselection_cut = "dijet_LeadJPt>30 && dijet_SubJPt>20 && dijet_leadEta<4.7 && dijet_leadEta > -4.7 && dijet_subleadEta < 4.7 && dijet_subleadEta > -4.7 && dijet_Mjj> 250 && leadPho_PToM  > 0.5"
 
@@ -208,7 +207,7 @@ process.VBFDiPhoDiJetMVADumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT"
 
 # cutomize
 from flashgg.MetaData.JobConfig import customize
-customize.setDefault("maxEvents",-1)
+customize.setDefault("maxEvents",1000)
 customize.setDefault("targetLumi",1.e+4)
 customize(process)
 

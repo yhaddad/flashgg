@@ -15,9 +15,11 @@ namespace flashgg {
     typedef CollectionDumper<std::vector<UntaggedTag>,
             UntaggedTag,
             CutBasedClassifier<UntaggedTag> > CutBasedUntaggedTagDumper;
+    // yacine
     typedef CollectionDumper<std::vector<VBFTag>,
             VBFTag,
-            CutBasedClassifier<VBFTag> > CutBasedVBFTagDumper;
+            CutBasedClassifier<VBFTag> > CutBasedVBFTagDumper ;
+    // -----
     typedef CollectionDumper<std::vector<TTHLeptonicTag>,
             TTHLeptonicTag,
             CutBasedClassifier<TTHLeptonicTag> > CutBasedTTHLeptonicTagDumper;
