@@ -261,7 +261,8 @@ namespace flashgg {
             truth_obj.setLeadingJet      ( tag_obj.leadingJet_ptr() );
             truth_obj.setSubLeadingJet   ( tag_obj.subLeadingJet_ptr() );
             truth_obj.setSubSubLeadingJet( tag_obj.subSubLeadingJet_ptr() );
-            
+            truth_obj.setDiPhoton        ( dipho );           
+ 
             //-------------------
             // GenParticles matching
             if ( genParticles->size() > 0 ) {
