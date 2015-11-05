@@ -682,55 +682,74 @@ namespace flashgg {
                                            }else{return -999.0;}}
 
         //4-Momentum simplex volume
-        float simplex_volume_FggJets() const {
+        float simplex_volume_DP_12_FggJet() const {
             if (hasDiPhoton() && hasLeadingJet() && hasSubLeadingJet()) {
-                float volume(0.0);
-                std::vector<float> p1(4);
-                std::vector<float> p2(4);
-                std::vector<float> p3(4);
-                std::vector<float> p4(4);
+                float volume = momentumSimplexVolume( leadingJet()->p4(),subLeadingJet()->p4());
+                return volume;
+            }else{return -9999.0;} 
+        }
+        float simplex_volume_DP_12_GenJet() const {
+            if (hasDiPhoton() && hasClosestGenJetToLeadingJet() && hasClosestGenJetToSubLeadingJet()) {
+                float volume = momentumSimplexVolume( closestGenJetToLeadingJet()->p4(),closestGenJetToSubLeadingJet()->p4());
+                return volume;
+            }else{return -9999.0;} 
+        }
+        float simplex_volume_DP_12_GenParticle() const {
+            if (hasDiPhoton() && hasClosestParticleToLeadingJet() && hasClosestParticleToSubLeadingJet()) {
+                float volume = momentumSimplexVolume( closestParticleToLeadingJet()->p4(),closestParticleToSubLeadingJet()->p4());
+                return volume;
+            }else{return -9999.0;} 
+        }
+        float simplex_volume_DP_12_Partons() const {
+            if (hasDiPhoton() && hasLeadingParton() && hasSubLeadingParton()) {
+                float volume = momentumSimplexVolume( leadingParton()->p4(),subLeadingParton()->p4());
+                return volume;
+            }else{return -9999.0;} 
+        }
 
-                p1[0]=leadingJet()->p4().T();p1[1]=leadingJet()->p4().X();p1[2]=leadingJet()->p4().Y();p1[3]=leadingJet()->p4().Z();
-                p2[0]=subLeadingJet()->p4().T();p2[1]=subLeadingJet()->p4().X();p2[2]=subLeadingJet()->p4().Y();p2[3]=subLeadingJet()->p4().Z();
-                p3[0]=diPhoton()->leadingPhoton()->p4().T();p3[1]=diPhoton()->leadingPhoton()->p4().X();
-                p3[2]=diPhoton()->leadingPhoton()->p4().Y();p3[3]=diPhoton()->leadingPhoton()->p4().Z();
-                p4[0]=diPhoton()->subLeadingPhoton()->p4().T();p4[1]=diPhoton()->subLeadingPhoton()->p4().X();
-                p4[2]=diPhoton()->subLeadingPhoton()->p4().Y();p4[3]=diPhoton()->subLeadingPhoton()->p4().Z();
+        float momentumSimplexVolume (ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > jet1,
+                                     ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > jet2) const {
 
-                for (unsigned i(0);i<4;i++) {
-                    for (unsigned j(0);j<4;j++) {                                      
-                        for (unsigned k(0);k<4;k++) {                                      
-                            for (unsigned l(0);l<4;l++) {                                      
+            float volume(0.0);
+            std::vector<float> p1(4);
+            std::vector<float> p2(4);
+            std::vector<float> p3(4);
+            std::vector<float> p4(4);
 
-                                //Levi-Civita
-                                std::vector<unsigned> indices(4);
-                                indices[0] = i; indices[1] = j; indices[2] = k; indices[3] = l;
-                                int element(1);
-                                for (unsigned m(0);m<4;m++) {
-                                    for (unsigned n(0);n<4;n++) {
-                                        if (m <= n) continue;     
-                                        int value = indices[m]-indices[n];
-                                        if (value < 0) {element *= -1;}
-                                        else if (value == 0) {element *= 0;} 
-                                    } 
-                                }
+            p1[0] = jet1.T();p1[1] = jet1.X();p1[2] = jet1.Y();p1[3] = jet1.Z();
+            p2[0] = jet2.T();p2[1] = jet2.X();p2[2] = jet2.Y();p2[3] = jet2.Z();
+            p3[0] = diPhoton()->leadingPhoton()->p4().T();p3[1] = diPhoton()->leadingPhoton()->p4().X();
+            p3[2] = diPhoton()->leadingPhoton()->p4().Y();p3[3] = diPhoton()->leadingPhoton()->p4().Z();
+            p4[0] = diPhoton()->subLeadingPhoton()->p4().T();p4[1] = diPhoton()->subLeadingPhoton()->p4().X();
+            p4[2] = diPhoton()->subLeadingPhoton()->p4().Y();p4[3] = diPhoton()->subLeadingPhoton()->p4().Z();
 
-                                //Momenta elements
-                                float temp(1.0);
-                                temp *= p1[i]*p2[j]*p3[k]*p4[l];
-                                temp *= (float)element;
-
-                                volume += temp;
+            for (unsigned i(0);i<4;i++) {
+                for (unsigned j(0);j<4;j++) {                                      
+                    for (unsigned k(0);k<4;k++) {                                      
+                        for (unsigned l(0);l<4;l++) {                                      
+                            //Levi-Civita
+                            std::vector<unsigned> indices(4);
+                            indices[0] = i; indices[1] = j; indices[2] = k; indices[3] = l;
+                            int element(1);
+                            for (unsigned m(0);m<4;m++) {
+                                for (unsigned n(0);n<4;n++) {
+                                    if (m <= n) continue;     
+                                    int value = indices[m]-indices[n];
+                                    if (value < 0) {element *= -1;}
+                                    else if (value == 0) {element *= 0;} 
+                                } 
                             }
+                            //Momentum elements
+                            float temp(1.0);
+                            temp *= p1[i]*p2[j]*p3[k]*p4[l];
+                            temp *= (float)element;
+                            volume += temp;
                         }
                     }
                 }
-                return fabs((1.0/24.0)*volume);
-            }else{return -9999.0;} 
+            }
+            return fabs((1.0/24.0)*volume);
         }
-       
-
-
 
 
 
