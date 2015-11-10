@@ -7,15 +7,15 @@ from flashgg.Taggers.flashggTagSorter_cfi import flashggTagSorter
 
 flashggTagSequence = cms.Sequence(flashggDiPhotonMVA
 		                  * flashggDiPhotonMVANew
-                                  * flashggDiPhotonMVAPUPPI
+#                                  * flashggDiPhotonMVAPUPPI
                                   * flashggUnpackedJets
-                                  * flashggUnpackedPuppiJets
+#                                  * flashggUnpackedPuppiJets
                                   * flashggVBFMVA
                                   * flashggVBFMVALegacy
-                                  * flashggVBFMVAPUPPI
+#                                  * flashggVBFMVAPUPPI
                                   * flashggVBFDiPhoDiJetMVA
                                   * flashggVBFDiPhoDiJetMVALegacy
-                                  * flashggVBFDiPhoDiJetMVAPUPPI
+#                                  * flashggVBFDiPhoDiJetMVAPUPPI
                                   * ( flashggUntagged
                                       + flashggVBFTag
                                       + flashggTTHLeptonicTag

@@ -23,8 +23,9 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
 process.source = cms.Source ("PoolSource",
                              #fileNames = cms.untracked.vstring(options.inputFiles))
-                             fileNames = cms.untracked.vstring("file:myMicroAODOutputFile_1.root"))
-
+                             #fileNames = cms.untracked.vstring("file:myMicroAODOutputFile_1.root"))
+                             fileNames = cms.untracked.vstring("/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-BetaV7-25ns/Spring15BetaV7/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring15-ReMiniAOD-BetaV7-25ns-Spring15BetaV7-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/151021_152809/0000/myMicroAODOutputFile_1.root"))
+    
 # if options.maxEvents > 0:
 # process.source.eventsToProcess = cms.untracked.VEventRange('1:1-1:'+str(options.maxEvents))
 
@@ -44,7 +45,7 @@ process.load("flashgg.Taggers.flashggTagTester_cfi")
 process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
 
-
+process.flashggVBFTag.Boundaries    = cms.untracked.vdouble(-2,0,2)
 process.vbfTagDumper = createTagDumper("VBFTag")
 process.vbfTagDumper.dumpTrees     = True
 process.vbfTagDumper.dumpHistos    = True
@@ -100,10 +101,12 @@ dijet_variables=[
     "jet1_pt             := leadingJet.pt",
     "jet2_pt             := subLeadingJet.pt",
     "jet3_pt             := subSubLeadingJet.pt",
-    "jet1_eta            := leadingJet.pt",
-    "jet2_eta            := subLeadingJet.pt",
-    "jet3_eta            := subSubLeadingJet.pt",
-    
+    "jet1_eta            := leadingJet.eta",
+    "jet2_eta            := subLeadingJet.eta",
+    "jet3_eta            := subSubLeadingJet.eta",
+
+    "jet1_pt_test        := tagTruth().pt_J1()",
+ 
     "J1J2_mjj            := tagTruth().mjj_J1J2_FggJet()",
     "J1J3_mjj            := tagTruth().mjj_J1J3_FggJet()",
     "J2J3_mjj            := tagTruth().mjj_J2J3_FggJet()",
@@ -168,6 +171,13 @@ dijet_variables=[
 
     "momentum4Volume     := tagTruth().simplex_volume_DP_12_FggJet()",
 
+    "dR_min_J12J23       := dR_min_J13J23_FggJet()",
+
+    "dRToNearestPartonJ1 := tagTruth().dR_partonMatchingToJ1()",
+    "dRToNearestPartonJ2 := tagTruth().dR_partonMatchingToJ2()",
+    "dRToNearestPartonJ3 := tagTruth().dR_partonMatchingToJ3()",
+
+    "numberOfMatches     := tagTruth().numberOfMatchesAfterDRCut(0.5)",
 
     # tag truth information
     "genZ                :=tagTruth().genPV().z", # try that !!
@@ -200,7 +210,7 @@ cfgTools.addCategories(process.vbfTagDumper,
 process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
 
 from flashgg.MetaData.JobConfig import customize
-customize.setDefault("maxEvents",1000)
+customize.setDefault("maxEvents",150000)
 customize.setDefault("targetLumi",1.e+4)
 customize(process)
 
