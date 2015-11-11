@@ -275,97 +275,46 @@ namespace flashgg {
                     dijetP4s.second = jetP4s[1];
                 }
 
+                dijet_leadEta_    = dijetP4s.first.eta();
+                dijet_subleadEta_ = dijetP4s.second.eta();
 
-                std::cout << "Comparing new and legacy" << std::endl << setw(12) << "New" << setw(12) << "Legacy" << std::endl;
+                dijet_abs_dEta_   = fabs( dijetP4s.first.eta() - dijetP4s.second.eta());
 
-                //Legacy
-                std::pair < Ptr<flashgg::Jet>, Ptr<flashgg::Jet> > dijet;
-                // fill dijet pair with lead jet as first, sublead as second.
-                dijet.first  =  Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
-                dijet.second =  Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
-               
-                std::cout << setw(12) << dijetP4s.first.eta(); 
-                dijet_leadEta_    = dijet.first->eta();
-                std::cout << setw(12) << dijet_leadEta_ << std::endl;
+                dijet_LeadJPt_    = dijetP4s.first.pt();
+                dijet_SubJPt_     = dijetP4s.second.pt();
 
-                std::cout << setw(12) << dijetP4s.second.eta();
-                dijet_subleadEta_ = dijet.second->eta();
-                std::cout << setw(12) << dijet_subleadEta_ << std::endl;            
+                dijet_dphi_trunc_ = std::min((float) abs(dijetP4s.first.phi() - dijetP4s.second.phi()), (float) 2.916);
 
-                std::cout << setw(12) << fabs( dijetP4s.first.eta() - dijetP4s.second.eta());
-                dijet_abs_dEta_   = std::fabs( dijet.first->eta() - dijet.second->eta() );
-                std::cout << setw(12) << dijet_abs_dEta_ << std::endl;
+                dijet_dipho_dphi_ = std::min((float) abs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi()), (float) 2.916);
 
-                std::cout << setw(12) << dijetP4s.first.pt();
-                dijet_LeadJPt_    = dijet.first->pt();
-                std::cout << setw(12) << dijet_LeadJPt_ << std::endl;
-    
-                std::cout << setw(12) << dijetP4s.second.pt();
-                dijet_SubJPt_     = dijet.second->pt();
-                std::cout << setw(12) << dijet_SubJPt_ << std::endl;
+                dijet_dipho_pt_   = (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
 
-                auto leadPho_p4 =  diPhotons->ptrAt( candIndex )->leadingPhoton()->p4();
-                auto sublPho_p4 =  diPhotons->ptrAt( candIndex )->subLeadingPhoton()->p4();
-                auto leadJet_p4 =  dijet.first->p4();
-                auto sublJet_p4 =  dijet.second->p4();
+                dijet_Zep_        = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
+
+                dijet_Mjj_        = (dijetP4s.first + dijetP4s.second).M();
+
+                dipho_PToM_       = (diPhotonP4s[0] + diPhotonP4s[1]).Pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
+                leadPho_PToM_     = diPhotonP4s[0].pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
+                sublPho_PToM_     = diPhotonP4s[1].pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
                 
-                auto diphoton_p4  = leadPho_p4 + sublPho_p4;
-                auto dijet_p4     = leadJet_p4 + sublJet_p4;
-                
-                std::cout << setw(12) << std::min((float) abs(dijetP4s.first.phi() - dijetP4s.second.phi()), (float) 2.916);
-                dijet_dphi_trunc_ = std::min((float) abs(dijet.first->phi() - dijet.second->phi()), (float) 2.916);
-                std::cout << setw(12) << dijet_dphi_trunc_ << std::endl;
-
-                std::cout << setw(12) << std::min((float) abs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi()), (float) 2.916);
-                dijet_dipho_dphi_ = std::min((float) abs(dijet_p4.Phi() -diphoton_p4.Phi()), (float) 2.916 );
-                std::cout << setw(12) << dijet_dipho_dphi_ << std::endl;                
-
-                std::cout << setw(12) << (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
-                dijet_dipho_pt_   = (dijet_p4 + diphoton_p4).Pt();
-                std::cout << setw(12) << dijet_dipho_pt_ << std::endl;
-
-                std::cout << setw(12) << fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
-                dijet_Zep_        = fabs(diphoton_p4.Eta() - 0.5 * ( leadJet_p4.Eta() + sublJet_p4.Eta()));
-                std::cout << setw(12) << dijet_Zep_ << std::endl;            
-
-                std::cout << setw(12) << (dijetP4s.first + dijetP4s.second).M();
-                dijet_Mjj_        = dijet_p4.M();
-                std::cout << setw(12) << dijet_Mjj_ << std::endl;
-
-                dipho_PToM_       = diphoton_p4.Pt()/diphoton_p4.M();
-                leadPho_PToM_     = diPhotons->ptrAt(candIndex)->leadingPhoton()->pt()/diphoton_p4.M();
-                sublPho_PToM_     = diPhotons->ptrAt(candIndex)->subLeadingPhoton()->pt()/diphoton_p4.M();
-                
-                std::cout << setw(12) << std::min ( std::min(deltaR( dijetP4s.first ,diPhotonP4s[0] ),
-                                                             deltaR( dijetP4s.second,diPhotonP4s[0] )),
-                                                    std::min(deltaR( dijetP4s.first ,diPhotonP4s[1] ),
-                                                             deltaR( dijetP4s.second,diPhotonP4s[1] ))        
-                                                  );
-                dijet_minDRJetPho_= std::min( std::min(reco::deltaR( leadJet_p4,leadPho_p4 ),
-                                                       reco::deltaR( sublJet_p4,leadPho_p4 )),
-                                              std::min(reco::deltaR( leadJet_p4,sublPho_p4 ),
-                                                       reco::deltaR( sublJet_p4,sublPho_p4 ))
+                dijet_minDRJetPho_ = std::min( std::min(deltaR( dijetP4s.first ,diPhotonP4s[0] ),
+                                                        deltaR( dijetP4s.second,diPhotonP4s[0] )),
+                                               std::min(deltaR( dijetP4s.first ,diPhotonP4s[1] ),
+                                                        deltaR( dijetP4s.second,diPhotonP4s[1] ))        
                                               );
-                std::cout << setw(12) << dijet_minDRJetPho_ << std::endl;
                 
-                std::cout << setw(12) << fabs( (dijetP4s.first + dijetP4s.second).Rapidity() - (diPhotonP4s[0] + diPhotonP4s[1]).Rapidity() );
-                dijet_dy_         = std::fabs(leadJet_p4.Rapidity() - sublPho_p4.Rapidity());
-                std::cout << setw(12) << dijet_dy_ << std::endl;        
+                dijet_dy_         = fabs( (dijetP4s.first + dijetP4s.second).Rapidity() - (diPhotonP4s[0] + diPhotonP4s[1]).Rapidity() );
 
-                std::cout << setw(12) << dijetP4s.first.Rapidity();
-                dijet_leady_      = leadJet_p4.Rapidity();
-                std::cout << setw(12) << dijet_leady_ << std::endl;
+                dijet_leady_      = dijetP4s.first.Rapidity();
 
-                std::cout << setw(12) << dijetP4s.second.Rapidity();
-                dijet_subleady_   = sublJet_p4.Rapidity();
-                std::cout << setw(12) << dijet_subleady_ << std::endl;
+                dijet_subleady_   = dijetP4s.second.Rapidity();
                 
                 mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
                 
                 mvares.leadJet_ptr    = Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet_ptr = Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
-                mvares.diphoton   = *diPhotons->ptrAt( candIndex );
+                mvares.diphoton       = *diPhotons->ptrAt( candIndex );
             }else{
                 mvares.leadJet_ptr    = edm::Ptr<flashgg::Jet>();
                 mvares.subleadJet_ptr = edm::Ptr<flashgg::Jet>();
