@@ -42,7 +42,7 @@ echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
 echo 
 
 echo -e "+++++++++++ Generate VBF Traininigs +++++++++++++"
-fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
+fggRunJobs.py --load data/VBFTraining-RunIISpring15-ReMiniAOD-BetaV7-25ns.json \
 	      -d ${WORKSPACE}/test_diphodijet_training \
 	      -x cmsRun vbfDumper_cfg_new.py maxEvents=-1 \
 	      -q hepmedium.q --no-use-tarball useAAA=1 

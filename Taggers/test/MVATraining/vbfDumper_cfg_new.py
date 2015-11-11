@@ -27,7 +27,7 @@ from  flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
 
-process.flashggVBFMVA.MVAMethod     = cms.untracked.string("")
+#process.flashggVBFMVA.MVAMethod     = cms.untracked.string("")
 process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
 
@@ -79,7 +79,7 @@ dijet_variables=[
     "sublPho_PToM        :=  VBFMVA.sublPho_PToM     ",
     "dijet_dphi_trunc    :=  VBFMVA.dijet_dphi_trunc ",
     "dijet_dipho_pt      :=  VBFMVA.dijet_dipho_pt   ",
-    "dijet_dphi          :=  abs(VBFMVA.leadJet.phi - VBFMVA.subleadJet.phi)",
+    "dijet_dphi          :=  deltaPhi(VBFMVA.leadJet.phi,VBFMVA.subleadJet.phi)",
     "dijet_dipho_dphi    :=  VBFMVA.dijet_dipho_dphi",
     "dijet_minDRJetPho   :=  VBFMVA.dijet_minDRJetPho",
     "has3Jet             :=  hasValidVBFTriJet",

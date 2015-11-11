@@ -7,23 +7,23 @@ from flashgg.Taggers.flashggTagSorter_cfi import flashggTagSorter
 
 flashggTagSequence = cms.Sequence(flashggDiPhotonMVA
 		                  * flashggDiPhotonMVANew
-                                  * flashggDiPhotonMVAPUPPI
+                                  #* flashggDiPhotonMVAPUPPI
                                   * flashggUnpackedJets
-                                  * flashggUnpackedPuppiJets
+                                  #* flashggUnpackedPuppiJets
                                   * flashggVBFMVA
-                                  * flashggVBFMVALegacy
-                                  * flashggVBFMVAPUPPI
+                                  #* flashggVBFMVALegacy
+                                  #* flashggVBFMVAPUPPI
                                   * flashggVBFDiPhoDiJetMVA
-                                  * flashggVBFDiPhoDiJetMVALegacy
-                                  * flashggVBFDiPhoDiJetMVAPUPPI
-                                  * ( flashggUntagged
-                                      + flashggVBFTag
-                                      + flashggTTHLeptonicTag
-                                      + flashggVHEtTag
-                                      + flashggTTHHadronicTag
-                                      + flashggVHLooseTag
-                                      + flashggVHTightTag
-                                      + flashggVHHadronicTag
+                                  #* flashggVBFDiPhoDiJetMVALegacy
+                                  #* flashggVBFDiPhoDiJetMVAPUPPI
+                                  *(flashggUntagged
+                                    + flashggVBFTag
+                                    + flashggTTHLeptonicTag
+                                    + flashggVHEtTag
+                                    + flashggTTHHadronicTag
+                                    + flashggVHLooseTag
+                                    + flashggVHTightTag
+                                    + flashggVHHadronicTag
 				  )
                                   * flashggTagSorter
 )
