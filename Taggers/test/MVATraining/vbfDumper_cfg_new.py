@@ -171,7 +171,7 @@ dijet_variables=[
 
     "momentum4Volume     := tagTruth().simplex_volume_DP_12_FggJet()",
 
-    "dR_min_J12J23       := dR_min_J13J23_FggJet()",
+    "dR_min_J12J23       := tagTruth().dR_min_J13J23_FggJet()",
 
     "dRToNearestPartonJ1 := tagTruth().dR_partonMatchingToJ1()",
     "dRToNearestPartonJ2 := tagTruth().dR_partonMatchingToJ2()",
@@ -210,7 +210,7 @@ cfgTools.addCategories(process.vbfTagDumper,
 process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
 
 from flashgg.MetaData.JobConfig import customize
-customize.setDefault("maxEvents",150000)
+customize.setDefault("maxEvents",100)
 customize.setDefault("targetLumi",1.e+4)
 customize(process)
 
