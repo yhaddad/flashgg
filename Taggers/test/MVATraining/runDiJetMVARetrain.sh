@@ -4,7 +4,7 @@
 # Email : lcorpe@cern.ch
 
 
-export WORKSPACE=/vols/cms/yhaddad
+export WORKSPACE=$PWD
 export SOURCE=${CMSSW_BASE}/flashgg/Taggers/test/MVATraining/
 
 NEvent=40000
@@ -42,14 +42,15 @@ echo -e "+++++++++++ with := ${NEvent}     ++++++++++++++++"
 echo 
 
 echo -e "+++++++++++ Generate VBF Traininigs +++++++++++++"
-fggRunJobs.py --load data/VBFMVATrainingSamplesWithPUPPI.json \
+fggRunJobs.py --load data/VBFTraining-RunIISpring15-ReMiniAOD-BetaV7-25ns.json \
+
 	      -d ${WORKSPACE}/test_diphodijet_training \
-	      -x cmsRun vbfDumper_cfg_new.py maxEvents=${NEvent}  \
+	      -x cmsRun vbfDumper_cfg_new.py maxEvents=-1 \
 	      -q hepmedium.q --no-use-tarball useAAA=1 
 echo 
 echo -e "+++++++++++ Run the training macro ++++++++++++++"
-echo
-#
+echo 
+
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"CHS\"\)
 #root  -l -q macro/VBFDiPhoDiJetMVA_Training.cc++\(\"${NEvent}\",\"VBF\",\"PUPPI\"\)
 
