@@ -1,0 +1,248 @@
+
+##################################################
+######     RETRAINING VBF DIJET MVA         ######
+##################################################
+
+
++++++++++++ Create working directories  ++++++++++#
+
+
++++++++++++ Generate the Training Trees ++++++++++
++++++++++++ with := 200000     ++++++++++++++++
+
++++++++++++ Generate VBF Traininigs +++++++++++++
+
+INFO: We are at 'hep.ph.ic.ac.uk', so we will use 'sge' as bacth system.
+     Please specify the batch system on the command line if you are not happy with this.
+
+Will stage output to /vols/cms/yhaddad/test_diphodijet_training using the command 'cp -pv'
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root
+
+
+WARNING: We are counting on the path for this proxy being visible to the remote jobs: /home/hep/yhaddad/x509up_u750527
+
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root
+
+running: cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root
+
+
+--- Running jobs: 9. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs0] [7190194]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs0] [7190194]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=VBFHToGG_M-125_13TeV_powheg_pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_VBFHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/6311                            
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs0.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs0.sh.fail'
+
+
+------------
+
+--- Running jobs: 8. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs1] [7190195]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs1] [7190195]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/39153177                        
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs1.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs1.sh.fail'
+
+
+------------
+
+--- Running jobs: 7. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs2] [7190196]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs2] [7190196]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root'
+Job output: 
+
+    2 Fatal Exception      1/79521                           
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs2.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs2.sh.fail'
+
+
+------------
+
+--- Running jobs: 6. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs4] [7190198]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs4] [7190198]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/312639890                       
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs4.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs4.sh.fail'
+
+
+------------
+
+--- Running jobs: 5. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs3] [7190197]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs3] [7190197]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/304990346                       
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs3.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs3.sh.fail'
+
+
+------------
+
+--- Running jobs: 4. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs5] [7190199]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs5] [7190199]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/2592032                         
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs5.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs5.sh.fail'
+
+
+------------
+
+--- Running jobs: 3. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs6] [7190200]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs6] [7190200]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/8677164                         
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs6.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs6.sh.fail'
+
+
+------------
+
+--- Running jobs: 2. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs7] [7190201]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs7] [7190201]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8.root'
+Job output: 
+
+    2 Fatal Exception      Run: 1 Event: 24                  
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs7.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs7.sh.fail'
+
+
+------------
+
+--- Running jobs: 1. Total jobs: 9 (total submissions: 9)
+
+Job finished: 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs8] [7190202]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+------------
+Job finished: (exit code 0) 'WorkNodeJob: [SGEJob: [hepmedium.q] [/vols/cms/yhaddad/test_diphodijet_training/runJobs8] [7190202]]' 'cmsRun /vols/cms/yhaddad/test_diphodijet_training/vbfDumper_cfg_new.py maxEvents=200000 useAAA=1 campaign=RunIISpring15-50ns-withPUPPI processIdMap=/vols/cms/yhaddad/test_diphodijet_training/config.json dataset=GluGluHToGG_M-125_13TeV_powheg_pythia8 outputFile=/vols/cms/yhaddad/test_diphodijet_training/output_GluGluHToGG_M-125_13TeV_powheg_pythia8.root'
+Job output: 
+
+    2 Fatal Exception      1/27001                           
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 1                   1
+System                  4                   4
+`runJobs8.sh.fail' -> `/vols/cms/yhaddad/test_diphodijet_training/runJobs8.sh.fail'
+
+
+------------
+
++++++++++++ Run the training macro ++++++++++++++
+
+##################################################
+
+
+##################################################
+######     RETRAINING VBF DIJET MVA         ######
+##################################################
+
+
++++++++++++ Create working directories  ++++++++++#
+
+
++++++++++++ Generate the Training Trees ++++++++++
++++++++++++ with := -1     ++++++++++++++++
+
++++++++++++ Generate VBF Traininigs +++++++++++++
+
+##################################################
+######     RETRAINING VBF DIJET MVA         ######
+##################################################
+mkdir: invalid option -- 'd'
+Try `mkdir --help' for more information.
+run-vbfDumper_cfg_standard_dijet.sh: line 12: fggRunJobs.py: command not found
++++++++++++ Run the training macro ++++++++++++++
+

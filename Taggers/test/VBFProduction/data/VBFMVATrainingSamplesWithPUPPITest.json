@@ -1,0 +1,6 @@
+{    
+    "processes" : {
+        "vbf_m125" : [ "VBFHToGG_M-125_13TeV_powheg_pythia8" ]
+    },
+    "cmdLine" : "campaign=flashggMicroAODSpring15"
+}
