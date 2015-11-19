@@ -27,8 +27,8 @@ process.load("flashgg.Taggers.flashggTagTester_cfi")
 
 process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
-#process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/test/VBFProduction/MVAWeights/training_17_11_15/Flashgg_VBF_CHS_BDTG.weights.xml")
-#process.flashggVBFMVA.MVAMethod        = cms.untracked.string("BDTG")
+process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/test/VBFProduction/MVAWeights/Flashgg_VBF_CHS_BDTG.weights.xml")
+process.flashggVBFMVA.MVAMethod        = cms.untracked.string("BDTG")
 
 # the merging of the 3rd Jet
 process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
@@ -90,7 +90,9 @@ dijet_variables=[
     "cos_dijet_dipho_dphi:=  cos(VBFMVA.dijet_dipho_dphi)",
     "dijet_minDRJetPho   :=  VBFMVA.dijet_minDRJetPho",
     "has3Jet             :=  hasValidVBFTriJet",
-    "dijet_MVA              :=  VBFMVA.VBFMVAValue",
+    "dijet_mva           :=  VBFMVA.VBFMVAValue",
+    "dipho_dijet_MVA     :=  VBFDiPhoDiJetMVA.VBFDiPhoDiJetMVAValue()",
+    "dipho_mva           :=  diPhotonMVA.mvaValue()",
     "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dipho_dphi ",
     # new variables
     "jet1_pt             := leadingJet.pt",
@@ -120,8 +122,12 @@ dijet_variables=[
     "J1J2_dipho_dPhi     := tagTruth().dPhijj_J1J2_FggJet()",
     "J1J3_dipho_dPhi     := tagTruth().dPhijj_J1J3_FggJet()",
     "J2J3_dipho_dPhi     := tagTruth().dPhijj_J2J3_FggJet()",
-
+    
     "J1J2J3_dipho_dPhi   := tagTruth().dPhijjj_FggJet()",
+    
+    "J1J2_dR             := tagTruth().dR_J1J2_FggJet()",
+    "J1J3_dR             := tagTruth().dR_J1J3_FggJet()",
+    "J2J3_dR             := tagTruth().dR_J2J3_FggJet()",
     
     "dEta_J1_J2J3        := tagTruth().dEta_J1J2J3_FggJet()",
     "dEta_J2_J3J1        := tagTruth().dEta_J2J3J1_FggJet()",
@@ -204,7 +210,7 @@ process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
 
 from flashgg.MetaData.JobConfig import customize
 customize.setDefault("maxEvents",100)
-customize.setDefault("targetLumi",1.e+4)
+customize.setDefault("targetLumi",2.11e+3)
 customize(process)
 
 process.p1 = cms.Path(

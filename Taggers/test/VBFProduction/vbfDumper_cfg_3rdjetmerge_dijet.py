@@ -18,21 +18,22 @@ process.TFileService = cms.Service("TFileService",
                                    closeFileFast = cms.untracked.bool(True))
 
 
-from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
+from   flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 import flashgg.Taggers.dumperConfigTools as cfgTools
-from  flashgg.Taggers.tagsDumpers_cfi import createTagDumper
+from   flashgg.Taggers.tagsDumpers_cfi   import createTagDumper
 
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
 
 process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
+
 # the merging of the 3rd Jet
 process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(True)
 process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
 
 process.flashggVBFTag.Boundaries    = cms.untracked.vdouble(-2,0,2)
-process.vbfTagDumper = createTagDumper("VBFTag")
+process.vbfTagDumper  = createTagDumper("VBFTag")
 process.vbfTagDumper.dumpTrees     = True
 process.vbfTagDumper.dumpHistos    = True
 process.vbfTagDumper.dumpWorkspace = False
@@ -81,7 +82,9 @@ dijet_variables=[
     "dijet_dphi_trunc    :=  VBFMVA.dijet_dphi_trunc ",
     "dijet_dipho_pt      :=  VBFMVA.dijet_dipho_pt   ",
     "dijet_dphi          :=  abs(deltaPhi(VBFMVA.leadJet.phi, VBFMVA.subleadJet.phi))",
-    "dijet_dipho_dphi    :=  VBFMVA.dijet_dipho_dphi",
+    "dijet_dipho_dphi    :=  VBFMVA.dijet_dipho_dphi ",
+    "dijet_dPhi_trunc    := VBFMVA.dijet_dipho_dphi  ",
+    "cos_dijet_dipho_dphi:=  cos(VBFMVA.dijet_dipho_dphi)",
     "dijet_minDRJetPho   :=  VBFMVA.dijet_minDRJetPho",
     "has3Jet             :=  hasValidVBFTriJet",
     "dijet_MVA           :=  VBFMVA.VBFMVAValue",
@@ -140,7 +143,7 @@ dijet_variables=[
     "dR_Photon2_J1       := tagTruth().dR_Ph2_1_FggJet()",
     "dR_Photon2_J2       := tagTruth().dR_Ph2_2_FggJet()",
     "dR_Photon2_J3       := tagTruth().dR_Ph2_3_FggJet()",
-
+    
     "dR_dipho_trijet     := tagTruth().dR_DP_123_FggJet()",
 
     "misPt_dPhi_3J       := tagTruth().missingP4_dPhi_jjj_FggJet()",

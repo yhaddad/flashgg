@@ -109,8 +109,6 @@ namespace flashgg {
         float pt_leadq = 0., pt_subleadq = 0., pt_subsubleadq = 0.;
         Point higgsVtx;
         
-        //std::cout << "VBFTagProducer:: ndiphoton =="<< diPhotons->size() << std::endl;
-        
         if( ! evt.isRealData() ) {
             for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
                 int pdgid = genParticles->ptrAt( genLoop )->pdgId();

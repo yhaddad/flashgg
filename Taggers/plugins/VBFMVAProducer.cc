@@ -271,7 +271,7 @@ namespace flashgg {
                 std::pair<reco::Candidate::LorentzVector,reco::Candidate::LorentzVector> dijetP4s;
                 
                 if (indexToMergeWithJ3 != -1 && _merge3rdJet ) {
-                    //std::cout << "Merging jet " << indexToMergeWithJ3+1 << " with jet 3" << std::endl;    
+                    std::cout << "Hey I am merging jets : " << indexToMergeWithJ3+1 << " with jet 3" << std::endl;    
                     dijetP4s.first  = jetP4s[ indexToMergeWithJ3 == 0 ? 1 : 0 ];
                     dijetP4s.second = jetP4s[ indexToMergeWithJ3 ] + jetP4s[2];                 
                     if (dijetP4s.second.pt() > dijetP4s.first.pt()) {std::swap(dijetP4s.first, dijetP4s.second);}
@@ -279,10 +279,10 @@ namespace flashgg {
                     dijetP4s.first  = jetP4s[0];
                     dijetP4s.second = jetP4s[1];
                 }
-
+                
                 dijet_leadEta_    = dijetP4s.first.eta();
                 dijet_subleadEta_ = dijetP4s.second.eta();
-
+                
                 dijet_abs_dEta_   = fabs( dijetP4s.first.eta() - dijetP4s.second.eta());
 
                 dijet_LeadJPt_    = dijetP4s.first.pt();
