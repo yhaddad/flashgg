@@ -40,54 +40,58 @@ process.vbfTagDumper.dumpWorkspace = False
 
 from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
 massSearchReplaceAnyInputTag(process.flashggTagSequence,cms.InputTag("flashggDiPhotons"),cms.InputTag("flashggPreselectedDiPhotons"))
-
 dipho_variables=[
-    "dipho_sumpt      := diPhoton.sumPt",
-    "dipho_cosphi     := abs(cos(diPhoton.leadingPhoton.phi - diPhoton.subLeadingPhoton.phi))",
-    "mass             := diPhoton.mass",
-    "leadPt           := diPhoton.leadingPhoton.pt",
-    "leadEt           := diPhoton.leadingPhoton.et",
-    "leadEta          := diPhoton.leadingPhoton.eta",
-    "leadPhi          := diPhoton.leadingPhoton.phi",
-    "lead_sieie       := diPhoton.leadingPhoton.sigmaIetaIeta",
-    "lead_hoe         := diPhoton.leadingPhoton.hadronicOverEm",
-    "lead_sigmaEoE    := diPhoton.leadingPhoton.sigEOverE",
-    "lead_ptoM        := diPhoton.leadingPhoton.pt/diPhoton.mass",
-    "leadR9           := diPhoton.leadingPhoton.r9",
-    "subleadPt        := diPhoton.subLeadingPhoton.pt",
-    "subleadEt        := diPhoton.subLeadingPhoton.et",
-    "subleadEta       := diPhoton.subLeadingPhoton.eta",
-    "subleadPhi       := diPhoton.subLeadingPhoton.phi",
-    "sublead_sieie    := diPhoton.subLeadingPhoton.sigmaIetaIeta",
-    "sublead_hoe      := diPhoton.subLeadingPhoton.hadronicOverEm",
-    "sublead_sigmaEoE := diPhoton.subLeadingPhoton.sigEOverE",
-    "sublead_ptoM     := diPhoton.subLeadingPhoton.pt/diPhoton.mass",
-    "subleadR9        := diPhoton.subLeadingPhoton.r9",
-    "leadIDMVA        := diPhoton.leadingView.phoIdMvaWrtChosenVtx",
-    "subleadIDMVA     := diPhoton.subLeadingView.phoIdMvaWrtChosenVtx",]
+    "dipho_sumpt            := diPhoton.sumPt",
+    "dipho_cosphi           := abs(cos(diPhoton.leadingPhoton.phi - diPhoton.subLeadingPhoton.phi))",
+    "dipho_mass             := diPhoton.mass",
+    "dipho_leadPt           := diPhoton.leadingPhoton.pt",
+    "dipho_leadEt           := diPhoton.leadingPhoton.et",
+    "dipho_leadEta          := diPhoton.leadingPhoton.eta",
+    "dipho_leadPhi          := diPhoton.leadingPhoton.phi",
+    "dipho_lead_sieie       := diPhoton.leadingPhoton.sigmaIetaIeta",
+    "dipho_lead_hoe         := diPhoton.leadingPhoton.hadronicOverEm",
+    "dipho_lead_sigmaEoE    := diPhoton.leadingPhoton.sigEOverE",
+    "dipho_lead_ptoM        := diPhoton.leadingPhoton.pt/diPhoton.mass",
+    "dipho_leadR9           := diPhoton.leadingPhoton.r9",
+    "dipho_subleadPt        := diPhoton.subLeadingPhoton.pt",
+    "dipho_subleadEt        := diPhoton.subLeadingPhoton.et",
+    "dipho_subleadEta       := diPhoton.subLeadingPhoton.eta",
+    "dipho_subleadPhi       := diPhoton.subLeadingPhoton.phi",
+    "dipho_sublead_sieie    := diPhoton.subLeadingPhoton.sigmaIetaIeta",
+    "dipho_sublead_hoe      := diPhoton.subLeadingPhoton.hadronicOverEm",
+    "dipho_sublead_sigmaEoE := diPhoton.subLeadingPhoton.sigEOverE",
+    "dipho_sublead_ptoM     := diPhoton.subLeadingPhoton.pt/diPhoton.mass",
+    "dipho_subleadR9        := diPhoton.subLeadingPhoton.r9",
+    "dipho_leadIDMVA        := diPhoton.leadingView.phoIdMvaWrtChosenVtx",
+    "dipho_subleadIDMVA     := diPhoton.subLeadingView.phoIdMvaWrtChosenVtx",
+    "dipho_lead_elveto      := diPhoton.leadingPhoton.passElectronVeto",
+    "dipho_sublead_elveto   := diPhoton.subLeadingPhoton.passElectronVeto",
+]
 
 dijet_variables=[
-    "dijet_abs_dEta      :=  abs(VBFMVA.leadJet.eta-VBFMVA.subleadJet.eta)",
-    "dijet_leadEta       :=  VBFMVA.dijet_leadEta    ",
-    "dijet_subleadEta    :=  VBFMVA.dijet_subleadEta ",
-    "dijet_leady         :=  VBFMVA.dijet_leady      ",
-    "dijet_subleady      :=  VBFMVA.dijet_subleady   ",
-    "dijet_LeadJPt       :=  VBFMVA.dijet_LeadJPt    ",
-    "dijet_SubJPt        :=  VBFMVA.dijet_SubJPt     ",
-    "dijet_Zep           :=  VBFMVA.dijet_Zep        ",
-    "dijet_Mjj           :=  VBFMVA.dijet_Mjj        ",
-    "dipho_PToM          :=  VBFMVA.dipho_PToM       ",
-    "leadPho_PToM        :=  VBFMVA.leadPho_PToM     ",
-    "sublPho_PToM        :=  VBFMVA.sublPho_PToM     ",
-    "dijet_dphi_trunc    :=  VBFMVA.dijet_dphi_trunc ",
-    "dijet_dipho_pt      :=  VBFMVA.dijet_dipho_pt   ",
-    "dijet_dphi          :=  abs(deltaPhi(VBFMVA.leadJet.phi, VBFMVA.subleadJet.phi))",
-    "dijet_dipho_dphi    :=  VBFMVA.dijet_dipho_dphi ",
-    "dijet_dPhi_trunc    := VBFMVA.dijet_dipho_dphi  ",
-    "cos_dijet_dipho_dphi:=  cos(VBFMVA.dijet_dipho_dphi)",
-    "dijet_minDRJetPho   :=  VBFMVA.dijet_minDRJetPho",
-    "has3Jet             :=  hasValidVBFTriJet",
-    "dijet_MVA           :=  VBFMVA.VBFMVAValue",
+    "dijet_abs_dEta         :=  abs(VBFMVA.dijet_leadEta - VBFMVA.dijet_subleadEta)",
+    "dijet_leadEta          :=  VBFMVA.dijet_leadEta    ",
+    "dijet_subleadEta       :=  VBFMVA.dijet_subleadEta ",
+    "dijet_leady            :=  VBFMVA.dijet_leady      ",
+    "dijet_subleady         :=  VBFMVA.dijet_subleady   ",
+    "dijet_LeadJPt          :=  VBFMVA.dijet_LeadJPt    ",
+    "dijet_SubJPt           :=  VBFMVA.dijet_SubJPt     ",
+    "dijet_Zep              :=  VBFMVA.dijet_Zep        ",
+    "dijet_Mjj              :=  VBFMVA.dijet_Mjj        ",
+    "dipho_PToM             :=  VBFMVA.dipho_PToM       ",
+    "leadPho_PToM           :=  VBFMVA.leadPho_PToM     ",
+    "sublPho_PToM           :=  VBFMVA.sublPho_PToM     ",
+    "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dphi_trunc ",
+    "dijet_dipho_pt         :=  VBFMVA.dijet_dipho_pt   ",
+    "dijet_dphi             :=  abs(deltaPhi(VBFMVA.leadJet.phi, VBFMVA.subleadJet.phi))",
+    "dijet_dipho_dphi       :=  VBFMVA.dijet_dipho_dphi ",
+    "dijet_dPhi_trunc       :=  VBFMVA.dijet_dphi_trunc ",
+    "cos_dijet_dipho_dphi   :=  cos(VBFMVA.dijet_dipho_dphi)",
+    "dijet_minDRJetPho      :=  VBFMVA.dijet_minDRJetPho",
+    "has3Jet                :=  hasValidVBFTriJet",
+    "dijet_mva              :=  VBFMVA.VBFMVAValue",
+    "dipho_dijet_MVA        :=  VBFDiPhoDiJetMVA.VBFDiPhoDiJetMVAValue()",
+    "dipho_mva              :=  diPhotonMVA.mvaValue()",
     "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dipho_dphi ",
     # new variables
     "jet1_pt             := leadingJet.pt",
@@ -117,8 +121,12 @@ dijet_variables=[
     "J1J2_dipho_dPhi     := tagTruth().dPhijj_J1J2_FggJet()",
     "J1J3_dipho_dPhi     := tagTruth().dPhijj_J1J3_FggJet()",
     "J2J3_dipho_dPhi     := tagTruth().dPhijj_J2J3_FggJet()",
-
+    
     "J1J2J3_dipho_dPhi   := tagTruth().dPhijjj_FggJet()",
+    
+    "J1J2_dR             := tagTruth().dR_J1J2_FggJet()",
+    "J1J3_dR             := tagTruth().dR_J1J3_FggJet()",
+    "J2J3_dR             := tagTruth().dR_J2J3_FggJet()",
     
     "dEta_J1_J2J3        := tagTruth().dEta_J1J2J3_FggJet()",
     "dEta_J2_J3J1        := tagTruth().dEta_J2J3J1_FggJet()",
@@ -143,7 +151,7 @@ dijet_variables=[
     "dR_Photon2_J1       := tagTruth().dR_Ph2_1_FggJet()",
     "dR_Photon2_J2       := tagTruth().dR_Ph2_2_FggJet()",
     "dR_Photon2_J3       := tagTruth().dR_Ph2_3_FggJet()",
-    
+
     "dR_dipho_trijet     := tagTruth().dR_DP_123_FggJet()",
 
     "misPt_dPhi_3J       := tagTruth().missingP4_dPhi_jjj_FggJet()",
@@ -172,7 +180,7 @@ dijet_variables=[
     "numberOfMatches     := tagTruth().numberOfMatchesAfterDRCut(0.5)",
 
     # tag truth information
-    "genZ                :=tagTruth().genPV().z", # try that !!
+    "genZ                                 := tagTruth().genPV().z", # try that !!
     "pt_genJetMatchingToJ1                := tagTruth().pt_genJetMatchingToJ1",
     "pt_genJetMatchingToJ2                := tagTruth().pt_genJetMatchingToJ2",
     "pt_genJetMatchingToJ3                := tagTruth().pt_genJetMatchingToJ3",
@@ -206,7 +214,7 @@ customize(process)
 
 process.p1 = cms.Path(
     process.flashggTagSequence*
-    process.flashggTagTester*
+    #process.flashggTagTester*
     process.vbfTagDumper
 )
 

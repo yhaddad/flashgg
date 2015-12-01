@@ -267,24 +267,28 @@ namespace flashgg {
             }
            
             if( hasValidVBFDiJet ) {
-               
                 std::pair<reco::Candidate::LorentzVector,reco::Candidate::LorentzVector> dijetP4s;
                 
+                //std ::cout << "-->before  jet_1 pt:" << jetP4s[0].pt() << std::endl;
+                //std ::cout << "-->before  jet_2 pt:" << jetP4s[1].pt() << std::endl;
                 if (indexToMergeWithJ3 != -1 && _merge3rdJet ) {
-                    std::cout << "Hey I am merging jets : " << indexToMergeWithJ3+1 << " with jet 3" << std::endl;    
+                    //std::cout << "Hey I am merging jets : " << indexToMergeWithJ3+1 << " with jet 3" << std::endl;    
                     dijetP4s.first  = jetP4s[ indexToMergeWithJ3 == 0 ? 1 : 0 ];
                     dijetP4s.second = jetP4s[ indexToMergeWithJ3 ] + jetP4s[2];                 
-                    if (dijetP4s.second.pt() > dijetP4s.first.pt()) {std::swap(dijetP4s.first, dijetP4s.second);}
+                    if (dijetP4s.second.pt() > dijetP4s.first.pt()) { std::swap(dijetP4s.first, dijetP4s.second);}
                 }else{
                     dijetP4s.first  = jetP4s[0];
                     dijetP4s.second = jetP4s[1];
                 }
                 
+                //std ::cout << "-->after  jet_1 pt:" << dijetP4s.first.pt()  << std::endl;
+                //std ::cout << "-->after  jet_2 pt:" << dijetP4s.second.pt() << std::endl;
+                
                 dijet_leadEta_    = dijetP4s.first.eta();
                 dijet_subleadEta_ = dijetP4s.second.eta();
                 
                 dijet_abs_dEta_   = fabs( dijetP4s.first.eta() - dijetP4s.second.eta());
-
+                
                 dijet_LeadJPt_    = dijetP4s.first.pt();
                 dijet_SubJPt_     = dijetP4s.second.pt();
                 
@@ -292,9 +296,9 @@ namespace flashgg {
                 dijet_dipho_dphi_ = fabs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi() );
 
                 dijet_dipho_pt_   = (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
-
+                
                 dijet_Zep_        = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
-
+                
                 dijet_Mjj_        = (dijetP4s.first + dijetP4s.second).M();
 
                 dipho_PToM_       = (diPhotonP4s[0] + diPhotonP4s[1]).Pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();

@@ -32,7 +32,7 @@ process.flashggVBFMVA.MVAMethod        = cms.untracked.string("BDTG")
 
 # the merging of the 3rd Jet
 process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
-process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.8)
+process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
 
 process.flashggVBFTag.Boundaries    = cms.untracked.vdouble(-2,0,2)
 process.vbfTagDumper = createTagDumper("VBFTag")
@@ -67,32 +67,34 @@ dipho_variables=[
     "dipho_subleadR9        := diPhoton.subLeadingPhoton.r9",
     "dipho_leadIDMVA        := diPhoton.leadingView.phoIdMvaWrtChosenVtx",
     "dipho_subleadIDMVA     := diPhoton.subLeadingView.phoIdMvaWrtChosenVtx",
-    ]
+    "dipho_lead_elveto      := diPhoton.leadingPhoton.passElectronVeto",
+    "dipho_sublead_elveto   := diPhoton.subLeadingPhoton.passElectronVeto",
+]
 
 dijet_variables=[
-    "dijet_abs_dEta      :=  abs(VBFMVA.leadJet.eta-VBFMVA.subleadJet.eta)",
-    "dijet_leadEta       :=  VBFMVA.dijet_leadEta    ",
-    "dijet_subleadEta    :=  VBFMVA.dijet_subleadEta ",
-    "dijet_leady         :=  VBFMVA.dijet_leady      ",
-    "dijet_subleady      :=  VBFMVA.dijet_subleady   ",
-    "dijet_LeadJPt       :=  VBFMVA.dijet_LeadJPt    ",
-    "dijet_SubJPt        :=  VBFMVA.dijet_SubJPt     ",
-    "dijet_Zep           :=  VBFMVA.dijet_Zep        ",
-    "dijet_Mjj           :=  VBFMVA.dijet_Mjj        ",
-    "dipho_PToM          :=  VBFMVA.dipho_PToM       ",
-    "leadPho_PToM        :=  VBFMVA.leadPho_PToM     ",
-    "sublPho_PToM        :=  VBFMVA.sublPho_PToM     ",
-    "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dphi_trunc",
-    "dijet_dipho_pt      :=  VBFMVA.dijet_dipho_pt   ",
-    "dijet_dphi          :=  abs(deltaPhi(VBFMVA.leadJet.phi, VBFMVA.subleadJet.phi))",
-    "dijet_dipho_dphi    :=  VBFMVA.dijet_dipho_dphi ",
-    "dijet_dPhi_trunc    := VBFMVA.dijet_dipho_dphi  ",
-    "cos_dijet_dipho_dphi:=  cos(VBFMVA.dijet_dipho_dphi)",
-    "dijet_minDRJetPho   :=  VBFMVA.dijet_minDRJetPho",
-    "has3Jet             :=  hasValidVBFTriJet",
-    "dijet_mva           :=  VBFMVA.VBFMVAValue",
-    "dipho_dijet_MVA     :=  VBFDiPhoDiJetMVA.VBFDiPhoDiJetMVAValue()",
-    "dipho_mva           :=  diPhotonMVA.mvaValue()",
+    "dijet_abs_dEta         :=  abs(VBFMVA.dijet_leadEta - VBFMVA.dijet_subleadEta)",
+    "dijet_leadEta          :=  VBFMVA.dijet_leadEta    ",
+    "dijet_subleadEta       :=  VBFMVA.dijet_subleadEta ",
+    "dijet_leady            :=  VBFMVA.dijet_leady      ",
+    "dijet_subleady         :=  VBFMVA.dijet_subleady   ",
+    "dijet_LeadJPt          :=  VBFMVA.dijet_LeadJPt    ",
+    "dijet_SubJPt           :=  VBFMVA.dijet_SubJPt     ",
+    "dijet_Zep              :=  VBFMVA.dijet_Zep        ",
+    "dijet_Mjj              :=  VBFMVA.dijet_Mjj        ",
+    "dipho_PToM             :=  VBFMVA.dipho_PToM       ",
+    "leadPho_PToM           :=  VBFMVA.leadPho_PToM     ",
+    "sublPho_PToM           :=  VBFMVA.sublPho_PToM     ",
+    "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dphi_trunc ",
+    "dijet_dipho_pt         :=  VBFMVA.dijet_dipho_pt   ",
+    "dijet_dphi             :=  abs(deltaPhi(VBFMVA.leadJet.phi, VBFMVA.subleadJet.phi))",
+    "dijet_dipho_dphi       :=  VBFMVA.dijet_dipho_dphi ",
+    "dijet_dPhi_trunc       :=  VBFMVA.dijet_dphi_trunc ",
+    "cos_dijet_dipho_dphi   :=  cos(VBFMVA.dijet_dipho_dphi)",
+    "dijet_minDRJetPho      :=  VBFMVA.dijet_minDRJetPho",
+    "has3Jet                :=  hasValidVBFTriJet",
+    "dijet_mva              :=  VBFMVA.VBFMVAValue",
+    "dipho_dijet_MVA        :=  VBFDiPhoDiJetMVA.VBFDiPhoDiJetMVAValue()",
+    "dipho_mva              :=  diPhotonMVA.mvaValue()",
     "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dipho_dphi ",
     # new variables
     "jet1_pt             := leadingJet.pt",
@@ -215,7 +217,7 @@ customize(process)
 
 process.p1 = cms.Path(
     process.flashggTagSequence*
-    process.flashggTagTester*
+#    process.flashggTagTester*
     process.vbfTagDumper
 )
 
