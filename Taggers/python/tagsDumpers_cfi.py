@@ -5,12 +5,12 @@ from flashgg.Taggers.tagsDumpConfig_cff import tagsDumpConfig
 def createTagDumper (tagName): 
     tagDumper = cms.EDAnalyzer('CutBased'+tagName+'Dumper',
                                **tagsDumpConfig.parameters_())    
-    tagDumper.className = cms.untracked.string("CutBased"+tagName+"Dumper")
-    tagDumper.src = cms.InputTag("flashgg"+tagName)
-    tagDumper.processId = cms.string(dict[tagName])
+    tagDumper.className    = cms.untracked.string("CutBased"+tagName+"Dumper")
+    tagDumper.src          = cms.InputTag("flashgg"+tagName)
+    tagDumper.processId    = cms.string(dict[tagName]) #uncomment to default
     # split tree, histogram and datasets 
     tagDumper.nameTemplate = "$PROCESS_$SQRTS_$LABEL_$SUBCAT"
-
+    
     return tagDumper
 
 dict = {'Untagged': 'untagged',

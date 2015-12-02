@@ -16,6 +16,8 @@ crabConfig_*
 *_cc.so
 *_C.d
 *_C.so
+*.pcm
+*.
 *\#*
 .\#*
 AutoDict_*

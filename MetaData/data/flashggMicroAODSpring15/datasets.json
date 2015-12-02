@@ -1,0 +1,942 @@
+{
+    "/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/yhaddad-flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2-ef05bee8615e075fcbdd769a1d6ff714/USER": {
+        "files": [
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_1.root", 
+                "nevents": 49859
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_10.root", 
+                "nevents": 20896
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_11.root", 
+                "nevents": 49761
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_12.root", 
+                "nevents": 3129
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_13.root", 
+                "nevents": 6823
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_14.root", 
+                "nevents": 3908
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_15.root", 
+                "nevents": 3780
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_16.root", 
+                "nevents": 19513
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_17.root", 
+                "nevents": 21177
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_18.root", 
+                "nevents": 8341
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_19.root", 
+                "nevents": 1471
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_2.root", 
+                "nevents": 49836
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_20.root", 
+                "nevents": 49817
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_21.root", 
+                "nevents": 49871
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_22.root", 
+                "nevents": 6906
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_23.root", 
+                "nevents": 49393
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_24.root", 
+                "nevents": 29210
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_25.root", 
+                "nevents": 49406
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_26.root", 
+                "nevents": 43094
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_27.root", 
+                "nevents": 49566
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_28.root", 
+                "nevents": 49727
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_29.root", 
+                "nevents": 49661
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_3.root", 
+                "nevents": 49294
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_30.root", 
+                "nevents": 9798
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_31.root", 
+                "nevents": 23289
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_32.root", 
+                "nevents": 49631
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_33.root", 
+                "nevents": 49788
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_34.root", 
+                "nevents": 49311
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_35.root", 
+                "nevents": 49490
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_36.root", 
+                "nevents": 49352
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_37.root", 
+                "nevents": 1563
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_38.root", 
+                "nevents": 788
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_39.root", 
+                "nevents": 5534
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_4.root", 
+                "nevents": 49760
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_40.root", 
+                "nevents": 16312
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_43.root", 
+                "nevents": 12248
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_44.root", 
+                "nevents": 48827
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_45.root", 
+                "nevents": 11648
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_46.root", 
+                "nevents": 2419
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_47.root", 
+                "nevents": 22700
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_48.root", 
+                "nevents": 49792
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_49.root", 
+                "nevents": 49853
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_5.root", 
+                "nevents": 28981
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_50.root", 
+                "nevents": 33531
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_51.root", 
+                "nevents": 3112
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_52.root", 
+                "nevents": 3825
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_53.root", 
+                "nevents": 776
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_54.root", 
+                "nevents": 3108
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_55.root", 
+                "nevents": 39449
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_6.root", 
+                "nevents": 3056
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_8.root", 
+                "nevents": 42646
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/150923_125649/0000/myMicroAODOutputFile_9.root", 
+                "nevents": 1655
+            }
+        ]
+    }, 
+    "/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/yhaddad-flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1-ef05bee8615e075fcbdd769a1d6ff714/USER": {
+        "files": [
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_1.root", 
+                "nevents": 4840
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_10.root", 
+                "nevents": 49585
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_100.root", 
+                "nevents": 4057
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_101.root", 
+                "nevents": 49874
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_102.root", 
+                "nevents": 31554
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_103.root", 
+                "nevents": 14704
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_104.root", 
+                "nevents": 49879
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_105.root", 
+                "nevents": 49894
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_106.root", 
+                "nevents": 4312
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_107.root", 
+                "nevents": 48422
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_108.root", 
+                "nevents": 49990
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_109.root", 
+                "nevents": 568
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_11.root", 
+                "nevents": 49943
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_110.root", 
+                "nevents": 8052
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_111.root", 
+                "nevents": 13394
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_112.root", 
+                "nevents": 49437
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_113.root", 
+                "nevents": 49916
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_114.root", 
+                "nevents": 49843
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_115.root", 
+                "nevents": 778
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_116.root", 
+                "nevents": 49944
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_117.root", 
+                "nevents": 34290
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_118.root", 
+                "nevents": 49911
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_119.root", 
+                "nevents": 13671
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_12.root", 
+                "nevents": 49550
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_120.root", 
+                "nevents": 49987
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_121.root", 
+                "nevents": 47865
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_122.root", 
+                "nevents": 49807
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_123.root", 
+                "nevents": 2597
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_124.root", 
+                "nevents": 49973
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_125.root", 
+                "nevents": 49732
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_126.root", 
+                "nevents": 39818
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_127.root", 
+                "nevents": 49945
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_128.root", 
+                "nevents": 33036
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_129.root", 
+                "nevents": 12678
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_13.root", 
+                "nevents": 49756
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_130.root", 
+                "nevents": 9059
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_131.root", 
+                "nevents": 49987
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_132.root", 
+                "nevents": 1697
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_133.root", 
+                "nevents": 849
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_14.root", 
+                "nevents": 49886
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_15.root", 
+                "nevents": 49996
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_16.root", 
+                "nevents": 6605
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_17.root", 
+                "nevents": 4479
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_18.root", 
+                "nevents": 11111
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_19.root", 
+                "nevents": 47612
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_2.root", 
+                "nevents": 49162
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_20.root", 
+                "nevents": 49942
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_21.root", 
+                "nevents": 39700
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_22.root", 
+                "nevents": 49611
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_23.root", 
+                "nevents": 10938
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_24.root", 
+                "nevents": 21637
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_25.root", 
+                "nevents": 49540
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_26.root", 
+                "nevents": 49781
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_27.root", 
+                "nevents": 49698
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_28.root", 
+                "nevents": 49851
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_29.root", 
+                "nevents": 49793
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_3.root", 
+                "nevents": 2916
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_30.root", 
+                "nevents": 29153
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_31.root", 
+                "nevents": 30799
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_32.root", 
+                "nevents": 2467
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_33.root", 
+                "nevents": 49936
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_34.root", 
+                "nevents": 4615
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_35.root", 
+                "nevents": 43111
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_36.root", 
+                "nevents": 3153
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_37.root", 
+                "nevents": 49885
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_38.root", 
+                "nevents": 49961
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_39.root", 
+                "nevents": 32427
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_4.root", 
+                "nevents": 4288
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_40.root", 
+                "nevents": 49716
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_41.root", 
+                "nevents": 49947
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_42.root", 
+                "nevents": 49685
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_43.root", 
+                "nevents": 889
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_44.root", 
+                "nevents": 49782
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_45.root", 
+                "nevents": 49945
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_46.root", 
+                "nevents": 1480
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_47.root", 
+                "nevents": 49949
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_48.root", 
+                "nevents": 8726
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_49.root", 
+                "nevents": 49011
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_5.root", 
+                "nevents": 49665
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_50.root", 
+                "nevents": 49823
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_51.root", 
+                "nevents": 2184
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_52.root", 
+                "nevents": 49794
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_53.root", 
+                "nevents": 49957
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_54.root", 
+                "nevents": 248
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_55.root", 
+                "nevents": 49743
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_56.root", 
+                "nevents": 46655
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_57.root", 
+                "nevents": 1709
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_58.root", 
+                "nevents": 32226
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_59.root", 
+                "nevents": 49572
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_6.root", 
+                "nevents": 30337
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_60.root", 
+                "nevents": 49984
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_61.root", 
+                "nevents": 33928
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_62.root", 
+                "nevents": 49930
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_63.root", 
+                "nevents": 49820
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_64.root", 
+                "nevents": 49990
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_65.root", 
+                "nevents": 47247
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_66.root", 
+                "nevents": 49997
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_67.root", 
+                "nevents": 7099
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_68.root", 
+                "nevents": 14170
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_69.root", 
+                "nevents": 49984
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_7.root", 
+                "nevents": 23053
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_70.root", 
+                "nevents": 49812
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_71.root", 
+                "nevents": 49924
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_72.root", 
+                "nevents": 49824
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_73.root", 
+                "nevents": 460
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_74.root", 
+                "nevents": 45254
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_75.root", 
+                "nevents": 21236
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_76.root", 
+                "nevents": 49934
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_77.root", 
+                "nevents": 1419
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_78.root", 
+                "nevents": 24292
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_79.root", 
+                "nevents": 49959
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_8.root", 
+                "nevents": 49974
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_80.root", 
+                "nevents": 49819
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_81.root", 
+                "nevents": 18704
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_82.root", 
+                "nevents": 19023
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_83.root", 
+                "nevents": 9633
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_84.root", 
+                "nevents": 2252
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_85.root", 
+                "nevents": 11941
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_86.root", 
+                "nevents": 13226
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_87.root", 
+                "nevents": 49982
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_88.root", 
+                "nevents": 32730
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_89.root", 
+                "nevents": 49859
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_9.root", 
+                "nevents": 49810
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_90.root", 
+                "nevents": 11439
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_91.root", 
+                "nevents": 49397
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_92.root", 
+                "nevents": 49988
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_93.root", 
+                "nevents": 49924
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_94.root", 
+                "nevents": 17562
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_95.root", 
+                "nevents": 49682
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_96.root", 
+                "nevents": 5452
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_97.root", 
+                "nevents": 38070
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_98.root", 
+                "nevents": 49788
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_130053/0000/myMicroAODOutputFile_99.root", 
+                "nevents": 49997
+            }
+        ]
+    }, 
+    "/GluGluHToGG_M-125_13TeV_powheg_pythia8/yhaddad-flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1-0dd451313ae3ad3aaf25f5f49c28c7f5/USER": {
+        "files": [
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_1.root", 
+                "nevents": 35880
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_10.root", 
+                "nevents": 1600
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_2.root", 
+                "nevents": 16000
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_3.root", 
+                "nevents": 49600
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_4.root", 
+                "nevents": 49600
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_5.root", 
+                "nevents": 1600
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_6.root", 
+                "nevents": 30280
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_7.root", 
+                "nevents": 49600
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_8.root", 
+                "nevents": 20800
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/GluGluHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131214/0000/myMicroAODOutputFile_9.root", 
+                "nevents": 44880
+            }
+        ]
+    }, 
+    "/VBFHToGG_M-125_13TeV_powheg_pythia8/yhaddad-flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1-0dd451313ae3ad3aaf25f5f49c28c7f5/USER": {
+        "files": [
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_1.root", 
+                "nevents": 15020
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_10.root", 
+                "nevents": 49635
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_11.root", 
+                "nevents": 35240
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_12.root", 
+                "nevents": 22930
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_13.root", 
+                "nevents": 49950
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_14.root", 
+                "nevents": 49725
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_15.root", 
+                "nevents": 820
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_16.root", 
+                "nevents": 20020
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_17.root", 
+                "nevents": 3155
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_18.root", 
+                "nevents": 29970
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_19.root", 
+                "nevents": 49770
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_2.root", 
+                "nevents": 2355
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_20.root", 
+                "nevents": 4000
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_21.root", 
+                "nevents": 14175
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_22.root", 
+                "nevents": 49725
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_23.root", 
+                "nevents": 4000
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_24.root", 
+                "nevents": 6465
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_25.root", 
+                "nevents": 3200
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_26.root", 
+                "nevents": 4800
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_27.root", 
+                "nevents": 32150
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_28.root", 
+                "nevents": 49970
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_29.root", 
+                "nevents": 49985
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_3.root", 
+                "nevents": 37170
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_30.root", 
+                "nevents": 47990
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_31.root", 
+                "nevents": 8020
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_32.root", 
+                "nevents": 32395
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_33.root", 
+                "nevents": 36060
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_34.root", 
+                "nevents": 2400
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_35.root", 
+                "nevents": 19310
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_36.root", 
+                "nevents": 49905
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_4.root", 
+                "nevents": 3155
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_5.root", 
+                "nevents": 28795
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_6.root", 
+                "nevents": 49635
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_7.root", 
+                "nevents": 32905
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_8.root", 
+                "nevents": 49945
+            }, 
+            {
+                "name": "/store/group/phys_higgs/cmshgg/yhaddad/flashgg/flashggMicroAODSpring15/Spring15MicroAODforJets/VBFHToGG_M-125_13TeV_powheg_pythia8/flashggMicroAODSpring15-Spring15MicroAODforJets-v0-RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/150923_131713/0000/myMicroAODOutputFile_9.root", 
+                "nevents": 49500
+            }
+        ]
+    }
+}

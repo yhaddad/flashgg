@@ -204,6 +204,7 @@ class JobsManager(object):
         args.append("processIdMap=%s/config.json" % os.path.abspath(options.outputDir))
 
         pset = args[0] if not options.jobExe else args[1]
+        print 'yacine::', pset
         with open(pset,"r") as pin:
             with open("%s/%s" % ( options.outputDir, os.path.basename(pset) ), "w+" ) as pout:
                 pout.write(pin.read())

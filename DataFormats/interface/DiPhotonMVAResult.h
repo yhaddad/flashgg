@@ -25,7 +25,8 @@ namespace flashgg {
         float CosPhi;
         float vtxprob;
         float mvaValue() const {return result;}
-        // Output
+
+       // Output
         float result;
     };
 

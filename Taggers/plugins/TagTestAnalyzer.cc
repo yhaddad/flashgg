@@ -114,6 +114,9 @@ namespace flashgg {
                 if( vbftag->tagTruth().isNonnull() ) {
                     const VBFTagTruth *truth = dynamic_cast<const VBFTagTruth *>( &*vbftag->tagTruth() );
                     assert( truth != NULL );  // If we stored a VBFTag with a nonnull pointer, we either have VBFTagTruth or a nutty bug
+
+                    // FIXME Needs to be rewritten for new Truth accessors
+                    /*
                     std::cout << "\t[VBF TRUTH]: genPV=" << truth->genPV() << std::endl;
                     std::cout << "\t\t------------------------------------------" << std::endl;
                     if( truth->closestGenJetToLeadingJet().isNonnull() ) {
@@ -158,8 +161,8 @@ namespace flashgg {
                     if( truth->leadingQuark().isNonnull() && truth->subLeadingQuark().isNonnull() ) {
                         std::cout << "\t\tDiquark mass: " << ( truth->leadingQuark()->p4() + truth->subLeadingQuark()->p4() ).mass() << std::endl;
                     }
+                    */
                 }
-
             }
 
             const   TTHHadronicTag *tthhadronictag = dynamic_cast<const TTHHadronicTag *>( chosenTag );
