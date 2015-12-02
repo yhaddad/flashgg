@@ -23,7 +23,7 @@ namespace flashgg {
 
     class VBFMVAProducer : public EDProducer
     {
-
+        
     public:
         VBFMVAProducer( const ParameterSet & );
     private:
@@ -38,6 +38,8 @@ namespace flashgg {
         string     _MVAMethod;
         bool       _usePuJetID;
         bool       _useJetID;
+        bool       _merge3rdJet;
+        double     _thirdJetDRCut;
         string     _JetIDLevel;
         double     _minDijetMinv;
         
@@ -68,11 +70,13 @@ namespace flashgg {
         diPhotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( iConfig.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
         //jetTokenDz_( consumes<View<flashgg::Jet> >( iConfig.getParameter<InputTag>( "JetTag" ) ) ),
         inputTagJets_ ( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
-        _MVAMethod    ( iConfig.getUntrackedParameter<string>( "MVAMethod" , "BDT") ),
-        _usePuJetID   ( iConfig.getUntrackedParameter<bool>  ( "UsePuJetID"  , false ) ),
-        _useJetID     ( iConfig.getUntrackedParameter<bool>  ( "UseJetID"    , false ) ),
-        _JetIDLevel   ( iConfig.getUntrackedParameter<string>( "JetIDLevel", "Loose" ) ), // Loose == 0, Tight == 1
-        _minDijetMinv ( iConfig.getParameter<double>         ( "MinDijetMinv" ) )
+        _MVAMethod    ( iConfig.getUntrackedParameter<string> ( "MVAMethod"    , "BDT"  ) ),
+        _usePuJetID   ( iConfig.getUntrackedParameter<bool>   ( "UsePuJetID"   , false  ) ),
+        _useJetID     ( iConfig.getUntrackedParameter<bool>   ( "UseJetID"     , false  ) ),
+        _merge3rdJet  ( iConfig.getUntrackedParameter<bool>   ( "merge3rdJet"  , false  ) ),
+        _thirdJetDRCut( iConfig.getUntrackedParameter<double> ( "thirdJetDRCut", 1.8    ) ),
+        _JetIDLevel   ( iConfig.getUntrackedParameter<string> ( "JetIDLevel"   , "Loose") ), // Loose == 0, Tight == 1
+        _minDijetMinv ( iConfig.getParameter<double>          ( "MinDijetMinv" ) )
     {
         vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vbfMVAweightfile" );
         
@@ -105,7 +109,7 @@ namespace flashgg {
             VbfMva_->AddVariable( "dijet_Zep"         , &dijet_Zep_        );
             //VbfMva_->AddVariable( "dijet_minDRJetPho" , &dijet_minDRJetPho_);
             //VbfMva_->AddVariable( "dijet_dipho_dphi"  , &dijet_dipho_dphi_ );
-            VbfMva_->AddVariable( "dijet_dPhi_trunc"  , &dijet_dipho_dphi_ );
+            VbfMva_->AddVariable( "dijet_dPhi_trunc"  , &dijet_dphi_trunc_ );
             //VbfMva_->AddVariable( "dipho_PToM"        , &dipho_PToM_       );
             VbfMva_->AddVariable( "leadPho_PToM"      , &leadPho_PToM_);
             VbfMva_->AddVariable( "sublPho_PToM"      , &sublPho_PToM_);
@@ -149,7 +153,8 @@ namespace flashgg {
             dipho_PToM_       = -999.;
             leadPho_PToM_     = -999.;
             sublPho_PToM_     = -999.;
-            
+           
+ 
             // First find dijet by looking for highest-pt jets...
             std::pair <int, int>     dijet_indices( -1, -1 );
             std::pair <float, float> dijet_pts( -1., -1. );
@@ -224,54 +229,100 @@ namespace flashgg {
                 if( dijet_indices.first != -1 && dijet_indices.second != -1 ) {hasValidVBFDiJet  = 1;}
                 if( hasValidVBFDiJet          && jet_3_index != -1          ) {hasValidVBFTriJet = 1;}
             }
-            //std::cout << "[VBF] has valid VBF Dijet ? "<< hasValidVBFDijet<< std::endl;
-            if( hasValidVBFDiJet ) {
-                
-                std::pair < Ptr<flashgg::Jet>, Ptr<flashgg::Jet> > dijet;
-                // fill dijet pair with lead jet as first, sublead as second.
-                dijet.first  =  Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
-                dijet.second =  Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
-                
-                dijet_leadEta_    = dijet.first->eta();
-                dijet_subleadEta_ = dijet.second->eta();
-                dijet_abs_dEta_   = std::fabs( dijet.first->eta() - dijet.second->eta() );
-                dijet_LeadJPt_    = dijet.first->pt();
-                dijet_SubJPt_     = dijet.second->pt();
 
-                auto leadPho_p4 =  diPhotons->ptrAt( candIndex )->leadingPhoton()->p4();
-                auto sublPho_p4 =  diPhotons->ptrAt( candIndex )->subLeadingPhoton()->p4();
-                auto leadJet_p4 =  dijet.first->p4();
-                auto sublJet_p4 =  dijet.second->p4();
+
+            //Third jet deltaR cut and merge index finding
+            int indexToMergeWithJ3(-1);
+            //float thirdJetDRCut(1.8);
+
+            //Getting the P4s
+            std::vector<reco::Candidate::LorentzVector> diPhotonP4s(2);
+            std::vector<reco::Candidate::LorentzVector> jetP4s;
+
+            diPhotonP4s[0] = diPhotons->ptrAt( candIndex )->leadingPhoton()->p4(); 
+            diPhotonP4s[1] = diPhotons->ptrAt( candIndex )->subLeadingPhoton()->p4(); 
+            if ( hasValidVBFDiJet ) {
+                jetP4s.push_back(Jets[jetCollectionIndex]->ptrAt(dijet_indices.first)->p4());
+                jetP4s.push_back(Jets[jetCollectionIndex]->ptrAt(dijet_indices.second)->p4());
+            }
+            if ( hasValidVBFTriJet ) {
+
+                jetP4s.push_back(Jets[jetCollectionIndex]->ptrAt(jet_3_index)->p4());
+
+                float dR_13 = deltaR(jetP4s[0].eta(),jetP4s[0].phi(),jetP4s[2].eta(),jetP4s[2].phi());
+                float dR_23 = deltaR(jetP4s[1].eta(),jetP4s[1].phi(),jetP4s[2].eta(),jetP4s[2].phi());
                 
-                auto diphoton_p4  = leadPho_p4 + sublPho_p4;
-                auto dijet_p4     = leadJet_p4 + sublJet_p4;
+                if (dR_13 < dR_23) {
+                    indexToMergeWithJ3 = dR_13 < _thirdJetDRCut ? 0 : -1;
+                }else{
+                    indexToMergeWithJ3 = dR_23 < _thirdJetDRCut ? 1 : -1;
+                }
+
+                if (dR_13 > _thirdJetDRCut && dR_23 > _thirdJetDRCut) {
+                    hasValidVBFTriJet = 0;
+                }
                 
-                dijet_dphi_trunc_ = std::min((float) abs(dijet.first->phi() - dijet.second->phi()), (float) 2.916);
-                dijet_dipho_dphi_ = std::min((float) abs(dijet_p4.Phi() -diphoton_p4.Phi()), (float) 2.916 );
+                //std::cout << "Third jet merge info:" << std::endl;
+                //std::cout << setw(12) << dR_13 << setw(12) << dR_23 << setw(12) << indexToMergeWithJ3 << std::endl;
+            }
+           
+            if( hasValidVBFDiJet ) {
+                std::pair<reco::Candidate::LorentzVector,reco::Candidate::LorentzVector> dijetP4s;
                 
-                dijet_dipho_pt_   = (dijet_p4 + diphoton_p4).Pt();
-                dijet_Zep_        = fabs(diphoton_p4.Eta() - 0.5 * ( leadJet_p4.Eta() + sublJet_p4.Eta()));
-                dijet_Mjj_        = dijet_p4.M();
-                dipho_PToM_       = diphoton_p4.Pt()/diphoton_p4.M();
-                leadPho_PToM_     = diPhotons->ptrAt(candIndex)->leadingPhoton()->pt()/diphoton_p4.M();
-                sublPho_PToM_     = diPhotons->ptrAt(candIndex)->subLeadingPhoton()->pt()/diphoton_p4.M();
+                //std ::cout << "-->before  jet_1 pt:" << jetP4s[0].pt() << std::endl;
+                //std ::cout << "-->before  jet_2 pt:" << jetP4s[1].pt() << std::endl;
+                if (indexToMergeWithJ3 != -1 && _merge3rdJet ) {
+                    //std::cout << "Hey I am merging jets : " << indexToMergeWithJ3+1 << " with jet 3" << std::endl;    
+                    dijetP4s.first  = jetP4s[ indexToMergeWithJ3 == 0 ? 1 : 0 ];
+                    dijetP4s.second = jetP4s[ indexToMergeWithJ3 ] + jetP4s[2];                 
+                    if (dijetP4s.second.pt() > dijetP4s.first.pt()) { std::swap(dijetP4s.first, dijetP4s.second);}
+                }else{
+                    dijetP4s.first  = jetP4s[0];
+                    dijetP4s.second = jetP4s[1];
+                }
                 
-                dijet_minDRJetPho_= std::min( std::min(reco::deltaR( leadJet_p4,leadPho_p4 ),
-                                                       reco::deltaR( sublJet_p4,leadPho_p4 )),
-                                              std::min(reco::deltaR( leadJet_p4,sublPho_p4 ),
-                                                       reco::deltaR( sublJet_p4,sublPho_p4 ))
+                //std ::cout << "-->after  jet_1 pt:" << dijetP4s.first.pt()  << std::endl;
+                //std ::cout << "-->after  jet_2 pt:" << dijetP4s.second.pt() << std::endl;
+                
+                dijet_leadEta_    = dijetP4s.first.eta();
+                dijet_subleadEta_ = dijetP4s.second.eta();
+                
+                dijet_abs_dEta_   = fabs( dijetP4s.first.eta() - dijetP4s.second.eta());
+                
+                dijet_LeadJPt_    = dijetP4s.first.pt();
+                dijet_SubJPt_     = dijetP4s.second.pt();
+                
+                dijet_dphi_trunc_ = std::min((float) abs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi()), (float) 2.916);
+                dijet_dipho_dphi_ = fabs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi() );
+
+                dijet_dipho_pt_   = (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
+                
+                dijet_Zep_        = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
+                
+                dijet_Mjj_        = (dijetP4s.first + dijetP4s.second).M();
+
+                dipho_PToM_       = (diPhotonP4s[0] + diPhotonP4s[1]).Pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
+                leadPho_PToM_     = diPhotonP4s[0].pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
+                sublPho_PToM_     = diPhotonP4s[1].pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
+                
+                dijet_minDRJetPho_ = std::min( std::min(deltaR( dijetP4s.first ,diPhotonP4s[0] ),
+                                                        deltaR( dijetP4s.second,diPhotonP4s[0] )),
+                                               std::min(deltaR( dijetP4s.first ,diPhotonP4s[1] ),
+                                                        deltaR( dijetP4s.second,diPhotonP4s[1] ))        
                                               );
                 
-                dijet_dy_         = std::fabs(leadJet_p4.Rapidity() - sublPho_p4.Rapidity());
-                dijet_leady_      = leadJet_p4.Rapidity();
-                dijet_subleady_   = sublJet_p4.Rapidity();
+                dijet_dy_         = fabs( (dijetP4s.first + dijetP4s.second).Rapidity() - (diPhotonP4s[0] + diPhotonP4s[1]).Rapidity() );
+                
+                dijet_leady_      = dijetP4s.first.Rapidity();
+
+                dijet_subleady_   = dijetP4s.second.Rapidity();
                 
                 mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
                 
                 mvares.leadJet_ptr    = Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 mvares.subleadJet_ptr = Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
-                mvares.diphoton   = *diPhotons->ptrAt( candIndex );
+                mvares.diphoton       = *diPhotons->ptrAt( candIndex );
             }else{
                 mvares.leadJet_ptr    = edm::Ptr<flashgg::Jet>();
                 mvares.subleadJet_ptr = edm::Ptr<flashgg::Jet>();
