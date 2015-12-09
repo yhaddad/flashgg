@@ -244,6 +244,8 @@ namespace flashgg {
             if ( hasValidVBFDiJet ) {
                 jetP4s.push_back(Jets[jetCollectionIndex]->ptrAt(dijet_indices.first)->p4());
                 jetP4s.push_back(Jets[jetCollectionIndex]->ptrAt(dijet_indices.second)->p4());
+                std::cout << "b_tag_1::" << Jets[jetCollectionIndex]->ptrAt(dijet_indices.first )->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") <<std::endl;
+                std::cout << "b_tag_2::" << Jets[jetCollectionIndex]->ptrAt(dijet_indices.second)->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") <<std::endl;
             }
             if ( hasValidVBFTriJet ) {
                 

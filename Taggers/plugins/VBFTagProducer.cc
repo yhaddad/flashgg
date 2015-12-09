@@ -213,11 +213,11 @@ namespace flashgg {
                         index_gj_subleadjet = gjLoop;
                     }
                 }
-                if( index_gj_leadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestGenJetToLeadingJet( genJets->ptrAt( index_gj_leadjet ) ); }
+                if( index_gj_leadjet < std::numeric_limits<unsigned int>::max() )    { truth_obj.setClosestGenJetToLeadingJet( genJets->ptrAt( index_gj_leadjet ) ); }
                 if( index_gj_subleadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestGenJetToSubLeadingJet( genJets->ptrAt( index_gj_subleadjet ) ); }
                 
-                if( index_leadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setLeadingParton( genParticles->ptrAt( index_leadq ) ); }
-                if( index_subleadq < std::numeric_limits<unsigned int>::max() ) { truth_obj.setSubLeadingParton( genParticles->ptrAt( index_subleadq ) ); }
+                if( index_leadq       < std::numeric_limits<unsigned int>::max()) { truth_obj.setLeadingParton( genParticles->ptrAt( index_leadq ) ); }
+                if( index_subleadq    < std::numeric_limits<unsigned int>::max()) { truth_obj.setSubLeadingParton( genParticles->ptrAt( index_subleadq ) ); }
                 if( index_subsubleadq < std::numeric_limits<unsigned int>::max()) { truth_obj.setSubSubLeadingParton( genParticles->ptrAt( index_subsubleadq ));}
             }
             truth_obj.setGenPV( higgsVtx );

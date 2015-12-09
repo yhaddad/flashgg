@@ -179,12 +179,12 @@ namespace flashgg {
 
                 jetcount++;
                 JetVect.push_back( thejet );
-
+                
                 bDiscriminatorValue = thejet->bDiscriminator( bTag_ );
-
+                
                 if( bDiscriminatorValue > bDiscriminatorLoose_ ) { njets_btagloose++; }
                 if( bDiscriminatorValue > bDiscriminatorMedium_ ) {
-
+                    
                     njets_btagmedium++;
                     JetVect.pop_back();
                     BJetVect.push_back( thejet );
