@@ -14,6 +14,7 @@
 #include "TMVA/Reader.h"
 #include "TMath.h"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/Math/interface/deltaPhi.h"
 #include <string>
 
 using namespace std;
@@ -36,6 +37,7 @@ namespace flashgg {
         unique_ptr<TMVA::Reader>VbfMva_;
         FileInPath vbfMVAweightfile_;
         string     _MVAMethod;
+        string     _Btag;
         bool       _usePuJetID;
         bool       _useJetID;
         bool       _merge3rdJet;
@@ -60,6 +62,11 @@ namespace flashgg {
         float dijet_subleady_ ;
         float dijet_dipho_pt_ ;
         
+        //float dijet_leadBtag_    ;
+        //float dijet_subleadBtag_ ;
+        //float dijet_leadQGL_    ;
+        //float dijet_subleadQGL_ ;
+        
         float dipho_PToM_  ;
         float leadPho_PToM_;
         float sublPho_PToM_;
@@ -71,12 +78,14 @@ namespace flashgg {
         //jetTokenDz_( consumes<View<flashgg::Jet> >( iConfig.getParameter<InputTag>( "JetTag" ) ) ),
         inputTagJets_ ( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
         _MVAMethod    ( iConfig.getUntrackedParameter<string> ( "MVAMethod"    , "BDT"  ) ),
+        _Btag         ( iConfig.getUntrackedParameter<string> ( "bTag"         , "pfCombinedInclusiveSecondaryVertexV2BJetTags"  ) ),
         _usePuJetID   ( iConfig.getUntrackedParameter<bool>   ( "UsePuJetID"   , false  ) ),
         _useJetID     ( iConfig.getUntrackedParameter<bool>   ( "UseJetID"     , false  ) ),
         _merge3rdJet  ( iConfig.getUntrackedParameter<bool>   ( "merge3rdJet"  , false  ) ),
         _thirdJetDRCut( iConfig.getUntrackedParameter<double> ( "thirdJetDRCut", 1.8    ) ),
         _JetIDLevel   ( iConfig.getUntrackedParameter<string> ( "JetIDLevel"   , "Loose") ), // Loose == 0, Tight == 1
         _minDijetMinv ( iConfig.getParameter<double>          ( "MinDijetMinv" ) )
+        
     {
         vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vbfMVAweightfile" );
         
@@ -292,9 +301,9 @@ namespace flashgg {
                 dijet_LeadJPt_    = dijetP4s.first.pt();
                 dijet_SubJPt_     = dijetP4s.second.pt();
                 
-                dijet_dphi_trunc_ = std::min((float) abs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi()), (float) 2.916);
-                dijet_dipho_dphi_ = fabs( (dijetP4s.first + dijetP4s.second).phi() - (diPhotonP4s[0] + diPhotonP4s[1]).phi() );
-
+                dijet_dphi_trunc_ = std::min((float) abs( reco::deltaPhi((dijetP4s.first + dijetP4s.second).phi(),(diPhotonP4s[0] + diPhotonP4s[1]).phi()) ), (float) 2.916);
+                dijet_dipho_dphi_ = fabs( reco::deltaPhi((dijetP4s.first + dijetP4s.second).phi(),(diPhotonP4s[0] + diPhotonP4s[1]).phi()) );
+                
                 dijet_dipho_pt_   = (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
                 
                 dijet_Zep_        = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
@@ -323,8 +332,15 @@ namespace flashgg {
                 mvares.leadJet        = dijetP4s.first;
                 mvares.subleadJet     = dijetP4s.second;
                 
+                
                 mvares.leadJet_ptr    = Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
-                mvares.subleadJet_ptr = Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
+                mvares.subleadJet_ptr = Jets[jetCollectionIndex]->ptrAt( dijet_indices.second);
+                
+                mvares.dijet_leadBtag    = Jets[jetCollectionIndex]->ptrAt( dijet_indices.first )->bDiscriminator( _Btag.c_str() );
+                mvares.dijet_subleadBtag = Jets[jetCollectionIndex]->ptrAt( dijet_indices.second)->bDiscriminator( _Btag.c_str() );
+                
+                mvares.dijet_leadQGL     = -1;
+                mvares.dijet_subleadQGL  = -1;
                 //mvares.diphoton       = *diPhotons->ptrAt( candIndex );
             }else{
                 mvares.leadJet_ptr    = edm::Ptr<flashgg::Jet>();
