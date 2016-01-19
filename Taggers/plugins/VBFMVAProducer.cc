@@ -230,7 +230,7 @@ namespace flashgg {
                     jet_3_index = jetLoop;
                     jet_3_pt    = jet->pt();
                 }
-                n_jets_count++;
+                if( jet->pt() > 30.0 ) n_jets_count++;
                 // if the jet's pt is neither higher than the lead jet or sublead jet, then forget it!
                 if( dijet_indices.first != -1 && dijet_indices.second != -1 ) {hasValidVBFDiJet  = 1;}
                 if( hasValidVBFDiJet          && jet_3_index != -1          ) {hasValidVBFTriJet = 1;}
