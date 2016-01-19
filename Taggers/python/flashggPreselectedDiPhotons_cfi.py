@@ -7,7 +7,7 @@ rediscoveryHLTvariables = cms.vstring(
     "trkSumPtHollowConeDR03",
     "full5x5_sigmaIetaIeta",
     "full5x5_r9",
-    "passElectronVeto"
+    "1-passElectronVeto"
     )
 
 #cuts to mimic category trigger cuts
@@ -73,10 +73,11 @@ flashggPreselectedDiPhotons = cms.EDFilter(
         " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
         " && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
         " && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
-        " && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
-#        " && (leadingPhoton.passElectronVeto) && (subLeadingPhoton.passElectronVeto)"
+        #" && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
+        " && (leadPhotonId > 0 && subLeadPhotonId > 0)"
+        #" && !(leadingPhoton.passElectronVeto) && !(subLeadingPhoton.passElectronVeto)"
         ),
-    variables = rediscoveryHLTvariables,
+    variables  = rediscoveryHLTvariables,
     categories = rediscoveryHLTcutsV1
     )
 

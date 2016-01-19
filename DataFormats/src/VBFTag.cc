@@ -30,6 +30,7 @@ const VBFMVAResult VBFTag::VBFMVA() const
 const reco::Candidate::LorentzVector VBFTag::leadingJet() const
 {
     return vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet;
+    
 }
 
 const reco::Candidate::LorentzVector  VBFTag::subLeadingJet() const
@@ -55,7 +56,6 @@ const edm::Ptr<Jet> VBFTag::subLeadingJet_ptr() const
 
 const edm::Ptr<Jet> VBFTag::subSubLeadingJet_ptr() const
 {
-    //! adding a third jets for the VBF studies
     return vbfDiPhoDiJet_mva_result_.vbfMvaResult.subsubleadJet_ptr;
 }
 
