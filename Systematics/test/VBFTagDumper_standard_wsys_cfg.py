@@ -59,8 +59,11 @@ process.flashggVBFMVA.UseJetID      = cms.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
 
 # use custum TMVA weights
-process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/Flashgg_VBF_CHS_STD_BDTG.weights.xml")
+process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
 process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
+
+# changes xmlf for diphton 
+process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
 
 # QCD Recovery 
 # process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
@@ -143,34 +146,35 @@ else:
 # get the variable list
 import flashgg.Taggers.VBFTagVariables as var
 new_variables = [
-    "prompt_pho_1   := diPhoton.leadingPhoton.genMatchType()",
-    "prompt_pho_2   := diPhoton.subLeadingPhoton.genMatchType()",
     "n_jets         := VBFMVA.n_rec_jets",
-    "dijet_jet1_RMS := leadingJet_ptr.rms()",
-    "dijet_jet2_RMS := subLeadingJet_ptr.rms()"
-    #"dijet_jet1_QGL := leadingJet_ptr.QGL()",
-    #"dijet_jet2_QGL := subLeadingJet_ptr.QGL()"
-    #"jet1_btag     := leadingJet_ptr.bDiscriminator(\"pfCombinedInclusiveSecondaryVertexV2BJetTags\")",
-    #"jet2_btag     := subLeadingJet_ptr.bDiscriminator(\"pfCombinedInclusiveSecondaryVertexV2BJetTags\")"
+    "dijet_jet1_RMS := leading_rms",
+    "dijet_jet2_RMS := subLeading_rms",
+    "dijet_jet1_QGL := leading_QGL",
+    "dijet_jet2_QGL := subLeading_QGL"
     ]
+matching_photon = [
+    "prompt_pho_1   := diPhoton.leadingPhoton.genMatchType()",
+    "prompt_pho_2   := diPhoton.subLeadingPhoton.genMatchType()"
+    ] 
+
 all_variables = var.dijet_variables + var.dipho_variables + new_variables #var.truth_variables
 if customize.processId != "Data":
-    all_variables += var.truth_variables
-
+    all_variables += var.truth_variables + matching_photon
+    
 cats = []
 if doSystematics:
     for syst in jetsystlabels:
         systcutstring = "hasSyst(\"%s\") "%syst
-        cats += [("VBFDiJet_%s"%syst,"leadingJet.pt>0&&%s"%systcutstring,0)]#,
+        cats += [("VBFDiJet_%s"%syst,"%s"%systcutstring,0)]#,
                  #("excluded_%s"%syst,systcutstring,0)]
 else:
     cats = [
-                    ("VBFDiJet","leadingJet.pt>0",0)#,
+                    ("VBFDiJet","1",0)#,
                     #("excluded","1",0)
                     ]
 
 cats += [
-    ("VBFDiJet","leadingJet.pt>0",0)#,
+    ("VBFDiJet","1",0)#,
     #("excluded","1",0)
     ]
 
@@ -181,7 +185,6 @@ cfgTools.addCategories(process.vbfTagDumper,
 )
 
 print cats
-
 
 #process.vbfTagDumper.nameTemplate ="$PROCESS_$SQRTS_$LABEL_$SUBCAT_$CLASSNAME"
 process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
