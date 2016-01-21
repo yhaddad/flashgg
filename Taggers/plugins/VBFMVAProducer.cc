@@ -41,6 +41,7 @@ namespace flashgg {
         bool       _useJetID;
         bool       _merge3rdJet;
         double     _thirdJetDRCut;
+        double     _rmsforwardCut;
         string     _JetIDLevel;
         double     _minDijetMinv;
         
@@ -76,6 +77,7 @@ namespace flashgg {
         _useJetID     ( iConfig.getUntrackedParameter<bool>   ( "UseJetID"     , false  ) ),
         _merge3rdJet  ( iConfig.getUntrackedParameter<bool>   ( "merge3rdJet"  , false  ) ),
         _thirdJetDRCut( iConfig.getUntrackedParameter<double> ( "thirdJetDRCut", 1.8    ) ),
+        _rmsforwardCut( iConfig.getUntrackedParameter<double> ( "rmsforwardCut", 1.0    ) ),
         _JetIDLevel   ( iConfig.getUntrackedParameter<string> ( "JetIDLevel"   , "Loose") ), // Loose == 0, Tight == 1
         _minDijetMinv ( iConfig.getParameter<double>          ( "MinDijetMinv" ) )
     {
@@ -183,7 +185,11 @@ namespace flashgg {
                     if( _JetIDLevel == "Loose" && !jet->passesJetID  ( flashgg::Loose ) ) continue;
                     if( _JetIDLevel == "Tight" && !jet->passesJetID  ( flashgg::Tight ) ) continue;
                 }
-                
+                // rms cuts over 2.5 
+                if( fabs( jet->eta() ) > 2.5 && jet->rms() > _rmsforwardCut ){ 
+                    std::cout << "("<< jet->eta()<< ")("<< jet->rms() <<").. jet rejected ::" << std::endl;
+                    continue; 
+                }
                 // within eta 4.7?
                 if( fabs( jet->eta() ) > 4.7 ) { continue; }
 
