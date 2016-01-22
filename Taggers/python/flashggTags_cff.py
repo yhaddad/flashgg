@@ -233,6 +233,3 @@ flashggVHHadronicTag = cms.EDProducer("FlashggVHHadronicTagProducer",
                                       cosThetaStarThreshold = cms.double(0.5),
                                       phoIdMVAThreshold = cms.double(-0.9)
 )
-
-
-
