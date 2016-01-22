@@ -64,7 +64,7 @@ process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
 
 # use custum TMVA weights
 process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
-process.flashggVBFMVA.MVAMethod        = cms.untracked.string("BDTG")
+process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
 
 # changes xmlf for diphton 
 process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
