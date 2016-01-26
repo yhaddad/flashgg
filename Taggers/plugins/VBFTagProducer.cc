@@ -99,6 +99,8 @@ namespace flashgg {
         float pt_leadq = 0., pt_subleadq = 0., pt_subsubleadq = 0.;
         Point higgsVtx;
         
+        ///std::cout << "+++++ test +++++" << std::endl;
+        
         if( ! evt.isRealData() ) {
             evt.getByToken( genPartToken_, genParticles );
             evt.getByToken( genJetToken_, genJets );
@@ -135,6 +137,7 @@ namespace flashgg {
         assert( diPhotons->size() == vbfDiPhoDiJetMvaResults->size() ); 
         assert( diPhotons->size() == mvaResults->size() ); // We are relying on corresponding sets - update this to give an error/exception
         //std::cout << "-----------------------------------------------------" << std::endl;
+        std::cout << "VBFTagProducer::diPhotons->size()=="<< diPhotons->size() << std::endl;
         for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
             edm::Ptr<flashgg::VBFDiPhoDiJetMVAResult> vbfdipho_mvares = vbfDiPhoDiJetMvaResults->ptrAt( candIndex );
             edm::Ptr<flashgg::DiPhotonMVAResult>      mvares          = mvaResults->ptrAt( candIndex );
@@ -188,7 +191,7 @@ namespace flashgg {
                         }
                     }
                 }
-
+                
                 if( index_gp_leadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestParticleToLeadingJet( genParticles->ptrAt( index_gp_leadjet ) ); }
                 if( index_gp_subleadjet < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestParticleToSubLeadingJet( genParticles->ptrAt( index_gp_subleadjet ) ); }
                 if( index_gp_leadphoton < std::numeric_limits<unsigned int>::max() ) { truth_obj.setClosestParticleToLeadingPhoton( genParticles->ptrAt( index_gp_leadphoton ) ); }

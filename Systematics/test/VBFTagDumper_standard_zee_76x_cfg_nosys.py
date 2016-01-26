@@ -39,20 +39,21 @@ from flashgg.Taggers.flashggTagOutputCommands_cff import tagDefaultOutputCommand
 import flashgg.Taggers.dumperConfigTools as cfgTools
 from  flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 
-if doSystematics:
-    from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
-    from flashgg.Systematics.flashggJetSystematics_cfi import createJetSystematics
-    process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService")
-    jetSystematicsInputTags = createJetSystematics(process,UnpackedJetCollectionVInputTag)
+#if doSystematics:
+from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
+from flashgg.Systematics.flashggJetSystematics_cfi import createJetSystematics
+process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService")
+jetSystematicsInputTags = createJetSystematics(process,UnpackedJetCollectionVInputTag)
 
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
 
-if doSystematics:
-    process.flashggTagSequence.remove(process.flashggUnpackedJets)
-    for i in range(len(UnpackedJetCollectionVInputTag)):
-        massSearchReplaceAnyInputTag(process.flashggTagSequence,UnpackedJetCollectionVInputTag[i],jetSystematicsInputTags[i])
-    process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
+
+process.flashggTagSequence.remove(process.flashggUnpackedJets)
+for i in range(len(UnpackedJetCollectionVInputTag)):
+    massSearchReplaceAnyInputTag(process.flashggTagSequence,UnpackedJetCollectionVInputTag[i],jetSystematicsInputTags[i])
+
+process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
 
 # Use JetID
 process.flashggVBFMVA.UseJetID      = cms.bool(False)
@@ -170,7 +171,7 @@ all_variables = var.dijet_variables + var.dipho_variables + new_variables #var.t
 if customize.processId != "Data":
     all_variables += var.truth_variables + matching_photon
 
-#cats = []
+cats = []
 #if doSystematics:
 #    for syst in jetsystlabels:
 #        systcutstring = "hasSyst(\"%s\") "%syst
@@ -184,7 +185,7 @@ if customize.processId != "Data":
 #        ("VBFDiJet","1",0)#,
 #        #("excluded","1",0)
 #        ]
-#
+
 cats = [
     #("VBFDiJet","leadingJet.pt>0",0)#,
     ("VBFDiJet","1",0)#,
@@ -218,6 +219,7 @@ if customize.processId == "Data" and requireTriggerOnData:
 if doSystematics:
     process.p1 = cms.Path(
         process.hltRequirement*
+        process.flashggTagSequence*
         process.flashggDiPhotonSystematics*
         (process.flashggUnpackedJets*process.jetSystematicsSequence)*
         (process.flashggTagSequence+process.systematicsTagSequences)*
@@ -231,5 +233,5 @@ else:
         # process.flashggTagTester* # Uncommment if you what to test VBFtag
         process.vbfTagDumper
         )
-
+    
 print process.p1
