@@ -33,6 +33,8 @@ namespace flashgg {
         const float subLeading_rms() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->rms() : -9999.;}
         const float leading_QGL   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->QGL() : -9999.;}
         const float subLeading_QGL() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->QGL() : -9999.;}
+        const float leading_rawPt   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->correctedJet("Uncorrected").pt() : -9999.;}
+        const float subLeading_rawPt() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->correctedJet("Uncorrected").pt() : -9999.;}
         
         const bool hasValidVBFDiJet() const {
             return (vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr.isNonnull() && vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr.isNonnull()); 

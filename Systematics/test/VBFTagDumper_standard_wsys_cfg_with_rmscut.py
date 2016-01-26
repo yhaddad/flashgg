@@ -20,6 +20,7 @@ if doSystematics:
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4' # keep updated for JEC
 #    process.GlobalTag.globaltag = '74X_dataRun2_reMiniAOD_v0' # Original for checks against MiniAOD
 
+
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
