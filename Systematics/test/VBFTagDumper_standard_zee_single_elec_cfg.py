@@ -55,13 +55,13 @@ if doSystematics:
     process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
 
 # Use JetID
-process.flashggVBFMVA.UseJetID      = cms.bool(False)
+process.flashggVBFMVA.UseJetID      = cms.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
 
 # use custum TMVA weights
 process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
 process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
-process.flashggVBFMVA.rmsforwardCut    = cms.double(1)
+process.flashggVBFMVA.rmsforwardCut    = cms.double(0.02)
 
 process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
 # QCD Recovery 
@@ -209,7 +209,12 @@ customize(process)
 
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
 #process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass95_v*") )
-process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*") )
+#process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*") )
+if customize.processId == "Data":
+    process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Ele27_eta2p1_WPLoose_Gsf_v*") )
+else:
+    process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Ele27_eta2p1_WP75_Gsf_v*") )
+
 process.options      = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
 process.hltRequirement = cms.Sequence()
