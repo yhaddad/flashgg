@@ -25,10 +25,14 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-#        "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/160105_224017/0000/myMicroAODOutputFile_1.root"
-        "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/DoubleEG/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-Run2015C_25ns-05Oct2015-v1/160105_222657/0000/myMicroAODOutputFile_41.root"
-#        "file:myMicroAODOutputFile.root"
-                             ))
+        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/160105_224017/0000/myMicroAODOutputFile_1.root"
+        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall15DR76-1_3_0-25ns/1_3_0/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIIFall15DR76-1_3_0-25ns-1_3_0-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext1-v1/160126_090235/0000/myMicroAODOutputFile_9.root"
+        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall15DR76-1_3_0-25ns/1_3_0/GluGluHToGG_M-125_13TeV_powheg_pythia8/RunIIFall15DR76-1_3_0-25ns-1_3_0-v0-RunIIFall15DR76-25nsFlat10to25TSG_76X_mcRun2_asymptotic_v12-v1/160116_110115/0000/myMicroAODOutputFile_1.root"
+        #"root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall15DR76-1_3_0-25ns/1_3_0/DoubleEG/RunIIFall15DR76-1_3_0-25ns-1_3_0-v0-Run2015C_25ns-16Dec2015-v1/160116_105829/0000/myMicroAODOutputFile_1.root"
+        #"file:myMicroAODOutputFile_DoubleEG.root"
+        "file:myMicroAODOutputFile_GluGluHToGG_M125.root"
+        #"file:myMicroAODOutputFile.root"
+        ))
 
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("VBFTagsDump.root"),
@@ -66,9 +70,13 @@ process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
 # process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
 # process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
 
+process.flashggPreselectedDiPhotons.rediscoveryHLTvariables = cms.vstring("pfPhoIso03", 
+                                                                          "trkSumPtHollowConeDR03",
+                                                                          "full5x5_sigmaIetaIeta",
+                                                                          "full5x5_r9",
+                                                                          "passElectronVeto")#"1-passElectronVeto")
 # combined MVA boundary set
 process.flashggVBFTag.Boundaries    = cms.vdouble(-2,0,2)
-
 process.systematicsTagSequences = cms.Sequence()
 
 from flashgg.MetaData.JobConfig import customize
