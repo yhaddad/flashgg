@@ -28,6 +28,15 @@ namespace flashgg {
         const edm::Ptr<flashgg::Jet> leadingJet_ptr() const; //needs to be validated
         const edm::Ptr<flashgg::Jet> subLeadingJet_ptr() const; //needs to be validated
         const edm::Ptr<flashgg::Jet> subSubLeadingJet_ptr() const; //needs to be validated // 3rd Jet needed for VBF studies
+        
+        const float leading_rms   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->rms() : -9999.;}
+        const float subLeading_rms() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->rms() : -9999.;}
+        const float leading_QGL   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->QGL() : -9999.;}
+        const float subLeading_QGL() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->QGL() : -9999.;}
+        
+        const bool hasValidVBFDiJet() const {
+            return (vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr.isNonnull() && vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr.isNonnull()); 
+        };
         const bool hasValidVBFTriJet() const; 
     private:
         VBFDiPhoDiJetMVAResult vbfDiPhoDiJet_mva_result_;
