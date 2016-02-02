@@ -59,11 +59,11 @@ process.flashggVBFMVA.UseJetID      = cms.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
 
 # use custum TMVA weights
-process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
-process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
-process.flashggVBFMVA.rmsforwardCut    = cms.double(0.02)
+#process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
+#process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
+#process.flashggVBFMVA.rmsforwardCut    = cms.double(0.02)
 
-process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
+#process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
 # QCD Recovery 
 # process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
 # process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
@@ -156,12 +156,6 @@ new_variables = [
     "dijet_jet2_RMS := subLeading_rms",
     "dijet_jet1_QGL := leading_QGL",
     "dijet_jet2_QGL := subLeading_QGL"
-    #"dijet_jet1_RMS := leadingJet_ptr.rms()",
-    #"dijet_jet2_RMS := subLeadingJet_ptr.rms()"
-    #"dijet_jet1_QGL := leadingJet_ptr.QGL()",
-    #"dijet_jet2_QGL := subLeadingJet_ptr.QGL()"
-    #"jet1_btag     := leadingJet_ptr.bDiscriminator(\"pfCombinedInclusiveSecondaryVertexV2BJetTags\")",
-    #"jet2_btag     := subLeadingJet_ptr.bDiscriminator(\"pfCombinedInclusiveSecondaryVertexV2BJetTags\")"
     ]
 matching_photon = [
     "prompt_pho_1   := diPhoton.leadingPhoton.genMatchType()",
@@ -176,7 +170,6 @@ if doSystematics:
     for syst in jetsystlabels:
         systcutstring = "hasSyst(\"%s\") "%syst
         cats += [
-            #("VBFDiJet_%s"%syst,"leadingJet.pt>0&&%s"%systcutstring,0)]#,
             ("VBFDiJet_%s"%syst,"%s"%systcutstring,0)]#,
                  #("excluded_%s"%syst,systcutstring,0)]
 else:

@@ -1,0 +1,10 @@
+{
+    "processes" : {
+    "Data" : [ 
+     	   "/SingleElectron/ferrif-RunIISpring15-SingleEle2015D-TTG-TTJ-TGJ-WG-ZG-1_2_0-25ns-1_2_0-v0-Run2015D-04Dec2015-v2-7b05e4f729d8444b2665263390b46268/USER",
+    	   "/SingleElectron/sethzenz-RunIISpring15-ReReco74XMissingSingleElectron-1_2_0-25ns-1_2_0-v0-Run2015D-04Dec2015-v2-7b05e4f729d8444b2665263390b46268/USER"
+	   ],	     
+    "DYjet"   : [ "/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8" ]
+     },	
+     "cmdLine" : "campaign=RunIISpring15-ReReco74X-All-1_1_0-Or-1_2_0-25ns"
+}

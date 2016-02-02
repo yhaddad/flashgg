@@ -25,8 +25,6 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/160105_224017/0000/myMicroAODOutputFile_1.root"
-        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/160105_222534/0000/myMicroAODOutputFile_84.root"
         "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/DoubleEG/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-Run2015C_25ns-05Oct2015-v1/160105_222657/0000/myMicroAODOutputFile_41.root"
         ))
 
@@ -59,22 +57,22 @@ if doSystematics:
     process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
 
 # Use JetID
-process.flashggVBFMVA.UseJetID      = cms.untracked.bool(True)
-process.flashggVBFMVA.JetIDLevel    = cms.untracked.string("Loose")
+process.flashggVBFMVA.UseJetID      = cms.bool(True)
+process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
 
 # use custum TMVA weights
-process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
-process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
+#process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
+#process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
 
 # changes xmlf for diphton 
-process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
+#process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
 
 # QCD Recovery 
 # process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
 # process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
 
 # combined MVA boundary set
-process.flashggVBFTag.Boundaries    = cms.untracked.vdouble(-2,0,2)
+process.flashggVBFTag.Boundaries    = cms.vdouble(-2,0,2)
 process.systematicsTagSequences = cms.Sequence()
 
 from flashgg.MetaData.JobConfig import customize

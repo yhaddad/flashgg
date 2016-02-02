@@ -25,7 +25,9 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-        "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/DoubleEG/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-Run2015C_25ns-05Oct2015-v1/160105_222657/0000/myMicroAODOutputFile_41.root"
+        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReReco74XMissingDoubleEG-1_2_0-25ns/1_2_0/DoubleEG/RunIISpring15-ReReco74XMissingDoubleEG-1_2_0-25ns-1_2_0-v0-Run2015D-04Dec2015-v2/160129_122253/0000/myMicroAODOutputFile_108.root"
+        "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReReco74XMissingDoubleEG-1_2_0-25ns/1_2_0/DoubleEG/RunIISpring15-ReReco74XMissingDoubleEG-1_2_0-25ns-1_2_0-v0-Run2015D-04Dec2015-v2/160129_122253/0000/myMicroAODOutputFile_2.root"
+        #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/DoubleEG/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-Run2015C_25ns-05Oct2015-v1/160105_222657/0000/myMicroAODOutputFile_41.root"
         ))
 
 process.TFileService = cms.Service("TFileService",
@@ -57,11 +59,11 @@ process.flashggVBFMVA.UseJetID      = cms.bool(True)
 process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
 
 # use custum TMVA weights
-process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
-process.flashggVBFMVA.MVAMethod        = cms.string( "BDTG" )
+#process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
+#process.flashggVBFMVA.MVAMethod        = cms.string( "BDTG" )
 process.flashggVBFMVA.rmsforwardCut    = cms.double(  0.03  )
 
-process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
+#process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
 # QCD Recovery 
 # process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
 # process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
