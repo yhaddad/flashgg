@@ -15,8 +15,8 @@
 #include "flashgg/DataFormats/interface/Jet.h"
 
 #include "FWCore/Framework/interface/ESHandle.h"
-#include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
-#include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
+//#include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
+//#include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
 //#include "JetMETCorrections/Objects/interface/JetCorrector.h"
 #include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 
@@ -33,14 +33,14 @@ namespace flashgg {
         bool   correctionsSet_;
         bool   doCentralJEC_;
         string JECLabel_;
-        edm::EDGetTokenT<JetCorrector> mJetCorrector;
+        edm::EDGetTokenT<reco::JetCorrector> mJetCorrector;
     };
 
     JetSystematicProducer::JetSystematicProducer ( const edm::ParameterSet &iConfig ) : ObjectSystematicProducer<flashgg::Jet,int,std::vector>( iConfig ) {
         correctionsSet_ = false;
         doCentralJEC_  = iConfig.getParameter<bool>  ("DoCentralJEC");
         JECLabel_      = iConfig.getParameter<string>("JECLabel");
-        mJetCorrector  = consumes<JetCorrector>(edm::InputTag("JetCorrectorTag"));
+        mJetCorrector  = consumes<reco::JetCorrector>(iConfig.getParameter<InputTag>("JetCorrectorTag"));
     }
     
     void JetSystematicProducer::produce( edm::Event &iEvent, const edm::EventSetup & iSetup ) {
@@ -49,15 +49,12 @@ namespace flashgg {
             // The old way to retreive the correctors
             // const JetCorrector* corrector = JetCorrector::getJetCorrector (JECLabel_,iSetup); 
             // new recipe from : https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrOnTheFly
-            edm::Handle<JetCorrector>  corrector  ;
+            edm::Handle<reco::JetCorrector>  corrector  ;
             iEvent.getByToken(mJetCorrector, corrector );
-
-
-            const JetCorrector *  tmp_corrector = corrector->product();
             
             for( unsigned int ncorr = 0; ncorr < this->Corrections_.size(); ncorr++ ) {
                 if( !this->Corrections_.at( ncorr )->makesWeight() ){
-                    this->Corrections_.at( ncorr )->setJEC(tmp_corrector,iEvent,iSetup);
+                    this->Corrections_.at( ncorr )->setJEC(corrector.product(),iEvent,iSetup);
                 }
             }
 

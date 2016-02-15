@@ -9,7 +9,6 @@
 #include "flashgg/DataFormats/interface/WeightedObject.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "JetMETCorrections/Objects/interface/JetCorrector.h"
-
 #include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 namespace flashgg {
 
@@ -51,7 +50,7 @@ namespace flashgg {
         virtual void setJECUncertainty ( const JetCorrectorParameters & ) {
             throw cms::Exception( "NotImplemented" ) << " should be used for JEC only";
         } 
-        virtual void setJEC( const JetCorrector*, const edm::Event &, const edm::EventSetup &  ) {
+        virtual void setJEC( const reco::JetCorrector*, const edm::Event &, const edm::EventSetup &  ) {
             throw cms::Exception( "NotImplemented" ) << " should be used for JEC only";
         }
 
