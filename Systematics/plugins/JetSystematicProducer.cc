@@ -35,7 +35,7 @@ namespace flashgg {
         string JECLabel_;
         edm::EDGetTokenT<JetCorrector> mJetCorrector;
     };
-
+    
     JetSystematicProducer::JetSystematicProducer ( const edm::ParameterSet &iConfig ) : ObjectSystematicProducer<flashgg::Jet,int,std::vector>( iConfig ) {
         correctionsSet_ = false;
         doCentralJEC_  = iConfig.getParameter<bool>  ("DoCentralJEC");
@@ -51,8 +51,7 @@ namespace flashgg {
             // new recipe from : https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrOnTheFly
             edm::Handle<JetCorrector>  corrector  ;
             iEvent.getByToken(mJetCorrector, corrector );
-
-
+            
             const JetCorrector *  tmp_corrector = corrector->product();
             
             for( unsigned int ncorr = 0; ncorr < this->Corrections_.size(); ncorr++ ) {
