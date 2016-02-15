@@ -52,7 +52,8 @@ print "customize.processId:",customize.processId
 from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
 
 # load the correctors
-from JetMETCorrections.Configuration.JetCorrectors_cff import *
+#from JetMETCorrections.Configuration.JetCorrectors_cff import *
+process.load("JetMETCorrections.Configuration.JetCorrectors_cff")
 
 if customize.processId.count("h_") or customize.processId.count("vbf_"):
     # convention: ggh vbf wzh (wh zh) tth
@@ -220,7 +221,7 @@ process.p = cms.Path(process.dataRequirements*
                      process.genFilter*
                      process.flashggDiPhotonSystematics*
                      process.flashggMuonSystematics*process.flashggElectronSystematics*
-                     (process.flashggUnpackedJets*process.jetSystematicsSequence)*
+                     (process.flashggUnpackedJets*process.ak4PFCHSL1FastL2L3CorrectorChain*process.jetSystematicsSequence)*
                      (process.flashggTagSequence*process.systematicsTagSequences)*
                      process.flashggVBFTagMerger*
                      process.vbfTagDumper

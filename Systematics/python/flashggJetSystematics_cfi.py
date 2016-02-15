@@ -71,11 +71,12 @@ def createJetSystematicsForTag(process,jetInputTag):
                          DoCentralJEC = cms.bool(False),
                          JECLabel = cms.string("UNDEFINED"),
                          SystMethods2D = cms.VPSet(),
+                         JetCorrectorTag = cms.InputTag("ak4PFCHSL1FastL2L3Corrector"),
                          SystMethods = cms.VPSet(cms.PSet( MethodName = cms.string("FlashggJetEnergyCorrector"),
                                                            Label = cms.string("JEC"),
                                                            NSigmas = cms.vint32(-1,1),
                                                            OverallRange = cms.string("abs(eta)<5.0"),
-                                                           Debug = cms.untracked.bool(False),
+                                                           Debug = cms.untracked.bool(True),
                                                            ApplyCentralValue = cms.bool(True)
                                                            ),
                                                  cms.PSet( MethodName = cms.string("FlashggJetSmearConstant"),

@@ -18,7 +18,7 @@ namespace flashgg {
         void applyCorrection( flashgg::Jet &y, int syst_shift ) override;
         std::string shiftLabel( int ) const override;
         void setJECUncertainty ( const JetCorrectorParameters & ) override {}; // NotImplemented in base class --> harmless noop
-        void setJEC( const JetCorrector*, const edm::Event &, const edm::EventSetup & ) override {}; // NotImplemented in base class --> harmless noop
+        void setJEC( const reco::JetCorrector*, const edm::Event &, const edm::EventSetup & ) override {}; // NotImplemented in base class --> harmless noop
 
     private:
         selector_type overall_range_;

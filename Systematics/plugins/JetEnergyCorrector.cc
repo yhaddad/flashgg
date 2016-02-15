@@ -18,12 +18,12 @@ namespace flashgg {
         void applyCorrection( flashgg::Jet &y, int syst_shift ) override;
         std::string shiftLabel( int ) const override;
         void setJECUncertainty ( const JetCorrectorParameters &) override;
-        void setJEC( const JetCorrector*, const edm::Event &, const edm::EventSetup &  ) override;
+        void setJEC( const reco::JetCorrector*, const edm::Event &, const edm::EventSetup &  ) override;
 
     private:
         selector_type overall_range_;
         unique_ptr<JetCorrectionUncertainty> jec_unc_;
-        const JetCorrector* jec_cor_;
+        const reco::JetCorrector* jec_cor_;
         const edm::Event* evt_;
         const edm::EventSetup* evt_setup_;
         bool jec_set_;
@@ -38,7 +38,7 @@ namespace flashgg {
         jec_set_ = false;
     }
     
-    void JetEnergyCorrector::setJEC( const JetCorrector* theJEC, const edm::Event &iEvent, const edm::EventSetup & iSetup ) {
+    void JetEnergyCorrector::setJEC( const reco::JetCorrector* theJEC, const edm::Event &iEvent, const edm::EventSetup & iSetup ) {
         jec_set_ = true;
         jec_cor_ = theJEC;
         evt_ = &iEvent;
@@ -64,20 +64,26 @@ namespace flashgg {
 
     void JetEnergyCorrector::applyCorrection( flashgg::Jet &y, int syst_shift )
     {
+        std::cout << " JetEnergyCorrector::applyCorrection " << std::endl;
         if( overall_range_( y ) ) {
             double jec_adjust = 1.;
             if (jec_set_ && applyCentralValue()) {
-                double jec = jec_cor_->correction( y.correctedJet("Uncorrected") , *evt_, *evt_setup_ );
+                //                double jec = jec_cor_->correction( y.correctedJet("Uncorrected") , *evt_, *evt_setup_ );
                 double oldjec = (y.energy()/y.correctedJet("Uncorrected").energy());
+                std::cout << " got oldjec " << oldjec << std::endl;
+                std::cout << " about to get new jec " << std::endl;
+                double jec = jec_cor_->correction( y );
+                std::cout << " got new jec " << jec << std::endl;
                 if ( debug_ ) {
                     std::cout << " DOING JEC! We get this jec from the corrector: " << jec << std::endl;
                     std::cout << "    ... previous jec was: " << oldjec << std::endl;
                 }
                 jec_adjust = jec/oldjec;
             }
-            jec_unc_->setJetEta(y.eta());
-            jec_unc_->setJetPt(jec_adjust*y.pt()); 
-            float unc = jec_unc_->getUncertainty(true);
+            //            jec_unc_->setJetEta(y.eta());
+            //            jec_unc_->setJetPt(jec_adjust*y.pt()); 
+            //            float unc = jec_unc_->getUncertainty(true);
+            float unc = 0.;
             float scale = jec_adjust + syst_shift*unc;
             if( debug_ ) {
                 std::cout << "  " << shiftLabel( syst_shift ) << ": Jet has pt= " << y.pt() << " eta=" << y.eta()
