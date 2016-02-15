@@ -1,9 +1,10 @@
 import FWCore.ParameterSet.Config as cms
 
 def printSystematicInfo(process):
-    vpsetlist = [process.flashggDiPhotonSystematics.SystMethods, process.flashggMuonSystematics.SystMethods, process.flashggElectronSystematics.SystMethods]
-#    from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
-#    vpsetlist += [getattr(process,"flashggJetSystematics%i"%i).SystMethods for i in range(len(UnpackedJetCollectionVInputTag))]
+    #vpsetlist = [process.flashggDiPhotonSystematics.SystMethods, process.flashggMuonSystematics.SystMethods, process.flashggElectronSystematics.SystMethods]
+    vpsetlist = [process.flashggDiPhotonSystematics.SystMethods]
+    #    from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
+    #    vpsetlist += [getattr(process,"flashggJetSystematics%i"%i).SystMethods for i in range(len(UnpackedJetCollectionVInputTag))]
     vpsetlist += [process.flashggJetSystematics0.SystMethods]
     print (14*"-"+" DUMPING SYSTEMATIC OVERVIEW "+14*"-")
     print "%20s %15s %20s" % ("Systematic","Central value?","Systematic shifts?")
