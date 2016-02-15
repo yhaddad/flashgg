@@ -17,7 +17,8 @@
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
-#include "JetMETCorrections/Objects/interface/JetCorrector.h"
+//#include "JetMETCorrections/Objects/interface/JetCorrector.h"
+#include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 
 namespace flashgg {
 
@@ -29,48 +30,64 @@ namespace flashgg {
         
     private:
         void produce( edm::Event &, const edm::EventSetup & ) override;
-        bool correctionsSet_;
-        bool doCentralJEC_;
+        bool   correctionsSet_;
+        bool   doCentralJEC_;
         string JECLabel_;
+        edm::EDGetTokenT<JetCorrector> mJetCorrector;
     };
 
     JetSystematicProducer::JetSystematicProducer ( const edm::ParameterSet &iConfig ) : ObjectSystematicProducer<flashgg::Jet,int,std::vector>( iConfig ) {
         correctionsSet_ = false;
-        doCentralJEC_ = iConfig.getParameter<bool>("DoCentralJEC");
-        JECLabel_ = iConfig.getParameter<string>("JECLabel");
+        doCentralJEC_  = iConfig.getParameter<bool>  ("DoCentralJEC");
+        JECLabel_      = iConfig.getParameter<string>("JECLabel");
+        mJetCorrector  = consumes<JetCorrector>(edm::InputTag("JetCorrectorTag"));
     }
     
     void JetSystematicProducer::produce( edm::Event &iEvent, const edm::EventSetup & iSetup ) {
         if (doCentralJEC_) {
             // Sal: IIRC, you want "ak4PFCHSL1FastL2L3Residual" for data, "ak4PFCHSL1FastL2L3" for MC
-            const JetCorrector* corrector = JetCorrector::getJetCorrector (JECLabel_,iSetup); 
+            // The old way to retreive the correctors
+            // const JetCorrector* corrector = JetCorrector::getJetCorrector (JECLabel_,iSetup); 
+            // new recipe from : https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrOnTheFly
+            edm::Handle<JetCorrector>  corrector  ;
+            iEvent.getByToken(mJetCorrector, corrector );
+
+
+            const JetCorrector *  tmp_corrector = corrector->product();
+            
             for( unsigned int ncorr = 0; ncorr < this->Corrections_.size(); ncorr++ ) {
                 if( !this->Corrections_.at( ncorr )->makesWeight() ){
-                    this->Corrections_.at( ncorr )->setJEC(corrector,iEvent,iSetup);
+                    this->Corrections_.at( ncorr )->setJEC(tmp_corrector,iEvent,iSetup);
                 }
             }
+
+            
+            std::cout << "after the the loop" << std::endl;
             for( unsigned int ncorr = 0; ncorr < this->Corrections2D_.size(); ncorr++ ) {
                 if( !this->Corrections2D_.at( ncorr )->makesWeight() ){
-                    this->Corrections2D_.at( ncorr )->setJEC(corrector,iEvent,iSetup);
+                    this->Corrections2D_.at( ncorr )->setJEC(corrector.product(),iEvent,iSetup);
                 }
             }
         }
-        if (!correctionsSet_) {
-            edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
-            iSetup.get<JetCorrectionsRecord>().get("AK4PFchs",JetCorParColl); 
-            JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
-            for( unsigned int ncorr = 0; ncorr < this->Corrections_.size(); ncorr++ ) {
-                if( !this->Corrections_.at( ncorr )->makesWeight() ){
-                    this->Corrections_.at( ncorr )->setJECUncertainty(JetCorPar);
-                }
-            }
-            for( unsigned int ncorr = 0; ncorr < this->Corrections2D_.size(); ncorr++ ) {
-                if( !this->Corrections2D_.at( ncorr )->makesWeight() ){
-                    this->Corrections2D_.at( ncorr )->setJECUncertainty(JetCorPar);
-                }
-            }
-        }
+        //if (!correctionsSet_) {
+        //    edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
+        //    iSetup.get<JetCorrectionsRecord>().get("AK4PFchs",JetCorParColl); 
+        //    JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
+        //    std::cout << "after the JetCorrectorParameters" << std::endl;
+        //    for( unsigned int ncorr = 0; ncorr < this->Corrections_.size(); ncorr++ ) {
+        //        if( !this->Corrections_.at( ncorr )->makesWeight() ){
+        //            this->Corrections_.at( ncorr )->setJECUncertainty(JetCorPar);
+        //        }
+        //    }
+        //    for( unsigned int ncorr = 0; ncorr < this->Corrections2D_.size(); ncorr++ ) {
+        //        if( !this->Corrections2D_.at( ncorr )->makesWeight() ){
+        //            this->Corrections2D_.at( ncorr )->setJECUncertainty(JetCorPar);
+        //        }
+        //    }
+        //}
+        std::cout << "before the ObjectSystematicProducer" << std::endl;
         ObjectSystematicProducer<flashgg::Jet,int,std::vector>::produce( iEvent, iSetup );
+        std::cout << "after the ObjectSystematicProducer" << std::endl;
     }
 
 }

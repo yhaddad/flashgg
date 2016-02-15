@@ -10,6 +10,7 @@
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "JetMETCorrections/Objects/interface/JetCorrector.h"
 
+#include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 namespace flashgg {
 
     template <class flashgg_object, class param_var>

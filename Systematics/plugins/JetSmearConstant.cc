@@ -5,6 +5,7 @@
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include "CLHEP/Random/RandGauss.h"
 
+#include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 namespace flashgg {
 
     class JetSmearConstant: public ObjectSystMethodBinnedByFunctor<flashgg::Jet, int>

@@ -5,6 +5,7 @@
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
 
+#include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 namespace flashgg {
 
     class JetEnergyCorrector: public BaseSystMethod<flashgg::Jet, int>
@@ -36,7 +37,7 @@ namespace flashgg {
     {
         jec_set_ = false;
     }
-
+    
     void JetEnergyCorrector::setJEC( const JetCorrector* theJEC, const edm::Event &iEvent, const edm::EventSetup & iSetup ) {
         jec_set_ = true;
         jec_cor_ = theJEC;
