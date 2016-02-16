@@ -48,7 +48,8 @@ namespace flashgg {
             // Sal: IIRC, you want "ak4PFCHSL1FastL2L3Residual" for data, "ak4PFCHSL1FastL2L3" for MC
             // The old way to retreive the correctors
             // const JetCorrector* corrector = JetCorrector::getJetCorrector (JECLabel_,iSetup); 
-            // new recipe from : https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrOnTheFly
+            // new recipe from :
+            // https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrOnTheFly
             edm::Handle<reco::JetCorrector>  corrector  ;
             iEvent.getByToken(mJetCorrector, corrector );
             
@@ -58,8 +59,6 @@ namespace flashgg {
                 }
             }
             
-            
-            std::cout << "after the the loop" << std::endl;
             for( unsigned int ncorr = 0; ncorr < this->Corrections2D_.size(); ncorr++ ) {
                 if( !this->Corrections2D_.at( ncorr )->makesWeight() ){
                     this->Corrections2D_.at( ncorr )->setJEC(corrector.product(),iEvent,iSetup);
@@ -82,9 +81,7 @@ namespace flashgg {
         //        }
         //    }
         //}
-        std::cout << "before the ObjectSystematicProducer" << std::endl;
         ObjectSystematicProducer<flashgg::Jet,int,std::vector>::produce( iEvent, iSetup );
-        std::cout << "after the ObjectSystematicProducer" << std::endl;
     }
 
 }

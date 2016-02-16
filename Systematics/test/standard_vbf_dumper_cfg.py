@@ -18,21 +18,21 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 
 from Configuration.AlCa.GlobalTag import GlobalTag
 if os.environ["CMSSW_VERSION"].count("CMSSW_7_6"):
-    #process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_RunIIFall15DR76_v0'
-    process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_v13'# keep updated for JEC
+    process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_RunIIFall15DR76_v0'
+    #process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_v13'# keep updated for JEC
 else:
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
     
 
 process.maxEvents   = cms.untracked.PSet( input = cms.untracked.int32(1000) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1 )
 
 from flashgg.Systematics.SystematicsCustomize import *
 
 jetSystematicsInputTags = createStandardSystematicsProducers(process)
-process.flashggTagSequence=cms.Sequence(process.flashggPreselectedDiPhotons*
-                                        process.flashggDiPhotonMVA*
-                                        process.flashggVBFTag)
+
+process.load("flashgg.Taggers.flashggTagSequence_cfi")
+process.load("flashgg.Taggers.flashggTagTester_cfi")
 
 process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
 modifyTagSequenceForSystematics(process,jetSystematicsInputTags)
@@ -74,7 +74,7 @@ elif customize.processId == "Data":
                 newvpset    += [pset]
         systprod.SystMethods  = newvpset        
         systprod.DoCentralJEC = True
-        systprod.JECLabel     = ak4PFL1L2L3Corrector #"ak4PFCHSL1FastL2L3Residual"
+        systprod.JECLabel     = "ak4PFCHSL1FastL2L3Residual"
         process.load("JetMETCorrections/Configuration/JetCorrectionServices_cff")
 else:
     print "Background MC, so store mgg and central only"
@@ -113,8 +113,9 @@ from flashgg.MetaData.samples_utils import SamplesManager
 
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-        "root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_112132/0000/myMicroAODOutputFile_156.root"
-        ))
+                                 #"root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_112132/0000/myMicroAODOutputFile_156.root"
+                                 "root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall15DR76-1_3_0-25ns/1_3_0/SingleElectron/RunIIFall15DR76-1_3_0-25ns-1_3_0-v0-Run2015C_25ns-16Dec2015-v1/160116_110208/0000/myMicroAODOutputFile_1.root"
+                             ))
 
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("test.root"))
@@ -206,8 +207,8 @@ process.eeBadScFilter.EERecHitSource = cms.InputTag("reducedEgamma","reducedEERe
 
 process.dataRequirements = cms.Sequence()
 if customize.processId == "Data":
-        process.dataRequirements += process.hltHighLevel
-        process.dataRequirements += process.eeBadScFilter
+    process.dataRequirements += process.hltHighLevel
+    process.dataRequirements += process.eeBadScFilter
 
 # Split WH and ZH
 process.genFilter = cms.Sequence()
@@ -217,14 +218,18 @@ if (customize.processId.count("wh") or customize.processId.count("zh")) and not 
     process.VHFilter.chooseW = bool(customize.processId.count("wh"))
     process.VHFilter.chooseZ = bool(customize.processId.count("zh"))
     
-process.p = cms.Path(process.dataRequirements*
-                     process.genFilter*
-                     process.flashggDiPhotonSystematics*
-                     process.flashggMuonSystematics*process.flashggElectronSystematics*
-                     (process.flashggUnpackedJets*process.ak4PFCHSL1FastL2L3CorrectorChain*process.jetSystematicsSequence)*
-                     (process.flashggTagSequence*process.systematicsTagSequences)*
-                     process.flashggVBFTagMerger*
-                     process.vbfTagDumper
+process.p = cms.Path(process.dataRequirements
+                     * process.genFilter
+                     * process.flashggDiPhotonSystematics
+                     * process.flashggMuonSystematics
+                     * process.flashggElectronSystematics
+                     * (process.flashggUnpackedJets
+                        * process.ak4PFCHSL1FastL2L3CorrectorChain
+                        * process.jetSystematicsSequence)
+                     * (process.flashggTagSequence
+                        + process.systematicsTagSequences)
+                     * process.flashggVBFTagMerger
+                     * process.vbfTagDumper
                      )
 
 print "--- Dumping modules that take diphotons as input: ---"

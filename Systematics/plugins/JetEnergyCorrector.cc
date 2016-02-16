@@ -64,36 +64,31 @@ namespace flashgg {
 
     void JetEnergyCorrector::applyCorrection( flashgg::Jet &y, int syst_shift )
     {
-        std::cout << " JetEnergyCorrector::applyCorrection " << std::endl;
         if( overall_range_( y ) ) {
             double jec_adjust = 1.;
             if (jec_set_ && applyCentralValue()) {
-                //                double jec = jec_cor_->correction( y.correctedJet("Uncorrected") , *evt_, *evt_setup_ );
+                //double jec = jec_cor_->correction( y.correctedJet("Uncorrected") ,
+                //                                   *evt_, *evt_setup_ );
                 double oldjec = (y.energy()/y.correctedJet("Uncorrected").energy());
-                std::cout << " got oldjec " << oldjec << std::endl;
-                std::cout << " about to get new jec " << std::endl;
                 double jec = jec_cor_->correction( y );
-                std::cout << " got new jec " << jec << std::endl;
                 if ( debug_ ) {
                     std::cout << " DOING JEC! We get this jec from the corrector: " << jec << std::endl;
                     std::cout << "    ... previous jec was: " << oldjec << std::endl;
                 }
                 jec_adjust = jec/oldjec;
             }
-            //            jec_unc_->setJetEta(y.eta());
-            //            jec_unc_->setJetPt(jec_adjust*y.pt()); 
-            //            float unc = jec_unc_->getUncertainty(true);
             float unc = 0.;
             float scale = jec_adjust + syst_shift*unc;
             if( debug_ ) {
-                std::cout << "  " << shiftLabel( syst_shift ) << ": Jet has pt= " << y.pt() << " eta=" << y.eta()
+                std::cout << "  "             << shiftLabel( syst_shift )
+                          << ": Jet has pt= " << y.pt()
+                          << " eta="          << y.eta()
                           << " and we apply a multiplicative correction of " << scale << std::endl;
             }
             y.setP4( scale * y.p4() );
         }
     }
 }
-
 DEFINE_EDM_PLUGIN( FlashggSystematicJetMethodsFactory,
                    flashgg::JetEnergyCorrector,
                    "FlashggJetEnergyCorrector" );
@@ -104,4 +99,3 @@ DEFINE_EDM_PLUGIN( FlashggSystematicJetMethodsFactory,
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
