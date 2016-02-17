@@ -160,12 +160,12 @@ new_variables = [
 matching_photon = [
     "prompt_pho_1   := diPhoton.leadingPhoton.genMatchType()",
     "prompt_pho_2   := diPhoton.subLeadingPhoton.genMatchType()"
-    ]
+]
 
-all_variables = var.dipho_variables + new_variables 
+all_variables = var.dipho_variables + var.dijet_variables +  new_variables 
 if customize.processId != "Data":
     all_variables += var.truth_variables + matching_photon
-
+    
 cats = [
     ("VBFDiJet","1",0)#,
 ]
