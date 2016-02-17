@@ -1,6 +1,6 @@
 #!/usr/bin/env cmsRun
 
-runOnZee = True
+runOnZee = False
 dumpJetSysTrees = False
 
 import FWCore.ParameterSet.Config as cms
@@ -55,10 +55,7 @@ from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
 #from JetMETCorrections.Configuration.JetCorrectors_cff import *
 process.load("JetMETCorrections.Configuration.JetCorrectors_cff")
 
-if customize.processId.count("h_") or customize.processId.count("vbf_"):
-    # convention: ggh vbf wzh (wh zh) tth
-    raise Exception,"not really set up for signal or for shifted MCs right now"
-elif customize.processId == "Data":
+if customize.processId == "Data":
     print "Data, so turn of all shifts and systematics, with some exceptions"
     variablesToUse = minimalNonSignalVariables
     customizeSystematicsForData(process)
@@ -185,11 +182,6 @@ cfgTools.addCategories(process.vbfTagDumper,
                        histograms = []
 )
 process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
-
-customize.setDefault("maxEvents" ,  5000     ) # max-number of events
-customize.setDefault("targetLumi",  1.00e+3  ) # define integrated lumi
-customize(process)
-
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
 if runOnZee:
     if customize.processId == "Data":
@@ -244,7 +236,7 @@ print
 printSystematicInfo(process)
 
 # set default options if needed
-customize.setDefault("maxEvents",100)
-customize.setDefault("targetLumi",2.61e+3)
+customize.setDefault("maxEvents"  ,5000   )
+customize.setDefault("targetLumi" ,1.00e+3)
 # call the customization
 customize(process)
