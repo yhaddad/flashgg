@@ -115,7 +115,12 @@ class JobConfig(object):
         from SimGeneral.MixingModule.mix_2015_25ns_Startup_PoissonOOTPU_cfi import mix as mix_2015_25ns
         from SimGeneral.MixingModule.mix_2015_50ns_Startup_PoissonOOTPU_cfi import mix as mix_2015_50ns
         self.pu_distribs = { "74X_mcRun2_asymptotic_v2" : mix_2015_25ns.input.nbPileupEvents }
-        
+        try:
+            from SimGeneral.MixingModule.mix_2015_25ns_FallMC_matchData_PoissonOOTPU_cfi import mix as mix_2015_Fall_25ns
+            self.pu_distribs["76X_mcRun2_asymptotic_v12"] = mix_2015_Fall_25ns.input.nbPileupEvents
+            self.pu_distribs["76X_mcRun2_asymptotic_RunIIFall15DR76_v0"] = mix_2015_Fall_25ns.input.nbPileupEvents
+        except Exception:
+            print "INFO: Failed to set up Fall PU scenario, this is possibly expected in 7_4_X"
 
     def __getattr__(self,name):
         ## did not manage to inherit from VarParsing, because of some issues in __init__
