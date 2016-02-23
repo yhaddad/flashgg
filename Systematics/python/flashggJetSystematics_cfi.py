@@ -74,7 +74,7 @@ def createJetSystematicsForTag(process,jetInputTag):
                                                            Label = cms.string("JEC"),
                                                            NSigmas = cms.vint32(-1,1),
                                                            OverallRange = cms.string("abs(eta)<5.0"),
-                                                           Debug = cms.untracked.bool(True),
+                                                           Debug = cms.untracked.bool(False),
                                                            ApplyCentralValue = cms.bool(True),
                                                            SetupUncertainties = cms.bool(True),
                                                            JetCorrectorTag = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
@@ -85,7 +85,7 @@ def createJetSystematicsForTag(process,jetInputTag):
                                                            OverallRange = cms.string("abs(eta)<5.0"),
                                                            RandomLabel = cms.string("rnd_g_JER"), # for no-match case
                                                            rho = cms.InputTag('fixedGridRhoAll'),
-                                                           Debug = cms.untracked.bool(True),
+                                                           Debug = cms.untracked.bool(False),
                                                            ApplyCentralValue = cms.bool(True)
                                                            ),
                                                  cms.PSet( MethodName = cms.string("FlashggJetBTagWeight"),

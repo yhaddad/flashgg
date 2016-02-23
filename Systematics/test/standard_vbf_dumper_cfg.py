@@ -1,7 +1,7 @@
 #!/usr/bin/env cmsRun
 
-runOnZee = False
-dumpJetSysTrees = False
+#runOnZee = False
+dumpJetSysTrees = True
 
 import FWCore.ParameterSet.Config as cms
 import FWCore.Utilities.FileUtils as FileUtils
@@ -51,6 +51,13 @@ customize.options.register('forwardJetRMSCut',
                            VarParsing.VarParsing.multiplicity.singleton,
                            VarParsing.VarParsing.varType.float,
                            'forwardJetRMSCut')
+
+customize.options.register('runOnZee',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'runOnZee')
+
 customize.parse()
 print "customize.processId:",customize.processId
 
@@ -118,7 +125,9 @@ process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
                                  #"root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_112132/0000/myMicroAODOutputFile_156.root"
                                  #"root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIIFall15DR76-1_3_0-25ns/1_3_0/SingleElectron/RunIIFall15DR76-1_3_0-25ns-1_3_0-v0-Run2015C_25ns-16Dec2015-v1/160116_110208/0000/myMicroAODOutputFile_1.root"
-                                 "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/VBFHToGG_M-130_13TeV_powheg_pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_024307/0000/myMicroAODOutputFile_1.root"
+                                 #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/VBFHToGG_M-130_13TeV_powheg_pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_024307/0000/myMicroAODOutputFile_1.root"
+                                 #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/SingleMuon/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-Run2015D-16Dec2015-v1/160214_075116/0000/myMicroAODOutputFile_971.root"
+                                 "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_112132/0000/myMicroAODOutputFile_96.root"
                              ))
 
 process.TFileService = cms.Service("TFileService",
@@ -134,7 +143,8 @@ process.vbfTagDumper.dumpWorkspace = False
 
 # Use JetID
 process.flashggVBFMVA.UseJetID      = cms.bool(True)
-process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
+process.flashggVBFMVA.JetIDLevel    = cms.string("Tight")
+#process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
 
 process.flashggVBFTag.Boundaries  = cms.vdouble(-2)
 process.systematicsTagSequences   = cms.Sequence()
@@ -143,6 +153,9 @@ process.flashggVBFMVA.rmsforwardCut = cms.double(customize.forwardJetRMSCut)
 print '------------------------------------------------------------'
 print ' formward RMS Cut value ::' , customize.forwardJetRMSCut
 print '------------------------------------------------------------'
+print ' running on Zee         ::' , customize.runOnZee
+print '------------------------------------------------------------'
+
 # use custum TMVA weights
 # process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
 # process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
@@ -153,7 +166,7 @@ print '------------------------------------------------------------'
 # process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
 
 # run on Drell-Yan 
-if runOnZee:
+if customize.runOnZee:
     process.flashggPreselectedDiPhotons.variables =  cms.vstring('pfPhoIso03', 
                                                                  'trkSumPtHollowConeDR03', 
                                                                  'full5x5_sigmaIetaIeta', 
@@ -197,7 +210,7 @@ cfgTools.addCategories(process.vbfTagDumper,
 )
 process.vbfTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
-if runOnZee:
+if customize.runOnZee:
     if customize.processId == "Data":
         process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Ele27_eta2p1_WPLoose_Gsf_v*") )
     else:
@@ -253,5 +266,6 @@ printSystematicInfo(process)
 # set default options if needed
 customize.setDefault("maxEvents"  ,5000   )
 customize.setDefault("targetLumi" ,1.00e+3)
+
 # call the customization
 customize(process)
