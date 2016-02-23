@@ -15,6 +15,7 @@ namespace flashgg {
     public:
         typedef StringCutObjectSelector<Photon, true> selector_type;
 
+
         PhotonSmearConstant( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer *gv );
         void applyCorrection( flashgg::Photon &y, int syst_shift ) override;
         std::string shiftLabel( int ) const override;
@@ -24,7 +25,6 @@ namespace flashgg {
         std::string random_label_;
         bool exaggerateShiftUp_; // for sanity checks only
     };
-
     PhotonSmearConstant::PhotonSmearConstant( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer *gv ) :
         ObjectSystMethodBinnedByFunctor( conf, std::forward<edm::ConsumesCollector>(iC), gv ),
         overall_range_( conf.getParameter<std::string>( "OverallRange" ) ),

@@ -130,6 +130,8 @@ def customizePhotonSystematicsForData(process):
             newvpset += [pset]
         if pset.Label.value().count("SigmaEOverESmearing"):
             newvpset += [pset]
+        if pset.Label.value().count("SigmaEOverESmearing"):
+            newvpset += [pset]
     process.flashggDiPhotonSystematics.SystMethods = newvpset
 
 def customizeLeptonSystematicsForData(process):

@@ -31,8 +31,16 @@ namespace flashgg {
         
         const float leading_rms   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->rms() : -9999.;}
         const float subLeading_rms() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->rms() : -9999.;}
+        const float leading_match   () const {
+            return  hasValidVBFDiJet()? (vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->genJet() ? 1:0): -999;
+        }
+        const float subLeading_match() const {
+            return  hasValidVBFDiJet()? (vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->genJet() ? 1:0): -999;
+        }
+        
         const float leading_QGL   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->QGL() : -9999.;}
         const float subLeading_QGL() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->QGL() : -9999.;}
+        
         const float leading_rawPt   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->correctedJet("Uncorrected").pt() : -9999.;}
         const float subLeading_rawPt() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->correctedJet("Uncorrected").pt() : -9999.;}
         
@@ -48,7 +56,7 @@ namespace flashgg {
         const float subleading_HFEMEnergyFraction() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->HFEMEnergyFraction() : -9999.;}
         const float subleading_HFEMEnergy() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->HFEMEnergy() : -9999.;  }
         const float subleading_HFEMMultiplicity() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->HFEMEnergy() : -9999.;  }
-
+        
         const bool hasValidVBFDiJet() const {
             return (vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr.isNonnull() && vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr.isNonnull()); 
         };

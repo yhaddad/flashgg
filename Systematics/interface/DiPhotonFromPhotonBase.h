@@ -17,7 +17,6 @@ namespace flashgg {
 
     public:
         DiPhotonFromPhotonBase( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer * gv );
-
         void applyCorrection( DiPhotonCandidate &y, param_var syst_shift ) override;
         float makeWeight( const DiPhotonCandidate &y, param_var syst_shift ) override;
         std::string shiftLabel( param_var ) const override;

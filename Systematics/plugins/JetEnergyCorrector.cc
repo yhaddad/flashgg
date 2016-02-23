@@ -34,7 +34,7 @@ namespace flashgg {
         edm::EDGetTokenT<reco::JetCorrector> mJetCorrector;
     };
 
-
+    
     JetEnergyCorrector::JetEnergyCorrector( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer * gv ) :
         BaseSystMethod( conf, std::forward<edm::ConsumesCollector>(iC)  ),
         overall_range_( conf.getParameter<std::string>( "OverallRange" ) ),
