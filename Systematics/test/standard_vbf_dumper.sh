@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 
 #rms_cut=(0.01 0.02 0.03 0.04 0.05 1.00)
-run_on_zee=true
-rms_cut=(0.03 2.00 0.01)
+run_on_zee=false
+rms_cut=(0.03)
 label="tight_jetid"
 for i in ${rms_cut[@]};do
     echo "--> rmsCut :: $i label :: ${label}"
-    if [ run_on_zee ]
+    if [ run_on_zee = true ]
     then
 	echo " ############################### "
 	echo " # running on zee sample       # "

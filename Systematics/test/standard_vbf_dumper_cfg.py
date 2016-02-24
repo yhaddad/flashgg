@@ -157,8 +157,8 @@ print ' running on Zee         ::' , customize.runOnZee
 print '------------------------------------------------------------'
 
 # use custum TMVA weights
-# process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijet_mva_11_01_16_BDTG.weights.xml")
-# process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
+process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijetMVA_76x_17_02_15_BDTG.weights.xml")
+process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
 # process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
 
 # QCD Recovery 
