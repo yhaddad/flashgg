@@ -1,0 +1,11 @@
+{
+    "processes" : {
+	"ggh_125"  : [
+	    "/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8/ferrif-RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext2-v1-61ec12b3e335d5103b9c71fb98a2868d/USER"
+	],
+	"vbf_125" : [
+	    "/VBFHToGG_M125_13TeV_amcatnlo_pythia8/ferrif-RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext2-v1-61ec12b3e335d5103b9c71fb98a2868d/USER"
+	]
+    },	
+    "cmdLine" : "campaign=RunIIFall15DR76-1_3_0-25ns_ext1"
+}

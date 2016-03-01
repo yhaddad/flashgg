@@ -22,10 +22,10 @@ namespace flashgg {
         JetRMSShift( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer * gv );
         void applyCorrection( flashgg::Jet &y, int syst_shift ) override;
         std::string shiftLabel( int ) const override;
-
+        
     private:
         selector_type overall_range_;
-        bool debug_;
+        //bool debug_;
     };
 
 
@@ -59,9 +59,9 @@ namespace flashgg {
                 float shift = shift_val + syst_shift * shift_err;
                 float theRms = y.rms();
                 y.setSimpleRMS( theRms + shift );
-                if ( this->debug_ ) {
-                    std::cout << "JetRMSShift::applyCorrection syst_shift=" << syst_shift << " old rms=" << theRms << " new rms=" << y.rms() << std::endl;
-                }
+                //if ( this->debug_ ) {
+                //    std::cout << "JetRMSShift::applyCorrection syst_shift=" << syst_shift << " old rms=" << theRms << " new rms=" << y.rms() << std::endl;
+                //}
             }
         }
     }

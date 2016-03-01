@@ -15,6 +15,7 @@ namespace flashgg {
     public:
         typedef StringCutObjectSelector<Photon, true> selector_type;
 
+
         PhotonSmearStochastic( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer *gv );
         void applyCorrection( flashgg::Photon &y, std::pair<int, int> syst_shift ) override;
         std::string shiftLabel( std::pair<int, int> ) const override;
