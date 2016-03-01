@@ -19,7 +19,6 @@ namespace flashgg {
     private:
         selector_type overall_range_;
     };
-
     PhotonMvaShift::PhotonMvaShift( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer *gv ) :
         ObjectSystMethodBinnedByFunctor( conf, std::forward<edm::ConsumesCollector>(iC), gv ),
         overall_range_( conf.getParameter<std::string>( "OverallRange" ) )

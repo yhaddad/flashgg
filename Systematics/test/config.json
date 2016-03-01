@@ -1,0 +1,35 @@
+{
+    "cont": false, 
+    "resubMissing": false, 
+    "hadd": false, 
+    "njobs": 100, 
+    "verbose": false, 
+    "jobExe": "cmsRun", 
+    "cmdLine": "campaign=RunIIFall15DR76-1_3_0-25ns_ext1", 
+    "stageCmd": "guess", 
+    "outputDir": "/vols/cms04/yhaddad/output_zee_76x_rms_2.00", 
+    "asyncLsf": true, 
+    "maxResub": 3, 
+    "ncpu": 8, 
+    "copy_proxy": true, 
+    "processes": {
+        "Data": [
+            "/SingleElectron/ferrif-RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-Run2015C_25ns-16Dec2015-v1-5edb826a5c37da64e53f7a0f39c62a72/USER", 
+            "/SingleElectron/ferrif-RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-Run2015D-16Dec2015-v1-5edb826a5c37da64e53f7a0f39c62a72/USER"
+        ], 
+        "DYjet": [
+            "/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/ferrif-RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1-9dd966127498bcac8c2a422833c3836e/USER", 
+            "/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/ferrif-RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12_ext4-v1-9dd966127498bcac8c2a422833c3836e/USER"
+        ]
+    }, 
+    "useTarball": false, 
+    "stageTo": "/vols/cms04/yhaddad/output_zee_76x_rms_2.00", 
+    "__opts__": null, 
+    "hadd_dataset": false, 
+    "use_tarball": true, 
+    "__opts___src": "ZPlusJetDump.json", 
+    "queue": "hepmedium.q", 
+    "hadd_process": false, 
+    "batchSystem": "auto", 
+    "output": "output.root"
+}

@@ -14,6 +14,7 @@ namespace flashgg {
     public:
         typedef StringCutObjectSelector<Jet, true> selector_type;
 
+        
         JetSmear( const edm::ParameterSet &conf, edm::ConsumesCollector && iC, const GlobalVariablesComputer * gv );
         void applyCorrection( flashgg::Jet &y, int syst_shift ) override;
         std::string shiftLabel( int ) const override;
