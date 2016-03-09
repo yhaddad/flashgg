@@ -19,7 +19,8 @@ flashggUntagged = cms.EDProducer("FlashggUntaggedTagProducer",
                                  SystLabel      = cms.string(""),
                                  MVAResultTag   = cms.InputTag('flashggDiPhotonMVA'),
                                  GenParticleTag = cms.InputTag( "flashggPrunedGenParticles" ),
-                                 Boundaries     = cms.vdouble(-0.337,0.258,0.584,0.913), #,1.000),
+                                 #Boundaries     = cms.vdouble(-0.337,0.258,0.584,0.913), #,1.000),
+                                 Boundaries     = cms.vdouble(-2), #,1.000),
                                  RequireScaledPtCuts = cms.bool(True)
 )
 
@@ -74,10 +75,11 @@ flashggVBFTag = cms.EDProducer("FlashggVBFTagProducer",
                                #Boundaries=cms.vdouble(0.21,0.6,0.81)
                                #  for the moment we have two categories VBF-0 and VBF-1: to be changed when the diphoton MVA is ready 
                                #Boundaries=cms.vdouble(0.5819, 0.9449)
-                               Boundaries=cms.vdouble(0.62, 0.94),
+                               #Boundaries=cms.vdouble(0.62, 0.94),
+                               Boundaries=cms.vdouble(-2),
                                SetArbitraryNonGoldMC = cms.bool(False),
                                DropNonGoldData = cms.bool(False),
-                               RequireVBFPreselection = cms.bool(True)
+                               RequireVBFPreselection = cms.bool(False)
                                )
 
 

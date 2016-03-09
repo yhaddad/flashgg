@@ -53,7 +53,8 @@ def modifyTagSequenceForSystematics(process,jetSystematicsInputTags,ZPlusJetMode
     for i in range(len(jetSystematicsInputTags)):
         massSearchReplaceAnyInputTag(process.flashggTagSequence,UnpackedJetCollectionVInputTag[i],jetSystematicsInputTags[i])
 
-    if ZPlusJetMode == 2:  # VBF    
+    if ZPlusJetMode == 2:  # VBF
+        print "running in VBF mode :: creating VBFTagMerger"
         process.flashggSystTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
     elif ZPlusJetMode:    
         process.flashggSystTagMerger = cms.EDProducer("ZPlusJetTagMerger",src=cms.VInputTag("flashggZPlusJetTag"))
@@ -78,6 +79,7 @@ def cloneTagSequenceForEachSystematic(process,systlabels,phosystlabels,jetsystla
                 module.SystLabel = systlabel
         process.systematicsTagSequences += newseq
         if ZPlusJetMode == 2:
+            print "running in VBF mode :: ", "flashggVBFTag" + systlabel
             process.flashggSystTagMerger.src.append(cms.InputTag("flashggVBFTag" + systlabel))
         elif ZPlusJetMode:
             process.flashggSystTagMerger.src.append(cms.InputTag("flashggZPlusJetTag" + systlabel))
