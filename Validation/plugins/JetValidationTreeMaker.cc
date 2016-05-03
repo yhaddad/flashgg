@@ -38,6 +38,8 @@
 
 
 #include "TTree.h"
+#include "TH1.h"
+#include "TH2.h"
 #include "TMatrix.h"
 #include "TVector.h"
 #include "TLorentzVector.h"
@@ -313,6 +315,7 @@ private:
     //EDGetTokenT< VertexCandidateMap > vertexCandidateMapTokenAOD_;
 
     EDGetTokenT< edm::View<reco::GenParticle> >          genPartToken_;
+    EDGetTokenT< edm::View<pat::PackedGenParticle> >     genPhoToken_; // Ed
     EDGetTokenT< edm::View<reco::GenJet> >               genJetToken_;
     //EDGetTokenT< edm::View<flashgg::Jet> >               jetDzToken_;
     std::vector<edm::EDGetTokenT<View<flashgg::Jet> > >  tokenJets_;
@@ -331,6 +334,44 @@ private:
     TTree     *jetTree;
     TTree     *genPartTree;
     TTree     *genJetTree;
+
+    // initial plots // Ed
+    TH1F      *hPromptFakeDeltaR;
+    TH1F      *hPromptGenJetRatio; 
+    TH1F      *hFakeGenJetRatio; 
+    TH1F      *hPromptNumGenPhotons;
+    TH1F      *hFakeNumGenPhotons;
+    TH1F      *hPromptFakeDeltaRNoIso;
+    TH1F      *hPromptGenJetRatioNoIso;
+    TH1F      *hFakeGenJetRatioNoIso;
+    TH1F      *hPromptNumGenPhotonsNoIso; 
+    TH1F      *hFakeNumGenPhotonsNoIso; 
+    // matrix element parton plots
+    TH1F      *hPromptNearestPartonDeltaR;
+    TH1F      *hFakeNearestPartonDeltaR;
+    TH1F      *hPromptNearestPartonDeltaRNoIso;
+    TH1F      *hFakeNearestPartonDeltaRNoIso;
+    TH1F      *hPromptPartonRatio;
+    TH1F      *hFakePartonRatio;
+    TH1F      *hPromptPartonRatioNoIso;
+    TH1F      *hFakePartonRatioNoIso;
+    TH1F      *hPromptPartonMatching;
+    TH1F      *hFakePartonMatching;
+    TH1F      *hPromptPartonMatchingNoIso;
+    TH1F      *hFakePartonMatchingNoIso;
+    TH1F      *hPartonPdgId;
+    TH1F      *hPartonPdgIdNoIso;
+    // parton match only plots
+    TH1F      *hIfMatchPromptGenJetDeltaR;
+    TH1F      *hIfMatchPartonGenJetDeltaR;
+    // 2D plots
+    TH2F      *hFakeNumRatio;
+    TH2F      *hFakeNumRatioNoIso; // Ed
+    TH2F      *hPrPaDrRatio; // Ed
+    TH2F      *hPrPaDrRatioNoIso; // Ed
+
+    int  prompt_fake_count; // Ed
+    int  promptIsoCount; // Ed
 
     eventInfo   eInfo;
     jetInfo     jInfo;
@@ -352,6 +393,7 @@ private:
 
 JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig ):
     genPartToken_( consumes<View<reco::GenParticle> >( iConfig.getUntrackedParameter<InputTag> ( "GenParticleTag", InputTag( "prunedGenParticles" ) ) ) ),
+    genPhoToken_( consumes<View<pat::PackedGenParticle> >( iConfig.getUntrackedParameter<InputTag> ( "GenPhotonTag", InputTag( "packedGenParticles" ) ) ) ),
     genJetToken_( consumes<View<reco::GenJet> >( iConfig.getUntrackedParameter<InputTag> ( "GenJetTag", InputTag( "slimmedGenJets" ) ) ) ),
     //jetDzToken_   ( consumes<View<flashgg::Jet> >( iConfig.getParameter<InputTag>( "JetTagDz" ) ) ),
     inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
@@ -375,6 +417,8 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     }
 
     event_number = 0;
+    prompt_fake_count = 0; // Ed
+    promptIsoCount = 0; // Ed
     jetCollectionName = iConfig.getParameter<string>( "StringTag" );
     //qgToken	= consumes<edm::ValueMap<float>>( edm::InputTag( qgVariablesInputTag.label(), "qgLikelihood" ) );
 
@@ -411,7 +455,8 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     iEvent.getByToken( genPartToken_, gens );
     //const PtrVector<reco::GenParticle>& gens = genParticles->ptrVector();
 
-
+    Handle<View<pat::PackedGenParticle> > genPhotons; // Ed
+    iEvent.getByToken( genPhoToken_, genPhotons ); // Ed
 
     Handle<View<reco::GenJet> > genJets;
     iEvent.getByToken( genJetToken_, genJets );
@@ -476,6 +521,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
 
         // be sure that the photons comes from the higgs
         if( gens->ptrAt( genLoop )->pdgId() == 22 && gens->ptrAt( genLoop )-> mother( 0 )->pdgId() == 25 ) {
+            cout << " a gen photon!!! " << endl;
             genPhoton.push_back( gens->ptrAt( genLoop ) );
         }
 
@@ -495,10 +541,408 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
 
     size_t diPhotonsSize = diPhotons->size();
     if( ZeroVertexOnly_ ) { diPhotonsSize = 1; }
-
+ 
     for( unsigned int diphoIndex = 0; diphoIndex < diPhotonsSize; diphoIndex++ ) {
         unsigned int jetCollectionIndex = 0;
         if( !ZeroVertexOnly_ ) { jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex(); }
+
+        //--------------------------------------------------------------------------------------------------
+        // Begin analysis of prompt-fake events // Ed
+        
+        auto printDipho = diPhotons->ptrAt(0);
+        // select only diphoton candidate with highest IDMVA score
+        if( diPhotonsSize > 1 ) {
+            float max_phoIDMVA_sum = -3.0;
+            for( uint secondDiphoIndex = 0; secondDiphoIndex < diPhotonsSize; secondDiphoIndex++ ) {
+                float temp_phoIDMVA_sum =  diPhotons->ptrAt( secondDiphoIndex )->leadPhotonId() + diPhotons->ptrAt( secondDiphoIndex )->subLeadPhotonId();
+                if( temp_phoIDMVA_sum > max_phoIDMVA_sum ) {
+                    printDipho = diPhotons->ptrAt( secondDiphoIndex );
+                    max_phoIDMVA_sum = temp_phoIDMVA_sum;
+                }
+            }
+        }
+        if( printDipho->mass() < 100 || printDipho->mass() > 180 ) continue;
+        auto printLeadPho    = printDipho->leadingPhoton();
+        auto printSubLeadPho = printDipho->subLeadingPhoton();
+        flashgg::Photon::mcMatch_t leadMatchType    = printLeadPho->genMatchType();
+        flashgg::Photon::mcMatch_t subleadMatchType = printSubLeadPho->genMatchType();
+        bool prompt_fake = ( (!(leadMatchType==1 && subleadMatchType==1)) && (leadMatchType==1 || subleadMatchType==1) );
+        auto promptPhoton   = printLeadPho;
+        int photonsInPrompt = 0;
+        auto fakePhoton     = printSubLeadPho;
+        int photonsInFake   = 0;
+        auto promptGenJet = genJets->ptrAt(0);
+        auto fakeGenJet   = genJets->ptrAt(1);
+        bool reversed     = false;
+        bool promptIso    = false;
+        auto promptNearestParton   = gens->ptrAt(0);
+        int  promptPartonMatchType = 0;
+        auto fakeNearestParton     = gens->ptrAt(1);
+        int  fakePartonMatchType   = 0;
+        int  partonPdgId0 = -999;
+        int  partonPdgId1 = -999;
+
+        if( prompt_fake ) {
+            prompt_fake_count++;
+            if( leadMatchType != 1 ) {
+                promptPhoton = printSubLeadPho;
+                fakePhoton   = printLeadPho;
+                reversed     = true;
+            }
+            // check if promptPhoton is "isolated" and count matching genPhotons
+            if( genPhotons->size() > 0 ) {
+                for( uint genPhotonIndex = 0; genPhotonIndex < genPhotons->size(); genPhotonIndex++ ) {
+                    bool nearLeadPhoton    = false;
+                    bool nearSubLeadPhoton = false;
+                    float genPhotonEta     = genPhotons->ptrAt( genPhotonIndex )->eta();
+                    float genPhotonPhi     = genPhotons->ptrAt( genPhotonIndex )->phi();
+                    float drGenPhoLead     = sqrt( (genPhotonEta-printLeadPho->eta())*(genPhotonEta-printLeadPho->eta()) 
+                                                 + (genPhotonPhi-printLeadPho->phi())*(genPhotonPhi-printLeadPho->phi()) );
+                    float drGenPhoSubLead  = sqrt( (genPhotonEta-printSubLeadPho->eta())*(genPhotonEta-printSubLeadPho->eta()) 
+                                                 + (genPhotonPhi-printSubLeadPho->phi())*(genPhotonPhi-printSubLeadPho->phi()) );
+                    if( drGenPhoLead    < 0.4 ) nearLeadPhoton    = true;
+                    if( drGenPhoSubLead < 0.4 ) nearSubLeadPhoton = true;
+                    if( nearLeadPhoton && !nearSubLeadPhoton ) {
+                        if(     !reversed && (abs(printLeadPho->energy() - genPhotons->ptrAt( genPhotonIndex )->energy()) / genPhotons->ptrAt( genPhotonIndex )->energy() < 0.1) ) { 
+                            promptIso    = true; 
+                            photonsInPrompt++;
+                        }
+                        else if( !reversed ) { 
+                            photonsInPrompt++;
+                        }
+                        else if( reversed ) { 
+                            photonsInFake++;
+                        }
+                    }
+                    else if ( !nearLeadPhoton && nearSubLeadPhoton ) {
+                        if(      reversed && (abs(printSubLeadPho->energy() - genPhotons->ptrAt( genPhotonIndex )->energy()) / genPhotons->ptrAt( genPhotonIndex )->energy() < 0.1) ) { 
+                            promptIso = true;
+                            photonsInPrompt++;
+                        }
+                        else if( reversed ) { 
+                            photonsInPrompt++;
+                        }
+                        else if( !reversed ) { 
+                            photonsInFake++;
+                        }
+                    }
+                }
+            } // end of iso checking and genPhoton counting
+
+            // only print for "unusual" events
+            cout << "------------------------------------------------------------------- " << endl;
+            cout << "NEW EVENT" << endl;
+            cout << "-------------------------------------------------------------------" << endl << endl;
+            if( !promptIso ) {
+                cout << "number of diphotons = " << diPhotonsSize << endl << endl;
+                cout << "leadMatchType    = " << leadMatchType << endl;
+                cout << "lead IDMVA       = " << printDipho->leadPhotonId() << endl;
+                cout << "lead pt          = " << printLeadPho->pt() << endl;
+                cout << "lead energy      = " << printLeadPho->energy() << endl;
+                cout << "lead eta         = " << printLeadPho->eta() << endl;
+                cout << "lead phi         = " << printLeadPho->phi() << endl << endl;
+                cout << "subleadMatchType = " << subleadMatchType << endl;
+                cout << "sublead IDMVA    = " << printDipho->subLeadPhotonId() << endl;
+                cout << "sublead pt       = " << printSubLeadPho->pt() << endl;
+                cout << "sublead energy   = " << printSubLeadPho->energy() << endl;
+                cout << "sublead eta      = " << printSubLeadPho->eta() << endl;
+                cout << "sublead phi      = " << printSubLeadPho->phi() << endl << endl;
+                cout << "photon deltaR    = " << sqrt( (printLeadPho->phi()-printSubLeadPho->phi())*(printLeadPho->phi()-printSubLeadPho->phi())
+                                                     + (printLeadPho->eta()-printSubLeadPho->eta())*(printLeadPho->eta()-printSubLeadPho->eta()) ) << endl;
+                cout << "photon deltaPhi  = " << printLeadPho->phi()-printSubLeadPho->phi() << endl << endl << endl;
+
+                // print out gen photon info
+                if( genPhotons->size() > 0 ) {
+                    for( uint genPhotonIndex = 0; genPhotonIndex < genPhotons->size(); genPhotonIndex++ ) {
+                        bool nearLeadPhoton    = false;
+                        bool nearSubLeadPhoton = false;
+                        float genPhotonEta = genPhotons->ptrAt( genPhotonIndex )->eta();
+                        float genPhotonPhi = genPhotons->ptrAt( genPhotonIndex )->phi();
+                        float drGenPhoLead    = sqrt( (genPhotonEta-printLeadPho->eta())*(genPhotonEta-printLeadPho->eta()) 
+                                                    + (genPhotonPhi-printLeadPho->phi())*(genPhotonPhi-printLeadPho->phi()) );
+                        float drGenPhoSubLead = sqrt( (genPhotonEta-printSubLeadPho->eta())*(genPhotonEta-printSubLeadPho->eta()) 
+                                                    + (genPhotonPhi-printSubLeadPho->phi())*(genPhotonPhi-printSubLeadPho->phi()) );
+                        if( drGenPhoLead    < 0.4 ) nearLeadPhoton    = true;
+                        if( drGenPhoSubLead < 0.4 ) nearSubLeadPhoton = true;
+                        if( !nearLeadPhoton && !nearSubLeadPhoton ) {
+                            cout << "gen photon " << genPhotonIndex << " is near neither photon" << endl << endl;
+                        }
+                        else if ( nearLeadPhoton && !nearSubLeadPhoton ) {
+                            cout << "gen photon " << genPhotonIndex << " is near leading photon" << endl;
+                            cout << "gen photon " << genPhotonIndex << " pt     = " << genPhotons->ptrAt( genPhotonIndex )->pt() << endl;
+                            cout << "gen photon " << genPhotonIndex << " energy = " << genPhotons->ptrAt( genPhotonIndex )->energy() << endl;
+                            cout << "gen photon " << genPhotonIndex << " eta    = " << genPhotons->ptrAt( genPhotonIndex )->eta() << endl;
+                            cout << "gen photon " << genPhotonIndex << " phi    = " << genPhotons->ptrAt( genPhotonIndex )->phi() << endl;
+                            cout << "gen photon " << genPhotonIndex << " deltaR = " << drGenPhoLead << endl << endl;
+                        }
+                        else if ( !nearLeadPhoton && nearSubLeadPhoton ) {
+                            cout << "gen photon " << genPhotonIndex << " is near subleading photon" << endl;
+                            cout << "gen photon " << genPhotonIndex << " pt     = " << genPhotons->ptrAt( genPhotonIndex )->pt() << endl;
+                            cout << "gen photon " << genPhotonIndex << " energy = " << genPhotons->ptrAt( genPhotonIndex )->energy() << endl;
+                            cout << "gen photon " << genPhotonIndex << " eta    = " << genPhotons->ptrAt( genPhotonIndex )->eta() << endl;
+                            cout << "gen photon " << genPhotonIndex << " phi    = " << genPhotons->ptrAt( genPhotonIndex )->phi() << endl;
+                            cout << "gen photon " << genPhotonIndex << " deltaR = " << drGenPhoSubLead << endl << endl;
+                        }
+                        else {
+                            cout << "gen photon " << genPhotonIndex << " is near both photons!!!" << endl << endl;
+                        }
+                    }
+                } // end of gen photon info
+                cout << "" << endl;
+            }
+
+            // Print out gen jet info
+            if( genJets->size() > 0 ) {
+                for( uint genJetIndex = 0; genJetIndex < genJets->size(); genJetIndex++ ) {
+                    bool nearLeadPhoton    = false;
+                    bool nearSubLeadPhoton = false;
+                    float genJetEta = genJets->ptrAt( genJetIndex )->eta();
+                    float genJetPhi = genJets->ptrAt( genJetIndex )->phi();
+                    float drGenLead    = sqrt( (genJetEta-printLeadPho->eta())*(genJetEta-printLeadPho->eta()) + (genJetPhi-printLeadPho->phi())*(genJetPhi-printLeadPho->phi()) );
+                    float drGenSubLead = sqrt( (genJetEta-printSubLeadPho->eta())*(genJetEta-printSubLeadPho->eta()) + (genJetPhi-printSubLeadPho->phi())*(genJetPhi-printSubLeadPho->phi()) );
+                    if( drGenLead    < 0.4 ) nearLeadPhoton    = true;
+                    if( drGenSubLead < 0.4 ) nearSubLeadPhoton = true;
+                    if( !nearLeadPhoton && !nearSubLeadPhoton && !promptIso ) {
+                        cout << "Gen Jet " << genJetIndex << " is near neither photon" << endl << endl;
+                    }
+                    else if ( nearLeadPhoton && !nearSubLeadPhoton ) {
+                        if( !promptIso ) {
+                            cout << "Gen Jet " << genJetIndex << " is near leading photon" << endl;
+                            cout << "Gen Jet " << genJetIndex << " pt     = " << genJets->ptrAt( genJetIndex )->pt() << endl;
+                            cout << "Gen Jet " << genJetIndex << " energy = " << genJets->ptrAt( genJetIndex )->energy() << endl;
+                            cout << "Gen Jet " << genJetIndex << " eta    = " << genJetEta << endl;
+                            cout << "Gen Jet " << genJetIndex << " phi    = " << genJetPhi << endl;
+                            cout << "Gen Jet " << genJetIndex << " deltaR = " << drGenLead << endl;
+                            cout << "Gen Jet " << genJetIndex << " has      " << genJets->ptrAt(genJetIndex)->numberOfDaughters() << " daughters" << endl << endl;
+                        }
+                        if(     !reversed ) { 
+                            promptGenJet = genJets->ptrAt( genJetIndex );
+                        }
+                        else if( reversed ) { 
+                            fakeGenJet   = genJets->ptrAt( genJetIndex );
+                        }
+                    }
+                    else if ( !nearLeadPhoton && nearSubLeadPhoton ) {
+                        if( !promptIso ) {
+                            cout << "Gen Jet " << genJetIndex << " is near subleading photon" << endl;
+                            cout << "Gen Jet " << genJetIndex << " pt     = " << genJets->ptrAt( genJetIndex )->pt() << endl;
+                            cout << "Gen Jet " << genJetIndex << " energy = " << genJets->ptrAt( genJetIndex )->energy() << endl;
+                            cout << "Gen Jet " << genJetIndex << " eta    = " << genJetEta << endl;
+                            cout << "Gen Jet " << genJetIndex << " phi    = " << genJetPhi << endl;
+                            cout << "Gen Jet " << genJetIndex << " deltaR = " << drGenSubLead << endl;
+                            cout << "Gen Jet " << genJetIndex << " has      " << genJets->ptrAt(genJetIndex)->numberOfDaughters() << " daughters" << endl << endl;
+                        }
+                        if(       reversed ) { 
+                            promptGenJet = genJets->ptrAt( genJetIndex );
+                        }
+                        else if( !reversed ) { 
+                            fakeGenJet   = genJets->ptrAt( genJetIndex );
+                        }
+                    }
+                    else if( !promptIso ) {
+                        cout << "Gen Jet " << genJetIndex << " is near both photons!!!" << endl << endl;
+                    }
+                    /*if( !promptIso ) {
+                        for( uint genDaughterIndex = 0; genDaughterIndex < genJets->ptrAt( genJetIndex )->numberOfDaughters(); genDaughterIndex++ ) {
+                            cout << "daughter " << genDaughterIndex << " has pdgID, energy = "
+                                 << genJets->ptrAt( genJetIndex )->daughter( genDaughterIndex )->pdgId() << ", " 
+                                 << genJets->ptrAt( genJetIndex )->daughter( genDaughterIndex )->energy() << endl;
+                        }
+                        cout << "" << endl << endl;
+                    }*/
+                }
+            } // end of gen jet info
+
+            // print out the reco jet info
+            if( !promptIso ) {
+                auto recoJets = Jets[jetCollectionIndex];
+                if( recoJets->size() > 0 ) {
+                    for( unsigned int recoJetIndex = 0; recoJetIndex < recoJets->size(); recoJetIndex++ ) {
+                        /*float recoJetEta = recoJets->ptrAt( recoJetIndex )->eta();
+                        float recoJetPhi = recoJets->ptrAt( recoJetIndex )->phi();
+                        cout << "Reco Jet " << recoJetIndex << " pt     = " << recoJets->ptrAt( recoJetIndex )->pt() << endl;
+                        cout << "Reco Jet " << recoJetIndex << " energy = " << recoJets->ptrAt( recoJetIndex )->energy() << endl;
+                        cout << "Reco Jet " << recoJetIndex << " eta    = " << recoJetEta << endl;
+                        cout << "Reco Jet " << recoJetIndex << " phi    = " << recoJetPhi << endl << endl;*/
+
+                        bool nearLeadPhoton    = false;
+                        bool nearSubLeadPhoton = false;
+                        float recoJetEta = recoJets->ptrAt( recoJetIndex )->eta();
+                        float recoJetPhi = recoJets->ptrAt( recoJetIndex )->phi();
+                        float drRecoLead    = sqrt( (recoJetEta-printLeadPho->eta())*(recoJetEta-printLeadPho->eta()) + (recoJetPhi-printLeadPho->phi())*(recoJetPhi-printLeadPho->phi()) );
+                        float drRecoSubLead = sqrt( (recoJetEta-printSubLeadPho->eta())*(recoJetEta-printSubLeadPho->eta()) + (recoJetPhi-printSubLeadPho->phi())*(recoJetPhi-printSubLeadPho->phi()) );
+                        if( drRecoLead    < 0.4 ) nearLeadPhoton    = true;
+                        if( drRecoSubLead < 0.4 ) nearSubLeadPhoton = true;
+                        if( !nearLeadPhoton && !nearSubLeadPhoton ) {
+                            cout << "Reco Jet " << recoJetIndex << " is near neither photon" << endl << endl;
+                        }
+                        else if ( nearLeadPhoton && !nearSubLeadPhoton ) {
+                            cout << "Reco Jet " << recoJetIndex << " is near leading photon" << endl;
+                            cout << "Reco Jet " << recoJetIndex << " pt     = " << recoJets->ptrAt( recoJetIndex )->pt() << endl;
+                            cout << "Reco Jet " << recoJetIndex << " energy = " << recoJets->ptrAt( recoJetIndex )->energy() << endl;
+                            cout << "Reco Jet " << recoJetIndex << " eta    = " << recoJetEta << endl;
+                            cout << "Reco Jet " << recoJetIndex << " phi    = " << recoJetPhi << endl;
+                            cout << "Reco Jet " << recoJetIndex << " deltaR = " << drRecoLead << endl << endl;
+                        }
+                        else if ( !nearLeadPhoton && nearSubLeadPhoton ) {
+                            cout << "Reco Jet " << recoJetIndex << " is near subleading photon" << endl;
+                            cout << "Reco Jet " << recoJetIndex << " pt     = " << recoJets->ptrAt( recoJetIndex )->pt() << endl;
+                            cout << "Reco Jet " << recoJetIndex << " energy = " << recoJets->ptrAt( recoJetIndex )->energy() << endl;
+                            cout << "Reco Jet " << recoJetIndex << " eta    = " << recoJetEta << endl;
+                            cout << "Reco Jet " << recoJetIndex << " phi    = " << recoJetPhi << endl;
+                            cout << "Reco Jet " << recoJetIndex << " deltaR = " << drRecoSubLead << endl << endl;
+                        }
+                        else {
+                            cout << "Reco Jet " << recoJetIndex << " is near both photons !!!" << endl << endl;
+                        }
+                    }
+                } // end of reco jet info
+            }
+
+            // loop over partons from matrix element
+            if( gens->size() > 0 ) {
+                cout << "number of partons = " << gens->size() << endl << endl;
+                float mindrPromptPho = 10.;
+                float mindrFakePho   = 10.;
+                for( uint genParticleIndex = 0; genParticleIndex < gens->size(); genParticleIndex++ ) {
+                    bool nearPromptPho    = false;
+                    bool nearFakePho      = false;
+                    bool nearPromptGenJet = false;
+                    bool nearFakeGenJet   = false;
+                    auto gen              = gens->ptrAt( genParticleIndex );
+                    string pdg_type       = "";
+                    if( gen->pdgId() == 21 )                    pdg_type = "gluon";
+                    if( gen->pdgId() < 7 && gen->pdgId() > -7 ) pdg_type = "quark";
+                    if ( genParticleIndex == 0 ) partonPdgId0 = gen->pdgId();
+                    if ( genParticleIndex == 1 ) partonPdgId1 = gen->pdgId();
+
+                    float drPromptPho               = sqrt( (gen->eta()-promptPhoton->eta())*(gen->eta()-promptPhoton->eta()) + 
+                                                      (gen->phi()-promptPhoton->phi())*(gen->phi()-promptPhoton->phi()) );
+                    if( drPromptPho < mindrPromptPho ) {
+                        mindrPromptPho        = drPromptPho;
+                        promptNearestParton   = gen;
+                        if( mindrPromptPho < 0.4 ) {
+                            nearPromptPho     = true;
+                            if( pdg_type == "quark" ) promptPartonMatchType = 1;
+                            if( pdg_type == "gluon" ) promptPartonMatchType = 2;
+                        }
+                    }
+
+                    float drFakePho               = sqrt( (gen->eta()-fakePhoton->eta())*(gen->eta()-fakePhoton->eta()) + 
+                                                    (gen->phi()-fakePhoton->phi())*(gen->phi()-fakePhoton->phi()) );
+                    if( drFakePho < mindrFakePho ) {
+                        mindrFakePho        = drFakePho;
+                        fakeNearestParton   = gen;
+                        if( mindrFakePho < 0.4 ) {
+                            nearFakePho     = true;
+                            if( pdg_type == "quark" ) fakePartonMatchType = 1;
+                            if( pdg_type == "gluon" ) fakePartonMatchType = 2;
+                        }
+                    }
+
+                    float drPromptGenJet = sqrt( (gen->eta()-promptGenJet->eta())*(gen->eta()-promptGenJet->eta()) + 
+                                                 (gen->phi()-promptGenJet->phi())*(gen->phi()-promptGenJet->phi()) );
+                    if( drPromptGenJet < 0.4 ) {
+                        nearPromptGenJet = true;
+                    }
+                    float drFakeGenJet = sqrt( (gen->eta()-fakeGenJet->eta())*(gen->eta()-fakeGenJet->eta()) + 
+                                               (gen->phi()-fakeGenJet->phi())*(gen->phi()-fakeGenJet->phi()) );
+                    if( drFakeGenJet < 0.4 ) {
+                        nearFakeGenJet = true;
+                    }
+                    if( nearPromptPho && nearPromptGenJet ) {
+                        cout << "a gen "+pdg_type+" matches both the promptPhoton and its genJet" << endl;
+                        cout << "energies of parton , photon are " << gen->energy() << " , " << promptPhoton->energy() << endl;
+                        cout << "pts of parton , photon are      " << gen->pt() << " , " << promptPhoton->pt() << endl;
+                        cout << "etas of parton , photon are     " << gen->eta() << " , " << promptPhoton->eta() << endl;
+                        cout << "phis of parton , photon are     " << gen->phi() << " , " << promptPhoton->phi() << endl << endl;
+                        cout << "drPromptPho          = " << drPromptPho << endl;
+                        cout << "drPromptGenJet       = " << drPromptGenJet << endl;
+                        float drPromptPhoItsGenJet = sqrt( (promptPhoton->eta()-promptGenJet->eta())*(promptPhoton->eta()-promptGenJet->eta()) + 
+                                                           (promptPhoton->phi()-promptGenJet->phi())*(promptPhoton->phi()-promptGenJet->phi()) );
+                        cout << "drPromptPhoItsGenJet = " << drPromptPhoItsGenJet << endl << endl;
+                    }
+                    else if( nearFakePho && nearFakeGenJet ) {
+                        cout << "a gen "+pdg_type+" matches both the fakePhoton and its genJet" << endl;
+                        cout << "energies of parton , photon are " << gen->energy() << " , " << fakePhoton->energy() << endl;
+                        cout << "pts of parton , photon are      " << gen->pt() << " , " << fakePhoton->pt() << endl;
+                        cout << "etas of parton , photon are     " << gen->eta() << " , " << fakePhoton->eta() << endl;
+                        cout << "phis of parton , photon are     " << gen->phi() << " , " << fakePhoton->phi() << endl << endl;
+                    }
+                    else { 
+                        cout << "this parton does not have a perfect match... " << endl << endl;
+                    }
+                }
+                cout << "" << endl;
+            }
+
+            float promptEta          = promptPhoton->eta();
+            float promptPhi          = promptPhoton->phi();
+            float promptPartonEta    = promptNearestParton->eta();
+            float promptPartonPhi    = promptNearestParton->phi();
+            float promptGenJetEta    = promptGenJet->eta();
+            float promptGenJetPhi    = promptGenJet->phi();
+            float fakeEta            = fakePhoton->eta();
+            float fakePhi            = fakePhoton->phi();
+            float fakePartonEta      = fakeNearestParton->eta();
+            float fakePartonPhi      = fakeNearestParton->phi();
+            float drPromptFake       = sqrt( (promptEta-fakeEta)*(promptEta-fakeEta) + (promptPhi-fakePhi)*(promptPhi-fakePhi) );
+            float drPromptParton     = sqrt( (promptEta-promptPartonEta)*(promptEta-promptPartonEta) + (promptPhi-promptPartonPhi)*(promptPhi-promptPartonPhi) );
+            float drPromptGenJet     = sqrt( (promptEta-promptGenJetEta)*(promptEta-promptGenJetEta) + (promptPhi-promptGenJetPhi)*(promptPhi-promptGenJetPhi) );
+            float drPartonGenJet     = sqrt( (promptGenJetEta-promptPartonEta)*(promptGenJetEta-promptPartonEta) + (promptGenJetPhi-promptPartonPhi)*(promptGenJetPhi-promptPartonPhi) );
+            float drFakeParton       = sqrt( (fakeEta-fakePartonEta)*(fakeEta-fakePartonEta) + (fakePhi-fakePartonPhi)*(fakePhi-fakePartonPhi) );
+            float promptPhotonEnergy = promptPhoton->energy();
+            float promptGenJetEnergy = promptGenJet->energy();
+            float promptPartonEnergy = promptNearestParton->energy();
+            float fakePhotonEnergy   = fakePhoton->energy();
+            float fakeGenJetEnergy   = fakeGenJet->energy();
+            float fakePartonEnergy   = fakeNearestParton->energy();
+            if( promptIso ) {
+                promptIsoCount++;
+                /*cout << "EVENT HAD ISOLATED PROMPT PHOTON" << endl;
+                cout << "with energy    = " << promptPhoton->energy() << endl;
+                cout << "gen jet energy = " << promptGenJet->energy() << endl;
+                cout << "fake energy    = " << fakePhoton->energy() << endl;
+                cout << "gen jet energy = " << fakeGenJet->energy() << endl;*/
+                hPromptFakeDeltaR->Fill( drPromptFake );
+                hPromptGenJetRatio->Fill( promptPhotonEnergy / promptGenJetEnergy );
+                hFakeGenJetRatio->Fill( fakePhotonEnergy / fakeGenJetEnergy );
+                hPromptNumGenPhotons->Fill( photonsInPrompt );
+                hFakeNumGenPhotons->Fill( photonsInFake );
+                hPromptPartonMatching->Fill( promptPartonMatchType );
+                hFakePartonMatching->Fill( fakePartonMatchType );
+                hPromptNearestPartonDeltaR->Fill( drPromptParton );
+                hFakeNearestPartonDeltaR->Fill( drFakeParton );
+                if( promptPartonMatchType != 0) hPromptPartonRatio->Fill( promptPhotonEnergy / promptPartonEnergy );
+                if( fakePartonMatchType   != 0) hFakePartonRatio->Fill( fakePhotonEnergy / fakePartonEnergy );
+                hPartonPdgId->Fill( partonPdgId0 );
+                hPartonPdgId->Fill( partonPdgId1 );
+                hFakeNumRatio->Fill( photonsInFake, fakePhotonEnergy / fakeGenJetEnergy );
+                hPrPaDrRatio->Fill( drPromptParton, promptPhotonEnergy / promptPartonEnergy );
+                if( promptPartonMatchType != 0) hIfMatchPartonGenJetDeltaR->Fill( drPartonGenJet );
+                if( promptPartonMatchType != 0) hIfMatchPromptGenJetDeltaR->Fill( drPromptGenJet );
+            }
+            else {
+                cout << "EVENT DID NOT HAVE ISOLATED PROMPT PHOTON" << endl << endl << endl << endl;
+                hPromptFakeDeltaRNoIso->Fill( drPromptFake );
+                hPromptGenJetRatioNoIso->Fill( promptPhotonEnergy / promptGenJetEnergy );
+                hFakeGenJetRatioNoIso->Fill( fakePhotonEnergy / fakeGenJetEnergy );
+                hPromptNumGenPhotonsNoIso->Fill( photonsInPrompt );
+                hFakeNumGenPhotonsNoIso->Fill( photonsInFake );
+                hPromptPartonMatchingNoIso->Fill( promptPartonMatchType );
+                hFakePartonMatchingNoIso->Fill( fakePartonMatchType );
+                hPromptNearestPartonDeltaRNoIso->Fill( drPromptParton );
+                hFakeNearestPartonDeltaRNoIso->Fill( drFakeParton );
+                if( promptPartonMatchType != 0) hPromptPartonRatioNoIso->Fill( promptPhotonEnergy / promptPartonEnergy );
+                if( fakePartonMatchType   != 0) hFakePartonRatioNoIso->Fill( fakePhotonEnergy / fakePartonEnergy );
+                hPartonPdgIdNoIso->Fill( partonPdgId0 );
+                hPartonPdgIdNoIso->Fill( partonPdgId1 );
+                hFakeNumRatioNoIso->Fill( photonsInFake, fakePhotonEnergy / fakeGenJetEnergy );
+                hPrPaDrRatioNoIso->Fill( drPromptParton, promptPhotonEnergy / promptPartonEnergy );
+            }
+
+        } // End printouts of prompt-fake events */ // Ed
+        //--------------------------------------------------------------------------------------------------
 
         jInfo.nJets      = Jets[jetCollectionIndex]->size();
         jInfo.nPV        = vtxs->size();
@@ -1079,11 +1523,111 @@ JetValidationTreeMaker::beginJob()
     genJetTree->Branch( "photondRmin"      , &genJetInfo.photondRmin  , "photondRmin/F" );
     genJetTree->Branch( "GenPhotonPt"      , &genJetInfo.GenPhotonPt  , "GenPhotonPt/F" );
 
+    // First set of plots
+    hPromptFakeDeltaR = fs_->make<TH1F>("hPromptFakeDeltaR","DeltaR between Prompt and Fake photons",60,0.,6.); // Ed
+    hPromptFakeDeltaR->GetXaxis()->SetTitle("#DeltaR");
+
+    hPromptGenJetRatio = fs_->make<TH1F>("hPromptGenJetRatio","promptPhoton energy / genJet energy",60,0.,1.2);
+    hPromptGenJetRatio->GetXaxis()->SetTitle("E_{#gamma} / E_{genJet}");
+
+    hFakeGenJetRatio = fs_->make<TH1F>("hFakeGenJetRatio","fakePhoton energy / genJet energy",60,0.,1.2);
+    hFakeGenJetRatio->GetXaxis()->SetTitle("E_{#gamma} / E_{genJet}");
+
+    hPromptNumGenPhotons = fs_->make<TH1F>("hPromptNumGenPhotons","number of genPhotons matching promptPhoton",9,-0.5,8.5);
+    hPromptNumGenPhotons->GetXaxis()->SetTitle("n_{#gamma}");
+
+    hFakeNumGenPhotons = fs_->make<TH1F>("hFakeNumGenPhotons","number of genPhotons matching fakePhoton",9,-0.5,8.5);
+    hFakeNumGenPhotons->GetXaxis()->SetTitle("n_{#gamma}");
+
+    hPromptFakeDeltaRNoIso = fs_->make<TH1F>("hPromptFakeDeltaRNoIso","DeltaR between Prompt and Fake photons",60,0.,6.);
+    hPromptFakeDeltaRNoIso->GetXaxis()->SetTitle("deltaR");
+
+    hPromptGenJetRatioNoIso = fs_->make<TH1F>("hPromptGenJetRatioNoIso","promptPhoton energy / genJet energy",60,0.,1.2);
+    hPromptGenJetRatioNoIso->GetXaxis()->SetTitle("E_{#gamma} / E_{genJet}");
+
+    hFakeGenJetRatioNoIso = fs_->make<TH1F>("hFakeGenJetRatioNoIso","fakePhoton energy / genJet energy",60,0.,1.2);
+    hFakeGenJetRatioNoIso->GetXaxis()->SetTitle("E_{#gamma} / E_{genJet}");
+
+    hPromptNumGenPhotonsNoIso = fs_->make<TH1F>("hPromptNumGenPhotonsNoIso","number of genPhotons matching promptPhoton",9,-0.5,8.5);
+    hPromptNumGenPhotonsNoIso->GetXaxis()->SetTitle("n_{#gamma}");
+
+    hFakeNumGenPhotonsNoIso = fs_->make<TH1F>("hFakeNumGenPhotonsNoIso","number of genPhotons matching fakePhoton",9,-0.5,8.5);
+    hFakeNumGenPhotonsNoIso->GetXaxis()->SetTitle("n_{#gamma}");
+
+    // Matrix element parton plots
+    hPromptNearestPartonDeltaR = fs_->make<TH1F>("hPromptNearestPartonDeltaR","DeltaR between promptPhoton and nearest parton",60,0.,6.); 
+    hPromptNearestPartonDeltaR->GetXaxis()->SetTitle("#DeltaR");
+
+    hFakeNearestPartonDeltaR = fs_->make<TH1F>("hFakeNearestPartonDeltaR","DeltaR between fakePhoton and nearest parton",60,0.,6.); 
+    hFakeNearestPartonDeltaR->GetXaxis()->SetTitle("#DeltaR");
+
+    hPromptNearestPartonDeltaRNoIso = fs_->make<TH1F>("hPromptNearestPartonDeltaRNoIso","DeltaR between promptPhoton and nearest parton",60,0.,6.); 
+    hPromptNearestPartonDeltaRNoIso->GetXaxis()->SetTitle("#DeltaR");
+
+    hFakeNearestPartonDeltaRNoIso = fs_->make<TH1F>("hFakeNearestPartonDeltaRNoIso","DeltaR between fakePhoton and nearest parton",60,0.,6.); 
+    hFakeNearestPartonDeltaRNoIso->GetXaxis()->SetTitle("#DeltaR");
+
+    hPromptPartonRatio = fs_->make<TH1F>("hPromptPartonRatio","Energy promptPhoton / energy matching parton",75,0.,1.5); 
+    hPromptPartonRatio->GetXaxis()->SetTitle("E_{#gamma} / E_{parton}");
+
+    hFakePartonRatio = fs_->make<TH1F>("hFakePartonRatio","Energy fakePhoton / energy matching parton",75,0.,1.5); 
+    hFakePartonRatio->GetXaxis()->SetTitle("E_{#gamma} / E_{parton}");
+
+    hPromptPartonRatioNoIso = fs_->make<TH1F>("hPromptPartonRatioNoIso","Energy promptPhoton / energy matching parton",75,0.,1.5); 
+    hPromptPartonRatioNoIso->GetXaxis()->SetTitle("E_{#gamma} / E_{parton}");
+
+    hFakePartonRatioNoIso = fs_->make<TH1F>("hFakePartonRatioNoIso","Energy fakePhoton / energy matching parton",75,0.,1.5); 
+    hFakePartonRatioNoIso->GetXaxis()->SetTitle("E_{#gamma} / E_{parton}");
+
+    hPromptPartonMatching = fs_->make<TH1F>("hPromptPartonMatching","Whether matching is none, quark or gluon",3,-0.5,2.5); 
+    hPromptPartonMatching->GetXaxis()->SetTitle("Match Type");
+
+    hFakePartonMatching = fs_->make<TH1F>("hFakePartonMatching","Whether matching is none, quark or gluon",3,-0.5,2.5); 
+    hFakePartonMatching->GetXaxis()->SetTitle("Match Type");
+
+    hPromptPartonMatchingNoIso = fs_->make<TH1F>("hPromptPartonMatchingNoIso","Whether matching is none, quark or gluon",3,-0.5,2.5); 
+    hPromptPartonMatchingNoIso->GetXaxis()->SetTitle("Match Type");
+
+    hFakePartonMatchingNoIso = fs_->make<TH1F>("hFakePartonMatchingNoIso","Whether matching is none, quark or gluon",3,-0.5,2.5); 
+    hFakePartonMatchingNoIso->GetXaxis()->SetTitle("Match Type");
+
+    hPartonPdgId = fs_->make<TH1F>("hPartonPdgId","Pdg of parton",30,-5.5,24.5);
+    hPartonPdgId->GetXaxis()->SetTitle("PdgId");
+
+    hPartonPdgIdNoIso = fs_->make<TH1F>("hPartonPdgIdNoIso","Pdg of parton",30,-5.5,24.5);
+    hPartonPdgIdNoIso->GetXaxis()->SetTitle("PdgId");
+
+    // plots only if parton matches
+    hIfMatchPromptGenJetDeltaR = fs_->make<TH1F>("hIfMatchPromptGenJetDeltaR","DeltaR between Prompt and genJet (parton match only)",60,0.,6.);
+    hIfMatchPromptGenJetDeltaR->GetXaxis()->SetTitle("deltaR");
+
+    hIfMatchPartonGenJetDeltaR = fs_->make<TH1F>("hIfMatchPartonGenJetDeltaR","DeltaR between parton and genJet (parton match only)",60,0.,6.);
+    hIfMatchPartonGenJetDeltaR->GetXaxis()->SetTitle("deltaR");
+
+    // 2D plots
+    hFakeNumRatio = fs_->make<TH2F>("hFakeNumRatio","Number of genPhotons matching fakePhoton vs fakePhoton energy / fake genJet energy",10,-0.5,9.5,12,0.,1.2);
+    hFakeNumRatio->GetXaxis()->SetTitle("n_{gen#gamma}");
+    hFakeNumRatio->GetYaxis()->SetTitle("E_{reco#gamma} / E_{genJet}");
+
+    hFakeNumRatioNoIso = fs_->make<TH2F>("hFakeNumRatioNoIso","Number of genPhotons matching fakePhoton vs fakePhoton energy / fake genJet energy",10,-0.5,9.5,12,0.,1.2);
+    hFakeNumRatioNoIso->GetXaxis()->SetTitle("n_{gen#gamma}");
+    hFakeNumRatioNoIso->GetYaxis()->SetTitle("E_{reco#gamma} / E_{genJet}"); // Ed
+
+    hPrPaDrRatio = fs_->make<TH2F>("hPrPaDrRatio","#DeltaR(Parton,Prompt) vs prompt energy / parton energy",24,0.,6.,12,0.,1.2);
+    hPrPaDrRatio->GetXaxis()->SetTitle("#DeltaR");
+    hPrPaDrRatio->GetYaxis()->SetTitle("E_{#gamma} / E_{parton}");
+
+    hPrPaDrRatioNoIso = fs_->make<TH2F>("hPrPaDrRatioNoIso","#DeltaR(Parton,Prompt) vs prompt energy / parton energy",24,0.,6.,12,0.,1.2);
+    hPrPaDrRatioNoIso->GetXaxis()->SetTitle("#DeltaR");
+    hPrPaDrRatioNoIso->GetYaxis()->SetTitle("E_{#gamma} / E_{parton}");
+
 }
 
 void JetValidationTreeMaker::endJob()
 {
-
+    /*cout << "" << endl << endl << endl; // Ed
+    cout << "promptIsoCount  = " << promptIsoCount << endl; 
+    cout << "promptFakeCount = " << prompt_fake_count << endl << endl << endl << endl;*/ // Ed
 }
 
 void JetValidationTreeMaker::initEventStructure()
