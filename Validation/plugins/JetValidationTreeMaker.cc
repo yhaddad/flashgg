@@ -308,12 +308,14 @@ struct PromptFakeInfo {
 
     float promptGenPhotonPt;
     float promptGenPhotonEnergy;
+    float promptTotalGenPhoEnergy;
     float promptGenPhotonEta;
     float promptGenPhotonPhi;
     float promptGenPhotonDr;
     int   promptNumGenPhotons;
     float fakeGenPhotonPt;
     float fakeGenPhotonEnergy;
+    float fakeTotalGenPhoEnergy;
     float fakeGenPhotonEta;
     float fakeGenPhotonPhi;
     float fakeGenPhotonDr;
@@ -690,23 +692,25 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             fakeIDMVA    = printDipho->leadPhotonId();
         }
 
-        auto genPhotonNearestPrompt = genPhotons->ptrAt(0);
-        auto genPhotonNearestFake   = genPhotons->ptrAt(1);
-        int  genPhotonsInPrompt     = 0;
-        int  genPhotonsInFake       = 0;
-        auto genJetNearestPrompt    = genJets->ptrAt(0);
-        auto genJetNearestFake      = genJets->ptrAt(1);
-        int  promptNumGenJets       = 0;
-        int  fakeNumGenJets         = 0;
-        auto recoJets               = Jets[jetCollectionIndex];
-        auto recoJetNearestPrompt   = recoJets->ptrAt(0);
-        auto recoJetNearestFake     = recoJets->ptrAt(1);
-        int  recoJetsInPrompt       = 0;
-        int  recoJetsInFake         = 0;
-        auto partonNearestPrompt    = gens->ptrAt(0);
-        auto partonNearestFake      = gens->ptrAt(1);
-        int  promptPartonMatchType  = 0;
-        int  fakePartonMatchType    = 0;
+        auto  genPhotonNearestPrompt  = genPhotons->ptrAt(0);
+        auto  genPhotonNearestFake    = genPhotons->ptrAt(1);
+        int   genPhotonsInPrompt      = 0;
+        int   genPhotonsInFake        = 0;
+        float promptTotalGenPhoEnergy = 0.;
+        float fakeTotalGenPhoEnergy   = 0.;
+        auto  genJetNearestPrompt     = genJets->ptrAt(0);
+        auto  genJetNearestFake       = genJets->ptrAt(1);
+        int   promptNumGenJets        = 0;
+        int   fakeNumGenJets          = 0;
+        auto  recoJets                = Jets[jetCollectionIndex];
+        auto  recoJetNearestPrompt    = recoJets->ptrAt(0);
+        auto  recoJetNearestFake      = recoJets->ptrAt(1);
+        int   recoJetsInPrompt        = 0;
+        int   recoJetsInFake          = 0;
+        auto  partonNearestPrompt     = gens->ptrAt(0);
+        auto  partonNearestFake       = gens->ptrAt(1);
+        int   promptPartonMatchType   = 0;
+        int   fakePartonMatchType     = 0;
 
         if( eventIsPromptFake ) {
             float promptEta   = promptPhoton->eta();
@@ -731,15 +735,19 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
                 if( drPrompt < minDrPrompt ) {
                     minDrPrompt = drPrompt;
                     genPhotonNearestPrompt = genPhotons->ptrAt( genPhotonIndex );
-                    if ( drPrompt < 0.4 ) genPhotonsInPrompt++;
                 }
-                else if( drPrompt < 0.4 ) genPhotonsInPrompt++;
+                if( drPrompt < 0.4 ) { 
+                    genPhotonsInPrompt++;
+                    promptTotalGenPhoEnergy += genPhotons->ptrAt( genPhotonIndex )->energy();
+                }
                 if( drFake < minDrFake ) {
                     minDrFake = drFake;
                     genPhotonNearestFake = genPhotons->ptrAt( genPhotonIndex );
-                    if ( drFake < 0.4 ) genPhotonsInFake++;
                 }
-                else if( drFake < 0.4 ) genPhotonsInFake++;
+                if( drFake < 0.4 ) { 
+                    genPhotonsInFake++;
+                    fakeTotalGenPhoEnergy += genPhotons->ptrAt( genPhotonIndex )->energy();
+                }
             } // end of genPhoton matching and counting
             float promptGenPhotonDr = minDrPrompt;
             float fakeGenPhotonDr   = minDrFake;
@@ -845,18 +853,20 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             pfInfo.fakePhi      = fakePhi;
             pfInfo.fakeIDMVA    = fakeIDMVA;
 
-            pfInfo.promptGenPhotonPt     = genPhotonNearestPrompt->pt();
-            pfInfo.promptGenPhotonEnergy = genPhotonNearestPrompt->energy();
-            pfInfo.promptGenPhotonEta    = genPhotonNearestPrompt->eta();
-            pfInfo.promptGenPhotonPhi    = genPhotonNearestPrompt->phi();
-            pfInfo.promptGenPhotonDr     = promptGenPhotonDr;
-            pfInfo.promptNumGenPhotons   = genPhotonsInPrompt;
-            pfInfo.fakeGenPhotonPt       = genPhotonNearestFake->pt();
-            pfInfo.fakeGenPhotonEnergy   = genPhotonNearestFake->energy();
-            pfInfo.fakeGenPhotonEta      = genPhotonNearestFake->eta();
-            pfInfo.fakeGenPhotonPhi      = genPhotonNearestFake->phi();
-            pfInfo.fakeGenPhotonDr       = fakeGenPhotonDr;
-            pfInfo.fakeNumGenPhotons     = genPhotonsInFake;
+            pfInfo.promptGenPhotonPt       = genPhotonNearestPrompt->pt();
+            pfInfo.promptGenPhotonEnergy   = genPhotonNearestPrompt->energy();
+            pfInfo.promptTotalGenPhoEnergy = promptTotalGenPhoEnergy;
+            pfInfo.promptGenPhotonEta      = genPhotonNearestPrompt->eta();
+            pfInfo.promptGenPhotonPhi      = genPhotonNearestPrompt->phi();
+            pfInfo.promptGenPhotonDr       = promptGenPhotonDr;
+            pfInfo.promptNumGenPhotons     = genPhotonsInPrompt;
+            pfInfo.fakeGenPhotonPt         = genPhotonNearestFake->pt();
+            pfInfo.fakeGenPhotonEnergy     = genPhotonNearestFake->energy();
+            pfInfo.fakeTotalGenPhoEnergy   = fakeTotalGenPhoEnergy;
+            pfInfo.fakeGenPhotonEta        = genPhotonNearestFake->eta();
+            pfInfo.fakeGenPhotonPhi        = genPhotonNearestFake->phi();
+            pfInfo.fakeGenPhotonDr         = fakeGenPhotonDr;
+            pfInfo.fakeNumGenPhotons       = genPhotonsInFake;
 
             pfInfo.promptGenJetPt     = genJetNearestPrompt->pt();
             pfInfo.promptGenJetEnergy = genJetNearestPrompt->energy();
@@ -1506,12 +1516,14 @@ JetValidationTreeMaker::beginJob()
 
     promptFakeTree->Branch( "promptGenPhotonPt"      , &pfInfo.promptGenPhotonPt    , "promptGenPhotonPt/F" );
     promptFakeTree->Branch( "promptGenPhotonEnergy"  , &pfInfo.promptGenPhotonEnergy, "promptGenPhotonEnergy/F" );
+    promptFakeTree->Branch( "promptTotalGenPhoEnergy"  , &pfInfo.promptTotalGenPhoEnergy, "promptTotalGenPhoEnergy/F" );
     promptFakeTree->Branch( "promptGenPhotonEta"     , &pfInfo.promptGenPhotonEta   , "promptGenPhotonEta/F" );
     promptFakeTree->Branch( "promptGenPhotonPhi"     , &pfInfo.promptGenPhotonPhi   , "promptGenPhotonPhi/F" );
     promptFakeTree->Branch( "promptGenPhotonDr"      , &pfInfo.promptGenPhotonDr     , "promptGenPhotonDr/F" );
     promptFakeTree->Branch( "promptNumGenPhotons"   , &pfInfo.promptNumGenPhotons, "promptNumGenPhotons/I" );
     promptFakeTree->Branch( "fakeGenPhotonPt"      , &pfInfo.fakeGenPhotonPt    , "fakeGenPhotonPt/F" );
     promptFakeTree->Branch( "fakeGenPhotonEnergy"  , &pfInfo.fakeGenPhotonEnergy, "fakeGenPhotonEnergy/F" );
+    promptFakeTree->Branch( "fakeTotalGenPhoEnergy"  , &pfInfo.fakeTotalGenPhoEnergy, "fakeTotalGenPhoEnergy/F" );
     promptFakeTree->Branch( "fakeGenPhotonEta"     , &pfInfo.fakeGenPhotonEta   , "fakeGenPhotonEta/F" );
     promptFakeTree->Branch( "fakeGenPhotonPhi"     , &pfInfo.fakeGenPhotonPhi   , "fakeGenPhotonPhi/F" );
     promptFakeTree->Branch( "fakeGenPhotonDr"      , &pfInfo.fakeGenPhotonDr     , "fakeGenPhotonDr/F" );
