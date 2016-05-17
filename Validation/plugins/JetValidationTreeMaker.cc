@@ -299,11 +299,13 @@ struct PromptFakeInfo {
     float promptEnergy;
     float promptEta;
     float promptPhi;
+    int   promptPdgId;
     float promptIDMVA;
     float fakePt;
     float fakeEnergy;
     float fakeEta;
     float fakePhi;
+    int   fakePdgId;
     float fakeIDMVA;
 
     float promptGenPhotonPt;
@@ -435,13 +437,13 @@ private:
 
     TTree     *eventTree;
     TTree     *jetTree;
-    TTree     *genPartTree;
+    //TTree     *genPartTree; // Ed
     TTree     *genJetTree;
     TTree     *promptFakeTree;
 
     eventInfo   eInfo;
     jetInfo     jInfo;
-    GenPartInfo genInfo;
+    //GenPartInfo genInfo; // Ed
     GenJetInfo  genJetInfo;
     PromptFakeInfo pfInfo;
     Int_t       event_number;
@@ -586,11 +588,11 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     std::vector<edm::Ptr<reco::GenParticle> > genParton;
 
     for( unsigned int genLoop = 0 ; genLoop < gens->size(); genLoop++ ) {
-        genInfo.pt     = gens->ptrAt( genLoop )->pt() ;
+        /*genInfo.pt     = gens->ptrAt( genLoop )->pt() ;
         genInfo.eta    = gens->ptrAt( genLoop )->eta();
         genInfo.phi    = gens->ptrAt( genLoop )->phi();
         genInfo.status = gens->ptrAt( genLoop )->status();
-        genInfo.pdgid  = int( gens->ptrAt( genLoop )->pdgId() );
+        genInfo.pdgid  = int( gens->ptrAt( genLoop )->pdgId() );*/ // Ed
 
         // be sure that the photons comes from the higgs
         if( gens->ptrAt( genLoop )->pdgId() == 22 && gens->ptrAt( genLoop )-> mother( 0 )->pdgId() == 25 ) {
@@ -606,7 +608,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             }
         }
         // fill the tree
-        genPartTree->Fill();
+        //genPartTree->Fill(); // Ed
     }
     // find tag the jets close to the photons
     std::map<unsigned int, GenPhotonInfo> photonJet_id;
@@ -691,6 +693,8 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             promptIDMVA  = printDipho->subLeadPhotonId();
             fakeIDMVA    = printDipho->leadPhotonId();
         }
+        pfInfo.promptPdgId = promptPhoton->pdgId();
+        pfInfo.fakePdgId   = fakePhoton->pdgId();
 
         auto  genPhotonNearestPrompt  = genPhotons->ptrAt(0);
         auto  genPhotonNearestFake    = genPhotons->ptrAt(1);
@@ -1450,13 +1454,13 @@ JetValidationTreeMaker::beginJob()
 
     jetTree->Branch( "weight"   , &jInfo.weight , "weight/F" );
 
-    genPartTree = fs_->make<TTree>( "genPartTree", "Check per-jet tree" );
+    /*genPartTree = fs_->make<TTree>( "genPartTree", "Check per-jet tree" );
     genPartTree->Branch( "pt"     , &genInfo.pt      , "pt/F" );
     genPartTree->Branch( "eta"    , &genInfo.eta     , "eta/F" );
     genPartTree->Branch( "phi"    , &genInfo.phi     , "phi/F" );
     genPartTree->Branch( "status" , &genInfo.status  , "status/I" );
     genPartTree->Branch( "pdgid"  , &genInfo.pdgid   , "pdgid/I" );
-    genPartTree->Branch( "y"      , &genInfo.y       , "y/F" );
+    genPartTree->Branch( "y"      , &genInfo.y       , "y/F" ); */ // Ed
 
     //genPartTree->SetBranchStatus( 'p4.*', 1 );
 
@@ -1507,11 +1511,13 @@ JetValidationTreeMaker::beginJob()
     promptFakeTree->Branch( "promptEnergy"  , &pfInfo.promptEnergy, "promptEnergy/F" );
     promptFakeTree->Branch( "promptEta"     , &pfInfo.promptEta   , "promptEta/F" );
     promptFakeTree->Branch( "promptPhi"     , &pfInfo.promptPhi   , "promptPhi/F" );
+    promptFakeTree->Branch( "promptPdgId"   , &pfInfo.promptPdgId , "promptPdgId/I" );
     promptFakeTree->Branch( "promptIDMVA"   , &pfInfo.promptIDMVA , "promptIDMVA/F" );
     promptFakeTree->Branch( "fakePt"      , &pfInfo.fakePt    , "fakePt/F" );
     promptFakeTree->Branch( "fakeEnergy"  , &pfInfo.fakeEnergy, "fakeEnergy/F" );
     promptFakeTree->Branch( "fakeEta"     , &pfInfo.fakeEta   , "fakeEta/F" );
     promptFakeTree->Branch( "fakePhi"     , &pfInfo.fakePhi   , "fakePhi/F" );
+    promptFakeTree->Branch( "fakePdgId"   , &pfInfo.fakePdgId , "fakePdgId/I" );
     promptFakeTree->Branch( "fakeIDMVA"   , &pfInfo.fakeIDMVA , "fakeIDMVA/F" );
 
     promptFakeTree->Branch( "promptGenPhotonPt"      , &pfInfo.promptGenPhotonPt    , "promptGenPhotonPt/F" );
