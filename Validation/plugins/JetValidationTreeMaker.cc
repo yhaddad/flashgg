@@ -717,9 +717,11 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         int   fakePartonMatchType     = 0;
 
         if( eventIsPromptFake ) {
-            float promptEta   = promptPhoton->eta();
+            //float promptEta   = promptPhoton->eta();
+            float promptEta   = promptPhoton->superCluster()->eta();
             float promptPhi   = promptPhoton->phi();
-            float fakeEta     = fakePhoton->eta();
+            //float fakeEta     = fakePhoton->eta();
+            float fakeEta     = fakePhoton->superCluster()->eta();
             float fakePhi     = fakePhoton->phi();
             float minDrPrompt = 10.0;
             float minDrFake   = 10.0;
