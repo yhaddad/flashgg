@@ -741,7 +741,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         int   promptPartonMatchType   = 0;
         int   fakePartonMatchType     = 0;
 
-        cout << "fakePhoton->eta() = " << fakePhoton->eta() << endl << endl;
+        //cout << "fakePhoton->eta() = " << fakePhoton->eta() << endl << endl;
 
         if( eventIsPromptFake ) {
             float promptEta   = promptPhoton->eta();
