@@ -1,6 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
-phoEffArea=cms.PSet( var=cms.string("abs(superCluster.eta)"), bins=cms.vdouble(0.,0.9,1.5,2,2.2,3), vals=cms.vdouble(0.16544,0.16544,0.13212,0.13212,0.13212) )
+#phoEffArea=cms.PSet( var=cms.string("abs(superCluster.eta)"), bins=cms.vdouble(0.,0.9,1.5,2,2.2,3), vals=cms.vdouble(0.16544,0.16544,0.13212,0.13212,0.13212) )
+phoEffArea=cms.PSet( var=cms.string("abs(eta)"), bins=cms.vdouble(0.,0.9,1.5,2,2.2,3), vals=cms.vdouble(0.16544,0.16544,0.13212,0.13212,0.13212) )
 
 rediscoveryHLTvariables = cms.vstring(
     "pfPhoIso03", 
@@ -70,9 +71,14 @@ flashggPreselectedDiPhotons = cms.EDFilter(
         " && (subLeadingPhoton.full5x5_r9>0.8||subLeadingPhoton.egChargedHadronIso<20||subLeadingPhoton.egChargedHadronIso/subLeadingPhoton.pt<0.3)"
         " && (leadingPhoton.hadronicOverEm < 0.08 && subLeadingPhoton.hadronicOverEm < 0.08)"
         " && (leadingPhoton.pt >30.0 && subLeadingPhoton.pt > 20.0)"
-        " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
-        " && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
-        " && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
+        #" && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
+        #" && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
+        #" && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
+        " && (abs(leadingPhoton.eta) < 2.5 && abs(subLeadingPhoton.eta) < 2.5)"
+        " && (abs(leadingPhoton.eta) < 1.4442 || abs(leadingPhoton.eta) > 1.566)"
+        " && (abs(subLeadingPhoton.eta) < 1.4442 || abs(subLeadingPhoton.eta) > 1.566)"
+        " && (mass > 100)"
+        " && (mass < 180)"
         " && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
 #        " && (leadingPhoton.pt > mass/3. && subLeadingPhoton.pt > mass/4.)"
 #        " && (leadingPhoton.passElectronVeto) && (subLeadingPhoton.passElectronVeto)"

@@ -45,6 +45,7 @@
 #include "TMatrix.h"
 #include "TVector.h"
 #include "TLorentzVector.h"
+#include "TRandom3.h"
 
 // **********************************************************************
 #ifndef FLASHgg_VertexCandidateMap_h
@@ -287,6 +288,7 @@ struct GenPhotonInfo {
 struct PromptFakeInfo {
     int eventID;
     //float weight; 
+    float fakeWeight; 
     //
     float diphoMass;
     float diphoPt;
@@ -362,10 +364,10 @@ struct PromptFakeInfo {
     float fakePartonDr;
     int   fakePartonMatchType;
 
-    float sigmarv;
+    /*float sigmarv;
     float sigmawv;
     float CosPhi;
-    float vtxprob;
+    float vtxprob;*/
 
     float dijet_leadEta;
     float dijet_subleadEta;
@@ -428,7 +430,7 @@ private:
     //EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
     
     EDGetTokenT<View<VBFMVAResult> > vbfMvaResultToken_; // Ed Ed
-    EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_; // Ed Ed
+    //EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_; // Ed Ed
 
     edm::InputTag 					qgVariablesInputTag;
     //edm::EDGetTokenT<edm::ValueMap<float>> 		qgToken;
@@ -458,6 +460,7 @@ private:
     bool        debug_;
     bool        useVBFTagPhotonMatching_;
 
+    TRandom3 *randomDiphoIndex;   
 };
 
 JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig ):
@@ -471,7 +474,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     //vertexCandidateMapToken_( consumes<VertexCandidateMap>( iConfig.getParameter<InputTag>( "VertexCandidateMapTag" ) ) ),
     
     vbfMvaResultToken_( consumes<View<flashgg::VBFMVAResult> >( iConfig.getParameter<InputTag> ( "VBFMVAResultTag" ) ) ), // Ed Ed
-    mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ), // Ed Ed
+    //mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ), // Ed Ed
 
     //qgVariablesInputTag( iConfig.getParameter<edm::InputTag>( "qgVariablesInputTag" ) ),
 
@@ -483,6 +486,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     useVBFTagPhotonMatching_( iConfig.getUntrackedParameter<bool>( "useVBFTagPhotonMatching", false ) )
 
 {
+    cout << "Inside constructor of JetValidationTreeMaker" << endl;
     for( uint i = 0; i < inputTagJets_.size(); i++ ) {
         auto token = consumes<View<flashgg::Jet> >(inputTagJets_[i]);
         tokenJets_.push_back(token); 
@@ -492,6 +496,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     jetCollectionName = iConfig.getParameter<string>( "StringTag" );
     //qgToken	= consumes<edm::ValueMap<float>>( edm::InputTag( qgVariablesInputTag.label(), "qgLikelihood" ) );
 
+    randomDiphoIndex = new TRandom3( 2395124 );
 }
 
 JetValidationTreeMaker::~JetValidationTreeMaker()
@@ -503,6 +508,7 @@ JetValidationTreeMaker::~JetValidationTreeMaker()
 void
 JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup &iSetup )
 {
+    //cout << "Inside JetValTreeMaker analyze method" << endl;
 
     if( debug_ ) {
         std::cout << "\e[0;31m";
@@ -534,8 +540,8 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     
     Handle<View<flashgg::VBFMVAResult> > vbfMvaResults; // Ed Ed
     iEvent.getByToken( vbfMvaResultToken_, vbfMvaResults );
-    Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
-    iEvent.getByToken( mvaResultToken_, mvaResults ); // Ed Ed
+    //Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
+    //iEvent.getByToken( mvaResultToken_, mvaResults ); // Ed Ed
 
     //Handle<View<flashgg::Jet> > jetsDz;
     //iEvent.getByToken( jetDzToken_, jetsDz );
@@ -559,6 +565,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     int nDiphotons = 0;
 
     nDiphotons = diPhotons->size();
+    //if ( nDiphotons > 0 ) cout << "nDiphotons = " << nDiphotons << "!!!" << endl;
     if( diPhotons->size() == 0 ) {
         legacyEqZeroth = 1; //if there is no diphoton, we use 0th vertex anyway.
     } else {
@@ -616,21 +623,26 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
 
     size_t diPhotonsSize = diPhotons->size();
     if( ZeroVertexOnly_ ) { diPhotonsSize = 1; }
- 
+
+    unsigned int actualDiphoIndex = randomDiphoIndex->Integer( diPhotonsSize );
+    //cout << "actualDiphoIndex = " << actualDiphoIndex << endl;
+    //cout << "diPhotonsSize = " << diPhotonsSize << endl;
+
     for( unsigned int diphoIndex = 0; diphoIndex < diPhotonsSize; diphoIndex++ ) {
+
         unsigned int jetCollectionIndex = 0;
         if( !ZeroVertexOnly_ ) { jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex(); }
 
-        edm::Ptr<flashgg::DiPhotonMVAResult> dipho_mvares = mvaResults->ptrAt( diphoIndex ); // Ed Ed
+        //edm::Ptr<flashgg::DiPhotonMVAResult> dipho_mvares = mvaResults->ptrAt( diphoIndex ); // Ed Ed
         edm::Ptr<flashgg::VBFMVAResult> vbf_mvares = vbfMvaResults->ptrAt( diphoIndex ); // Ed Ed
 
         //--------------------------------------------------------------------------------------------------
         // Begin analysis of prompt-fake events // Ed
         
-        pfInfo.sigmarv = dipho_mvares->sigmarv;
+        /*pfInfo.sigmarv = dipho_mvares->sigmarv;
         pfInfo.sigmawv = dipho_mvares->sigmawv;
         pfInfo.CosPhi  = dipho_mvares->CosPhi;
-        pfInfo.vtxprob = dipho_mvares->vtxprob;
+        pfInfo.vtxprob = dipho_mvares->vtxprob;*/
 
         pfInfo.dijet_leadEta = vbf_mvares->dijet_leadEta;
         pfInfo.dijet_subleadEta = vbf_mvares->dijet_subleadEta;
@@ -654,9 +666,11 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         //pfInfo.weight  = 1.0 * 108000000.0 * 0.000225 / numberMCevents; //30to40
         //pfInfo.weight  = 1.0 *  54120000.0 * 0.002    / numberMCevents; //40toInf
         
-        auto printDipho = diPhotons->ptrAt(0);
+        // NEEDS ATTENTION // Ed
+        auto printDipho = diPhotons->ptrAt( diphoIndex );
+        //auto printDipho = diPhotons->ptrAt( 0 );
         // select only diphoton candidate with highest IDMVA score
-        if( diPhotonsSize > 1 ) {
+        /*if( diPhotonsSize > 1 ) {
             float max_phoIDMVA_sum = -3.0;
             for( uint secondDiphoIndex = 0; secondDiphoIndex < diPhotonsSize; secondDiphoIndex++ ) {
                 float temp_phoIDMVA_sum =  diPhotons->ptrAt( secondDiphoIndex )->leadPhotonId() + diPhotons->ptrAt( secondDiphoIndex )->subLeadPhotonId();
@@ -665,11 +679,16 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
                     max_phoIDMVA_sum = temp_phoIDMVA_sum;
                 }
             }
-        }
-        if( printDipho->mass() < 100 || printDipho->mass() > 180 ) continue;
-        if( genJets->size()    < 2 ) continue;
+        }*/
+
+        //if( printDipho->mass() < 100 || printDipho->mass() > 180 ) continue;
+        /*if( genJets->size()    < 2 ) continue;
         if( genPhotons->size() < 2 ) continue;
         if( gens->size()       < 2 ) continue;
+        cout << "Num Gen Jets    = " << genJets->size() << endl;
+        cout << "Num Gen Photons = " << genPhotons->size() << endl;
+        cout << "Num Gen Partons = " << gens->size() << endl;*/
+        //cout << "At the continue point in JetValTreeMaker" << endl;
 
         pfInfo.diphoMass         = printDipho->mass();
         pfInfo.diphoPt           = printDipho->pt();
@@ -679,7 +698,9 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         auto printLeadPho    = printDipho->leadingPhoton();
         auto printSubLeadPho = printDipho->subLeadingPhoton();
         flashgg::Photon::mcMatch_t leadMatchType    = printLeadPho->genMatchType();
+        //cout << "lead match type is " << leadMatchType << endl;
         flashgg::Photon::mcMatch_t subleadMatchType = printSubLeadPho->genMatchType();
+        //cout << "sublead match type is " << subleadMatchType << endl;
         bool eventIsPromptFake = ( (!(leadMatchType==1 && subleadMatchType==1)) && (leadMatchType==1 || subleadMatchType==1) );
         auto promptPhoton      = printLeadPho;
         auto fakePhoton        = printSubLeadPho;
@@ -694,7 +715,11 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             fakeIDMVA    = printDipho->leadPhotonId();
         }
         pfInfo.promptPdgId = promptPhoton->pdgId();
+        //cout << "prompt pdgid is " << promptPhoton->pdgId() << endl;
         pfInfo.fakePdgId   = fakePhoton->pdgId();
+        //cout << "fake pdgid is " << fakePhoton->pdgId() << endl;
+        
+        pfInfo.fakeWeight = fakePhoton->weight( "fakeWeight" );
 
         auto  genPhotonNearestPrompt  = genPhotons->ptrAt(0);
         auto  genPhotonNearestFake    = genPhotons->ptrAt(1);
@@ -716,12 +741,14 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         int   promptPartonMatchType   = 0;
         int   fakePartonMatchType     = 0;
 
+        cout << "fakePhoton->eta() = " << fakePhoton->eta() << endl << endl;
+
         if( eventIsPromptFake ) {
-            //float promptEta   = promptPhoton->eta();
-            float promptEta   = promptPhoton->superCluster()->eta();
+            float promptEta   = promptPhoton->eta();
+            //float promptEta   = promptPhoton->superCluster()->eta();
             float promptPhi   = promptPhoton->phi();
-            //float fakeEta     = fakePhoton->eta();
-            float fakeEta     = fakePhoton->superCluster()->eta();
+            float fakeEta     = fakePhoton->eta();
+            //float fakeEta     = fakePhoton->superCluster()->eta();
             float fakePhi     = fakePhoton->phi();
             float minDrPrompt = 10.0;
             float minDrFake   = 10.0;
@@ -913,7 +940,8 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             pfInfo.fakePartonDr          = fakePartonDr;
             pfInfo.fakePartonMatchType   = fakePartonMatchType;
 
-            promptFakeTree->Fill();
+            if( diphoIndex == actualDiphoIndex ) promptFakeTree->Fill();
+            //promptFakeTree->Fill();
         } // End of prompt-fake events */ // Ed
         //--------------------------------------------------------------------------------------------------
 
@@ -1379,6 +1407,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     } //  end of loop over the diphotons
     eventTree->Fill();
     event_number++;
+    //cout << "Exiting JetValTreeMaker analyze method" << endl;
 }
 
 void
@@ -1501,6 +1530,7 @@ JetValidationTreeMaker::beginJob()
 
     promptFakeTree->Branch( "eventID"      , &pfInfo.eventID, "eventID/I" );
     //promptFakeTree->Branch( "weight"      , &pfInfo.weight, "weight/F" );
+    promptFakeTree->Branch( "fakeWeight"      , &pfInfo.fakeWeight, "fakeWeight/F" );
     
     promptFakeTree->Branch( "diphoMass"        , &pfInfo.diphoMass        , "diphoMass/F"         );
     promptFakeTree->Branch( "diphoPt"        , &pfInfo.diphoPt        , "diphoPt/F"         );
@@ -1576,10 +1606,10 @@ JetValidationTreeMaker::beginJob()
     promptFakeTree->Branch( "fakePartonDr"      , &pfInfo.fakePartonDr     , "fakePartonDr/F" );
     promptFakeTree->Branch( "fakePartonMatchType"   , &pfInfo.fakePartonMatchType, "fakePartonMatchType/I" );
 
-    promptFakeTree->Branch( "sigmarv", &pfInfo.sigmarv, "sigmarv/F" );
+    /*promptFakeTree->Branch( "sigmarv", &pfInfo.sigmarv, "sigmarv/F" );
     promptFakeTree->Branch( "sigmawv", &pfInfo.sigmawv, "sigmawv/F" );
     promptFakeTree->Branch( "CosPhi", &pfInfo.CosPhi, "CosPhi/F" );
-    promptFakeTree->Branch( "vtxprob", &pfInfo.vtxprob, "vtxprob/F" );
+    promptFakeTree->Branch( "vtxprob", &pfInfo.vtxprob, "vtxprob/F" );*/
 
     promptFakeTree->Branch( "dijet_leadEta", &pfInfo.dijet_leadEta, "dijet_leadEta/F" );
     promptFakeTree->Branch( "dijet_subleadEta", &pfInfo.dijet_subleadEta, "dijet_subleadEta/F" );

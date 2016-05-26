@@ -29,7 +29,10 @@ namespace flashgg {
         enum rechitSummaryFlags_t {  kSaturated=0, kLeRecovered, kNeighRecovered, kHasSwitchToGain1, kHasSwitchToGain6, kWeird };
 
         // someone had the insane idea of shadowing these methods in the pat::Photon....
-        float egChargedHadronIso() const {return  reco::Photon::chargedHadronIso();}
+        float egChargedHadronIso() const { // Ed
+            if( hasFakeIDMVA_ ) return 0.;
+            else return  reco::Photon::chargedHadronIso();
+        } // Ed
         float egNeutralHadronIso() const {return  reco::Photon::neutralHadronIso();}
         float egPhotonIso() const {return  reco::Photon::photonIso();}
 
@@ -136,7 +139,40 @@ namespace flashgg {
         float const sigEOverE() const;
 
         std::map<edm::Ptr<reco::Vertex>, float> const phoIdMvaD() const {return phoIdMvaD_;};
-        float const phoIdMvaDWrtVtx( const edm::Ptr<reco::Vertex> &vtx, bool lazy = false ) const { return findVertexFloat( vtx, phoIdMvaD_, lazy ); }; // if lazy flag is true only compare key (needed since fwlite does not fill provenance info)
+        float const phoIdMvaDWrtVtx( const edm::Ptr<reco::Vertex> &vtx, bool lazy = false ) const { // Ed
+            if( hasFakeIDMVA_ ) return fakeIDMVA_;
+            else return findVertexFloat( vtx, phoIdMvaD_, lazy ); 
+        }; // if lazy flag is true only compare key (needed since fwlite does not fill provenance info)
+
+        float fakeIDMVA() const { return fakeIDMVA_; } 
+        void setFakeIDMVA( float val ) { fakeIDMVA_ = val; }
+        bool hasFakeIDMVA() const { return hasFakeIDMVA_; } 
+        void setHasFakeIDMVA( bool val ) { hasFakeIDMVA_ = val; }
+
+        float hadronicOverEm() const {
+            if( hasFakeIDMVA_ ) return 0.;
+            else return pat::Photon::hadronicOverEm();
+        }
+        float full5x5_r9() const {
+            if( hasFakeIDMVA_ ) return 1.;
+            else return pat::Photon::full5x5_r9();
+        } 
+        float full5x5_sigmaIetaIeta() const {
+            if( hasFakeIDMVA_ ) return 1.;
+            else return pat::Photon::full5x5_sigmaIetaIeta();
+        } 
+        float trkSumPtHollowConeDR03() const {
+            if( hasFakeIDMVA_ ) return 0.;
+            else return pat::Photon::trkSumPtHollowConeDR03();
+        } 
+        bool isEB() const {
+            if( hasFakeIDMVA_ ) return true;
+            else return pat::Photon::isEB();
+        } 
+        bool isEE() const {
+            if( hasFakeIDMVA_ ) return false;
+            else return pat::Photon::isEE();
+        } // Ed
 
         void setMatchedGenPhoton( const edm::Ptr<pat::PackedGenParticle> pgp ) { addUserCand( "matchedGenPhoton", pgp ); };
         const pat::PackedGenParticle * matchedGenPhoton() const { return dynamic_cast<const pat::PackedGenParticle *>( userCand( "matchedGenPhoton" ).get() ); };
@@ -199,6 +235,8 @@ namespace flashgg {
         std::map<edm::Ptr<reco::Vertex>, float> pfChgIso03_;
         std::map<edm::Ptr<reco::Vertex>, float> pfChgIso02_;
         std::map<edm::Ptr<reco::Vertex>, float> phoIdMvaD_;
+        float fakeIDMVA_;
+        bool  hasFakeIDMVA_;
         bool passElecVeto_;
         std::map<std::string, std::map<edm::Ptr<reco::Vertex>, float> > extraChargedIsolations_;
         std::map<std::string, float> extraPhotonIsolations_, extraNeutralIsolations_;
