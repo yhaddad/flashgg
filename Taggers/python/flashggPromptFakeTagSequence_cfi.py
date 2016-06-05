@@ -1,5 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 #from flashgg.Taggers.flashggDiPhotonMVA_cfi import flashggDiPhotonMVA
+from flashgg.Taggers.flashggParameterisedDiPhotonMVA_cfi import flashggParameterisedDiPhotonMVA
 from flashgg.Taggers.flashggVBFMVA_cff import flashggVBFMVA,flashggVBFDiPhoDiJetMVA
 #from flashgg.Taggers.flashggPreselectOnePhotonOnly_cfi import flashggPreselectOnePhotonOnly
 from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDiPhotons
@@ -11,8 +12,9 @@ flashggPromptFakeTagSequence = cms.Sequence( #flashggUpdatedIdMVADiPhotons
                                   #* flashggPreselectedDiPhotons
                                   flashggPreselectedDiPhotons
 				  #* flashggDiPhotonMVA
+				  * flashggParameterisedDiPhotonMVA
                                   * flashggUnpackedJets
                                   * flashggVBFMVA
-                                  #* flashggVBFDiPhoDiJetMVA
+                                  * flashggVBFDiPhoDiJetMVA
                                   )
 

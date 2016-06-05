@@ -38,6 +38,7 @@
 
 #include "flashgg/DataFormats/interface/DiPhotonMVAResult.h" // Ed Ed
 #include "flashgg/DataFormats/interface/VBFMVAResult.h" // Ed Ed
+#include "flashgg/DataFormats/interface/VBFDiPhoDiJetMVAResult.h"
 
 #include "TTree.h"
 #include "TH1.h"
@@ -46,6 +47,11 @@
 #include "TVector.h"
 #include "TLorentzVector.h"
 #include "TRandom3.h"
+
+#include "FWCore/Utilities/interface/RandomNumberGenerator.h"
+#include "CLHEP/Random/RandomEngine.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CLHEP/Random/RandFlat.h"
 
 // **********************************************************************
 #ifndef FLASHgg_VertexCandidateMap_h
@@ -364,10 +370,12 @@ struct PromptFakeInfo {
     float fakePartonDr;
     int   fakePartonMatchType;
 
-    /*float sigmarv;
+    float sigmarv;
     float sigmawv;
     float CosPhi;
-    float vtxprob;*/
+    float vtxprob;
+    //float nConv;
+    float diphoMvaResult;
 
     float dijet_leadEta;
     float dijet_subleadEta;
@@ -384,6 +392,7 @@ struct PromptFakeInfo {
     float dijet_dipho_pt;
     float dijet_minDRJetPho;
 
+    float combMvaResult;
 };
 
 // **********************************************************************
@@ -430,7 +439,8 @@ private:
     //EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
     
     EDGetTokenT<View<VBFMVAResult> > vbfMvaResultToken_; // Ed Ed
-    //EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_; // Ed Ed
+    EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_; // Ed Ed
+    EDGetTokenT<View<VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResultToken_;
 
     edm::InputTag 					qgVariablesInputTag;
     //edm::EDGetTokenT<edm::ValueMap<float>> 		qgToken;
@@ -460,7 +470,7 @@ private:
     bool        debug_;
     bool        useVBFTagPhotonMatching_;
 
-    TRandom3 *randomDiphoIndex;   
+    //TRandom3 *randomDiphoIndex;   
 };
 
 JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig ):
@@ -474,7 +484,8 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     //vertexCandidateMapToken_( consumes<VertexCandidateMap>( iConfig.getParameter<InputTag>( "VertexCandidateMapTag" ) ) ),
     
     vbfMvaResultToken_( consumes<View<flashgg::VBFMVAResult> >( iConfig.getParameter<InputTag> ( "VBFMVAResultTag" ) ) ), // Ed Ed
-    //mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ), // Ed Ed
+    mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ), // Ed Ed Ed
+    vbfDiPhoDiJetMvaResultToken_( consumes<View<flashgg::VBFDiPhoDiJetMVAResult> >( iConfig.getParameter<InputTag> ( "VBFDiPhoDiJetMVAResultTag" ) ) ),
 
     //qgVariablesInputTag( iConfig.getParameter<edm::InputTag>( "qgVariablesInputTag" ) ),
 
@@ -496,7 +507,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     jetCollectionName = iConfig.getParameter<string>( "StringTag" );
     //qgToken	= consumes<edm::ValueMap<float>>( edm::InputTag( qgVariablesInputTag.label(), "qgLikelihood" ) );
 
-    randomDiphoIndex = new TRandom3( 2395124 );
+    //randomDiphoIndex = new TRandom3( 2395124 );
 }
 
 JetValidationTreeMaker::~JetValidationTreeMaker()
@@ -508,6 +519,13 @@ JetValidationTreeMaker::~JetValidationTreeMaker()
 void
 JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup &iSetup )
 {
+    edm::Service<edm::RandomNumberGenerator> rng;
+    if( ! rng.isAvailable() ) {
+        throw cms::Exception( "Configuration" ) << "ParameterisedFakePhotonProducer requires the RandomNumberGeneratorService  - please add to configuration";
+    }
+
+    CLHEP::HepRandomEngine & engine = rng->getEngine( iEvent.streamID() );
+
     //cout << "Inside JetValTreeMaker analyze method" << endl;
 
     if( debug_ ) {
@@ -540,8 +558,8 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     
     Handle<View<flashgg::VBFMVAResult> > vbfMvaResults; // Ed Ed
     iEvent.getByToken( vbfMvaResultToken_, vbfMvaResults );
-    //Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
-    //iEvent.getByToken( mvaResultToken_, mvaResults ); // Ed Ed
+    Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
+    iEvent.getByToken( mvaResultToken_, mvaResults ); // Ed Ed
 
     //Handle<View<flashgg::Jet> > jetsDz;
     //iEvent.getByToken( jetDzToken_, jetsDz );
@@ -551,6 +569,9 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         //iEvent.getByLabel( inputTagJets_[j], Jets[j] );
         iEvent.getByToken( tokenJets_[j], Jets[j] );
     }
+
+    Handle<View<flashgg::VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResults;
+    iEvent.getByToken( vbfDiPhoDiJetMvaResultToken_, vbfDiPhoDiJetMvaResults );
 
 
     //edm::Handle<edm::ValueMap<float>> qgHandle;
@@ -624,7 +645,9 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     size_t diPhotonsSize = diPhotons->size();
     if( ZeroVertexOnly_ ) { diPhotonsSize = 1; }
 
-    unsigned int actualDiphoIndex = randomDiphoIndex->Integer( diPhotonsSize );
+    //unsigned int actualDiphoIndex = randomDiphoIndex->Integer( diPhotonsSize );
+    unsigned int actualDiphoIndex = CLHEP::RandFlat::shootInt( &engine, diPhotonsSize ); // to be parameterised
+
     //cout << "actualDiphoIndex = " << actualDiphoIndex << endl;
     //cout << "diPhotonsSize = " << diPhotonsSize << endl;
 
@@ -633,16 +656,20 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         unsigned int jetCollectionIndex = 0;
         if( !ZeroVertexOnly_ ) { jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex(); }
 
-        //edm::Ptr<flashgg::DiPhotonMVAResult> dipho_mvares = mvaResults->ptrAt( diphoIndex ); // Ed Ed
+        edm::Ptr<flashgg::DiPhotonMVAResult> dipho_mvares = mvaResults->ptrAt( diphoIndex ); // Ed Ed
         edm::Ptr<flashgg::VBFMVAResult> vbf_mvares = vbfMvaResults->ptrAt( diphoIndex ); // Ed Ed
+        edm::Ptr<flashgg::VBFDiPhoDiJetMVAResult> vbfdipho_mvares = vbfDiPhoDiJetMvaResults->ptrAt( diphoIndex );
 
         //--------------------------------------------------------------------------------------------------
         // Begin analysis of prompt-fake events // Ed
         
-        /*pfInfo.sigmarv = dipho_mvares->sigmarv;
+        pfInfo.sigmarv = dipho_mvares->sigmarv;
         pfInfo.sigmawv = dipho_mvares->sigmawv;
         pfInfo.CosPhi  = dipho_mvares->CosPhi;
-        pfInfo.vtxprob = dipho_mvares->vtxprob;*/
+        pfInfo.vtxprob = dipho_mvares->vtxprob;
+        //pfInfo.nConv   = dipho_mvares->nConv;
+        pfInfo.diphoMvaResult = dipho_mvares->result;
+        pfInfo.combMvaResult = vbfdipho_mvares->vbfDiPhoDiJetMvaResult;
 
         pfInfo.dijet_leadEta = vbf_mvares->dijet_leadEta;
         pfInfo.dijet_subleadEta = vbf_mvares->dijet_subleadEta;
@@ -744,6 +771,9 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         //cout << "fakePhoton->eta() = " << fakePhoton->eta() << endl << endl;
 
         if( eventIsPromptFake ) {
+            //cout << "printDipho nConv = " << printDipho->nConv() << endl;
+            //cout << "promptPhoton has conv tracks? = " << promptPhoton->hasConversionTracks() << endl;
+            //cout << "fakePhoton   has conv tracks? = " << fakePhoton->hasConversionTracks()   << endl << endl;
             float promptEta   = promptPhoton->eta();
             //float promptEta   = promptPhoton->superCluster()->eta();
             float promptPhi   = promptPhoton->phi();
@@ -1606,10 +1636,11 @@ JetValidationTreeMaker::beginJob()
     promptFakeTree->Branch( "fakePartonDr"      , &pfInfo.fakePartonDr     , "fakePartonDr/F" );
     promptFakeTree->Branch( "fakePartonMatchType"   , &pfInfo.fakePartonMatchType, "fakePartonMatchType/I" );
 
-    /*promptFakeTree->Branch( "sigmarv", &pfInfo.sigmarv, "sigmarv/F" );
+    promptFakeTree->Branch( "sigmarv", &pfInfo.sigmarv, "sigmarv/F" );
     promptFakeTree->Branch( "sigmawv", &pfInfo.sigmawv, "sigmawv/F" );
     promptFakeTree->Branch( "CosPhi", &pfInfo.CosPhi, "CosPhi/F" );
-    promptFakeTree->Branch( "vtxprob", &pfInfo.vtxprob, "vtxprob/F" );*/
+    promptFakeTree->Branch( "vtxprob", &pfInfo.vtxprob, "vtxprob/F" );
+    promptFakeTree->Branch( "diphoMvaResult", &pfInfo.diphoMvaResult, "diphoMvaResult/F" );
 
     promptFakeTree->Branch( "dijet_leadEta", &pfInfo.dijet_leadEta, "dijet_leadEta/F" );
     promptFakeTree->Branch( "dijet_subleadEta", &pfInfo.dijet_subleadEta, "dijet_subleadEta/F" );
@@ -1625,6 +1656,8 @@ JetValidationTreeMaker::beginJob()
     promptFakeTree->Branch( "dijet_subleady", &pfInfo.dijet_subleady, "dijet_subleady/F" );
     promptFakeTree->Branch( "dijet_dipho_pt", &pfInfo.dijet_dipho_pt, "dijet_dipho_pt/F" );
     promptFakeTree->Branch( "dijet_minDRJetPho", &pfInfo.dijet_minDRJetPho, "dijet_minDRJetPho/F" );
+
+    promptFakeTree->Branch( "combMvaResult", &pfInfo.combMvaResult, "combMvaResult/F" );
 }
 
 void JetValidationTreeMaker::endJob()
