@@ -101,23 +101,28 @@ namespace flashgg {
 
         // Begin Prompt-Fake parameterisation----------------------------------------------------------------
         Handle<View<reco::GenJet> > genJets;
-        auto_ptr<vector<flashgg::Photon> > fakePhotonCollection( new vector<flashgg::Photon> );
         evt.getByToken( genJetToken_, genJets );
 
+        auto_ptr<vector<flashgg::Photon> > fakePhotonCollection( new vector<flashgg::Photon> );
         //cout << "size of photon collection is " << photons->size() << endl;
 
         // loop over photons, then loop over gen jets for each prompt photon
+        auto_ptr<vector<flashgg::Photon> > goodPromptPhotons( new vector<flashgg::Photon> );
         for( uint photonIndex = 0; photonIndex < photons->size(); photonIndex++ ) {
             auto promptPhoton = photons->ptrAt( photonIndex );
-            flashgg::Photon::mcMatch_t promptMatchType = promptPhoton->genMatchType();
-            if( promptMatchType != 1 ) continue;
-            float promptEta = promptPhoton->eta();
-            float promptPhi = promptPhoton->phi();
+            if( promptPhoton->genMatchType() != 1 ) continue;
+            if( abs( promptPhoton->eta() > 2.5 ) ) continue;
+            if( promptPhoton->pt() < 20 ) continue;
+            goodPromptPhotons->push_back( *promptPhoton );
+        }
+
+        if( goodPromptPhotons->size() == 1 ) {
             for( uint genJetIndex = 0; genJetIndex < genJets->size(); genJetIndex++ ) {
+                auto promptPhoton = goodPromptPhotons->at( 0 );
                 auto fakeCandidate = genJets->ptrAt( genJetIndex );
                 float fakeEta = fakeCandidate->eta();
                 float fakePhi = fakeCandidate->phi();
-                float promptFakeCandidateDeltaR = deltaR( promptEta, promptPhi, fakeEta, fakePhi );
+                float promptFakeCandidateDeltaR = deltaR( promptPhoton.eta(), promptPhoton.phi(), fakeEta, fakePhi );
                 if( promptFakeCandidateDeltaR < 0.4 ) continue;
                 flashgg::Photon fakePhoton = flashgg::Photon();
 
@@ -155,7 +160,7 @@ namespace flashgg {
                 //cout << "fakeWeight at step tre = " << fakeWeight << endl;
                 //cout << "absolute value fakeEta = " << abs(fakeEta) << endl << endl;
                 fakePhoton.setWeight( "fakeWeight", fakeWeight );
- 
+
                 float fakeEnergy = fakeGenJetEnergyRatio * fakeCandidate->energy();
                 //cout << "fakeEnergy = "  << fakeEnergy << endl;
                 float fakePt = fakeEnergy * sin( 2 * atan( exp( -fakeEta ) ) );

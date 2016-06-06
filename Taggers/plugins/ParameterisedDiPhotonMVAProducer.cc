@@ -78,7 +78,7 @@ namespace flashgg {
         
         float mass_;
         
-        float nConv_;
+        //float nConv_;
         float vtxProbMVA_;
         vector<double> vertex_prob_params_conv;
         vector<double> vertex_prob_params_noConv;
@@ -165,7 +165,7 @@ namespace flashgg {
         }
         produces<vector<DiPhotonMVAResult> >(); // one per diphoton, always in same order, vector is more efficient than map
 
-        cout << "Inside constructor of ParameterisedDiPhotonProducer" << endl;
+        cout << "Inside constructor of parameterised diphoton MVA producer" << endl;
     }
 
     void ParameterisedDiPhotonMVAProducer::produce( Event &evt, const EventSetup & )
@@ -277,10 +277,10 @@ namespace flashgg {
             //float MassResolutionWrongVtx = TMath::Sqrt( ( SigmaM * SigmaM ) + ( alpha_sig_wrg * alpha_sig_wrg ) );
             
             const flashgg::Photon *fakePhoton   = g1;
-            const flashgg::Photon *promptPhoton = g2;
+            //const flashgg::Photon *promptPhoton = g2;
             if( g2->hasFakeIDMVA() )  {
                 fakePhoton   = g2;
-                promptPhoton = g1;
+                //promptPhoton = g1;
             }
             else if( ! g1->hasFakeIDMVA() ) cout << "WARNING - NO FAKE PHOTON. SOMETHING DEFINITELY WRONG" << endl;
             float fakeEta = fakePhoton->eta();
@@ -359,10 +359,11 @@ namespace flashgg {
 
             //vtxProbMVA_ = diPhotons->ptrAt( candIndex )->vtxProbMVA();
             vtxProbMVA_ = 0.999;
+            vtxprob_ = vtxProbMVA_;
             //nConv_ = diPhotons->ptrAt( candIndex )->nConv();
-            nConv_ = promptPhoton->hasConversionTracks();
+            //nConv_ = promptPhoton->hasConversionTracks();
 
-            if( nConv_ > 0 ) {
+            /*if( nConv_ > 0 ) {
                 vtxprob_        = ( 1 + vertex_prob_params_conv.at( 0 ) - vertex_prob_params_conv.at( 1 ) + vertex_prob_params_conv.at( 2 ) - vertex_prob_params_conv.at(
                                         3 ) ) + vertex_prob_params_conv.at( 0 ) * vtxProbMVA_ + vertex_prob_params_conv.at( 1 ) * pow( vtxProbMVA_,
                                                 2 ) + vertex_prob_params_conv.at( 2 ) * pow( vtxProbMVA_, 3 ) + vertex_prob_params_conv.at( 3 ) * pow( vtxProbMVA_, 4 );
@@ -372,7 +373,7 @@ namespace flashgg {
                 vtxprob_        = ( 1 + vertex_prob_params_noConv.at( 0 ) - vertex_prob_params_noConv.at( 1 ) + vertex_prob_params_noConv.at(
                                         2 ) - vertex_prob_params_noConv.at( 3 ) ) + vertex_prob_params_noConv.at( 0 ) * vtxProbMVA_ + vertex_prob_params_noConv.at( 1 ) * pow( vtxProbMVA_,
                                                 2 ) + vertex_prob_params_noConv.at( 2 ) * pow( vtxProbMVA_, 3 ) + vertex_prob_params_noConv.at( 3 ) * pow( vtxProbMVA_, 4 );
-            }
+            }*/
 
             mvares.result = DiphotonMva_->EvaluateMVA( "BDT" );
 

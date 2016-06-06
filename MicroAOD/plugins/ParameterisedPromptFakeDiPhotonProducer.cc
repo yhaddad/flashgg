@@ -85,6 +85,8 @@ namespace flashgg {
             Ptr<flashgg::Photon> promptPhoton = promptPhotons->ptrAt( promptIndex );
             flashgg::Photon::mcMatch_t promptMatchType = promptPhoton->genMatchType();
             if( promptMatchType != 1 ) continue;
+            if( abs( promptPhoton->eta() > 2.5 ) ) continue;
+            if( promptPhoton->pt() < 20 ) continue;
             //cout << "prompt accessed, is prompt" << endl;
             //cout << "prompt pt is = " << promptPhoton->pt() << endl;
             //auto tempPromptLV = promptPhoton->p4();
