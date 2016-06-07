@@ -43,6 +43,7 @@ namespace flashgg {
         ParameterisedFakePhotonProducer( const ParameterSet & );
     private:
         void produce( Event &, const EventSetup & ) override;
+        virtual void endJob() override;
         EDGetTokenT<View<flashgg::Photon> > photonToken_;
         EDGetTokenT<View<reco::GenJet> > genJetToken_;
 
@@ -56,6 +57,8 @@ namespace flashgg {
         TH1F *hEndcapLowTemplateIDMVA;
         //TH1F *hEndcapMedTemplateIDMVA;
         TH1F *hEndcapHighTemplateIDMVA;
+
+        //TH1F* hRandGenJetCheck;
     };
 
     ParameterisedFakePhotonProducer::ParameterisedFakePhotonProducer( const ParameterSet &iConfig ) :
@@ -80,6 +83,8 @@ namespace flashgg {
         hEndcapLowTemplateIDMVA  = (TH1F*)template_file->Get("hEndcapLowTemplateIDMVA");
         //hEndcapMedTemplateIDMVA  = (TH1F*)template_file->Get("hEndcapMedTemplateIDMVA");
         hEndcapHighTemplateIDMVA = (TH1F*)template_file->Get("hEndcapHighTemplateIDMVA");
+
+        //hRandGenJetCheck = new TH1F( "hRandGenJetCheck", "Should be uniform on [0,1.2]", 48, 0., 1.2 );
 
         //delete template_file ?
         
@@ -133,6 +138,7 @@ namespace flashgg {
                 //cout << "fakeWeight at step one = " << fakeWeight << endl;
                 //float fakeGenJetEnergyRatio = randomEGAMEGEN->Uniform( 0., 1.2 );
                 float fakeGenJetEnergyRatio = CLHEP::RandFlat::shoot( &engine, 0., 1.2 );
+                //hRandGenJetCheck->Fill( fakeGenJetEnergyRatio );
                 //cout << "fakeGenJetEnergyRatio = " << fakeGenJetEnergyRatio << endl;
                 int fakeRatioBinNum = floor( fakeGenJetEnergyRatio / 0.025  ) + 1;
                 fakeWeight *= hFakeGenJetRatio->GetBinContent( fakeRatioBinNum ) / hFakeGenJetRatio->Integral("width");
@@ -182,6 +188,14 @@ namespace flashgg {
         evt.put( fakePhotonCollection );
         // End Prompt-Fake parameterisation------------------------------------------------------------------
 
+    }
+
+    void ParameterisedFakePhotonProducer::endJob()
+    {
+       
+        /*TFile *output_file = new TFile( "file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/randcheck.root", "recreate" );
+        hRandGenJetCheck->Write();
+        output_file->Close();*/
     }
 }
 

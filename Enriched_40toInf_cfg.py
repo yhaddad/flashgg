@@ -6,6 +6,7 @@
 from sys import argv
 print argv
 myfilenum = str(argv[2])
+myrandseed = int(argv[2])
 outdir  = "/vols/cms/es811/PromptFake3Jun16/"
 outname = "Enriched_40toInf_file"
 #files are 1-484
@@ -54,15 +55,15 @@ process.flashggJetValidationTreeMakerPFCHS = cms.EDAnalyzer('FlashggJetValidatio
 
 process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
                                                       flashggParameterisedFakePhotons = cms.PSet(
-                                                          initialSeed = cms.untracked.uint32(178),
+                                                          initialSeed = cms.untracked.uint32( myrandseed ),
                                                           engineName  = cms.untracked.string('TRandom3')
                                                       ),
                                                       flashggParameterisedDiPhotonMVA = cms.PSet(
-                                                          initialSeed = cms.untracked.uint32(31735),
+                                                          initialSeed = cms.untracked.uint32( 45*myrandseed + 1 ),
                                                           engineName  = cms.untracked.string('TRandom3')
                                                       ),
                                                       flashggJetValidationTreeMakerPFCHS = cms.PSet(
-                                                          initialSeed = cms.untracked.uint32(60267),
+                                                          initialSeed = cms.untracked.uint32( 5912*myrandseed + 179 ),
                                                           engineName  = cms.untracked.string('TRandom3')
                                                       ),
                                                   )
