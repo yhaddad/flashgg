@@ -24,7 +24,7 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
 else :
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input    = cms.untracked.int32(1000) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 
 from flashgg.Systematics.SystematicsCustomize import *
