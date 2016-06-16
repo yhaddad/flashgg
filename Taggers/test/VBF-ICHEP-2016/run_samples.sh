@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 export SOURCE=${CMSSW_BASE}/flashgg/Taggers/test/VBFProduction
 today=`date +%F`
