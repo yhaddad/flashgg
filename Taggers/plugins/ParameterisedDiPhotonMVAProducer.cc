@@ -250,8 +250,14 @@ namespace flashgg {
             float z2 = g2->superCluster()->position().z() - vtx->position().z();*/
 
             float x1 = g1->px() - vtx->position().x();
+            //cout << "g1 px = " << g1->px() << endl;
+            //cout << "vtx x = " << vtx->position().x() << endl;
             float y1 = g1->py() - vtx->position().y();
+            //cout << "g1 py = " << g1->py() << endl;
+            //cout << "vty y = " << vtx->position().y() << endl;
             float z1 = g1->pz() - vtx->position().z();
+            //cout << "g1 pz = " << g1->pz() << endl;
+            //cout << "vtz z = " << vtx->position().z() << endl;
 
             float x2 = g2->px() - vtx->position().x();
             float y2 = g2->py() - vtx->position().y();
@@ -354,11 +360,14 @@ namespace flashgg {
             //sigmarv_        = .5 * sqrt( ( g1->sigEOverE() ) * ( g1->sigEOverE() ) + ( g2->sigEOverE() ) * ( g2->sigEOverE() ) );
             sigmarv_        = sigmarv;
             //sigmawv_        = MassResolutionWrongVtx;
-            sigmawv_        = sigmarv + 0.01;
+            //sigmawv_        = sigmarv + 0.01;
+            sigmawv_        = 1.36*sigmarv;
             CosPhi_         = TMath::Cos( deltaPhi( g1->phi(), g2->phi() ) );
 
             //vtxProbMVA_ = diPhotons->ptrAt( candIndex )->vtxProbMVA();
-            vtxProbMVA_ = 0.999;
+            //vtxProbMVA_ = 0.999;
+            //vtxProbMVA_ = 0.99;
+            vtxProbMVA_ = 0.96;
             vtxprob_ = vtxProbMVA_;
             //nConv_ = diPhotons->ptrAt( candIndex )->nConv();
             //nConv_ = promptPhoton->hasConversionTracks();

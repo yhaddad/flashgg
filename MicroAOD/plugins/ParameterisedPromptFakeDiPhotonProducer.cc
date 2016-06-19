@@ -59,6 +59,7 @@ namespace flashgg {
         
         Handle<View<flashgg::Photon> > fakePhotons;
         evt.getByToken( fakePhotonToken_, fakePhotons );
+        //cout << "fakePhotons size = " << fakePhotons->size() << endl;
 
         math::XYZPoint higgsVtx;
         if( ! evt.isRealData() ) {
