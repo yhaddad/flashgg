@@ -28,6 +28,10 @@ namespace flashgg {
         const edm::Ptr<flashgg::Jet> leadingJet_ptr() const; //needs to be validated
         const edm::Ptr<flashgg::Jet> subLeadingJet_ptr() const; //needs to be validated
         const edm::Ptr<flashgg::Jet> subSubLeadingJet_ptr() const; //needs to be validated // 3rd Jet needed for VBF studies
+
+        const bool leadingJet_match()       const { return hasValidVBFDiJet() ? (leadingJet_ptr()->genJet()!=0)      : false;}
+        const bool subLeadingJet_match()    const { return hasValidVBFDiJet() ? (subLeadingJet_ptr()->genJet()!=0)   : false;}
+        const bool subSubLeadingJet_match() const { return hasValidVBFDiJet() ? (subSubLeadingJet_ptr()->genJet()!=0): false;}
         
         const float leading_rms   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->rms() : -9999.;}
         const float subLeading_rms() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->rms() : -9999.;}
