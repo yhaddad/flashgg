@@ -106,7 +106,8 @@
 <class name="edm::Wrapper<edm::Ptr<flashgg::DiPhotonTagBase> >"/>
 <class name="edm::Ptr<reco::Vertex>"/> 
 <class name="std::vector<edm::Ptr<reco::Vertex> >"/> 
-<class name="flashgg::Photon" ClassVersion="10">
+<class name="flashgg::Photon" ClassVersion="11">
+ <version ClassVersion="11" checksum="2866978891"/>
   <version ClassVersion="10" checksum="563539605"/>
 </class>
 <class name="edm::Ptr<flashgg::Photon>"/>
@@ -201,7 +202,7 @@
 <class name="std::vector<flashgg::Electron>"/>
 <class name="edm::Wrapper<std::vector<flashgg::Electron> >"/>
 <class name="flashgg::Muon" ClassVersion="12">
- <version ClassVersion="12" checksum="3130885816"/>
+  <version ClassVersion="12" checksum="3130885816"/>
   <version ClassVersion="11" checksum="3269337733"/>
   <version ClassVersion="10" checksum="1803852641"/>
 </class>

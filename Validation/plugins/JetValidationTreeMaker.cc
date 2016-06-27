@@ -36,11 +36,22 @@
 
 #include "DataFormats/JetReco/interface/PileupJetIdentifier.h"
 
+#include "flashgg/DataFormats/interface/DiPhotonMVAResult.h" // Ed Ed
+#include "flashgg/DataFormats/interface/VBFMVAResult.h" // Ed Ed
+#include "flashgg/DataFormats/interface/VBFDiPhoDiJetMVAResult.h"
 
 #include "TTree.h"
+#include "TH1.h"
+#include "TH2.h"
 #include "TMatrix.h"
 #include "TVector.h"
 #include "TLorentzVector.h"
+#include "TRandom3.h"
+
+#include "FWCore/Utilities/interface/RandomNumberGenerator.h"
+#include "CLHEP/Random/RandomEngine.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CLHEP/Random/RandFlat.h"
 
 // **********************************************************************
 #ifndef FLASHgg_VertexCandidateMap_h
@@ -279,6 +290,111 @@ struct GenPhotonInfo {
 
 };
 
+// info re PromptFake events
+struct PromptFakeInfo {
+    int eventID;
+    //float weight; 
+    float fakeWeight; 
+    //
+    float diphoMass;
+    float diphoPt;
+    float diphoLeadingPt;
+    float diphoSubleadingPt;
+    
+    float promptFakeDeltaR;
+
+    float promptPt;
+    float promptEnergy;
+    float promptEta;
+    float promptPhi;
+    int   promptPdgId;
+    float promptIDMVA;
+    float fakePt;
+    float fakeEnergy;
+    float fakeEta;
+    float fakePhi;
+    int   fakePdgId;
+    float fakeIDMVA;
+
+    float promptGenPhotonPt;
+    float promptGenPhotonEnergy;
+    float promptTotalGenPhoEnergy;
+    float promptGenPhotonEta;
+    float promptGenPhotonPhi;
+    float promptGenPhotonDr;
+    int   promptNumGenPhotons;
+    float fakeGenPhotonPt;
+    float fakeGenPhotonEnergy;
+    float fakeTotalGenPhoEnergy;
+    float fakeGenPhotonEta;
+    float fakeGenPhotonPhi;
+    float fakeGenPhotonDr;
+    int   fakeNumGenPhotons;
+
+    float promptGenJetPt;
+    float promptGenJetEnergy;
+    float promptGenJetEta;
+    float promptGenJetPhi;
+    float promptGenJetDr;
+    int   promptNumGenJets;
+    float fakeGenJetPt;
+    float fakeGenJetEnergy;
+    float fakeGenJetEta;
+    float fakeGenJetPhi;
+    float fakeGenJetDr;
+    int   fakeNumGenJets;
+
+    float promptRecoJetPt;
+    float promptRecoJetEnergy;
+    float promptRecoJetEta;
+    float promptRecoJetPhi;
+    float promptRecoJetDr;
+    int   promptNumRecoJets;
+    float fakeRecoJetPt;
+    float fakeRecoJetEnergy;
+    float fakeRecoJetEta;
+    float fakeRecoJetPhi;
+    float fakeRecoJetDr;
+    int   fakeNumRecoJets;
+
+    float promptPartonPt;
+    float promptPartonEnergy;
+    float promptPartonEta;
+    float promptPartonPhi;
+    float promptPartonDr;
+    int   promptPartonMatchType;
+    float fakePartonPt;
+    float fakePartonEnergy;
+    float fakePartonEta;
+    float fakePartonPhi;
+    float fakePartonDr;
+    int   fakePartonMatchType;
+
+    float sigmarv;
+    float sigmawv;
+    float CosPhi;
+    float vtxprob;
+    //float nConv;
+    float diphoMvaResult;
+
+    float dijet_leadEta;
+    float dijet_subleadEta;
+    float dijet_abs_dEta;
+    float dijet_LeadJPt;
+    float dijet_SubJPt;
+    float dijet_Zep;
+    float dijet_dphi_trunc;
+    float dijet_dipho_dphi;
+    float dijet_Mjj;
+    float dijet_dy;
+    float dijet_leady;
+    float dijet_subleady;
+    float dijet_dipho_pt;
+    float dijet_minDRJetPho;
+
+    float combMvaResult;
+};
+
 // **********************************************************************
 
 using namespace std;
@@ -313,6 +429,7 @@ private:
     //EDGetTokenT< VertexCandidateMap > vertexCandidateMapTokenAOD_;
 
     EDGetTokenT< edm::View<reco::GenParticle> >          genPartToken_;
+    EDGetTokenT< edm::View<pat::PackedGenParticle> >     genPhoToken_; // Ed
     EDGetTokenT< edm::View<reco::GenJet> >               genJetToken_;
     //EDGetTokenT< edm::View<flashgg::Jet> >               jetDzToken_;
     std::vector<edm::EDGetTokenT<View<flashgg::Jet> > >  tokenJets_;
@@ -320,22 +437,27 @@ private:
     EDGetTokenT< edm::View<flashgg::DiPhotonCandidate> > diPhotonToken_;
     EDGetTokenT< View<reco::Vertex> >                    vertexToken_;
     //EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
+    
+    EDGetTokenT<View<VBFMVAResult> > vbfMvaResultToken_; // Ed Ed
+    EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_; // Ed Ed
+    EDGetTokenT<View<VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResultToken_;
 
     edm::InputTag 					qgVariablesInputTag;
     //edm::EDGetTokenT<edm::ValueMap<float>> 		qgToken;
 
     typedef std::vector<edm::Handle<edm::View<flashgg::Jet> > > JetCollectionVector;
 
-
     TTree     *eventTree;
     TTree     *jetTree;
-    TTree     *genPartTree;
+    //TTree     *genPartTree; // Ed
     TTree     *genJetTree;
+    TTree     *promptFakeTree;
 
     eventInfo   eInfo;
     jetInfo     jInfo;
-    GenPartInfo genInfo;
+    //GenPartInfo genInfo; // Ed
     GenJetInfo  genJetInfo;
+    PromptFakeInfo pfInfo;
     Int_t       event_number;
     std::string jetCollectionName;
 
@@ -348,16 +470,22 @@ private:
     bool        debug_;
     bool        useVBFTagPhotonMatching_;
 
+    //TRandom3 *randomDiphoIndex;   
 };
 
 JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig ):
     genPartToken_( consumes<View<reco::GenParticle> >( iConfig.getUntrackedParameter<InputTag> ( "GenParticleTag", InputTag( "prunedGenParticles" ) ) ) ),
+    genPhoToken_( consumes<View<pat::PackedGenParticle> >( iConfig.getUntrackedParameter<InputTag> ( "GenPhotonTag", InputTag( "packedGenParticles" ) ) ) ),
     genJetToken_( consumes<View<reco::GenJet> >( iConfig.getUntrackedParameter<InputTag> ( "GenJetTag", InputTag( "slimmedGenJets" ) ) ) ),
     //jetDzToken_   ( consumes<View<flashgg::Jet> >( iConfig.getParameter<InputTag>( "JetTagDz" ) ) ),
     inputTagJets_( iConfig.getParameter<std::vector<edm::InputTag> >( "inputTagJets" ) ),
     diPhotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( iConfig.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
     vertexToken_( consumes<View<reco::Vertex> >( iConfig.getUntrackedParameter<InputTag> ( "VertexTag", InputTag( "offlineSlimmedPrimaryVertices" ) ) ) ),
     //vertexCandidateMapToken_( consumes<VertexCandidateMap>( iConfig.getParameter<InputTag>( "VertexCandidateMapTag" ) ) ),
+    
+    vbfMvaResultToken_( consumes<View<flashgg::VBFMVAResult> >( iConfig.getParameter<InputTag> ( "VBFMVAResultTag" ) ) ), // Ed Ed
+    mvaResultToken_( consumes<View<flashgg::DiPhotonMVAResult> >( iConfig.getParameter<InputTag> ( "MVAResultTag" ) ) ), // Ed Ed Ed
+    vbfDiPhoDiJetMvaResultToken_( consumes<View<flashgg::VBFDiPhoDiJetMVAResult> >( iConfig.getParameter<InputTag> ( "VBFDiPhoDiJetMVAResultTag" ) ) ),
 
     //qgVariablesInputTag( iConfig.getParameter<edm::InputTag>( "qgVariablesInputTag" ) ),
 
@@ -369,6 +497,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     useVBFTagPhotonMatching_( iConfig.getUntrackedParameter<bool>( "useVBFTagPhotonMatching", false ) )
 
 {
+    cout << "Inside constructor of JetValidationTreeMaker" << endl;
     for( uint i = 0; i < inputTagJets_.size(); i++ ) {
         auto token = consumes<View<flashgg::Jet> >(inputTagJets_[i]);
         tokenJets_.push_back(token); 
@@ -378,6 +507,7 @@ JetValidationTreeMaker::JetValidationTreeMaker( const edm::ParameterSet &iConfig
     jetCollectionName = iConfig.getParameter<string>( "StringTag" );
     //qgToken	= consumes<edm::ValueMap<float>>( edm::InputTag( qgVariablesInputTag.label(), "qgLikelihood" ) );
 
+    //randomDiphoIndex = new TRandom3( 2395124 );
 }
 
 JetValidationTreeMaker::~JetValidationTreeMaker()
@@ -389,6 +519,14 @@ JetValidationTreeMaker::~JetValidationTreeMaker()
 void
 JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup &iSetup )
 {
+    edm::Service<edm::RandomNumberGenerator> rng;
+    if( ! rng.isAvailable() ) {
+        throw cms::Exception( "Configuration" ) << "ParameterisedFakePhotonProducer requires the RandomNumberGeneratorService  - please add to configuration";
+    }
+
+    CLHEP::HepRandomEngine & engine = rng->getEngine( iEvent.streamID() );
+
+    //cout << "Inside JetValTreeMaker analyze method" << endl;
 
     if( debug_ ) {
         std::cout << "\e[0;31m";
@@ -411,11 +549,17 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     iEvent.getByToken( genPartToken_, gens );
     //const PtrVector<reco::GenParticle>& gens = genParticles->ptrVector();
 
-
+    Handle<View<pat::PackedGenParticle> > genPhotons; // Ed
+    iEvent.getByToken( genPhoToken_, genPhotons ); // Ed
 
     Handle<View<reco::GenJet> > genJets;
     iEvent.getByToken( genJetToken_, genJets );
     //const PtrVector<reco::GenJet>& genJets = genJet->ptrVector();
+    
+    Handle<View<flashgg::VBFMVAResult> > vbfMvaResults; // Ed Ed
+    iEvent.getByToken( vbfMvaResultToken_, vbfMvaResults );
+    Handle<View<flashgg::DiPhotonMVAResult> > mvaResults;
+    iEvent.getByToken( mvaResultToken_, mvaResults ); // Ed Ed
 
     //Handle<View<flashgg::Jet> > jetsDz;
     //iEvent.getByToken( jetDzToken_, jetsDz );
@@ -425,6 +569,9 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
         //iEvent.getByLabel( inputTagJets_[j], Jets[j] );
         iEvent.getByToken( tokenJets_[j], Jets[j] );
     }
+
+    Handle<View<flashgg::VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResults;
+    iEvent.getByToken( vbfDiPhoDiJetMvaResultToken_, vbfDiPhoDiJetMvaResults );
 
 
     //edm::Handle<edm::ValueMap<float>> qgHandle;
@@ -439,6 +586,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     int nDiphotons = 0;
 
     nDiphotons = diPhotons->size();
+    //if ( nDiphotons > 0 ) cout << "nDiphotons = " << nDiphotons << "!!!" << endl;
     if( diPhotons->size() == 0 ) {
         legacyEqZeroth = 1; //if there is no diphoton, we use 0th vertex anyway.
     } else {
@@ -468,14 +616,15 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     std::vector<edm::Ptr<reco::GenParticle> > genParton;
 
     for( unsigned int genLoop = 0 ; genLoop < gens->size(); genLoop++ ) {
-        genInfo.pt     = gens->ptrAt( genLoop )->pt() ;
+        /*genInfo.pt     = gens->ptrAt( genLoop )->pt() ;
         genInfo.eta    = gens->ptrAt( genLoop )->eta();
         genInfo.phi    = gens->ptrAt( genLoop )->phi();
         genInfo.status = gens->ptrAt( genLoop )->status();
-        genInfo.pdgid  = int( gens->ptrAt( genLoop )->pdgId() );
+        genInfo.pdgid  = int( gens->ptrAt( genLoop )->pdgId() );*/ // Ed
 
         // be sure that the photons comes from the higgs
         if( gens->ptrAt( genLoop )->pdgId() == 22 && gens->ptrAt( genLoop )-> mother( 0 )->pdgId() == 25 ) {
+            cout << " a gen photon!!! " << endl;
             genPhoton.push_back( gens->ptrAt( genLoop ) );
         }
 
@@ -487,7 +636,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
             }
         }
         // fill the tree
-        genPartTree->Fill();
+        //genPartTree->Fill(); // Ed
     }
     // find tag the jets close to the photons
     std::map<unsigned int, GenPhotonInfo> photonJet_id;
@@ -496,9 +645,335 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     size_t diPhotonsSize = diPhotons->size();
     if( ZeroVertexOnly_ ) { diPhotonsSize = 1; }
 
+    //unsigned int actualDiphoIndex = randomDiphoIndex->Integer( diPhotonsSize );
+    unsigned int actualDiphoIndex = CLHEP::RandFlat::shootInt( &engine, diPhotonsSize ); // to be parameterised
+
+    //cout << "actualDiphoIndex = " << actualDiphoIndex << endl;
+    //cout << "diPhotonsSize = " << diPhotonsSize << endl;
+
     for( unsigned int diphoIndex = 0; diphoIndex < diPhotonsSize; diphoIndex++ ) {
+
         unsigned int jetCollectionIndex = 0;
         if( !ZeroVertexOnly_ ) { jetCollectionIndex = diPhotons->ptrAt( diphoIndex )->jetCollectionIndex(); }
+
+        edm::Ptr<flashgg::DiPhotonMVAResult> dipho_mvares = mvaResults->ptrAt( diphoIndex ); // Ed Ed
+        edm::Ptr<flashgg::VBFMVAResult> vbf_mvares = vbfMvaResults->ptrAt( diphoIndex ); // Ed Ed
+        edm::Ptr<flashgg::VBFDiPhoDiJetMVAResult> vbfdipho_mvares = vbfDiPhoDiJetMvaResults->ptrAt( diphoIndex );
+
+        //--------------------------------------------------------------------------------------------------
+        // Begin analysis of prompt-fake events // Ed
+        
+        pfInfo.sigmarv = dipho_mvares->sigmarv;
+        pfInfo.sigmawv = dipho_mvares->sigmawv;
+        pfInfo.CosPhi  = dipho_mvares->CosPhi;
+        pfInfo.vtxprob = dipho_mvares->vtxprob;
+        //pfInfo.nConv   = dipho_mvares->nConv;
+        pfInfo.diphoMvaResult = dipho_mvares->result;
+        pfInfo.combMvaResult = vbfdipho_mvares->vbfDiPhoDiJetMvaResult;
+
+        pfInfo.dijet_leadEta = vbf_mvares->dijet_leadEta;
+        pfInfo.dijet_subleadEta = vbf_mvares->dijet_subleadEta;
+        pfInfo.dijet_abs_dEta = vbf_mvares->dijet_abs_dEta;
+        pfInfo.dijet_LeadJPt = vbf_mvares->dijet_LeadJPt;
+        pfInfo.dijet_SubJPt = vbf_mvares->dijet_SubJPt;
+        pfInfo.dijet_Zep = vbf_mvares->dijet_Zep;
+        pfInfo.dijet_dphi_trunc = vbf_mvares->dijet_dphi_trunc;
+        pfInfo.dijet_dipho_dphi = vbf_mvares->dijet_dipho_dphi;
+        pfInfo.dijet_Mjj = vbf_mvares->dijet_Mjj;
+        pfInfo.dijet_dy = vbf_mvares->dijet_dy;
+        pfInfo.dijet_leady = vbf_mvares->dijet_leady;
+        pfInfo.dijet_subleady = vbf_mvares->dijet_subleady;
+        pfInfo.dijet_dipho_pt = vbf_mvares->dijet_dipho_pt;
+        pfInfo.dijet_minDRJetPho = vbf_mvares->dijet_minDRJetPho;
+
+        pfInfo.eventID = event_number;
+        //  pfInfo.weight  = desiredLumi * xs * BR / numberMCevents;
+        // "QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8"  : {"xs":108000000.0 , "br" : 0.000225,"itype":30},
+        // "QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8"  : {"xs":54120000.0 , "br" : 0.002,"itype":32},
+        //pfInfo.weight  = 1.0 * 108000000.0 * 0.000225 / numberMCevents; //30to40
+        //pfInfo.weight  = 1.0 *  54120000.0 * 0.002    / numberMCevents; //40toInf
+        
+        // NEEDS ATTENTION // Ed
+        auto printDipho = diPhotons->ptrAt( diphoIndex );
+        //auto printDipho = diPhotons->ptrAt( 0 );
+        // select only diphoton candidate with highest IDMVA score
+        /*if( diPhotonsSize > 1 ) {
+            float max_phoIDMVA_sum = -3.0;
+            for( uint secondDiphoIndex = 0; secondDiphoIndex < diPhotonsSize; secondDiphoIndex++ ) {
+                float temp_phoIDMVA_sum =  diPhotons->ptrAt( secondDiphoIndex )->leadPhotonId() + diPhotons->ptrAt( secondDiphoIndex )->subLeadPhotonId();
+                if( temp_phoIDMVA_sum > max_phoIDMVA_sum ) {
+                    printDipho = diPhotons->ptrAt( secondDiphoIndex );
+                    max_phoIDMVA_sum = temp_phoIDMVA_sum;
+                }
+            }
+        }*/
+
+        //if( printDipho->mass() < 100 || printDipho->mass() > 180 ) continue;
+        /*if( genJets->size()    < 2 ) continue;
+        if( genPhotons->size() < 2 ) continue;
+        if( gens->size()       < 2 ) continue;
+        cout << "Num Gen Jets    = " << genJets->size() << endl;
+        cout << "Num Gen Photons = " << genPhotons->size() << endl;
+        cout << "Num Gen Partons = " << gens->size() << endl;*/
+        //cout << "At the continue point in JetValTreeMaker" << endl;
+
+        pfInfo.diphoMass         = printDipho->mass();
+        pfInfo.diphoPt           = printDipho->pt();
+        pfInfo.diphoLeadingPt    = printDipho->leadingPhoton()->pt();
+        pfInfo.diphoSubleadingPt = printDipho->subLeadingPhoton()->pt();
+
+        auto printLeadPho    = printDipho->leadingPhoton();
+        auto printSubLeadPho = printDipho->subLeadingPhoton();
+        flashgg::Photon::mcMatch_t leadMatchType    = printLeadPho->genMatchType();
+        //cout << "lead match type is " << leadMatchType << endl;
+        flashgg::Photon::mcMatch_t subleadMatchType = printSubLeadPho->genMatchType();
+        //cout << "sublead match type is " << subleadMatchType << endl;
+        bool eventIsPromptFake = ( (!(leadMatchType==1 && subleadMatchType==1)) && (leadMatchType==1 || subleadMatchType==1) );
+        auto promptPhoton      = printLeadPho;
+        auto fakePhoton        = printSubLeadPho;
+        //bool reversed          = false;
+        float promptIDMVA      = printDipho->leadPhotonId();
+        float fakeIDMVA        = printDipho->subLeadPhotonId();
+        if( leadMatchType != 1 ) {
+            promptPhoton = printSubLeadPho;
+            fakePhoton   = printLeadPho;
+            //reversed     = true;
+            promptIDMVA  = printDipho->subLeadPhotonId();
+            fakeIDMVA    = printDipho->leadPhotonId();
+        }
+        pfInfo.promptPdgId = promptPhoton->pdgId();
+        //cout << "prompt pdgid is " << promptPhoton->pdgId() << endl;
+        pfInfo.fakePdgId   = fakePhoton->pdgId();
+        //cout << "fake pdgid is " << fakePhoton->pdgId() << endl;
+        
+        pfInfo.fakeWeight = fakePhoton->weight( "fakeWeight" );
+
+        auto  genPhotonNearestPrompt  = genPhotons->ptrAt(0);
+        auto  genPhotonNearestFake    = genPhotons->ptrAt(1);
+        int   genPhotonsInPrompt      = 0;
+        int   genPhotonsInFake        = 0;
+        float promptTotalGenPhoEnergy = 0.;
+        float fakeTotalGenPhoEnergy   = 0.;
+        auto  genJetNearestPrompt     = genJets->ptrAt(0);
+        auto  genJetNearestFake       = genJets->ptrAt(1);
+        int   promptNumGenJets        = 0;
+        int   fakeNumGenJets          = 0;
+        auto  recoJets                = Jets[jetCollectionIndex];
+        auto  recoJetNearestPrompt    = recoJets->ptrAt(0);
+        auto  recoJetNearestFake      = recoJets->ptrAt(1);
+        int   recoJetsInPrompt        = 0;
+        int   recoJetsInFake          = 0;
+        auto  partonNearestPrompt     = gens->ptrAt(0);
+        auto  partonNearestFake       = gens->ptrAt(1);
+        int   promptPartonMatchType   = 0;
+        int   fakePartonMatchType     = 0;
+
+        //cout << "fakePhoton->eta() = " << fakePhoton->eta() << endl << endl;
+
+        if( eventIsPromptFake ) {
+            //cout << "printDipho nConv = " << printDipho->nConv() << endl;
+            //cout << "promptPhoton has conv tracks? = " << promptPhoton->hasConversionTracks() << endl;
+            //cout << "fakePhoton   has conv tracks? = " << fakePhoton->hasConversionTracks()   << endl << endl;
+            float promptEta   = promptPhoton->eta();
+            //float promptEta   = promptPhoton->superCluster()->eta();
+            float promptPhi   = promptPhoton->phi();
+            float fakeEta     = fakePhoton->eta();
+            //float fakeEta     = fakePhoton->superCluster()->eta();
+            float fakePhi     = fakePhoton->phi();
+            float minDrPrompt = 10.0;
+            float minDrFake   = 10.0;
+
+            pfInfo.promptFakeDeltaR = deltaR( promptEta, promptPhi, fakeEta, fakePhi );
+
+            // find nearest genPhoton and number of photons within dR of 0.4
+            minDrPrompt = 10.0;
+            minDrFake   = 10.0;
+            for( uint genPhotonIndex = 0; genPhotonIndex < genPhotons->size(); genPhotonIndex++ ) {
+                float tempEta  = genPhotons->ptrAt( genPhotonIndex )->eta();
+                float tempPhi  = genPhotons->ptrAt( genPhotonIndex )->phi();
+                float drPrompt = deltaR( tempEta, tempPhi, promptEta, promptPhi );
+                float drFake   = deltaR( tempEta, tempPhi, fakeEta,   fakePhi   );
+                //float drPrompt = sqrt( (tempEta-promptEta)*(tempEta-promptEta) + (tempPhi-promptPhi)*(tempPhi-promptPhi) );
+                //float drFake   = sqrt( (tempEta-fakeEta)*(tempEta-fakeEta)     + (tempPhi-fakePhi)*(tempPhi-fakePhi)     );
+                if( drPrompt < minDrPrompt ) {
+                    minDrPrompt = drPrompt;
+                    genPhotonNearestPrompt = genPhotons->ptrAt( genPhotonIndex );
+                }
+                if( drPrompt < 0.4 ) { 
+                    genPhotonsInPrompt++;
+                    promptTotalGenPhoEnergy += genPhotons->ptrAt( genPhotonIndex )->energy();
+                }
+                if( drFake < minDrFake ) {
+                    minDrFake = drFake;
+                    genPhotonNearestFake = genPhotons->ptrAt( genPhotonIndex );
+                }
+                if( drFake < 0.4 ) { 
+                    genPhotonsInFake++;
+                    fakeTotalGenPhoEnergy += genPhotons->ptrAt( genPhotonIndex )->energy();
+                }
+            } // end of genPhoton matching and counting
+            float promptGenPhotonDr = minDrPrompt;
+            float fakeGenPhotonDr   = minDrFake;
+
+
+            // Print nearest genJet and whether it is within dR of 0.4
+            minDrPrompt = 10.0;
+            minDrFake   = 10.0;
+            for( uint genJetIndex = 0; genJetIndex < genJets->size(); genJetIndex++ ) {
+                float tempEta  = genJets->ptrAt( genJetIndex )->eta();
+                float tempPhi  = genJets->ptrAt( genJetIndex )->phi();
+                float drPrompt = deltaR( tempEta, tempPhi, promptEta, promptPhi );
+                float drFake   = deltaR( tempEta, tempPhi, fakeEta,   fakePhi   );
+                //float drPrompt = sqrt( (tempEta-promptEta)*(tempEta-promptEta) + (tempPhi-promptPhi)*(tempPhi-promptPhi) );
+                //float drFake   = sqrt( (tempEta-fakeEta)*(tempEta-fakeEta)     + (tempPhi-fakePhi)*(tempPhi-fakePhi)     );
+                if( drPrompt < minDrPrompt ) {
+                    minDrPrompt = drPrompt;
+                    genJetNearestPrompt = genJets->ptrAt( genJetIndex );
+                    if ( drPrompt < 0.4 ) promptNumGenJets++;
+                }
+                else if( drPrompt < 0.4 ) promptNumGenJets++;
+                if( drFake < minDrFake ) {
+                    minDrFake = drFake;
+                    genJetNearestFake = genJets->ptrAt( genJetIndex );
+                    if ( drFake < 0.4 ) fakeNumGenJets++;
+                }
+                else if( drFake < 0.4 ) fakeNumGenJets++;
+            } // end of genJet matching
+            float promptGenJetDr = minDrPrompt;
+            float fakeGenJetDr   = minDrFake;
+
+            // print out the reco jet info
+            minDrPrompt = 10.0;
+            minDrFake   = 10.0;
+            for( uint recoJetIndex = 0; recoJetIndex < recoJets->size(); recoJetIndex++ ) {
+                float tempEta  = recoJets->ptrAt( recoJetIndex )->eta();
+                float tempPhi  = recoJets->ptrAt( recoJetIndex )->phi();
+                float drPrompt = deltaR( tempEta, tempPhi, promptEta, promptPhi );
+                float drFake   = deltaR( tempEta, tempPhi, fakeEta,   fakePhi   );
+                //float drPrompt = sqrt( (tempEta-promptEta)*(tempEta-promptEta) + (tempPhi-promptPhi)*(tempPhi-promptPhi) );
+                //float drFake   = sqrt( (tempEta-fakeEta)*(tempEta-fakeEta)     + (tempPhi-fakePhi)*(tempPhi-fakePhi)     );
+                if( drPrompt < minDrPrompt ) {
+                    minDrPrompt = drPrompt;
+                    recoJetNearestPrompt = recoJets->ptrAt( recoJetIndex );
+                    if ( drPrompt < 0.4 ) recoJetsInPrompt++;
+                }
+                else if( drPrompt < 0.4 ) recoJetsInPrompt++;
+                if( drFake < minDrFake ) {
+                    minDrFake = drFake;
+                    recoJetNearestFake = recoJets->ptrAt( recoJetIndex );
+                    if ( drFake < 0.4 ) recoJetsInFake++;
+                }
+                else if( drFake < 0.4 ) recoJetsInFake++;
+            } // end of recoJet matching 
+            float promptRecoJetDr = minDrPrompt;
+            float fakeRecoJetDr   = minDrFake;
+
+            // loop over partons from matrix element
+            minDrPrompt = 10.0;
+            minDrFake   = 10.0;
+            for( uint genParticleIndex = 0; genParticleIndex < gens->size(); genParticleIndex++ ) {
+                //cout << "gen particle " << genParticleIndex << " has status " <<  gens->ptrAt( genParticleIndex )->status() << endl;
+                float tempEta  = gens->ptrAt( genParticleIndex )->eta();
+                float tempPhi  = gens->ptrAt( genParticleIndex )->phi();
+                float drPrompt = deltaR( tempEta, tempPhi, promptEta, promptPhi );
+                float drFake   = deltaR( tempEta, tempPhi, fakeEta,   fakePhi   );
+                //float drPrompt = sqrt( (tempEta-promptEta)*(tempEta-promptEta) + (tempPhi-promptPhi)*(tempPhi-promptPhi) );
+                //float drFake   = sqrt( (tempEta-fakeEta)*(tempEta-fakeEta)     + (tempPhi-fakePhi)*(tempPhi-fakePhi)     );
+                if( drPrompt < minDrPrompt ) {
+                    minDrPrompt = drPrompt;
+                    partonNearestPrompt = gens->ptrAt( genParticleIndex );
+                    int pdgID = gens->ptrAt( genParticleIndex )->pdgId();
+                    if( pdgID < 7 && pdgID > -7 ) promptPartonMatchType = -1;
+                    if( pdgID == 21 )             promptPartonMatchType = -2;
+                    if ( drPrompt < 0.4) {
+                        if( pdgID < 7 && pdgID > -7 ) promptPartonMatchType = 1;
+                        if( pdgID == 21 )             promptPartonMatchType = 2;
+                    }
+                }
+                if( drFake < minDrFake ) {
+                    minDrFake = drFake;
+                    partonNearestFake = gens->ptrAt( genParticleIndex );
+                    int pdgID = gens->ptrAt( genParticleIndex )->pdgId();
+                    if( pdgID < 7 && pdgID > -7 ) fakePartonMatchType = -1;
+                    if( pdgID == 21 )             fakePartonMatchType = -2;
+                    if ( drFake < 0.4 ) {
+                        if( pdgID < 7 && pdgID > -7 ) fakePartonMatchType = 1;
+                        if( pdgID == 21 )             fakePartonMatchType = 2;
+                    }
+                }
+            } // end of parton matching
+            float promptPartonDr = minDrPrompt;
+            float fakePartonDr   = minDrFake;
+
+            pfInfo.promptPt     = promptPhoton->pt();
+            pfInfo.promptEnergy = promptPhoton->energy();
+            pfInfo.promptEta    = promptEta;
+            pfInfo.promptPhi    = promptPhi;
+            pfInfo.promptIDMVA  = promptIDMVA;
+            pfInfo.fakePt       = fakePhoton->pt();
+            pfInfo.fakeEnergy   = fakePhoton->energy();
+            pfInfo.fakeEta      = fakeEta;
+            pfInfo.fakePhi      = fakePhi;
+            pfInfo.fakeIDMVA    = fakeIDMVA;
+
+            pfInfo.promptGenPhotonPt       = genPhotonNearestPrompt->pt();
+            pfInfo.promptGenPhotonEnergy   = genPhotonNearestPrompt->energy();
+            pfInfo.promptTotalGenPhoEnergy = promptTotalGenPhoEnergy;
+            pfInfo.promptGenPhotonEta      = genPhotonNearestPrompt->eta();
+            pfInfo.promptGenPhotonPhi      = genPhotonNearestPrompt->phi();
+            pfInfo.promptGenPhotonDr       = promptGenPhotonDr;
+            pfInfo.promptNumGenPhotons     = genPhotonsInPrompt;
+            pfInfo.fakeGenPhotonPt         = genPhotonNearestFake->pt();
+            pfInfo.fakeGenPhotonEnergy     = genPhotonNearestFake->energy();
+            pfInfo.fakeTotalGenPhoEnergy   = fakeTotalGenPhoEnergy;
+            pfInfo.fakeGenPhotonEta        = genPhotonNearestFake->eta();
+            pfInfo.fakeGenPhotonPhi        = genPhotonNearestFake->phi();
+            pfInfo.fakeGenPhotonDr         = fakeGenPhotonDr;
+            pfInfo.fakeNumGenPhotons       = genPhotonsInFake;
+
+            pfInfo.promptGenJetPt     = genJetNearestPrompt->pt();
+            pfInfo.promptGenJetEnergy = genJetNearestPrompt->energy();
+            pfInfo.promptGenJetEta    = genJetNearestPrompt->eta();
+            pfInfo.promptGenJetPhi    = genJetNearestPrompt->phi();
+            pfInfo.promptGenJetDr     = promptGenJetDr;
+            pfInfo.promptNumGenJets   = promptNumGenJets;
+            pfInfo.fakeGenJetPt       = genJetNearestFake->pt();
+            pfInfo.fakeGenJetEnergy   = genJetNearestFake->energy();
+            pfInfo.fakeGenJetEta      = genJetNearestFake->eta();
+            pfInfo.fakeGenJetPhi      = genJetNearestFake->phi();
+            pfInfo.fakeGenJetDr       = fakeGenJetDr;
+            pfInfo.fakeNumGenJets     = fakeNumGenJets;
+
+            pfInfo.promptRecoJetPt     = recoJetNearestPrompt->pt();
+            pfInfo.promptRecoJetEnergy = recoJetNearestPrompt->energy();
+            pfInfo.promptRecoJetEta    = recoJetNearestPrompt->eta();
+            pfInfo.promptRecoJetPhi    = recoJetNearestPrompt->phi();
+            pfInfo.promptRecoJetDr     = promptRecoJetDr;
+            pfInfo.promptNumRecoJets   = recoJetsInPrompt;
+            pfInfo.fakeRecoJetPt       = recoJetNearestFake->pt();
+            pfInfo.fakeRecoJetEnergy   = recoJetNearestFake->energy();
+            pfInfo.fakeRecoJetEta      = recoJetNearestFake->eta();
+            pfInfo.fakeRecoJetPhi      = recoJetNearestFake->phi();
+            pfInfo.fakeRecoJetDr       = fakeRecoJetDr;
+            pfInfo.fakeNumRecoJets     = recoJetsInFake;
+
+            pfInfo.promptPartonPt        = partonNearestPrompt->pt();
+            pfInfo.promptPartonEnergy    = partonNearestPrompt->energy();
+            pfInfo.promptPartonEta       = partonNearestPrompt->eta();
+            pfInfo.promptPartonPhi       = partonNearestPrompt->phi();
+            pfInfo.promptPartonDr        = promptPartonDr;
+            pfInfo.promptPartonMatchType = promptPartonMatchType;
+            pfInfo.fakePartonPt          = partonNearestFake->pt();
+            pfInfo.fakePartonEnergy      = partonNearestFake->energy();
+            pfInfo.fakePartonEta         = partonNearestFake->eta();
+            pfInfo.fakePartonPhi         = partonNearestFake->phi();
+            pfInfo.fakePartonDr          = fakePartonDr;
+            pfInfo.fakePartonMatchType   = fakePartonMatchType;
+
+            if( diphoIndex == actualDiphoIndex ) promptFakeTree->Fill();
+            //promptFakeTree->Fill();
+        } // End of prompt-fake events */ // Ed
+        //--------------------------------------------------------------------------------------------------
 
         jInfo.nJets      = Jets[jetCollectionIndex]->size();
         jInfo.nPV        = vtxs->size();
@@ -962,6 +1437,7 @@ JetValidationTreeMaker::analyze( const edm::Event &iEvent, const edm::EventSetup
     } //  end of loop over the diphotons
     eventTree->Fill();
     event_number++;
+    //cout << "Exiting JetValTreeMaker analyze method" << endl;
 }
 
 void
@@ -1039,13 +1515,13 @@ JetValidationTreeMaker::beginJob()
 
     jetTree->Branch( "weight"   , &jInfo.weight , "weight/F" );
 
-    genPartTree = fs_->make<TTree>( "genPartTree", "Check per-jet tree" );
+    /*genPartTree = fs_->make<TTree>( "genPartTree", "Check per-jet tree" );
     genPartTree->Branch( "pt"     , &genInfo.pt      , "pt/F" );
     genPartTree->Branch( "eta"    , &genInfo.eta     , "eta/F" );
     genPartTree->Branch( "phi"    , &genInfo.phi     , "phi/F" );
     genPartTree->Branch( "status" , &genInfo.status  , "status/I" );
     genPartTree->Branch( "pdgid"  , &genInfo.pdgid   , "pdgid/I" );
-    genPartTree->Branch( "y"      , &genInfo.y       , "y/F" );
+    genPartTree->Branch( "y"      , &genInfo.y       , "y/F" ); */ // Ed
 
     //genPartTree->SetBranchStatus( 'p4.*', 1 );
 
@@ -1079,11 +1555,113 @@ JetValidationTreeMaker::beginJob()
     genJetTree->Branch( "photondRmin"      , &genJetInfo.photondRmin  , "photondRmin/F" );
     genJetTree->Branch( "GenPhotonPt"      , &genJetInfo.GenPhotonPt  , "GenPhotonPt/F" );
 
+    // tree containing info of prompt-fake events only
+    promptFakeTree = fs_->make<TTree>( "promptFakeTree", "Tree for prompt-fake events only" );
+
+    promptFakeTree->Branch( "eventID"      , &pfInfo.eventID, "eventID/I" );
+    //promptFakeTree->Branch( "weight"      , &pfInfo.weight, "weight/F" );
+    promptFakeTree->Branch( "fakeWeight"      , &pfInfo.fakeWeight, "fakeWeight/F" );
+    
+    promptFakeTree->Branch( "diphoMass"        , &pfInfo.diphoMass        , "diphoMass/F"         );
+    promptFakeTree->Branch( "diphoPt"        , &pfInfo.diphoPt        , "diphoPt/F"         );
+    promptFakeTree->Branch( "diphoLeadingPt"   , &pfInfo.diphoLeadingPt   , "diphoLeadingPt/F"    );
+    promptFakeTree->Branch( "diphoSubleadingPt", &pfInfo.diphoSubleadingPt, "diphoSubleadingPt/F" );
+    
+    promptFakeTree->Branch( "promptFakeDeltaR"      , &pfInfo.promptFakeDeltaR, "promptFakeDeltaR/F" );
+
+    promptFakeTree->Branch( "promptPt"      , &pfInfo.promptPt    , "promptPt/F" );
+    promptFakeTree->Branch( "promptEnergy"  , &pfInfo.promptEnergy, "promptEnergy/F" );
+    promptFakeTree->Branch( "promptEta"     , &pfInfo.promptEta   , "promptEta/F" );
+    promptFakeTree->Branch( "promptPhi"     , &pfInfo.promptPhi   , "promptPhi/F" );
+    promptFakeTree->Branch( "promptPdgId"   , &pfInfo.promptPdgId , "promptPdgId/I" );
+    promptFakeTree->Branch( "promptIDMVA"   , &pfInfo.promptIDMVA , "promptIDMVA/F" );
+    promptFakeTree->Branch( "fakePt"      , &pfInfo.fakePt    , "fakePt/F" );
+    promptFakeTree->Branch( "fakeEnergy"  , &pfInfo.fakeEnergy, "fakeEnergy/F" );
+    promptFakeTree->Branch( "fakeEta"     , &pfInfo.fakeEta   , "fakeEta/F" );
+    promptFakeTree->Branch( "fakePhi"     , &pfInfo.fakePhi   , "fakePhi/F" );
+    promptFakeTree->Branch( "fakePdgId"   , &pfInfo.fakePdgId , "fakePdgId/I" );
+    promptFakeTree->Branch( "fakeIDMVA"   , &pfInfo.fakeIDMVA , "fakeIDMVA/F" );
+
+    promptFakeTree->Branch( "promptGenPhotonPt"      , &pfInfo.promptGenPhotonPt    , "promptGenPhotonPt/F" );
+    promptFakeTree->Branch( "promptGenPhotonEnergy"  , &pfInfo.promptGenPhotonEnergy, "promptGenPhotonEnergy/F" );
+    promptFakeTree->Branch( "promptTotalGenPhoEnergy"  , &pfInfo.promptTotalGenPhoEnergy, "promptTotalGenPhoEnergy/F" );
+    promptFakeTree->Branch( "promptGenPhotonEta"     , &pfInfo.promptGenPhotonEta   , "promptGenPhotonEta/F" );
+    promptFakeTree->Branch( "promptGenPhotonPhi"     , &pfInfo.promptGenPhotonPhi   , "promptGenPhotonPhi/F" );
+    promptFakeTree->Branch( "promptGenPhotonDr"      , &pfInfo.promptGenPhotonDr     , "promptGenPhotonDr/F" );
+    promptFakeTree->Branch( "promptNumGenPhotons"   , &pfInfo.promptNumGenPhotons, "promptNumGenPhotons/I" );
+    promptFakeTree->Branch( "fakeGenPhotonPt"      , &pfInfo.fakeGenPhotonPt    , "fakeGenPhotonPt/F" );
+    promptFakeTree->Branch( "fakeGenPhotonEnergy"  , &pfInfo.fakeGenPhotonEnergy, "fakeGenPhotonEnergy/F" );
+    promptFakeTree->Branch( "fakeTotalGenPhoEnergy"  , &pfInfo.fakeTotalGenPhoEnergy, "fakeTotalGenPhoEnergy/F" );
+    promptFakeTree->Branch( "fakeGenPhotonEta"     , &pfInfo.fakeGenPhotonEta   , "fakeGenPhotonEta/F" );
+    promptFakeTree->Branch( "fakeGenPhotonPhi"     , &pfInfo.fakeGenPhotonPhi   , "fakeGenPhotonPhi/F" );
+    promptFakeTree->Branch( "fakeGenPhotonDr"      , &pfInfo.fakeGenPhotonDr     , "fakeGenPhotonDr/F" );
+    promptFakeTree->Branch( "fakeNumGenPhotons"   , &pfInfo.fakeNumGenPhotons, "fakeNumGenPhotons/I" );
+
+    promptFakeTree->Branch( "promptGenJetPt"      , &pfInfo.promptGenJetPt    , "promptGenJetPt/F" );
+    promptFakeTree->Branch( "promptGenJetEnergy"  , &pfInfo.promptGenJetEnergy, "promptGenJetEnergy/F" );
+    promptFakeTree->Branch( "promptGenJetEta"     , &pfInfo.promptGenJetEta   , "promptGenJetEta/F" );
+    promptFakeTree->Branch( "promptGenJetPhi"     , &pfInfo.promptGenJetPhi   , "promptGenJetPhi/F" );
+    promptFakeTree->Branch( "promptGenJetDr"      , &pfInfo.promptGenJetDr     , "promptGenJetDr/F" );
+    promptFakeTree->Branch( "promptNumGenJets"   , &pfInfo.promptNumGenJets, "promptNumGenJets/I" );
+    promptFakeTree->Branch( "fakeGenJetPt"      , &pfInfo.fakeGenJetPt    , "fakeGenJetPt/F" );
+    promptFakeTree->Branch( "fakeGenJetEnergy"  , &pfInfo.fakeGenJetEnergy, "fakeGenJetEnergy/F" );
+    promptFakeTree->Branch( "fakeGenJetEta"     , &pfInfo.fakeGenJetEta   , "fakeGenJetEta/F" );
+    promptFakeTree->Branch( "fakeGenJetPhi"     , &pfInfo.fakeGenJetPhi   , "fakeGenJetPhi/F" );
+    promptFakeTree->Branch( "fakeGenJetDr"      , &pfInfo.fakeGenJetDr     , "fakeGenJetDr/F" );
+    promptFakeTree->Branch( "fakeNumGenJets"   , &pfInfo.fakeNumGenJets, "fakeNumGenJets/I" );
+
+    promptFakeTree->Branch( "promptRecoJetPt"      , &pfInfo.promptRecoJetPt    , "promptRecoJetPt/F" );
+    promptFakeTree->Branch( "promptRecoJetEnergy"  , &pfInfo.promptRecoJetEnergy, "promptRecoJetEnergy/F" );
+    promptFakeTree->Branch( "promptRecoJetEta"     , &pfInfo.promptRecoJetEta   , "promptRecoJetEta/F" );
+    promptFakeTree->Branch( "promptRecoJetPhi"     , &pfInfo.promptRecoJetPhi   , "promptRecoJetPhi/F" );
+    promptFakeTree->Branch( "promptRecoJetDr"      , &pfInfo.promptRecoJetDr     , "promptRecoJetDr/F" );
+    promptFakeTree->Branch( "promptNumRecoJets"   , &pfInfo.promptNumRecoJets, "promptNumRecoJets/I" );
+    promptFakeTree->Branch( "fakeRecoJetPt"      , &pfInfo.fakeRecoJetPt    , "fakeRecoJetPt/F" );
+    promptFakeTree->Branch( "fakeRecoJetEnergy"  , &pfInfo.fakeRecoJetEnergy, "fakeRecoJetEnergy/F" );
+    promptFakeTree->Branch( "fakeRecoJetEta"     , &pfInfo.fakeRecoJetEta   , "fakeRecoJetEta/F" );
+    promptFakeTree->Branch( "fakeRecoJetPhi"     , &pfInfo.fakeRecoJetPhi   , "fakeRecoJetPhi/F" );
+    promptFakeTree->Branch( "fakeRecoJetDr"      , &pfInfo.fakeRecoJetDr     , "fakeRecoJetDr/F" );
+    promptFakeTree->Branch( "fakeNumRecoJets"   , &pfInfo.fakeNumRecoJets, "fakeNumRecoJets/I" );
+
+    promptFakeTree->Branch( "promptPartonPt"      , &pfInfo.promptPartonPt    , "promptPartonPt/F" );
+    promptFakeTree->Branch( "promptPartonEnergy"  , &pfInfo.promptPartonEnergy, "promptPartonEnergy/F" );
+    promptFakeTree->Branch( "promptPartonEta"     , &pfInfo.promptPartonEta   , "promptPartonEta/F" );
+    promptFakeTree->Branch( "promptPartonPhi"     , &pfInfo.promptPartonPhi   , "promptPartonPhi/F" );
+    promptFakeTree->Branch( "promptPartonDr"      , &pfInfo.promptPartonDr     , "promptPartonDr/F" );
+    promptFakeTree->Branch( "promptPartonMatchType"   , &pfInfo.promptPartonMatchType, "promptPartonMatchType/I" );
+    promptFakeTree->Branch( "fakePartonPt"      , &pfInfo.fakePartonPt    , "fakePartonPt/F" );
+    promptFakeTree->Branch( "fakePartonEnergy"  , &pfInfo.fakePartonEnergy, "fakePartonEnergy/F" );
+    promptFakeTree->Branch( "fakePartonEta"     , &pfInfo.fakePartonEta   , "fakePartonEta/F" );
+    promptFakeTree->Branch( "fakePartonPhi"     , &pfInfo.fakePartonPhi   , "fakePartonPhi/F" );
+    promptFakeTree->Branch( "fakePartonDr"      , &pfInfo.fakePartonDr     , "fakePartonDr/F" );
+    promptFakeTree->Branch( "fakePartonMatchType"   , &pfInfo.fakePartonMatchType, "fakePartonMatchType/I" );
+
+    promptFakeTree->Branch( "sigmarv", &pfInfo.sigmarv, "sigmarv/F" );
+    promptFakeTree->Branch( "sigmawv", &pfInfo.sigmawv, "sigmawv/F" );
+    promptFakeTree->Branch( "CosPhi", &pfInfo.CosPhi, "CosPhi/F" );
+    promptFakeTree->Branch( "vtxprob", &pfInfo.vtxprob, "vtxprob/F" );
+    promptFakeTree->Branch( "diphoMvaResult", &pfInfo.diphoMvaResult, "diphoMvaResult/F" );
+
+    promptFakeTree->Branch( "dijet_leadEta", &pfInfo.dijet_leadEta, "dijet_leadEta/F" );
+    promptFakeTree->Branch( "dijet_subleadEta", &pfInfo.dijet_subleadEta, "dijet_subleadEta/F" );
+    promptFakeTree->Branch( "dijet_abs_dEta", &pfInfo.dijet_abs_dEta, "dijet_abs_dEta/F" );
+    promptFakeTree->Branch( "dijet_LeadJPt", &pfInfo.dijet_LeadJPt, "dijet_LeadJPt/F" );
+    promptFakeTree->Branch( "dijet_SubJPt", &pfInfo.dijet_SubJPt, "dijet_SubJPt/F" );
+    promptFakeTree->Branch( "dijet_Zep", &pfInfo.dijet_Zep, "dijet_Zep/F" );
+    promptFakeTree->Branch( "dijet_dphi_trunc", &pfInfo.dijet_dphi_trunc, "dijet_dphi_trunc/F" );
+    promptFakeTree->Branch( "dijet_dipho_dphi", &pfInfo.dijet_dipho_dphi, "dijet_dipho_dphi/F" );
+    promptFakeTree->Branch( "dijet_Mjj", &pfInfo.dijet_Mjj, "dijet_Mjj/F" );
+    promptFakeTree->Branch( "dijet_dy", &pfInfo.dijet_dy, "dijet_dy/F" );
+    promptFakeTree->Branch( "dijet_leady", &pfInfo.dijet_leady, "dijet_leady/F" );
+    promptFakeTree->Branch( "dijet_subleady", &pfInfo.dijet_subleady, "dijet_subleady/F" );
+    promptFakeTree->Branch( "dijet_dipho_pt", &pfInfo.dijet_dipho_pt, "dijet_dipho_pt/F" );
+    promptFakeTree->Branch( "dijet_minDRJetPho", &pfInfo.dijet_minDRJetPho, "dijet_minDRJetPho/F" );
+
+    promptFakeTree->Branch( "combMvaResult", &pfInfo.combMvaResult, "combMvaResult/F" );
 }
 
 void JetValidationTreeMaker::endJob()
 {
-
 }
 
 void JetValidationTreeMaker::initEventStructure()

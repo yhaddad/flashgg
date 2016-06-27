@@ -38,6 +38,7 @@ void Photon::ZeroVariables()
     pfChgIso02_.clear();
     phoIdMvaD_.clear();
     passElecVeto_ = false;
+    hasFakeIDMVA_ = false;
 }
 
 Photon::Photon( const pat::Photon &aPhoton ) : pat::Photon::Photon( aPhoton )

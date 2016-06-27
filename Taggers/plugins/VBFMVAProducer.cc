@@ -82,6 +82,7 @@ namespace flashgg {
         _JetIDLevel   ( iConfig.getParameter<string> ( "JetIDLevel"   ) ),
         _minDijetMinv ( iConfig.getParameter<double> ( "MinDijetMinv" ) )
     {
+        cout << "Inside constructor of VBF MVA producer" << endl; // Ed
         vbfMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vbfMVAweightfile" );
         
         dijet_leadEta_    = -999.;
@@ -130,6 +131,7 @@ namespace flashgg {
     
     void VBFMVAProducer::produce( Event &evt, const EventSetup & )
     {
+        //cout << "Inside VBF MVA produce method" << endl;
         Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
         evt.getByToken( diPhotonToken_, diPhotons );
         
@@ -378,6 +380,7 @@ namespace flashgg {
             vbf_results->push_back( mvares );
         }
         evt.put( vbf_results );
+        //cout << "Exiting VBF MVA produce method" << endl;
     }
 }
 
