@@ -96,7 +96,8 @@ namespace flashgg {
         beamSpotToken_( consumes<reco::BeamSpot >( iConfig.getParameter<InputTag>( "BeamSpotTag" ) ) ),
         genJetToken_( consumes<View<reco::GenJet> >( iConfig.getParameter<InputTag> ( "GenJetTag" ) ) )
     {
-        TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates_v2.root");
+        //TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates_v2.root");
+        TFile *template_file = new TFile("file:/vols/cms/es811/TemplateHists/templates_v2.root");
 
         hSigmarvChecksLowEB  = (TH1F*)template_file->Get("hSigmarvChecksLowEB");
         hSigmarvChecksHighEB = (TH1F*)template_file->Get("hSigmarvChecksHighEB");

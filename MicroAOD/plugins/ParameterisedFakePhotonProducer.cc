@@ -77,7 +77,8 @@ namespace flashgg {
 
         // template histograms 
         //TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates.root");
-        TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates_v1.root");
+        //TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates_v1.root");
+        TFile *template_file = new TFile("file:/vols/cms/es811/TemplateHists/templates_v1.root");
 
         hFakeGenJetRatio         = (TH1F*)template_file->Get("hFakeGenJetRatio");
         hBarrelLowTemplateIDMVA  = (TH1F*)template_file->Get("hBarrelLowTemplateIDMVA");
@@ -87,7 +88,8 @@ namespace flashgg {
         //hEndcapMedTemplateIDMVA  = (TH1F*)template_file->Get("hEndcapMedTemplateIDMVA");
         hEndcapHighTemplateIDMVA = (TH1F*)template_file->Get("hEndcapHighTemplateIDMVA");
 
-        TFile *reweight_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/reweighting.root");
+        //TFile *reweight_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/reweighting.root");
+        TFile *reweight_file = new TFile("file:/vols/cms/es811/TemplateHists/reweighting.root");
         hCorrectPt = (TH1F*)reweight_file->Get("hCorrectPt");
         hWrongPt = (TH1F*)reweight_file->Get("hWrongPt");
 
