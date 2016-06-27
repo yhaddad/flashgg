@@ -58,6 +58,9 @@ namespace flashgg {
         //TH1F *hEndcapMedTemplateIDMVA;
         TH1F *hEndcapHighTemplateIDMVA;
 
+        TH1F *hCorrectPt;
+        TH1F *hWrongPt;
+
         //TH1F* hRandGenJetCheck;
     };
 
@@ -74,7 +77,8 @@ namespace flashgg {
 
         // template histograms 
         //TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates.root");
-        TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates_v1.root");
+        //TFile *template_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/templates_v1.root");
+        TFile *template_file = new TFile("file:/vols/cms/es811/TemplateHists/templates_v1.root");
 
         hFakeGenJetRatio         = (TH1F*)template_file->Get("hFakeGenJetRatio");
         hBarrelLowTemplateIDMVA  = (TH1F*)template_file->Get("hBarrelLowTemplateIDMVA");
@@ -83,6 +87,11 @@ namespace flashgg {
         hEndcapLowTemplateIDMVA  = (TH1F*)template_file->Get("hEndcapLowTemplateIDMVA");
         //hEndcapMedTemplateIDMVA  = (TH1F*)template_file->Get("hEndcapMedTemplateIDMVA");
         hEndcapHighTemplateIDMVA = (TH1F*)template_file->Get("hEndcapHighTemplateIDMVA");
+
+        //TFile *reweight_file = new TFile("file:/home/hep/es811/VBFStudies/CMSSW_7_6_3_patch2/src/flashgg/TemplateHists/reweighting.root");
+        TFile *reweight_file = new TFile("file:/vols/cms/es811/TemplateHists/reweighting.root");
+        hCorrectPt = (TH1F*)reweight_file->Get("hCorrectPt");
+        hWrongPt = (TH1F*)reweight_file->Get("hWrongPt");
 
         //hRandGenJetCheck = new TH1F( "hRandGenJetCheck", "Should be uniform on [0,1.2]", 48, 0., 1.2 );
 
@@ -180,6 +189,16 @@ namespace flashgg {
 
                 fakePhoton.setPassElectronVeto( true );
                 fakePhoton.setpfPhoIso03( 0. );
+
+                // additional new pt reweighting step 
+                float fakePtReweight = 0.;
+                if( fakePt > 0 && fakePt < 100 ) {
+                  int ptBinNum = floor( fakePt / 2.  ) + 1;
+                  float numer = hCorrectPt->GetBinContent( ptBinNum );
+                  float denom = hWrongPt->GetBinContent( ptBinNum );
+                  fakePtReweight = numer / denom;
+                }
+                fakePhoton.setWeight( "fakePtReweight", fakePtReweight );
 
                 fakePhotonCollection->push_back( fakePhoton );
             }
