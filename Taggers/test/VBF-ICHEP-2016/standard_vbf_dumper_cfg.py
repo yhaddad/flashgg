@@ -1,6 +1,6 @@
 #!/usr/bin/env cmsRun
 
-
+myrandseed = 23445
 
 import FWCore.ParameterSet.Config as cms
 import FWCore.Utilities.FileUtils as FileUtils
@@ -32,28 +32,10 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 10000 )
 from flashgg.Systematics.SystematicsCustomize import *
 jetSystematicsInputTags = createStandardSystematicsProducers(process)
 
-
-process.load("flashgg.Taggers.flashggTagSequence_cfi")
-process.load("flashgg.Taggers.flashggTagTester_cfi")
-
-# Keep an extra category as 'would go elsewhere instead', ignore preselection
-process.flashggVBFTag.Boundaries             = cms.vdouble(-999.,0.62, 0.94)
-process.flashggVBFTag.SetArbitraryNonGoldMC  = cms.bool(False)
-process.flashggVBFTag.DropNonGoldData        = cms.bool(False)
-process.flashggVBFTag.RequireVBFPreselection = cms.bool(False)
-
-process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
-modifyTagSequenceForSystematics(process,jetSystematicsInputTags,dumpJetSysTrees)
-
-systlabels    = [""]
-phosystlabels = []
-jetsystlabels = []
-elesystlabels = []
-musystlabels  = []
-
 # import flashgg customization to check if we have signal or background
 from flashgg.MetaData.JobConfig import customize
 # Register forwardJetRMSCut to be used from customize
+
 customize.options.register('forwardJetRMSCut',
                            0.03,
                            VarParsing.VarParsing.multiplicity.singleton,
@@ -81,6 +63,51 @@ customize.options.register('QCDParam',
 customize.parse()
 print "customize.processId:",customize.processId
 
+
+process.load("flashgg.Taggers.flashggTagSequence_cfi")
+process.load("flashgg.Taggers.flashggTagTester_cfi")
+
+if customize.QCDParam :
+    process.load("flashgg.Taggers.flashggPromptFakeTagSequence_cfi")
+    process.load("flashgg.MicroAOD.flashggParameterisedFakePhotons_cfi")
+    process.load("flashgg.MicroAOD.flashggParameterisedPromptFakeDiPhotons_cfi")
+    from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
+    massSearchReplaceAnyInputTag( process.flashggPromptFakeTagSequence,
+                              cms.InputTag("flashggUpdatedIdMVADiPhotons"),
+                              cms.InputTag("flashggParameterisedPromptFakeDiPhotons") )
+
+    process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
+                                                       flashggParameterisedFakePhotons = cms.PSet(
+                                                           initialSeed = cms.untracked.uint32( myrandseed ),
+                                                           engineName  = cms.untracked.string('TRandom3')
+                                                       ),
+                                                       flashggParameterisedDiPhotonMVA = cms.PSet(
+                                                           initialSeed = cms.untracked.uint32( 45*myrandseed + 1 ),
+                                                           engineName  = cms.untracked.string('TRandom3')
+                                                       ),
+                                                       flashggJetValidationTreeMakerPFCHS = cms.PSet(
+                                                           initialSeed = cms.untracked.uint32( 5912*myrandseed + 179 ),
+                                                           engineName  = cms.untracked.string('TRandom3')
+                                                       ),)
+
+
+# Keep an extra category as 'would go elsewhere instead', ignore preselection
+
+process.flashggVBFTag.Boundaries             = cms.vdouble(-999.,0.62, 0.94)
+process.flashggVBFTag.SetArbitraryNonGoldMC  = cms.bool(False)
+process.flashggVBFTag.DropNonGoldData        = cms.bool(False)
+process.flashggVBFTag.RequireVBFPreselection = cms.bool(False)
+
+process.flashggVBFTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
+modifyTagSequenceForSystematics(process,jetSystematicsInputTags,customize.dumpJetSysTrees)
+
+systlabels    = [""]
+phosystlabels = []
+jetsystlabels = []
+elesystlabels = []
+musystlabels  = []
+
+
 useEGMTools(process)
 
 #== Only run systematics for signal events
@@ -99,7 +126,7 @@ else:
     print "Background MC, so store mgg and central only"
     variablesToUse = minimalNonSignalVariables
 
-    if dumpJetSysTrees:
+    if customize.dumpJetSysTrees:
         print "Running jet systematics and putting them in ntuples because doJetSystTrees is set"
         for direction in ["Up","Down"]:
             jetsystlabels.append("JEC%s01sigma" % direction)
@@ -117,7 +144,7 @@ print "--- Variables to be dumped, including systematic weights ---"
 print variablesToUse
 print "------------------------------------------------------------"
 
-cloneTagSequenceForEachSystematic(process,systlabels,phosystlabels,jetsystlabels,jetSystematicsInputTags,dumpJetSysTrees)
+cloneTagSequenceForEachSystematic(process,systlabels,phosystlabels,jetsystlabels,jetSystematicsInputTags,customize.dumpJetSysTrees)
 
 # ========================================================================
 # Dumper section
@@ -126,8 +153,9 @@ from flashgg.MetaData.samples_utils import SamplesManager
 
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-                                 "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/VBFHToGG_M-120_13TeV_powheg_pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/160524_093617/0000/myMicroAODOutputFile_1.root"
+                                #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/VBFHToGG_M-120_13TeV_powheg_pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/160524_093617/0000/myMicroAODOutputFile_1.root"
                                  #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/DYToEE_NNPDF30_13TeV-powheg-pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/160524_084452/0000/myMicroAODOutputFile_110.root"
+                                 "root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIIFall15DR76-1_3_0-25ns_ext1/1_3_1/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIIFall15DR76-1_3_0-25ns_ext1-1_3_1-v0-RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/160127_023814/0000/myMicroAODOutputFile_1.root"
                              )
 )
 
@@ -157,15 +185,6 @@ print '------------------------------------------------------------'
 print ' running on Zee         ::' , customize.runOnZee
 print '------------------------------------------------------------'
 
-# use custum TMVA weights
-# process.flashggVBFMVA.vbfMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_dijetMVA_76x_17_02_15_BDTG.weights.xml")
-# process.flashggVBFMVA.MVAMethod        = cms.string("BDTG")
-# process.flashggDiPhotonMVA.diphotonMVAweightfile = cms.FileInPath("flashgg/Taggers/data/TMVAClassification_BDT_QCDeroded_v100_rereco.weights.xml")
-
-# QCD Recovery 
-# process.flashggVBFMVA.merge3rdJet   = cms.untracked.bool(False)
-# process.flashggVBFMVA.thirdJetDRCut = cms.untracked.double(1.5)
-
 # run on Drell-Yan 
 if customize.runOnZee:
     process.flashggPreselectedDiPhotons.variables =  cms.vstring('pfPhoIso03', 
@@ -176,6 +195,7 @@ if customize.runOnZee:
 
 for syst in jetsystlabels:
     getattr(process,"flashggPreselectedDiPhotons%s"%syst).variables = process.flashggPreselectedDiPhotons.variables
+    
 # get the variable list
 import flashgg.Taggers.VBFTagVariables as var
 new_variables = [
@@ -200,7 +220,7 @@ if customize.processId != "Data":
 cats = [
     ("VBFDiJet","1",0)#,
 ]
-if dumpJetSysTrees :
+if customize.dumpJetSysTrees :
     for syst in jetsystlabels:
         systcutstring = "hasSyst(\"%s\") "%syst
         cats += [
@@ -240,22 +260,41 @@ if (customize.processId.count("wh") or customize.processId.count("zh")) and not 
     process.genFilter += process.VHFilter
     process.VHFilter.chooseW = bool(customize.processId.count("wh"))
     process.VHFilter.chooseZ = bool(customize.processId.count("zh"))
-    
-process.p = cms.Path(process.dataRequirements
-                     * process.genFilter
-                     * process.flashggUpdatedIdMVADiPhotons
-                     * process.flashggDiPhotonSystematics
-                     * process.flashggMuonSystematics
-                     * process.flashggElectronSystematics
-                     * (process.flashggUnpackedJets
-                        * process.ak4PFCHSL1FastL2L3CorrectorChain
-                        * process.jetSystematicsSequence)
-                     * (process.flashggTagSequence
-                        + process.systematicsTagSequences)
-                     * process.flashggVBFTagMerger
-                     * process.vbfTagDumper
-                     )
 
+if customize.QCDParam :
+    process.p = cms.Path(  process.dataRequirements
+                           * process.genFilter
+                           * process.flashggParameterisedFakePhotons
+                           * process.flashggParameterisedPromptFakeDiPhotons
+                           * process.flashggPromptFakeTagSequence
+                           * process.flashggDiPhotonSystematics
+                           * process.flashggMuonSystematics
+                           * process.flashggElectronSystematics
+                           * (process.flashggUnpackedJets
+                              * process.ak4PFCHSL1FastL2L3CorrectorChain
+                              * process.jetSystematicsSequence)
+                           * (process.flashggTagSequence
+                              + process.systematicsTagSequences)
+                           * process.flashggVBFTagMerger
+                           * process.vbfTagDumper
+    )
+
+else:
+    process.p = cms.Path(process.dataRequirements
+                         * process.genFilter
+                         * process.flashggUpdatedIdMVADiPhotons
+                         * process.flashggDiPhotonSystematics
+                         * process.flashggMuonSystematics
+                         * process.flashggElectronSystematics
+                         * (process.flashggUnpackedJets
+                            * process.ak4PFCHSL1FastL2L3CorrectorChain
+                            * process.jetSystematicsSequence)
+                         * (process.flashggTagSequence
+                            + process.systematicsTagSequences)
+                         * process.flashggVBFTagMerger
+                         * process.vbfTagDumper
+    )
+    
 print "--- Dumping modules that take diphotons as input: ---"
 mns = process.p.moduleNames()
 for mn in mns:
