@@ -97,8 +97,12 @@ namespace flashgg {
         void computeP4AndOrder();
         void makePhotonsPersistent()
         {
-            viewPho1_.MakePersistent();
-            viewPho2_.MakePersistent();
+            if (!leadingPhoton()->hasFakeIDMVA()) {
+                viewPho1_.MakePersistent();
+            }
+            if (!subLeadingPhoton()->hasFakeIDMVA()) {
+                viewPho2_.MakePersistent();
+            }
         }
 
         void setJetCollectionIndex( unsigned int val ) { jetCollectionIndex_ = val; }

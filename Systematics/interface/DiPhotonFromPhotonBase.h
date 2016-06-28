@@ -83,8 +83,14 @@ namespace flashgg {
                       << y.mass() << " " << y.pt() << " " << y.leadingPhoton()->energy() << " " << y.subLeadingPhoton()->energy() << " "
                       << y.leadingPhoton()->eta() << " " << y.subLeadingPhoton()->eta() << std::endl;
         }
-        float weight1 = photon_corr_->makeWeight( *(y.leadingPhoton()), syst_shift );
-        float weight2 = photon_corr2_->makeWeight( *(y.subLeadingPhoton()), syst_shift );
+        float weight1 = 1.;
+        float weight2 = 1.;
+        if (!y.leadingPhoton()->hasFakeIDMVA()) {
+            weight1 = photon_corr_->makeWeight( *(y.leadingPhoton()), syst_shift );
+        }
+        if (!y.subLeadingPhoton()->hasFakeIDMVA()) {
+            weight2 = photon_corr2_->makeWeight( *(y.subLeadingPhoton()), syst_shift );
+        }
         float diphoweight = weight1*weight2;
         if( debug_ ) {
             std::cout << "END OF DiPhotonFromPhoton::makeWeight M PT E1 E2 ETA1 ETA2 "
@@ -102,9 +108,15 @@ namespace flashgg {
                       << y.leadingPhoton()->eta() << " " << y.subLeadingPhoton()->eta() << std::endl;
         }
         y.makePhotonsPersistent();
-        photon_corr_->applyCorrection( y.getLeadingPhoton(), syst_shift );
-        photon_corr2_->applyCorrection( y.getSubLeadingPhoton(), syst_shift );
-        y.computeP4AndOrder();
+        if (!y.leadingPhoton()->hasFakeIDMVA()) {
+            photon_corr_->applyCorrection( y.getLeadingPhoton(), syst_shift );
+        }
+        if (!y.subLeadingPhoton()->hasFakeIDMVA()) {
+            photon_corr2_->applyCorrection( y.getSubLeadingPhoton(), syst_shift );
+        }
+        if (!(y.leadingPhoton()->hasFakeIDMVA()||y.subLeadingPhoton()->hasFakeIDMVA())) {
+            y.computeP4AndOrder();
+        }
         if( debug_ ) {
             std::cout << "END OF DiPhotonFromPhoton::applyCorrection M PT E1 E2 ETA1 ETA2 "
                       << y.mass() << " " << y.pt() << " " << y.leadingPhoton()->energy() << " " << y.subLeadingPhoton()->energy() << " "
