@@ -1,8 +1,0 @@
-cross section for /DYToEE_NNPDF30_13TeV-powheg-pythia8 not found in ['$CMSSW_BASE/src/flashgg/MetaData/data/cross_sections.json']
-problems found, exiting
- ################################################################### 
- # WARNING: this module is deprecated.                             # 
- # Please use CondCore.CondDB.CondDB_cfi.py                        # 
- ################################################################### 
-Will use the following datasets catalog:
-/home/hep/yhaddad/work/CMSSW_8_0_8/src/flashgg/MetaData/data/RunIISpring16DR80X-2_0_0-25ns/datasets.json

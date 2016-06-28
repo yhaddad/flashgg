@@ -13,8 +13,8 @@ flashggPromptFakeTagSequence = cms.Sequence( #flashggUpdatedIdMVADiPhotons
                                   flashggPreselectedDiPhotons
 				  #* flashggDiPhotonMVA
 				  * flashggParameterisedDiPhotonMVA
-                                  * flashggUnpackedJets
-                                  * flashggVBFMVA
-                                  * flashggVBFDiPhoDiJetMVA
+                                  #* flashggUnpackedJets
+                                  #* flashggVBFMVA
+                                  #* flashggVBFDiPhoDiJetMVA
                                   )
 

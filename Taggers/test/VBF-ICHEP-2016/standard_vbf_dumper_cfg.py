@@ -72,24 +72,23 @@ if customize.QCDParam :
     process.load("flashgg.MicroAOD.flashggParameterisedFakePhotons_cfi")
     process.load("flashgg.MicroAOD.flashggParameterisedPromptFakeDiPhotons_cfi")
     from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
-    massSearchReplaceAnyInputTag( process.flashggPromptFakeTagSequence,
-                              cms.InputTag("flashggUpdatedIdMVADiPhotons"),
-                              cms.InputTag("flashggParameterisedPromptFakeDiPhotons") )
 
-    process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
-                                                       flashggParameterisedFakePhotons = cms.PSet(
-                                                           initialSeed = cms.untracked.uint32( myrandseed ),
-                                                           engineName  = cms.untracked.string('TRandom3')
-                                                       ),
-                                                       flashggParameterisedDiPhotonMVA = cms.PSet(
-                                                           initialSeed = cms.untracked.uint32( 45*myrandseed + 1 ),
-                                                           engineName  = cms.untracked.string('TRandom3')
-                                                       ),
-                                                       flashggJetValidationTreeMakerPFCHS = cms.PSet(
-                                                           initialSeed = cms.untracked.uint32( 5912*myrandseed + 179 ),
-                                                           engineName  = cms.untracked.string('TRandom3')
-                                                       ),)
-
+    process.flashggDiPhotonSystematics.src =  cms.InputTag("flashggParameterisedPromptFakeDiPhotons")
+    process.RandomNumberGeneratorService   =  cms.Service ("RandomNumberGeneratorService",
+                                                           flashggParameterisedFakePhotons = cms.PSet(
+                                                               initialSeed = cms.untracked.uint32( myrandseed ),
+                                                               engineName  = cms.untracked.string('TRandom3')
+                                                           ),
+                                                           flashggParameterisedDiPhotonMVA = cms.PSet(
+                                                               initialSeed = cms.untracked.uint32( 45*myrandseed + 1 ),
+                                                               engineName  = cms.untracked.string('TRandom3')
+                                                           ),
+                                                           flashggJetValidationTreeMakerPFCHS = cms.PSet(
+                                                               initialSeed = cms.untracked.uint32( 5912*myrandseed + 179 ),
+                                                               engineName  = cms.untracked.string('TRandom3')
+                                                           ),)
+    
+    
 
 # Keep an extra category as 'would go elsewhere instead', ignore preselection
 
@@ -147,6 +146,7 @@ print "------------------------------------------------------------"
 cloneTagSequenceForEachSystematic(process,systlabels,phosystlabels,jetsystlabels,jetSystematicsInputTags,customize.dumpJetSysTrees)
 
 # ========================================================================
+    
 # Dumper section
 from FWCore.ParameterSet.VarParsing import VarParsing
 from flashgg.MetaData.samples_utils import SamplesManager
@@ -261,12 +261,22 @@ if (customize.processId.count("wh") or customize.processId.count("zh")) and not 
     process.VHFilter.chooseW = bool(customize.processId.count("wh"))
     process.VHFilter.chooseZ = bool(customize.processId.count("zh"))
 
+
+print '------------------------------------------'
+for p in dir(process):
+    if 'flashgg' not in p : continue
+    dd = getattr(process, '%s' % p)
+    if 'src' in dir(dd):
+        print '--- process :', p , ' :src: ', dd.src
+print '------------------------------------------'
+
+
 if customize.QCDParam :
     process.p = cms.Path(  process.dataRequirements
                            * process.genFilter
                            * process.flashggParameterisedFakePhotons
                            * process.flashggParameterisedPromptFakeDiPhotons
-                           * process.flashggPromptFakeTagSequence
+                           #* process.flashggPromptFakeTagSequence
                            * process.flashggDiPhotonSystematics
                            * process.flashggMuonSystematics
                            * process.flashggElectronSystematics
