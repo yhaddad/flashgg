@@ -5,23 +5,26 @@ from flashgg.Taggers.flashggTags_cff import *
 from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDiPhotons
 from flashgg.Taggers.flashggTagSorter_cfi import flashggTagSorter
 from flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi import flashggUpdatedIdMVADiPhotons
+#from flashgg.Taggers.flashggParameterisedDiPhotonMVA_cfi import flashggParameterisedDiPhotonMVA
 
-flashggTagSequence = cms.Sequence(  #flashggUpdatedIdMVADiPhotons
-                                    #                              *
-                                  flashggPreselectedDiPhotons
-				  * flashggDiPhotonMVA
-                                  * flashggUnpackedJets
-                                  * flashggVBFMVA
-                                  * flashggVBFDiPhoDiJetMVA
-                                  * ( flashggUntagged
-                                     + flashggVBFTag
-                                     + flashggTTHLeptonicTag
-                                     + flashggTTHHadronicTag                                      
-#                                     + flashggVHEtTag
-#                                     + flashggVHLooseTag
-#                                     + flashggVHTightTag
-#                                     + flashggVHHadronicTag
+flashggTagSequence = cms.Sequence(
+    #flashggUpdatedIdMVADiPhotons
+    #                              *
+    flashggPreselectedDiPhotons
+    * flashggDiPhotonMVA
+    #* flashggParameterisedDiPhotonMVA
+    * flashggUnpackedJets
+    * flashggVBFMVA
+    * flashggVBFDiPhoDiJetMVA
+    * ( flashggUntagged
+        + flashggVBFTag
+        + flashggTTHLeptonicTag
+        + flashggTTHHadronicTag                                      
+        #                                     + flashggVHEtTag
+        #                                     + flashggVHLooseTag
+        #                                     + flashggVHTightTag
+        #                                     + flashggVHHadronicTag
 					)
-                                 * flashggTagSorter
-                                  )
+    * flashggTagSorter
+)
 

@@ -35,6 +35,10 @@ namespace flashgg {
         const float subLeading_QGL() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->QGL() : -9999.;}
         const float leading_rawPt   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->correctedJet("Uncorrected").pt() : -9999.;}
         const float subLeading_rawPt() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->correctedJet("Uncorrected").pt() : -9999.;}
+
+
+        const float qcd_leadPho_pt_weight() const {return diPhoton()->leadingPhoton()->weight("fakePtReweight");}
+        const float qcd_sublPho_pt_weight() const {return diPhoton()->subLeadingPhoton()->weight("fakePtReweight");}
         
         const float leading_HFHadronEnergyFraction() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->HFHadronEnergyFraction() : -9999.;}
         const float leading_HFHadronEnergy() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->HFHadronEnergy() : -9999.;  }

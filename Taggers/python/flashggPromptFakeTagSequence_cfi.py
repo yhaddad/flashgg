@@ -7,14 +7,15 @@ from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDi
 #from flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi import flashggUpdatedIdMVADiPhotons
 from flashgg.Taggers.flashggTags_cff import *
 
-flashggPromptFakeTagSequence = cms.Sequence( #flashggUpdatedIdMVADiPhotons
-                                  #* flashggPreselectOnePhotonOnly
-                                  #* flashggPreselectedDiPhotons
-                                  flashggPreselectedDiPhotons
-				  #* flashggDiPhotonMVA
-				  * flashggParameterisedDiPhotonMVA
-                                  #* flashggUnpackedJets
-                                  #* flashggVBFMVA
-                                  #* flashggVBFDiPhoDiJetMVA
-                                  )
+flashggPromptFakeTagSequence = cms.Sequence(
+    #  flashggUpdatedIdMVADiPhotons
+    #* flashggPreselectOnePhotonOnly
+    #* flashggPreselectedDiPhotons
+    flashggPreselectedDiPhotons
+    #* flashggDiPhotonMVA
+    * flashggParameterisedDiPhotonMVA
+    #* flashggUnpackedJets
+    #* flashggVBFMVA
+    #* flashggVBFDiPhoDiJetMVA
+)
 

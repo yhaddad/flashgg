@@ -1,7 +1,5 @@
 #!/usr/bin/env cmsRun
 
-myrandseed = 23445
-
 import FWCore.ParameterSet.Config as cms
 import FWCore.Utilities.FileUtils as FileUtils
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -26,8 +24,8 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_7_4"):
 else:
     raise Exception,"Could not find a sensible CMSSW_VERSION for default globaltag"
 
-process.maxEvents   = cms.untracked.PSet( input  = cms.untracked.int32( 10000 ) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 10000 )
+process.maxEvents   = cms.untracked.PSet( input  = cms.untracked.int32( 50000 ) )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 50000 )
 
 from flashgg.Systematics.SystematicsCustomize import *
 jetSystematicsInputTags = createStandardSystematicsProducers(process)
@@ -63,9 +61,14 @@ customize.options.register('QCDParam',
 customize.parse()
 print "customize.processId:",customize.processId
 
-
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
+
+print "-----------------------------------------"
+from datetime import datetime
+myrandseed = int(datetime.now().strftime('%H%M%S'))
+print " ramdom seed   == ", myrandseed
+print "-----------------------------------------"
 
 if customize.QCDParam :
     process.load("flashgg.Taggers.flashggPromptFakeTagSequence_cfi")
@@ -207,13 +210,19 @@ new_variables = [
 ]
 
 matching_photon = [
-    "dijet_jet1_match := leadingJet_match",
-    "dijet_jet2_match := subLeadingJet_match",
-    "prompt_pho_1     := diPhoton.leadingPhoton.genMatchType()",
-    "prompt_pho_2     := diPhoton.subLeadingPhoton.genMatchType()"
+    #"dijet_jet1_match := leadingJet_match",
+    #"dijet_jet2_match := subLeadingJet_match",
+    #"qcd_pt1_weight   := diPhoton().leadingPhoton().weight(\"fakePtReweight\")",
+    #"qcd_pt2_weight   := diPhoton().subLeadingPhoton().weight(\"fakePtReweight\")"#,
+    #"qcd_pt2_weight   := diPhoton().subLeadingPhoton().centralWeight()"#,
+    "qcd_pt1_weight  := qcd_leadPho_pt_weight()",
+    "qcd_pt2_weight  := qcd_sublPho_pt_weight()",
+    "prompt_pho_1    := diPhoton.leadingPhoton.genMatchType()",
+    "prompt_pho_2    := diPhoton.subLeadingPhoton.genMatchType()"
 ]
 
-all_variables = var.dipho_variables + var.dijet_variables +  new_variables 
+all_variables = var.dipho_variables + var.dijet_variables +  new_variables
+
 if customize.processId != "Data":
     all_variables += var.truth_variables + matching_photon
     
@@ -262,7 +271,7 @@ if (customize.processId.count("wh") or customize.processId.count("zh")) and not 
     process.VHFilter.chooseZ = bool(customize.processId.count("zh"))
 
 
-print '------------------------------------------'
+print '----------- check source ------------------'
 for p in dir(process):
     if 'flashgg' not in p : continue
     dd = getattr(process, '%s' % p)
@@ -270,23 +279,49 @@ for p in dir(process):
         print '--- process :', p , ' :src: ', dd.src
 print '------------------------------------------'
 
-
 if customize.QCDParam :
-    process.p = cms.Path(  process.dataRequirements
-                           * process.genFilter
-                           * process.flashggParameterisedFakePhotons
-                           * process.flashggParameterisedPromptFakeDiPhotons
-                           #* process.flashggPromptFakeTagSequence
-                           * process.flashggDiPhotonSystematics
-                           * process.flashggMuonSystematics
-                           * process.flashggElectronSystematics
-                           * (process.flashggUnpackedJets
-                              * process.ak4PFCHSL1FastL2L3CorrectorChain
-                              * process.jetSystematicsSequence)
-                           * (process.flashggTagSequence
-                              + process.systematicsTagSequences)
-                           * process.flashggVBFTagMerger
-                           * process.vbfTagDumper
+    print '----------- MVAresultTag ------------------'
+    for p in dir(process):
+        if 'flashgg' not in p : continue
+        dd = getattr(process, '%s' % p)
+        if 'MVAResultTag' in dir(dd):
+            dd.MVAResultTag = cms.InputTag('flashggParameterisedDiPhotonMVA')
+            
+    print '------------------------------------------'
+    process.NewTagSeg  =  cms.Sequence(
+        process.flashggPreselectedDiPhotons
+        * process.flashggParameterisedDiPhotonMVA
+        * process.flashggUnpackedJets
+        * process.flashggVBFMVA
+        * process.flashggVBFDiPhoDiJetMVA
+        * (process.flashggUntagged
+           + process.flashggVBFTag
+           #+ process.flashggTTHLeptonicTag
+           #+ process.flashggTTHHadronicTag
+           #+ process.flashggVHEtTag
+           #+ process.flashggVHLooseTag
+           #+ process.flashggVHTightTag
+           #+ process.flashggVHHadronicTag
+        )
+        * process.flashggTagSorter
+    )
+    
+    process.p = cms.Path( process.dataRequirements
+                          * process.genFilter
+                          * process.flashggParameterisedFakePhotons
+                          * process.flashggParameterisedPromptFakeDiPhotons
+                          * process.flashggDiPhotonSystematics
+                          * process.flashggMuonSystematics
+                          * process.flashggElectronSystematics
+                          * (  process.flashggUnpackedJets
+                               * process.ak4PFCHSL1FastL2L3CorrectorChain
+                               * process.jetSystematicsSequence)
+                          * (
+                              process.NewTagSeg
+                              + process.systematicsTagSequences
+                          ) 
+                          #* process.flashggVBFTagMerger
+                          * process.vbfTagDumper
     )
 
 else:
@@ -317,7 +352,7 @@ print
 printSystematicInfo(process)
 
 # set default options if needed
-customize.setDefault("maxEvents"  ,10000   )
+customize.setDefault("maxEvents"  ,50000   )
 customize.setDefault("targetLumi" ,1.00e+3)
 
 # call the customization
