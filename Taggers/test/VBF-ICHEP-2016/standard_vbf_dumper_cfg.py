@@ -27,15 +27,57 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_7_4"):
 else:
     raise Exception,"Could not find a sensible CMSSW_VERSION for default globaltag"
 
-process.maxEvents   = cms.untracked.PSet( input  = cms.untracked.int32( 10000 ) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 10000 )
+process.maxEvents   = cms.untracked.PSet( input  = cms.untracked.int32( 50000 ) )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 
 from flashgg.Systematics.SystematicsCustomize import *
 jetSystematicsInputTags = createStandardSystematicsProducers(process)
 
-
 process.load("flashgg.Taggers.flashggTagSequence_cfi")
 process.load("flashgg.Taggers.flashggTagTester_cfi")
+
+# PUJID  working points 
+# cut values for 4X3 categories
+# columns :  eta bins  : 4 categories
+# rows    :  pt bins   :  3 
+
+mva_wp = {
+    "none"  : [
+        [-1, -1,  -1, -1],
+        [-1, -1,  -1, -1],
+        [-1, -1 , -1, -1]
+    ],
+    "tight" : [
+        [0.26, -0.34, -0.24, -0.26],
+        [0.62, -0.21, -0.07, -0.03],
+        [0.87, 0.17 , 0.25 ,  0.33]
+    ],
+    "medium": [
+        [-0.49, -0.53, -0.44, -0.42],
+        [-0.06, -0.42, -0.30, -0.23],
+        [ 0.56, -0.10,  0.01,  0.13]
+    ],
+    "loose" :[
+        [-0.96, -0.64, -0.56, -0.54],
+        [-0.92, -0.56, -0.44, -0.39],
+        [-0.77, -0.31, -0.20, -0.03]
+    ],
+    "forward_tight" : [
+        [-1, -0.34, -0.24, -0.26],
+        [-1, -0.21, -0.07, -0.03],
+        [-1, 0.17 , 0.25 ,  0.33]
+    ],
+    "forward_medium": [
+        [-1, -0.53, -0.44, -0.42],
+        [-1, -0.42, -0.30, -0.23],
+        [-1, -0.10,  0.01,  0.13]
+    ],
+    "forward_loose" :[
+        [-1, -0.64, -0.56, -0.54],
+        [-1, -0.56, -0.44, -0.39],
+        [-1, -0.31, -0.20, -0.03]
+    ]
+}
 
 # Keep an extra category as 'would go elsewhere instead', ignore preselection
 process.flashggVBFTag.Boundaries             = cms.vdouble(-999.,0.62, 0.94)
@@ -60,6 +102,12 @@ customize.options.register('forwardJetRMSCut',
                            VarParsing.VarParsing.multiplicity.singleton,
                            VarParsing.VarParsing.varType.float,
                            'forwardJetRMSCut')
+
+customize.options.register('pujidWP',
+                           'tight',
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.string,
+                           'pujidWP')
 
 customize.options.register('runOnZee',
                            False,
@@ -115,7 +163,8 @@ from flashgg.MetaData.samples_utils import SamplesManager
 
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-                                 "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/VBFHToGG_M-120_13TeV_powheg_pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/160524_093617/0000/myMicroAODOutputFile_1.root"
+                                 "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring16DR80X-2_1_2-25ns_ICHEP16/2_1_2/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring16DR80X-2_1_2-25ns_ICHEP16-2_1_2-v0-RunIISpring16MiniAODv1-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/160628_143400/0000/myMicroAODOutputFile_5.root"
+                                 #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/VBFHToGG_M-120_13TeV_powheg_pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/160524_093617/0000/myMicroAODOutputFile_1.root"
                                  #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/DYToEE_NNPDF30_13TeV-powheg-pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/160524_084452/0000/myMicroAODOutputFile_110.root"
                              )
 )
@@ -133,13 +182,19 @@ process.vbfTagDumper.dumpWorkspace = False
 
 # Use JetID
 process.flashggVBFMVA.UseJetID      = cms.bool(True)
-process.flashggVBFMVA.JetIDLevel    = cms.string("Tight")
-#process.flashggVBFMVA.JetIDLevel    = cms.string("Loose")
+process.flashggVBFMVA.JetIDLevel    = cms.string("Tight") #cms.string("Loose")
 
 process.flashggVBFTag.Boundaries  = cms.vdouble(-2)
 process.systematicsTagSequences   = cms.Sequence()
 
 process.flashggVBFMVA.rmsforwardCut = cms.double(customize.forwardJetRMSCut)
+process.flashggVBFMVA.pujidWpPtBin1 = cms.vdouble(mva_wp[customize.pujidWP][0])
+process.flashggVBFMVA.pujidWpPtBin2 = cms.vdouble(mva_wp[customize.pujidWP][1])
+process.flashggVBFMVA.pujidWpPtBin3 = cms.vdouble(mva_wp[customize.pujidWP][2])
+print '------------------------------------------------------------'
+print ' PUJID Working point    ::' , customize.pujidWP
+print '------------------------------------------------------------'
+print ' PUJID wp cuts          ::' , mva_wp[customize.pujidWP]
 print '------------------------------------------------------------'
 print ' formward RMS Cut value ::' , customize.forwardJetRMSCut
 print '------------------------------------------------------------'
@@ -168,11 +223,13 @@ for syst in jetsystlabels:
 # get the variable list
 import flashgg.Taggers.VBFTagVariables as var
 new_variables = [
-    "n_jets           := VBFMVA.n_rec_jets",
-    "dijet_jet1_RMS   := leading_rms",
-    "dijet_jet2_RMS   := subLeading_rms",
-    "dijet_jet1_QGL   := leading_QGL",
-    "dijet_jet2_QGL   := subLeading_QGL"
+    "n_jets               := VBFMVA.n_rec_jets",
+    "dijet_jet1_RMS       := leading_rms",
+    "dijet_jet2_RMS       := subLeading_rms",
+    "dijet_jet1_QGL       := leading_QGL",
+    "dijet_jet2_QGL       := subLeading_QGL",
+    "dijet_jet1_pujid_mva := leading_pujidMVA()",
+    "dijet_jet2_pujid_mva := subleading_pujidMVA()"
 ]
 
 matching_photon = [
@@ -209,7 +266,7 @@ if customize.runOnZee:
         #else:
         #process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Ele27_eta2p1_WP75_Gsf_v*") )
 else:
-    process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass95_v*"))
+    process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring("HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v*"))
     
 process.options      = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
