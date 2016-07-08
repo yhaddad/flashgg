@@ -1,0 +1,9 @@
+{
+    "cmdLine"  : "campaign=RunIISpring16DR80X-2_1_2-25ns", 
+    "processes": {
+        "Data"   : [
+	    "/DoubleEG/sethzenz-RunIISpring16DR80X-2_1_2-25ns_ICHEP16-2_1_2-v0-Run2016B-PromptReco-v1-e5880c908a90926edba8620edd1b5cdc/USER",
+	    "/DoubleEG/sethzenz-RunIISpring16DR80X-2_1_2-25ns_ICHEP16-2_1_2-v0-Run2016B-PromptReco-v2-e5880c908a90926edba8620edd1b5cdc/USER"
+	]
+    }
+}

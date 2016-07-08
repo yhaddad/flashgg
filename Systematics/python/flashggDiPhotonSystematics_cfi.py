@@ -253,9 +253,19 @@ emptySigma = cms.PSet(
     secondVar = cms.vint32()
 )
 
+#<<<<<<< HEAD
 scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Golden22June")
 #scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Golden10June_plus_DCS")
 scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Golden10June_plus_DCS")
+#=======
+# latest greatest
+# scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/76X_16DecRereco_2015_photons")
+
+# unblinding version + Et-dependent scale uncertainties
+# scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/76X_16DecRereco_2015_Etunc")
+# this is preliminary for 80x
+#scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Golden10June_plus_DCS")
+#>>>>>>> origin/topic-retraining-80x-pass-0
 
 MCScaleHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           MethodName = cms.string("FlashggDiPhotonFromPhoton"),
