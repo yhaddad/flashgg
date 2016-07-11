@@ -200,7 +200,7 @@ namespace flashgg {
                 // rms cuts over 2.5 
                 if( fabs( jet->eta() ) > 2.5 && jet->rms() > _rmsforwardCut ){ 
                     //std::cout << "("<< jet->eta()<< ")("<< jet->rms() <<").. jet rejected ::" << std::endl;
-                    //continue; 
+                    continue; 
                 }
                 // new PUJID for differents pt bins
                 std::vector<std::pair<double,double> > eta_cuts_(4);
