@@ -1,0 +1,11 @@
+{
+    "cmdLine"  : "campaign=RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2_Workspaces", 
+    "processes": {
+        "Zee"    : [ "/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/ferrif-RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1-94d03017ce60e1991044b8807b85a209/USER" ],
+	"Data"   : [
+	    "/DoubleEG/ferrif-RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-Run2016B-PromptReco-v1-6afd65c310508d0f49bd277bc7a8e5b1/USER",
+	    "/DoubleEG/ferrif-RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-Run2016B-PromptReco-v2-6afd65c310508d0f49bd277bc7a8e5b1/USER",
+	    "/DoubleEG/ferrif-RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-Run2016C-PromptReco-v2-9a092465adbfb13c40886e07b86f6d23/USER" 
+        ]
+    }
+}
