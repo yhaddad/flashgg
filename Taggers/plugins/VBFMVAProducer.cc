@@ -173,9 +173,9 @@ namespace flashgg {
             // First find dijet by looking for highest-pt jets...
             std::pair <int, int>     dijet_indices( -1, -1 );
             std::pair <float, float> dijet_pts( -1., -1. );
-            int jet_3_index = -1;
-            int jet_3_pt    = -1;
-            float dr2pho = 0.5;
+            int jet_3_index =  -1;
+            int jet_3_pt    =  -1;
+            float dr2pho    = 0.4;
             
             float phi1 = diPhotons->ptrAt( candIndex )->leadingPhoton()->phi();
             float eta1 = diPhotons->ptrAt( candIndex )->leadingPhoton()->eta();
@@ -185,10 +185,11 @@ namespace flashgg {
             bool hasValidVBFDiJet  = 0;
             bool hasValidVBFTriJet = 0;
             
-            int  n_jets_count = 0;
+            int  n_jets_count_20 = 0;
+            int  n_jets_count_30 = 0;
             // take the jets corresponding to the diphoton candidate
             unsigned int jetCollectionIndex = diPhotons->ptrAt( candIndex )->jetCollectionIndex();
-                        
+            
             for( UInt_t jetLoop = 0; jetLoop < Jets[jetCollectionIndex]->size() ; jetLoop++ ) {
                 Ptr<flashgg::Jet> jet  = Jets[jetCollectionIndex]->ptrAt( jetLoop );
                 //if (jet->puJetId(diPhotons[candIndex]) <  PuIDCutoff) {continue;}
@@ -280,7 +281,8 @@ namespace flashgg {
                     jet_3_index = jetLoop;
                     jet_3_pt    = jet->pt();
                 }
-                if( jet->pt() > 30.0 ) n_jets_count++;
+                if( jet->pt() > 20.0 ) n_jets_count_20++;
+                if( jet->pt() > 30.0 ) n_jets_count_30++;
                 // if the jet's pt is neither higher than the lead jet or sublead jet, then forget it!
                 if( dijet_indices.first != -1 && dijet_indices.second != -1 ) {hasValidVBFDiJet  = 1;}
                 if( hasValidVBFDiJet          && jet_3_index != -1          ) {hasValidVBFTriJet = 1;}
@@ -290,7 +292,7 @@ namespace flashgg {
             //Third jet deltaR cut and merge index finding
             int indexToMergeWithJ3(-1);
             //float thirdJetDRCut(1.8);
-
+            
             //Getting the P4s
             std::vector<reco::Candidate::LorentzVector> diPhotonP4s(2);
             std::vector<reco::Candidate::LorentzVector> jetP4s;
@@ -324,7 +326,6 @@ namespace flashgg {
            
             if( hasValidVBFDiJet ) {
                 std::pair<reco::Candidate::LorentzVector,reco::Candidate::LorentzVector> dijetP4s;
-                
                 //std ::cout << "-->before  jet_1 pt:" << jetP4s[0].pt() << std::endl;
                 //std ::cout << "-->before  jet_2 pt:" << jetP4s[1].pt() << std::endl;
                 if (indexToMergeWithJ3 != -1 && _merge3rdJet ) {
@@ -373,8 +374,10 @@ namespace flashgg {
                 dijet_leady_      = dijetP4s.first.Rapidity();
                 
                 dijet_subleady_   = dijetP4s.second.Rapidity();
+                // centrality
                 
-                mvares.n_rec_jets = n_jets_count;
+                mvares.n_rec_jets_20 = n_jets_count_20;
+                mvares.n_rec_jets_30 = n_jets_count_30;
                 //mvares.leadJet    = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.first );
                 //mvares.subleadJet = *Jets[jetCollectionIndex]->ptrAt( dijet_indices.second );
                 mvares.leadJet        = dijetP4s.first;

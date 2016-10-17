@@ -104,7 +104,7 @@ namespace flashgg {
         void setJetCollectionIndex( unsigned int val ) { jetCollectionIndex_ = val; }
         unsigned int jetCollectionIndex() const { return jetCollectionIndex_; }
 
-        LorentzVector genP4() const; 
+        LorentzVector genP4() const;
 
         DiPhotonCandidate *clone() const { return ( new DiPhotonCandidate( *this ) ); }
 
@@ -112,7 +112,7 @@ namespace flashgg {
         void setGenPV( const Point genpv ) { genPV_ = genpv; }
 
     private:
-        
+
         edm::Ptr<reco::Vertex> vertex_;
         int vertex_index_;
 
@@ -159,4 +159,3 @@ namespace flashgg {
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-

@@ -24,10 +24,28 @@ dipho_variables=[
     "dipho_subleadIDMVA     := diPhoton.subLeadingView.phoIdMvaWrtChosenVtx",
     "dipho_lead_elveto      := diPhoton.leadingPhoton.passElectronVeto",
     "dipho_sublead_elveto   := diPhoton.subLeadingPhoton.passElectronVeto",
+
+    # "dipho_gen_dphi := (diPhoton.leadingPhoton.matchedGenPhoton.phi - diPhoton.subLeadingPhoton.matchedGenPhoton.phi)",
+    # "dipho_gen_deta := (diPhoton.leadingPhoton.matchedGenPhoton.eta - diPhoton.subLeadingPhoton.matchedGenPhoton.eta)",
+    #
+    # "dipho_rec_dphi := (diPhoton.leadingPhoton.phi - diPhoton.subLeadingPhoton.phi)",
+    # "dipho_rec_deta := (diPhoton.leadingPhoton.eta - diPhoton.subLeadingPhoton.eta)",
+
     "isGold := isGold"
-    ]
+]
 
 dijet_variables=[
+    "dipho_gen_lead_eta    := dipho_gen_lead_eta()",
+    "dipho_gen_sublead_eta := dipho_gen_sublead_eta()",
+    "dipho_gen_lead_phi    := dipho_gen_lead_phi()",
+    "dipho_gen_sublead_phi := dipho_gen_sublead_phi()",
+    "dipho_rec_lead_eta    := dipho_rec_lead_eta()",
+    "dipho_rec_sublead_eta := dipho_rec_sublead_eta()",
+    "dipho_rec_lead_phi    := dipho_rec_lead_phi()",
+    "dipho_rec_sublead_phi := dipho_rec_sublead_phi()",
+    "gen_phi_star := gen_phi_star()",
+    "rec_phi_star := rec_phi_star()",
+
     "dijet_abs_dEta         :=  abs(VBFMVA.dijet_leadEta - VBFMVA.dijet_subleadEta)",
     "dijet_leadEta          :=  VBFMVA.dijet_leadEta    ",
     "dijet_subleadEta       :=  VBFMVA.dijet_subleadEta ",
@@ -59,7 +77,6 @@ dijet_variables=[
     "jet1_eta            := leadingJet.eta",
     "jet2_eta            := subLeadingJet.eta",
     "jet3_eta            := subSubLeadingJet.eta",
-    "Mjj := sqrt((leadingJet.energy+subLeadingJet.energy)^2-(leadingJet.px+subLeadingJet.px)^2-(leadingJet.py+subLeadingJet.py)^2-(leadingJet.pz+subLeadingJet.pz)^2)",
     "jet1_rawPt          := leading_rawPt",
     "jet2_rawPt          := subLeading_rawPt",
     "jet1_HFHadronEnergyFraction := leading_HFHadronEnergyFraction",
@@ -94,13 +111,13 @@ truth_variables=[
     "J2J3_dipho_dPhi     := tagTruth().dPhijj_J2J3_FggJet()",
 
     "J1J2_dipho_dPhi_Gen     := tagTruth().dPhijj_J1J2_GenJet()",
-    
+
     "J1J2J3_dipho_dPhi   := tagTruth().dPhijjj_FggJet()",
-    
+
     "J1J2_dR             := tagTruth().dR_J1J2_FggJet()",
     "J1J3_dR             := tagTruth().dR_J1J3_FggJet()",
     "J2J3_dR             := tagTruth().dR_J2J3_FggJet()",
-    
+
     "dEta_J1_J2J3        := tagTruth().dEta_J1J2J3_FggJet()",
     "dEta_J2_J3J1        := tagTruth().dEta_J2J3J1_FggJet()",
     "dEta_J3_J1J2        := tagTruth().dEta_J3J1J2_FggJet()",
@@ -124,7 +141,7 @@ truth_variables=[
     "dR_Photon2_J1       := tagTruth().dR_Ph2_1_FggJet()",
     "dR_Photon2_J2       := tagTruth().dR_Ph2_2_FggJet()",
     "dR_Photon2_J3       := tagTruth().dR_Ph2_3_FggJet()",
-    
+
     "dR_dipho_trijet     := tagTruth().dR_DP_123_FggJet()",
 
     "misPt_dPhi_3J       := tagTruth().missingP4_dPhi_jjj_FggJet()",
@@ -143,15 +160,15 @@ truth_variables=[
     "dPhi_min_jets       := tagTruth().dPhi_min_FggJet()",
 
     "momentum4Volume     := tagTruth().simplex_volume_DP_12_FggJet()",
-    
+
     "dR_min_J12J23       := tagTruth().dR_min_J13J23_FggJet()",
 
     "dRToNearestPartonJ1 := tagTruth().dR_partonMatchingToJ1()",
     "dRToNearestPartonJ2 := tagTruth().dR_partonMatchingToJ2()",
     "dRToNearestPartonJ3 := tagTruth().dR_partonMatchingToJ3()",
-    
+
     "numberOfMatches     := tagTruth().numberOfMatchesAfterDRCut(0.5)",
-    
+
     # tag truth information
     "genZ                                 := tagTruth().genPV().z", # try that !!
     "pt_genJetMatchingToJ1                := tagTruth().pt_genJetMatchingToJ1",
@@ -166,5 +183,5 @@ truth_variables=[
     "hasClosestParticleToSubLeadingJet    := tagTruth().hasClosestParticleToSubLeadingJet",
     "hasClosestParticleToLeadingPhoton    := tagTruth().hasClosestParticleToLeadingPhoton",
     "hasClosestParticleToSubLeadingPhoton := tagTruth().hasClosestParticleToSubLeadingPhoton"
-    
+
     ]
