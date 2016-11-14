@@ -1,0 +1,6 @@
+{
+    "cmdLine"  : "campaign=RunIISpring16DR80X-2_1_2-25ns_ICHEP16", 
+    "processes": {
+        "Zee"    : [ "/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8" ]
+    }
+}
