@@ -21,7 +21,7 @@ using namespace std;
 using namespace edm;
 
 namespace flashgg {
-
+    
     class VBFMVAProducer : public EDProducer
     {
         
@@ -63,6 +63,9 @@ namespace flashgg {
         float dijet_dipho_dphi_;
         float dijet_Mjj_   ;
         float dijet_minDRJetPho_ ;
+        float dijet_centrality_gg_;
+        float dijet_centrality_j3_;
+        float dijet_centrality_g_ ;
         float dijet_dy_    ;
         float dijet_leady_    ;
         float dijet_subleady_ ;
@@ -107,6 +110,9 @@ namespace flashgg {
         leadPho_PToM_     = -999.;
         sublPho_PToM_     = -999.;
         dijet_minDRJetPho_= -999.;
+        dijet_centrality_gg_ = -999.;
+        dijet_centrality_j3_ = -999.;
+        dijet_centrality_g_  = -999.;
         dijet_dipho_pt_   = -999.;
         dijet_leady_      = -999.;
         dijet_subleady_   = -999.;
@@ -166,7 +172,9 @@ namespace flashgg {
             dijet_dipho_pt_   = -999.;
             dijet_leady_      = -999.;
             dijet_subleady_   = -999.;
-            
+            dijet_centrality_gg_ = -999.;
+            dijet_centrality_j3_ = -999.;
+            dijet_centrality_g_  = -999.;
             dipho_PToM_       = -999.;
             leadPho_PToM_     = -999.;
             sublPho_PToM_     = -999.;
@@ -355,9 +363,10 @@ namespace flashgg {
                 
                 dijet_dipho_pt_   = (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
                 
-                dijet_Zep_        = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
-                
-                dijet_Mjj_        = (dijetP4s.first + dijetP4s.second).M();
+                dijet_Zep_           = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
+                dijet_centrality_gg_ = exp(-4*pow(dijet_Zep_/dijet_leadEta_,2));
+                dijet_centrality_g_  = exp(-4*pow(fabs( diPhotonP4s[0].eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) )/dijet_leadEta_,2));
+                dijet_Mjj_           = (dijetP4s.first + dijetP4s.second).M();
 
                 dipho_PToM_       = (diPhotonP4s[0] + diPhotonP4s[1]).Pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
                 leadPho_PToM_     = diPhotonP4s[0].pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();

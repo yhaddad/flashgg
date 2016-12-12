@@ -27,6 +27,9 @@ namespace flashgg {
         dijet_subleady         ( -9999. ),
         dijet_dipho_pt         ( -9999. ),
         dijet_minDRJetPho      ( -9999. ),
+        dijet_centrality_gg    ( -9999. ),
+        dijet_centrality_j3    ( -9999. ),
+        dijet_centrality_g     ( -9999. ),
         
         dipho_PToM             ( -9999. ),
         leadPho_PToM           ( -9999. ),

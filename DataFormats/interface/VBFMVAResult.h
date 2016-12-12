@@ -55,6 +55,10 @@ namespace flashgg {
         float dijet_subleady;
         float dijet_dipho_pt;
         float dijet_minDRJetPho;
+        float dijet_centrality_gg;
+        float dijet_centrality_j3;
+        float dijet_centrality_g ;
+
         
         float dipho_PToM;
         float leadPho_PToM;
