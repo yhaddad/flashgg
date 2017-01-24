@@ -45,13 +45,19 @@ dijet_variables=[
     "dijet_dphi             :=  abs(deltaPhi(VBFMVA.leadJet.phi, VBFMVA.subleadJet.phi))",
     "dijet_dipho_dphi       :=  VBFMVA.dijet_dipho_dphi ",
     "dijet_dPhi_trunc       :=  VBFMVA.dijet_dphi_trunc ",
+    "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dipho_dphi ",
+    
+    "dijet_centrality_gg    :=  VBFMVA.dijet_centrality_gg",
+    "dijet_centrality_j3    :=  VBFMVA.dijet_centrality_j3",
+    "dijet_centrality_g     :=  VBFMVA.dijet_centrality_g",
+
     "cos_dijet_dipho_dphi   :=  cos(VBFMVA.dijet_dipho_dphi)",
     "dijet_minDRJetPho      :=  VBFMVA.dijet_minDRJetPho",
     "has3Jet                :=  hasValidVBFTriJet",
     "dijet_mva              :=  VBFMVA.VBFMVAValue",
     "dipho_dijet_MVA        :=  VBFDiPhoDiJetMVA.VBFDiPhoDiJetMVAValue()",
     "dipho_mva              :=  diPhotonMVA.mvaValue()",
-    "dijet_dipho_dphi_trunc :=  VBFMVA.dijet_dipho_dphi ",
+    
     # new variables
     "jet1_pt             := leadingJet.pt",
     "jet2_pt             := subLeadingJet.pt",
@@ -59,7 +65,12 @@ dijet_variables=[
     "jet1_eta            := leadingJet.eta",
     "jet2_eta            := subLeadingJet.eta",
     "jet3_eta            := subSubLeadingJet.eta",
+    "jet1_phi            := leadingJet.phi",
+    "jet2_phi            := subLeadingJet.phi",
+    "jet3_phi            := subSubLeadingJet.phi",
     "Mjj := sqrt((leadingJet.energy+subLeadingJet.energy)^2-(leadingJet.px+subLeadingJet.px)^2-(leadingJet.py+subLeadingJet.py)^2-(leadingJet.pz+subLeadingJet.pz)^2)",
+
+
     "jet1_rawPt          := leading_rawPt",
     "jet2_rawPt          := subLeading_rawPt",
     "jet1_HFHadronEnergyFraction := leading_HFHadronEnergyFraction",
@@ -167,4 +178,4 @@ truth_variables=[
     "hasClosestParticleToLeadingPhoton    := tagTruth().hasClosestParticleToLeadingPhoton",
     "hasClosestParticleToSubLeadingPhoton := tagTruth().hasClosestParticleToSubLeadingPhoton"
     
-    ]
+]

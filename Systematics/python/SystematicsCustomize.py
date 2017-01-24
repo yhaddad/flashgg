@@ -84,8 +84,12 @@ def modifyTagSequenceForSystematics(process,jetSystematicsInputTags,ZPlusJetMode
         process.flashggSystTagMerger = cms.EDProducer("TagMerger",src=cms.VInputTag("flashggTagSorter"))
     process.systematicsTagSequences = cms.Sequence()
 
-def cloneTagSequenceForEachSystematic(process,systlabels,phosystlabels,metsystlabels,jetsystlabels,jetSystematicsInputTags,ZPlusJetMode=False):
+def cloneTagSequenceForEachSystematic(process,systlabels=[],phosystlabels=[],metsystlabels=[],jetsystlabels=[],jetSystematicsInputTags=None,ZPlusJetMode=False):
+    print " -- syst labels :: "    , systlabels
+    print " -- jet syst labels :: ", jetsystlabels
+    print " type jetSystematicsInputTags ", type(jetSystematicsInputTags)
     for systlabel in systlabels:
+        print " -- syst label :: ", systlabel
         if systlabel == "":
             continue
         from PhysicsTools.PatAlgos.tools.helpers import cloneProcessingSnippet,massSearchReplaceAnyInputTag

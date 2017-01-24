@@ -1,0 +1,18 @@
+{
+    "jobs": [], 
+    "datasets_output": {
+        "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1-bf57eb1b86ac7305c9534d71b2c279d5_USER": [
+            "/home/hep/yhaddad/work/moriod17_jan_17/CMSSW_8_0_25/src/flashgg/Taggers/test/VBF-MORIOND-2017/jack/output_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1-bf57eb1b86ac7305c9534d71b2c279d5_USER.root", 
+            []
+        ]
+    }, 
+    "process_output": {
+        "DY": [
+            "/home/hep/yhaddad/work/moriod17_jan_17/CMSSW_8_0_25/src/flashgg/Taggers/test/VBF-MORIOND-2017/jack/output_DY.root", 
+            []
+        ]
+    }, 
+    "outputPfx": "/home/hep/yhaddad/work/moriod17_jan_17/CMSSW_8_0_25/src/flashgg/Taggers/test/VBF-MORIOND-2017/jack/output", 
+    "last_job_id": 0, 
+    "output": []
+}

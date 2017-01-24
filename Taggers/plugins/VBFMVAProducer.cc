@@ -21,7 +21,7 @@ using namespace std;
 using namespace edm;
 
 namespace flashgg {
-
+    
     class VBFMVAProducer : public EDProducer
     {
         
@@ -57,12 +57,16 @@ namespace flashgg {
         float dijet_subleadEta_;
         float dijet_abs_dEta_;
         float dijet_LeadJPt_ ;
+        float dijet_pt_ ;
         float dijet_SubJPt_  ;
         float dijet_Zep_     ;
         float dijet_dphi_trunc_;
         float dijet_dipho_dphi_;
         float dijet_Mjj_   ;
         float dijet_minDRJetPho_ ;
+        float dijet_centrality_gg_;
+        float dijet_centrality_j3_;
+        float dijet_centrality_g_ ;
         float dijet_dy_    ;
         float dijet_leady_    ;
         float dijet_subleady_ ;
@@ -97,6 +101,7 @@ namespace flashgg {
         dijet_subleadEta_ = -999.;
         dijet_abs_dEta_   = -999.;
         dijet_LeadJPt_    = -999.;
+        dijet_pt_    = -999.;
         dijet_SubJPt_     = -999.;
         dijet_Zep_        = -999.;
         dijet_dphi_trunc_ = -999.;
@@ -107,6 +112,9 @@ namespace flashgg {
         leadPho_PToM_     = -999.;
         sublPho_PToM_     = -999.;
         dijet_minDRJetPho_= -999.;
+        dijet_centrality_gg_ = -999.;
+        dijet_centrality_j3_ = -999.;
+        dijet_centrality_g_  = -999.;
         dijet_dipho_pt_   = -999.;
         dijet_leady_      = -999.;
         dijet_subleady_   = -999.;
@@ -115,6 +123,7 @@ namespace flashgg {
             VbfMva_.reset( new TMVA::Reader( "!Color:Silent" ) );
             // set of VBF variables
             VbfMva_->AddVariable( "dijet_LeadJPt"     , &dijet_LeadJPt_    );
+//            VbfMva_->AddVariable( "dijet_pt"     , &dijet_pt_    );
             VbfMva_->AddVariable( "dijet_SubJPt"      , &dijet_SubJPt_     );
             VbfMva_->AddVariable( "dijet_abs_dEta"    , &dijet_abs_dEta_   );
             //VbfMva_->AddVariable( "dijet_dy"          , &dijet_dy_         );
@@ -156,6 +165,7 @@ namespace flashgg {
             dijet_subleadEta_ = -999.;
             dijet_abs_dEta_   = -999.;
             dijet_LeadJPt_    = -999.;
+            dijet_pt_    = -999.;
             dijet_SubJPt_     = -999.;
             dijet_Zep_        = -999.;
             dijet_dphi_trunc_ = -999.;
@@ -166,7 +176,9 @@ namespace flashgg {
             dijet_dipho_pt_   = -999.;
             dijet_leady_      = -999.;
             dijet_subleady_   = -999.;
-            
+            dijet_centrality_gg_ = -999.;
+            dijet_centrality_j3_ = -999.;
+            dijet_centrality_g_  = -999.;
             dipho_PToM_       = -999.;
             leadPho_PToM_     = -999.;
             sublPho_PToM_     = -999.;
@@ -287,7 +299,6 @@ namespace flashgg {
                 if( hasValidVBFDiJet          && jet_3_index != -1          ) {hasValidVBFTriJet = 1;}
             }
 
-
             //Third jet deltaR cut and merge index finding
             int indexToMergeWithJ3(-1);
             //float thirdJetDRCut(1.8);
@@ -347,6 +358,7 @@ namespace flashgg {
                 dijet_abs_dEta_   = fabs( dijetP4s.first.eta() - dijetP4s.second.eta());
                 
                 dijet_LeadJPt_    = dijetP4s.first.pt();
+                dijet_pt_    = (dijetP4s.first + dijetP4s.second).pt();
                 dijet_SubJPt_     = dijetP4s.second.pt();
                 
                 dijet_dipho_dphi_ = fabs(reco::deltaPhi((dijetP4s.first + dijetP4s.second).phi(),(diPhotonP4s[0] + diPhotonP4s[1]).phi()));
@@ -355,9 +367,11 @@ namespace flashgg {
                 
                 dijet_dipho_pt_   = (dijetP4s.first + dijetP4s.second + diPhotonP4s[0] + diPhotonP4s[1]).pt(); 
                 
-                dijet_Zep_        = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
-                
-                dijet_Mjj_        = (dijetP4s.first + dijetP4s.second).M();
+                dijet_Zep_           = fabs( (diPhotonP4s[0]+diPhotonP4s[1]).eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) );
+                dijet_centrality_gg_ = exp(-4*pow(dijet_Zep_/dijet_leadEta_,2));
+                dijet_centrality_g_  = exp(-4*pow(fabs( diPhotonP4s[0].eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) )/dijet_leadEta_,2));
+                dijet_centrality_g_  = exp(-4*pow(fabs( diPhotonP4s[0].eta() - 0.5*(dijetP4s.first.eta()+dijetP4s.second.eta()) )/dijet_leadEta_,2));
+                dijet_Mjj_           = (dijetP4s.first + dijetP4s.second).M();
 
                 dipho_PToM_       = (diPhotonP4s[0] + diPhotonP4s[1]).Pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
                 leadPho_PToM_     = diPhotonP4s[0].pt()/(diPhotonP4s[0] + diPhotonP4s[1]).M();
@@ -402,23 +416,26 @@ namespace flashgg {
             if (_MVAMethod != "") 
                 mvares.vbfMvaResult_value = VbfMva_->EvaluateMVA( _MVAMethod.c_str() );
             
-            mvares.dijet_leadEta    = dijet_leadEta_ ;
-            mvares.dijet_subleadEta = dijet_subleadEta_ ;
-            mvares.dijet_abs_dEta   = dijet_abs_dEta_ ;
-            mvares.dijet_LeadJPt    = dijet_LeadJPt_ ;
-            mvares.dijet_SubJPt     = dijet_SubJPt_ ;
-            mvares.dijet_Zep        = dijet_Zep_ ;
-            mvares.dijet_dphi_trunc = dijet_dphi_trunc_ ;
-            mvares.dijet_dipho_dphi = dijet_dipho_dphi_ ;
-            mvares.dijet_Mjj        = dijet_Mjj_ ;
-            mvares.dipho_PToM       = dipho_PToM_ ;
-            mvares.sublPho_PToM     = sublPho_PToM_ ;
-            mvares.leadPho_PToM     = leadPho_PToM_ ;
-            mvares.dijet_minDRJetPho= dijet_minDRJetPho_;
-            mvares.dijet_dy         = dijet_dy_;
-            mvares.dijet_dipho_pt   = dijet_dipho_pt_ ;
-            mvares.dijet_leady      = dijet_leady_   ;
-            mvares.dijet_subleady   = dijet_subleady_;
+            mvares.dijet_leadEta     = dijet_leadEta_ ;
+            mvares.dijet_subleadEta  = dijet_subleadEta_ ;
+            mvares.dijet_abs_dEta    = dijet_abs_dEta_ ;
+            mvares.dijet_LeadJPt     = dijet_LeadJPt_ ;
+            mvares.dijet_pt          = dijet_pt_ ;
+            mvares.dijet_SubJPt      = dijet_SubJPt_ ;
+            mvares.dijet_Zep         = dijet_Zep_ ;
+            mvares.dijet_centrality_gg = dijet_centrality_gg_ ;
+            mvares.dijet_centrality_g  = dijet_centrality_g_ ;
+            mvares.dijet_dphi_trunc  = dijet_dphi_trunc_ ;
+            mvares.dijet_dipho_dphi  = dijet_dipho_dphi_ ;
+            mvares.dijet_Mjj         = dijet_Mjj_ ;
+            mvares.dipho_PToM        = dipho_PToM_ ;
+            mvares.sublPho_PToM      = sublPho_PToM_ ;
+            mvares.leadPho_PToM      = leadPho_PToM_ ;
+            mvares.dijet_minDRJetPho = dijet_minDRJetPho_;
+            mvares.dijet_dy          = dijet_dy_;
+            mvares.dijet_dipho_pt    = dijet_dipho_pt_ ;
+            mvares.dijet_leady       = dijet_leady_   ;
+            mvares.dijet_subleady    = dijet_subleady_;
             
             vbf_results->push_back( mvares );
         }
