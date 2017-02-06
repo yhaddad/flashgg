@@ -1,0 +1,18 @@
+{
+    "cmdLine"  : "campaign=RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2 puTarget=2.39e+05,8.38e+05,2.31e+06,3.12e+06,4.48e+06,6e+06,7e+06,1.29e+07,3.53e+07,7.87e+07,1.77e+08,3.6e+08,6.03e+08,8.77e+08,1.17e+09,1.49e+09,1.76e+09,1.94e+09,2.05e+09,2.1e+09,2.13e+09,2.15e+09,2.13e+09,2.06e+09,1.96e+09,1.84e+09,1.7e+09,1.55e+09,1.4e+09,1.24e+09,1.09e+09,9.37e+08,7.92e+08,6.57e+08,5.34e+08,4.27e+08,3.35e+08,2.58e+08,1.94e+08,1.42e+08,1.01e+08,6.9e+07,4.55e+07,2.88e+07,1.75e+07,1.02e+07,5.64e+06,2.99e+06,1.51e+06,7.32e+05,3.4e+05,1.53e+05,6.74e+04,3.05e+04,1.52e+04,8.98e+03,6.5e+03,5.43e+03,4.89e+03,4.52e+03,4.21e+03,3.91e+03,3.61e+03,3.32e+03,3.03e+03,2.75e+03,2.47e+03,2.21e+03,1.97e+03,1.74e+03,1.52e+03,1.32e+03,1.14e+03,983,839",
+    "processes": {
+        "Data": [
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016B-23Sep2016-v2-2366c4343141c765b2996ae305da0b97/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016B-23Sep2016-v3-2366c4343141c765b2996ae305da0b97/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016C-23Sep2016-v1-2366c4343141c765b2996ae305da0b97/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016D-23Sep2016-v1-2366c4343141c765b2996ae305da0b97/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016E-23Sep2016-v1-2366c4343141c765b2996ae305da0b97/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016F-23Sep2016-v1-2366c4343141c765b2996ae305da0b97/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016G-23Sep2016-v1-56157a2727a0c1c384898c280a0f972f/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016H-PromptReco-v2-531158c93170d8cd2bdb89d7c81ef33d/USER",
+            "/SingleElectron/ferrif-RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016H-PromptReco-v3-531158c93170d8cd2bdb89d7c81ef33d/USER"
+            ]
+    }
+}
+
+

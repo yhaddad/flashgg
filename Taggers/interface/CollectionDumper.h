@@ -325,6 +325,7 @@ namespace flashgg {
     template<class C, class T, class U>
         void CollectionDumper<C, T, U>::endJob()
         {
+            std::cout << "-- end job 1 =----" << std::endl;
          if(dumpPdfWeights_){
           for (auto &dumper: dumpers_){
             for (unsigned int i =0; i < dumper.second.size() ; i++){
@@ -335,6 +336,7 @@ namespace flashgg {
             }
            }
           }
+         std::cout << "-- end job 2 =----" << std::endl;
         }
          
 

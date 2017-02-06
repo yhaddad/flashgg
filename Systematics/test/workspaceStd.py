@@ -134,6 +134,22 @@ if customize.doFiducial:
     process.flashggTagSequence.replace(process.flashggUntagged, process.flashggSigmaMoMpToMTag)
 
 
+#process.flashggTagSequence.remove(process.flashggVBFTag)
+#process.flashggTagSequence.remove(process.flashggTTHLeptonicTag)
+#process.flashggTagSequence.remove(process.flashggTTHHadronicTag)
+#haven't tested VH tags with fiducial cross-section measurement yet
+#process.flashggTagSequence.remove(process.flashggVHEtTag)
+#process.flashggTagSequence.remove(process.flashggVHLooseTag)
+#process.flashggTagSequence.remove(process.flashggVHTightTag)
+#process.flashggTagSequence.remove(process.flashggVHMetTag)
+#process.flashggTagSequence.remove(process.flashggWHLeptonicTag)
+#process.flashggTagSequence.remove(process.flashggZHLeptonicTag)
+#process.flashggTagSequence.remove(process.flashggVHLeptonicLooseTag)
+#process.flashggTagSequence.remove(process.flashggVHHadronicTag)
+#process.flashggTagSequence.replace(process.flashggUntagged, process.flashggSigmaMoMpToMTag)
+#process.flashggTagSequence.replace(process.flashggSigmaMoMpToMTag)
+
+
 print 'here we print the tag sequence after'
 print process.flashggTagSequence
 
@@ -232,11 +248,13 @@ from flashgg.MetaData.samples_utils import SamplesManager
 
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
-"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_094103/0000/myMicroAODOutputFile_1.root"
+                                 #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_094103/0000/myMicroAODOutputFile_1.root"
+                                 #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/VHToGG_M120_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_094407/0000/myMicroAODOutputFile_19.root"
 #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2/2_2_0/VBFHToGG_M125_13TeV_amcatnlo_pythia8/RunIISpring16DR80X-2_2_0-25ns_ICHEP16_MiniAODv2-2_2_0-v0-RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext2-v1/160707_150558/0000/myMicroAODOutputFile_25.root"
 #"file:/afs/cern.ch/work/s/sethzenz/fromscratch107/CMSSW_8_0_8_patch1/src/flashgg/myMicroAODOutputFile.root"
 #"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_0_0-25ns/2_0_0/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring16DR80X-2_0_0-25ns-2_0_0-v0-RunIISpring16MiniAODv1-PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/160524_093752/0000/myMicroAODOutputFile_1.root"
-        #"file:myMicroAODOutputFile.root"
+                                 "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2_p3/2_3_0/SingleElectron/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2_p3-2_3_0-v0-Run2016D-23Sep2016-v1/170117_104152/0000/myMicroAODOutputFile_7.root"
+                                 #"file:/home/hep/yhaddad/work/temp/CMSSW_8_0_25/src/flashgg/myMicroAODOutputFile_19.root"
         #        "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/VBFHToGG_M-125_13TeV_powheg_pythia8/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/160105_224017/0000/myMicroAODOutputFile_1.root"
 #        "root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/szenz/flashgg/RunIISpring15-ReReco74X-Rerun-1_1_0-25ns/1_2_0/DoubleEG/RunIISpring15-ReReco74X-Rerun-1_1_0-25ns-1_2_0-v0-Run2015D-04Dec2015-v2/160117_214114/0000/myMicroAODOutputFile_10.root"
 #        "root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISpring15-ReMiniAOD-1_1_0-25ns/1_1_0/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/RunIISpring15-ReMiniAOD-1_1_0-25ns-1_1_0-v0-RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/160105_224456/0000/myMicroAODOutputFile_2.root"
@@ -290,7 +308,7 @@ if customize.doFiducial:
 else:
     tagList=[
         ["UntaggedTag",4],
-        ["VBFTag",2],
+        ["VBFTag",3],
         ["ZHLeptonicTag",0],
         ["WHLeptonicTag",0],
         ["VHLeptonicLooseTag",0],
@@ -489,7 +507,7 @@ process.flashggTagSorter.BlindedSelectionPrintout = True
 #print >> processDumpFile, process.dumpPython()
 
 # set default options if needed
-customize.setDefault("maxEvents",300)
+#customize.setDefault("maxEvents",300)
 customize.setDefault("targetLumi",1.00e+3)
 # call the customization
 customize(process)
