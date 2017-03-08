@@ -108,7 +108,7 @@ namespace flashgg {
     double VBFTagProducer::getJetVetoWeight(JetVetoUnctSource source, int Njets30, double Nsig=+1.0)
     {
         // Cross sections in the =0, =1, and >=2 jets of Powheg ggH after reweighing scaled to
-        static vector<double> sig({30.26,13.12,5.14});
+        static vector<double> sig({30.26,13.12,5.14}); // need to be updated with the NNLOPS sample
 
         // BLPTW absolute uncertainties in pb
         static vector<double> yieldUnc({ 1.12, 0.66, 0.42});
@@ -118,10 +118,8 @@ namespace flashgg {
         
         // account for missing EW+quark mass effects by scaling BLPTW total cross section to sigma(N3LO)
         // need to rescale the ggF XS to the N3LO calculation from YR4
-        // in flashgg the GGF "xs" is 48.58pb, which is the best prediction for the production cross section of a
-        // Higgs boson with a mass m H = 125 GeV at the LHC with a centre-of-mass energy of 13 TeV
-        // 
-        double sf = 1.0; // we are already using the best value 
+        // in flashgg the GGF "xs" is 48.58pb, 
+        double sf = 48.52/47.41; 
         int jetBin = (Njets30 > 1 ? 2 : Njets30);
         
         // three type of uncertainties, yiedls, resumation and jet-bin migration
