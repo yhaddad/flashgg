@@ -24,18 +24,20 @@ using namespace std;
 using namespace edm;
 
 namespace flashgg {
-
+    // enum for QCD scale uncertainty source
+    enum JetVetoUnctSource { yield=1, resum=2, mig01=3, mig12=4 };
     class VBFTagProducer : public EDProducer
     {
-
+        
     public:
         typedef math::XYZPoint Point;
-
+        
         VBFTagProducer( const ParameterSet & );
 
     private:
         void produce( Event &, const EventSetup & ) override;
         int  chooseCategory( float );
+        double getJetVetoWeight(JetVetoUnctSource , int, double);
 
         EDGetTokenT<View<DiPhotonCandidate> >      diPhotonToken_;
         EDGetTokenT<View<VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResultToken_;
@@ -46,13 +48,14 @@ namespace flashgg {
         edm::EDGetTokenT<vector<flashgg::PDFWeightObject> > WeightToken_;
         EDGetTokenT<int> stage0catToken_, stage1catToken_, njetsToken_;
         EDGetTokenT<float> pTHToken_,pTVToken_;
-
+        
         string systLabel_;
 
         bool dropNonGoldData_;
         bool setArbitraryNonGoldMC_;
         bool requireVBFPreselection_;
         bool getQCDWeights_;
+        bool getJetVetoWeights_;
 
         vector<double> boundaries;
 
@@ -69,7 +72,8 @@ namespace flashgg {
         dropNonGoldData_   ( iConfig.getParameter<bool> ( "DropNonGoldData" ) ),
         setArbitraryNonGoldMC_   ( iConfig.getParameter<bool> ( "SetArbitraryNonGoldMC" ) ),
         requireVBFPreselection_   ( iConfig.getParameter<bool> ( "RequireVBFPreselection" ) ),
-        getQCDWeights_( iConfig.getParameter<bool>( "GetQCDWeights" ) )
+        getQCDWeights_( iConfig.getParameter<bool>( "GetQCDWeights" ) ),
+        getJetVetoWeights_( iConfig.getParameter<bool>( "GetJetVetoWeights" ) )
     {
         boundaries = iConfig.getParameter<vector<double > >( "Boundaries" );
         assert( is_sorted( boundaries.begin(), boundaries.end() ) ); // we are counting on ascending order - update this to give an error message or exception
@@ -94,6 +98,40 @@ namespace flashgg {
         }
         return -1; // Does not pass, object will not be produced
     }
+
+    // the following implementation is based on a preliminary recipe from :
+    // https://indico.cern.ch/event/581691/contributions/2373167/attachments/1371942/2081220/WG1_meeting_towards_ggF_uncertainty_perscription.pdf
+    // --- 
+    // Event weight for propagation of QCD scale uncertainty
+    // Input: Number of truth (particle) jets with pT>30 GeV, built excluding the Higgs decay
+    // Number of sigma variation (+1 for "up", -1 for "down")
+    double VBFTagProducer::getJetVetoWeight(JetVetoUnctSource source, int Njets30, double Nsig=+1.0)
+    {
+        // Cross sections in the =0, =1, and >=2 jets of Powheg ggH after reweighing scaled to
+        static vector<double> sig({30.26,13.12,5.14});
+
+        // BLPTW absolute uncertainties in pb
+        static vector<double> yieldUnc({ 1.12, 0.66, 0.42});
+        static vector<double> resUnc  ({ 0.03, 0.57, 0.42});
+        static vector<double> cut01Unc({-1.22, 1.00, 0.21});
+        static vector<double> cut12Unc({    0,-0.86, 0.86});
+        
+        // account for missing EW+quark mass effects by scaling BLPTW total cross section to sigma(N3LO)
+        // need to rescale the ggF XS to the N3LO calculation from YR4
+        // in flashgg the GGF "xs" is 48.58pb, which is the best prediction for the production cross section of a
+        // Higgs boson with a mass m H = 125 GeV at the LHC with a centre-of-mass energy of 13 TeV
+        // 
+        double sf = 1.0; // we are already using the best value 
+        int jetBin = (Njets30 > 1 ? 2 : Njets30);
+        
+        // three type of uncertainties, yiedls, resumation and jet-bin migration
+        // this will return a weight as centred to 1
+        if ( source == yield ) return 1.0 + Nsig*yieldUnc[jetBin]/sig[jetBin]*sf;
+        if ( source == resum ) return 1.0 + Nsig*resUnc  [jetBin]/sig[jetBin]*sf;
+        if ( source == mig01 ) return 1.0 + Nsig*cut01Unc[jetBin]/sig[jetBin]*sf;
+        return 1.0 + Nsig*cut12Unc[jetBin]/sig[jetBin]*sf;
+    }
+    
     
     void VBFTagProducer::produce( Event &evt, const EventSetup & )
     {
@@ -121,7 +159,7 @@ namespace flashgg {
         if (getQCDWeights_) {
             evt.getByToken( WeightToken_, WeightHandle );
         }
-
+        
         std::auto_ptr<vector<VBFTag> >      tags  ( new vector<VBFTag> );
         std::auto_ptr<vector<VBFTagTruth> > truths( new vector<VBFTagTruth> );
 
@@ -223,7 +261,24 @@ namespace flashgg {
                     }
                 }
             }
-            
+            if ( getJetVetoWeights_ ) {
+                unsigned int nGenJet30 = 0;
+                for( unsigned int gjLoop = 0 ; gjLoop < genJets->size() ; gjLoop++ ) {
+                    if (genJets->ptrAt( gjLoop )->pt() > 30.0) nGenJet30++;
+                }
+                // filling the yield uncert      
+                tag_obj.setJetVetoUp  (0, getJetVetoWeight(yield, nGenJet30 , 1.0 ));
+                tag_obj.setJetVetoDown(0, getJetVetoWeight(yield, nGenJet30 ,-1.0 ));
+                // filling the resumation uncert
+                tag_obj.setJetVetoUp  (1, getJetVetoWeight(resum, nGenJet30 , 1.0 ));
+                tag_obj.setJetVetoDown(1, getJetVetoWeight(resum, nGenJet30 ,-1.0 ));
+                // filling the jet bin migration 0->1 uncert
+                tag_obj.setJetVetoUp  (2, getJetVetoWeight(mig01, nGenJet30 , 1.0 ));
+                tag_obj.setJetVetoDown(2, getJetVetoWeight(mig01, nGenJet30 ,-1.0 ));
+                // filling the jet bin migration 1->2 uncert
+                tag_obj.setJetVetoUp  (3, getJetVetoWeight(mig12, nGenJet30 , 1.0 ));
+                tag_obj.setJetVetoDown(3, getJetVetoWeight(mig12, nGenJet30 ,-1.0 ));
+            }
             if ( getQCDWeights_ ) {
                 for( unsigned int weight_index = 0; weight_index < (*WeightHandle).size(); weight_index++ ){
                     vector<uint16_t> compressed_weights = (*WeightHandle)[weight_index].pdf_weight_container;
@@ -239,8 +294,8 @@ namespace flashgg {
                         tag_obj.setPdf(j-1,uncompressed[j]/uncompressed[0]);
                     }
                     //                    for( unsigned int j=0; j<(*WeightHandle)[weight_index].alpha_s_container.size();j++ ) {
-                        //                        cout << "compressed variation " << (*WeightHandle)[weight_index].alpha_s_container[j] << endl;
-                        //                        cout << "uncompressed variation " << j << " " << uncompressed_alpha[j] << endl;
+                    //                        cout << "compressed variation " << (*WeightHandle)[weight_index].alpha_s_container[j] << endl;
+                    //                        cout << "uncompressed variation " << j << " " << uncompressed_alpha[j] << endl;
                     //                    }
                     tag_obj.setAlphaUp(uncompressed_alpha[0]/uncompressed[0]);
                     tag_obj.setAlphaDown(uncompressed_alpha[1]/uncompressed[0]);
@@ -252,16 +307,16 @@ namespace flashgg {
                     tag_obj.setScaleDown(2,uncompressed_scale[8]/uncompressed_scale[0]);
 
                     //                    for( unsigned int j=0; j<(*WeightHandle)[weight_index].qcd_scale_container.size();j++ ) {
-                        //                        cout << "compressed scale " << (*WeightHandle)[weight_index].qcd_scale_container[j] << endl;
-                        //                        cout << "uncompressed scale " << j << " " << uncompressed_scale[j] << endl;
+                    //                        cout << "compressed scale " << (*WeightHandle)[weight_index].qcd_scale_container[j] << endl;
+                    //                        cout << "uncompressed scale " << j << " " << uncompressed_scale[j] << endl;
                     //                    }
-
+                    
                     //                    std::cout << "Alpha Up: " << tag_obj.alphaUp() << std::endl;
                     //                    std::cout << "Alpha Down: " << tag_obj.alphaDown() <<std::endl;
-
+                    
                     //                    for ( unsigned int j = 0 ; j < 3 ; j++) {
-                        //                        std::cout << "Scale Up [" << j << "]: " << tag_obj.scaleUp(j) << std::endl;
-                        //                        std::cout << "Scale Down [" << j  << "]: " << tag_obj.scaleDown(j) << std::endl;
+                    //                        std::cout << "Scale Up [" << j << "]: " << tag_obj.scaleUp(j) << std::endl;
+                    //                        std::cout << "Scale Down [" << j  << "]: " << tag_obj.scaleDown(j) << std::endl;
                     //                    }
                     
                     
