@@ -32,7 +32,10 @@ namespace flashgg {
         const bool leadingJet_match()       const { return hasValidVBFDiJet() ? (leadingJet_ptr()->genJet()!=0)      : false;}
         const bool subLeadingJet_match()    const { return hasValidVBFDiJet() ? (subLeadingJet_ptr()->genJet()!=0)   : false;}
         const bool subSubLeadingJet_match() const { return hasValidVBFDiJet() ? (subSubLeadingJet_ptr()->genJet()!=0): false;}
-
+        const unsigned  nJet30()    const {return vbfDiPhoDiJet_mva_result_.vbfMvaResult.n_rec_jets; }
+        const unsigned  nGenJet30() const {return ngenjet30_ ; }
+        void setNGenJet30(unsigned val) { ngenjet30_ = val; }
+        
         const float leading_pujidMVA   () const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.leadJet_ptr->puJetIdMVA() : -9999.;}
         const float subleading_pujidMVA() const { return  hasValidVBFDiJet() ? vbfDiPhoDiJet_mva_result_.vbfMvaResult.subleadJet_ptr->puJetIdMVA() : -9999.;}
         
@@ -83,6 +86,9 @@ namespace flashgg {
     private:
         VBFDiPhoDiJetMVAResult vbfDiPhoDiJet_mva_result_;
 
+        unsigned njet30_;
+        unsigned ngenjet30_;
+        
         float alphaUp_;
         float alphaDown_;
         float scaleUp_[3];
