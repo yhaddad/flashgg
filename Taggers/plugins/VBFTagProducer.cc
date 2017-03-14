@@ -259,11 +259,15 @@ namespace flashgg {
                     }
                 }
             }
+            unsigned int nGenJet30 = 0;
+            for( unsigned int gjLoop = 0 ; gjLoop < genJets->size() ; gjLoop++ ) {
+                if (genJets->ptrAt( gjLoop )->pt() > 30.0) nGenJet30++;
+            }
+            //std::cout << "[debug] NGenJets : " << nGenJet30 << std::endl;
+            tag_obj.setNGenJet30(nGenJet30);
+            //std::cout << "[debug] NGenJets from VBFTag:  " << tag_obj.nGenJet30() << std::endl;
+            
             if ( getJetVetoWeights_ ) {
-                unsigned int nGenJet30 = 0;
-                for( unsigned int gjLoop = 0 ; gjLoop < genJets->size() ; gjLoop++ ) {
-                    if (genJets->ptrAt( gjLoop )->pt() > 30.0) nGenJet30++;
-                }
                 // filling the yield uncert      
                 tag_obj.setJetVetoUp  (0, getJetVetoWeight(yield, nGenJet30 , 1.0 ));
                 tag_obj.setJetVetoDown(0, getJetVetoWeight(yield, nGenJet30 ,-1.0 ));

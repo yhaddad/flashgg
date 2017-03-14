@@ -23,6 +23,8 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0_20"):
     process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2_v1'
 elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0_25"):
         process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'
+elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0_26"):
+        process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'
 elif os.environ["CMSSW_VERSION"].count("CMSSW_7_4"):
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
 else:
@@ -187,8 +189,8 @@ process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
                                  #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/161114_094221/0000/myMicroAODOutputFile_62.root"
                                  #"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/VBFHToGG_M125_13TeV_amcatnlo_pythia8_CUETP8M1Down/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/170114_093048/0000/myMicroAODOutputFile_2.root"
-                                 #"root://xrootd-cms.infn.it//store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/170113_234241/0000/myMicroAODOutputFile_1.root"
-                                 "file:/vols/cms/jwright/ForYacine/myMicroAODOutputFile_1.root"
+                                 "root://xrootd-cms.infn.it//store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/170113_234241/0000/myMicroAODOutputFile_1.root"
+                                 #"file:/vols/cms/jwright/ForYacine/myMicroAODOutputFile_1.root"
                                  #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2_p3/2_3_0/DoubleEG/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2_p3-2_3_0-v0-Run2016G-23Sep2016-v1/170116_174903/0000/myMicroAODOutputFile_4.root"
                              )
 )
@@ -249,7 +251,7 @@ for syst in jetsystlabels:
 # get the variable list
 import flashgg.Taggers.VBFTagVariables as var
 new_variables = [
-    "n_jets               := VBFMVA.n_rec_jets",
+    "n_jet_30             := VBFMVA.n_rec_jets",
     "dijet_jet1_RMS       := leading_rms",
     "dijet_jet2_RMS       := subLeading_rms",
     "dijet_jet1_QGL       := leading_QGL",
@@ -257,7 +259,8 @@ new_variables = [
     "dijet_jet1_pujid_mva := leading_pujidMVA()",
     "dijet_jet2_pujid_mva := subleading_pujidMVA()",
     "dipho_pt             := diPhoton.pt",
-    "dijet_pt             := VBFMVA.dijet_pt"
+    "dijet_pt             := VBFMVA.dijet_pt",
+    "n_gen_jet_30         := nGenJet30()"
 ]
 
 matching_photon = [
