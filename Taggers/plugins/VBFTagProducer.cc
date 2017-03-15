@@ -261,7 +261,11 @@ namespace flashgg {
             }
             unsigned int nGenJet30 = 0;
             for( unsigned int gjLoop = 0 ; gjLoop < genJets->size() ; gjLoop++ ) {
-                if (genJets->ptrAt( gjLoop )->pt() > 30.0) nGenJet30++;
+                //Remove photons        
+                edm::Ptr<reco::GenJet> gj = genJets->ptrAt( gjLoop );
+                float dr_leadPhoton    = deltaR( gj->eta(), gj->phi(),dipho->leadingPhoton()->eta(),dipho->leadingPhoton()->phi() ); 
+                float dr_subLeadPhoton = deltaR( gj->eta(), gj->phi(),dipho->subLeadingPhoton()->eta(),dipho->subLeadingPhoton()->phi() ); 
+                if( dr_leadPhoton > 0.1 && dr_subLeadPhoton > 0.1 && gj->pt() > 30.0) nGenJet30++;
             }
             //std::cout << "[debug] NGenJets : " << nGenJet30 << std::endl;
             tag_obj.setNGenJet30(nGenJet30);
@@ -280,6 +284,11 @@ namespace flashgg {
                 // filling the jet bin migration 1->2 uncert
                 tag_obj.setJetVetoUp  (3, getJetVetoWeight(mig12, nGenJet30 , 1.0 ));
                 tag_obj.setJetVetoDown(3, getJetVetoWeight(mig12, nGenJet30 ,-1.0 ));
+                //std::cout << "[debug] NGenJets : " << nGenJet30 << std::endl;
+                //std::cout << "\t yield = " << tag_obj.JetVetoUp(0) << " " << tag_obj.JetVetoDown(0) << std::endl;
+                //std::cout << "\t resum = " << tag_obj.JetVetoUp(1) << " " << tag_obj.JetVetoDown(1) << std::endl;
+                //std::cout << "\t mig01 = " << tag_obj.JetVetoUp(2) << " " << tag_obj.JetVetoDown(2) << std::endl;
+                //std::cout << "\t mig12 = " << tag_obj.JetVetoUp(3) << " " << tag_obj.JetVetoDown(3) << std::endl; 
             }
             if ( getQCDWeights_ ) {
                 for( unsigned int weight_index = 0; weight_index < (*WeightHandle).size(); weight_index++ ){
