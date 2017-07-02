@@ -40,6 +40,7 @@
 #include "flashgg/DataFormats/interface/WeightedObject.h"
 #include "flashgg/DataFormats/interface/PDFWeightObject.h"
 #include "flashgg/DataFormats/interface/ZPlusJetTag.h"
+#include "flashgg/DataFormats/interface/ZPlusGammaTag.h"
 #include "flashgg/DataFormats/interface/TagCandidate.h"
 
 #include <vector>
@@ -174,6 +175,10 @@ namespace  {
         flashgg::ZPlusJetTag zpj_res;
         std::vector<flashgg::ZPlusJetTag> vec_zpj_res;
         edm::Wrapper<std::vector<flashgg::ZPlusJetTag> > wrp_vec_zpj_res;
+
+        flashgg::ZPlusGammaTag zpg_res;
+        std::vector<flashgg::ZPlusGammaTag> vec_zpg_res;
+        edm::Wrapper<std::vector<flashgg::ZPlusGammaTag> > wrp_vec_zpg_res;
 
         flashgg::VBFDiPhoDiJetMVAResult vbfDiPhoDiJet_res;
         std::vector<flashgg::VBFDiPhoDiJetMVAResult> vec_vbfDiPhoDiJet_res;

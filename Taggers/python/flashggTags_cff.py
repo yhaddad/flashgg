@@ -502,4 +502,10 @@ flashggZPlusJetTag = cms.EDProducer("FlashggZPlusJetTagProducer",
                                     GenParticleTag=cms.InputTag( "flashggPrunedGenParticles" ),
                                     GenJetTag = cms.InputTag("slimmedGenJets")
                                     )
-
+flashggZPlusGammaTag = cms.EDProducer("FlashggZPlusGammaTagProducer",
+                                    DiPhotonTag    = cms.InputTag('flashggPreselectedDiPhotons'),
+                                    SystLabel      = cms.string(""),
+                                    MVAResultTag   = cms.InputTag('flashggDiPhotonMVA'),
+                                    inputTagPhotons= cms.InputTag("flashggRandomizedPhotons"),
+                                    GenParticleTag=cms.InputTag( "flashggPrunedGenParticles" )
+                                    )

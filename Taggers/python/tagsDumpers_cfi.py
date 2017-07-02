@@ -21,6 +21,7 @@ dict = {'UntaggedTag': 'untagged',
         'VHTightTag': 'vh',
         'VHHadronicTag': 'vh',
         'ZPlusJetTag':'zjet',
+	'ZPlusGammaTag':'zgamma',
         'WHLeptonicTag': 'vh',
         'VHLeptonicLooseTag': 'vh',
         'ZHLeptonicTag': 'vh'}

@@ -25,10 +25,10 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 if   os.environ["CMSSW_VERSION"].count("CMSSW_7_6"):
     process.GlobalTag.globaltag = '76X_mcRun2_asymptotic_v12'
-elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
-    process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2'
 elif os.environ["CMSSW_VERSION"].count("CMSSW_7_4"):
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
+elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
+    process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v8'
 else:
     raise Exception,"Could not find a sensible CMSSW_VERSION for default globaltag"
 
@@ -72,7 +72,6 @@ mva_wp = {
         [-0.96, -0.34, -0.24, -0.26],
         [-0.92, -0.21, -0.07, -0.03],
         [-0.77, 0.17 , 0.25 ,  0.33]
-        #[0.87, 0.17 , 0.25 ,  0.33]
     ],
     "forward_tight" : [
         [-1, -0.34, -0.24, -0.26],

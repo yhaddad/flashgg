@@ -1,0 +1,21 @@
+{
+    "cmdLine"  : "campaign=RunIISummer16-2_4_1-25ns_Moriond17", 
+    "processes": {
+	"ww" : [
+		"/WW_TuneCUETP8M1_13TeV-pythia8/sethzenz-RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1-17c645750168c82731e0bcef4523b51c/USER"	
+	],
+	"zz2l2q" : [
+		"/ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8"
+	],
+	"wz2l2q" :[
+		"/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8"
+	],
+	"wglnug":[
+		"/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8"
+	],
+	"zg2lg":[
+		"/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8"
+	]
+
+    }
+}

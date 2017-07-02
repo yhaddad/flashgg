@@ -21,8 +21,10 @@ elif os.environ["CMSSW_VERSION"].count("CMSSW_7_4"):
     process.GlobalTag.globaltag = '74X_mcRun2_asymptotic_v4'
 elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
     process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2'
-elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0_25"):
+elif os.environ["CMSSW_VERSION"].count("CMSSW_7_0_25"):
     process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'    
+elif os.environ["CMSSW_VERSION"].count("CMSSW_8_0_28"):
+    process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'
 else:
     raise Exception,"Could not find a sensible CMSSW_VERSION for default globaltag"
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
@@ -41,8 +43,8 @@ print "customize.processId:",customize.processId
 
 from flashgg.Systematics.SystematicsCustomize import *
 jetSystematicsInputTags = createStandardSystematicsProducers(process)
-process.flashggTagSequence=cms.Sequence(process.flashggPreselectedDiPhotons*process.flashggDiPhotonMVA*process.flashggZPlusJetTag)
-modifyTagSequenceForSystematics(process,jetSystematicsInputTags,customize.doJetSystTrees)
+process.flashggTagSequence=cms.Sequence(process.flashggPreselectedDiPhotons*process.flashggDiPhotonMVA*process.flashggZPlusGammaTag)
+modifyTagSequenceForSystematics(process,jetSystematicsInputTags,customize.doJetSystTrees*3)
 
 systlabels     = [""]
 phosystlabels  = []
@@ -101,9 +103,12 @@ from flashgg.MetaData.samples_utils import SamplesManager
 process.source = cms.Source ("PoolSource",
                              fileNames = cms.untracked.vstring(
                                  #"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_HCALDebug_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170114_082421/0000/myMicroAODOutputFile_9.root"
-    #                             "/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleEG/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016D-23Sep2016-v1/161117_082833/0000/myMicroAODOutputFile_99.root"
+                                 #"/store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DoubleEG/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-Run2016D-23Sep2016-v1/161117_082833/0000/myMicroAODOutputFile_99.root"
+#				"/store/group/phys_higgs/cmshgg/sethzenz/flashgg/ReMiniAOD-03Feb2017-2_5_5/2_5_5/JetHT/ReMiniAOD-03Feb2017-2_5_5-2_5_5-v0-Run2016H-03Feb2017_ver2-v1/170629_130229/0001/myMicroAODOutputFile_1849.root"
+#"root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/ferriff/flashgg/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2/2_3_0/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16DR80X-2_3_0-25ns_Moriond17_MiniAODv2-2_3_0-v0-RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/161116_144152/0000/myMicroAODOutputFile_54.root"
 "root://eoscms.cern.ch//eos/cms//store/group/phys_higgs/cmshgg/sethzenz/flashgg/RunIISummer16-2_4_1-25ns_Moriond17/2_4_1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_UpPS/RunIISummer16-2_4_1-25ns_Moriond17-2_4_1-v0-RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/170212_130540/0000/myMicroAODOutputFile_12.root"
-                             )
+
+			)                             
 )
 
 process.TFileService = cms.Service("TFileService",
@@ -112,13 +117,13 @@ process.TFileService = cms.Service("TFileService",
 import flashgg.Taggers.dumperConfigTools as cfgTools
 from  flashgg.Taggers.tagsDumpers_cfi import createTagDumper
 
-process.ZPlusJetTagDumper = createTagDumper("ZPlusJetTag")
-process.ZPlusJetTagDumper.dumpTrees     = True
-process.ZPlusJetTagDumper.dumpHistos    = True
-process.ZPlusJetTagDumper.dumpWorkspace = False
+process.ZPlusGammaTagDumper = createTagDumper("ZPlusGammaTag")
+process.ZPlusGammaTagDumper.dumpTrees     = True
+process.ZPlusGammaTagDumper.dumpHistos    = True
+process.ZPlusGammaTagDumper.dumpWorkspace = False
 
 if customize.doJetSystTrees:
-    process.ZPlusJetTagDumper.src = cms.InputTag("flashggSystTagMerger")
+    process.ZPlusGammaTagDumper.src = cms.InputTag("flashggSystTagMerger")
 
 # DY
 process.flashggPreselectedDiPhotons.variables =  cms.vstring('pfPhoIso03', 
@@ -136,33 +141,27 @@ print "jetsystlabels_ type ::", type(jetsystlabels_)
 # get the variable list
 import flashgg.Taggers.VBFTagVariables as var
 new_variables = [
-    "n_jets                     := nJets",
-    "jetPt                      := jetPt",
-    "jetEta                     := jetEta",
-    "jetPhi                     := jetPhi",
-    "jet_HFHadronEnergyFraction := jet_HFHadronEnergyFraction",
-    "jet_HFHadronEnergy         := jet_HFHadronEnergy",
-    "jet_HFHadronMultiplicity   := jet_HFHadronMultiplicity",
-    "jet_HFEMEnergyFraction     := jet_HFEMEnergyFraction",
-    "jet_HFEMEnergy             := jet_HFEMEnergy",
-    "jet_HFEMMultiplicity       := jet_HFEMMultiplicity",
-    "jet_rms                    := jet_rms", 
-    "jet_QGL                    := jet_QGL", 
-    "jet_rawPt                  := jet_rawPt", 
-    "zMass                      := zMass",
-    "zPt                        := zPt",
-    "zEta                       := zEta",
-    "zPhi                       := zPhi",
-    "deltaPhiZJet               := deltaPhiZJet",
-    "smartIndex                 := smartIndex",
-    "vtxZCoord                  := vtxZCoord",
-    "jet_match      := jet_match"
+    	"photonPt                   := photonPt",
+   	"photonEta                  := photonEta",
+    	"photonPhi                  := photonPhi"#,
+    
+#	"photon_id                     :=  ",
+#	"zMass                      := zMass",
+#    "zPt                        := zPt",
+#    "zEta                       := zEta",
+#    "zPhi                       := zPhi",
+#    "deltaPhiZJet               := deltaPhiZJet",
+#    "smartIndex                 := smartIndex",
+#    "vtxZCoord                  := vtxZCoord"
     ]
 matching_photon = [
-    "prompt_pho_1   := diPhoton.leadingPhoton.genMatchType()",
-    "prompt_pho_2   := diPhoton.subLeadingPhoton.genMatchType()"
+    	"prompt         := photon.genMatchType()",
+	"prompt_pho_1   := diPhoton.leadingPhoton.genMatchType()",
+   	"prompt_pho_2   := diPhoton.subLeadingPhoton.genMatchType()"
     ] 
-all_variables = var.dipho_variables + new_variables 
+all_variables = new_variables
+#all_variables = var.dipho_variables + new_variables 
+
 if customize.processId != "Data":
 #    all_variables += var.truth_variables + matching_photon
     all_variables += matching_photon
@@ -171,17 +170,17 @@ cats = []
 if customize.doJetSystTrees:
     for syst in jetsystlabels_:
         systcutstring = "hasSyst(\"%s\") "%syst
-        cats += [("ZPlusJet_%s"%syst,systcutstring,0)]
+        cats += [("ZPlusGamma_%s"%syst,systcutstring,0)]
 
-cats += [("ZPlusJet","1",0)]
-
-cfgTools.addCategories(process.ZPlusJetTagDumper,
+cats += [("ZPlusGamma","1",0)]
+print '[Yacine] = ',cats 
+cfgTools.addCategories(process.ZPlusGammaTagDumper,
                        cats,
                        variables  = all_variables,
                        histograms = []
 )
 
-process.ZPlusJetTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
+process.ZPlusGammaTagDumper.nameTemplate = "$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL"
 
 customize.setDefault("maxEvents" ,  5000        ) # max-number of events
 customize.setDefault("targetLumi",  1.00e+3  ) # define integrated lumi
@@ -230,7 +229,7 @@ process.p = cms.Path(process.dataRequirements*
 if customize.doJetSystTrees:
     process.p += process.flashggSystTagMerger
 
-process.p += process.ZPlusJetTagDumper
+process.p += process.ZPlusGammaTagDumper
 
 print "--- Dumping modules that take diphotons as input: ---"
 mns = process.p.moduleNames()

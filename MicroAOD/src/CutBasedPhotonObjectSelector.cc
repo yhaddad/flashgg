@@ -37,6 +37,8 @@ namespace flashgg {
             auto name = cat.getUntrackedParameter<string>( "name", Form( "cat%lu", selections_.size() ) );
 
             auto selection = cat.getParameter<vector<edm::ParameterSet> >( "selection" );
+            std::cout << "[Yacine] size selection : "<< selection.size() << std::endl;
+            std::cout << "[Yacine] size functor   : "<< functors_.size() << std::endl;
             assert( selection.size() == functors_.size() );
             auto &selval = selections_[name];
             for( auto &var : selection )  {

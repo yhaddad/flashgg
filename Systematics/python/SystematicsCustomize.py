@@ -75,7 +75,9 @@ def modifyTagSequenceForSystematics(process,jetSystematicsInputTags,ZPlusJetMode
     from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
     for i in range(len(jetSystematicsInputTags)):
         massSearchReplaceAnyInputTag(process.flashggTagSequence,UnpackedJetCollectionVInputTag[i],jetSystematicsInputTags[i])
-
+	
+    if ZPlusJetMode == 3:
+	process.flashggSystTagMerger = cms.EDProducer("ZPlusGammaTagMerger",src=cms.VInputTag("flashggZPlusGammaTag"))	
     if ZPlusJetMode == 2:  # VBF    
         process.flashggSystTagMerger = cms.EDProducer("VBFTagMerger",src=cms.VInputTag("flashggVBFTag"))
     elif ZPlusJetMode:    
