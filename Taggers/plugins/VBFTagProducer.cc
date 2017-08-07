@@ -24,40 +24,38 @@ using namespace std;
 using namespace edm;
 
 namespace flashgg {
-
+    // enum for QCD scale uncertainty source
+    enum JetVetoUnctSource { yield=1, resum=2, mig01=3, mig12=4 };
     class VBFTagProducer : public EDProducer
     {
-
+        
     public:
         typedef math::XYZPoint Point;
-
+        
         VBFTagProducer( const ParameterSet & );
 
     private:
         void produce( Event &, const EventSetup & ) override;
         int  chooseCategory( float );
+        double getJetVetoWeight(JetVetoUnctSource , int, double);
 
         EDGetTokenT<View<DiPhotonCandidate> >      diPhotonToken_;
         EDGetTokenT<View<VBFDiPhoDiJetMVAResult> > vbfDiPhoDiJetMvaResultToken_;
         EDGetTokenT<View<VBFMVAResult> >           vbfMvaResultToken_;
         EDGetTokenT<View<DiPhotonMVAResult> >      mvaResultToken_;
-        EDGetTokenT<View<reco::GenParticle> >      genPartToken_;
+        EDGetTokenT<View<reco::GenParticle> >      genPartToken_
         EDGetTokenT<View<reco::GenJet> >           genJetToken_;
         edm::EDGetTokenT<vector<flashgg::PDFWeightObject> > WeightToken_;
         EDGetTokenT<int> stage0catToken_, stage1catToken_, njetsToken_;
         EDGetTokenT<float> pTHToken_,pTVToken_;
-
+        
         string systLabel_;
 
         bool dropNonGoldData_;
         bool setArbitraryNonGoldMC_;
         bool requireVBFPreselection_;
         bool getQCDWeights_;
-
-        float vbfPreselLeadPtMin_;
-        float vbfPreselSubleadPtMin_;
-
-        float vbfPreselPhoIDMVAMin_;
+        bool getJetVetoWeights_;
 
         vector<double> boundaries;
 
@@ -75,9 +73,7 @@ namespace flashgg {
         setArbitraryNonGoldMC_   ( iConfig.getParameter<bool> ( "SetArbitraryNonGoldMC" ) ),
         requireVBFPreselection_   ( iConfig.getParameter<bool> ( "RequireVBFPreselection" ) ),
         getQCDWeights_( iConfig.getParameter<bool>( "GetQCDWeights" ) ),
-        vbfPreselLeadPtMin_( iConfig.getParameter<double>( "VBFPreselLeadPtMin" ) ),
-        vbfPreselSubleadPtMin_( iConfig.getParameter<double>( "VBFPreselSubleadPtMin" ) ),
-        vbfPreselPhoIDMVAMin_( iConfig.getParameter<double>( "VBFPreselPhoIDMVAMin") )
+        getJetVetoWeights_( iConfig.getParameter<bool>( "GetJetVetoWeights" ) )
     {
         boundaries = iConfig.getParameter<vector<double > >( "Boundaries" );
         assert( is_sorted( boundaries.begin(), boundaries.end() ) ); // we are counting on ascending order - update this to give an error message or exception
@@ -102,7 +98,54 @@ namespace flashgg {
         }
         return -1; // Does not pass, object will not be produced
     }
-    
+
+    // the following implementation is based on a preliminary recipe from :
+    // https://indico.cern.ch/event/581691/contributions/2373167/attachments/1371942/2081220/WG1_meeting_towards_ggF_uncertainty_perscription.pdf
+    // --- 
+    // Event weight for propagation of QCD scale uncertainty
+    // Input: Number of truth (particle) jets with pT>30 GeV, built excluding the Higgs decay
+    // Number of sigma variation (+1 for "up", -1 for "down")
+    double VBFTagProducer::getJetVetoWeight(JetVetoUnctSource source, int Njets30, double Nsig=+1.0)
+    {
+        // Cross sections in the =0, =1, and >=2 jets of Powheg ggH after reweighing scaled to
+        static vector<double> sig({30.26,13.12,5.14}); // need to be updated with the NNLOPS sample
+
+        // BLPTW absolute uncertainties in pb
+        static vector<double> yieldUnc({ 1.12, 0.66, 0.42});
+        static vector<double> resUnc  ({ 0.03, 0.57, 0.42});
+        static vector<double> cut01Unc({-1.22, 1.00, 0.21});
+        static vector<double> cut12Unc({    0,-0.86, 0.86});
+        
+        // account for missing EW+quark mass effects by scaling BLPTW total cross section to sigma(N3LO)
+        // need to rescale the ggF XS to the N3LO calculation from YR4
+        // in flashgg the GGF "xs" is 48.58pb, 
+        double sf = 48.52/47.41; 
+        int jetBin = (Njets30 > 1 ? 2 : Njets30);
+        
+        // three type of uncertainties, yiedls, resumation and jet-bin migration
+        // this will return a weight as centred to 1
+        if ( source == yield ) return 1.0 + Nsig*yieldUnc[jetBin]/sig[jetBin]*sf;
+        if ( source == resum ) return 1.0 + Nsig*resUnc  [jetBin]/sig[jetBin]*sf;
+        if ( source == mig01 ) return 1.0 + Nsig*cut01Unc[jetBin]/sig[jetBin]*sf;
+        return 1.0 + Nsig*cut12Unc[jetBin]/sig[jetBin]*sf;
+    }
+    // Note: the stage 1 STXS index is only used to determine if the current event fulfil the
+    //       VBF topology selection. I.e. only categories
+    //         GG2H_VBFTOPO_JET3VETO = 101, GG2H_VBFTOPO_JET3 = 102,
+    //       are checked
+    //
+    double vbf_2j(int STXS) {
+        if (STXS==101 || STXS == 102) return 0.20; // We have the same estimate as Andrea's == 20.0%
+        return 0.0; // Events with no VBF topology have no VBF uncertainty
+    }
+
+    double vbf_3j(int STXS) {
+        // These are preliminary numbers obtained using the the impved ST method on the DeltaPhi(H,jj)
+        // The results showed a consistency with Andrea's numbers, so we keep Vetoing using STXS but updating the numbers
+        if (STXS==101) return -0.336; // GG2H_VBFTOPO_JET3VETO, tot unc 38%
+        if (STXS==102) return  0.211; // GG2H_VBFTOPO_JET3, tot unc 30.4%
+        return 0.0; // Events with no VBF topology have no VBF uncertainty
+    }    
     void VBFTagProducer::produce( Event &evt, const EventSetup & )
     {
         Handle<int> stage0cat, stage1cat, njets;
@@ -129,7 +172,7 @@ namespace flashgg {
         if (getQCDWeights_) {
             evt.getByToken( WeightToken_, WeightHandle );
         }
-
+        
         std::auto_ptr<vector<VBFTag> >      tags  ( new vector<VBFTag> );
         std::auto_ptr<vector<VBFTagTruth> > truths( new vector<VBFTagTruth> );
 
@@ -231,7 +274,37 @@ namespace flashgg {
                     }
                 }
             }
+            unsigned int nGenJet30 = 0;
+            for( unsigned int gjLoop = 0 ; gjLoop < genJets->size() ; gjLoop++ ) {
+                //Remove photons        
+                edm::Ptr<reco::GenJet> gj = genJets->ptrAt( gjLoop );
+                float dr_leadPhoton    = deltaR( gj->eta(), gj->phi(),dipho->leadingPhoton()->eta(),dipho->leadingPhoton()->phi() ); 
+                float dr_subLeadPhoton = deltaR( gj->eta(), gj->phi(),dipho->subLeadingPhoton()->eta(),dipho->subLeadingPhoton()->phi() ); 
+                if( dr_leadPhoton > 0.1 && dr_subLeadPhoton > 0.1 && gj->pt() > 30.0) nGenJet30++;
+            }
+            //std::cout << "[debug] NGenJets : " << nGenJet30 << std::endl;
+            tag_obj.setNGenJet30(nGenJet30);
+            //std::cout << "[debug] NGenJets from VBFTag:  " << tag_obj.nGenJet30() << std::endl;
             
+            //if ( getJetVetoWeights_ ) {
+                // filling the yield uncert      
+                //tag_obj.setJetVetoUp  (0, getJetVetoWeight(yield, nGenJet30 , 1.0 ));
+                //tag_obj.setJetVetoDown(0, getJetVetoWeight(yield, nGenJet30 ,-1.0 ));
+                // filling the resumation uncert
+                //tag_obj.setJetVetoUp  (1, getJetVetoWeight(resum, nGenJet30 , 1.0 ));
+                //tag_obj.setJetVetoDown(1, getJetVetoWeight(resum, nGenJet30 ,-1.0 ));
+                // filling the jet bin migration 0->1 uncert
+                //tag_obj.setJetVetoUp  (2, getJetVetoWeight(mig01, nGenJet30 , 1.0 ));
+                //tag_obj.setJetVetoDown(2, getJetVetoWeight(mig01, nGenJet30 ,-1.0 ));
+                // filling the jet bin migration 1->2 uncert
+                //tag_obj.setJetVetoUp  (3, getJetVetoWeight(mig12, nGenJet30 , 1.0 ));
+                //tag_obj.setJetVetoDown(3, getJetVetoWeight(mig12, nGenJet30 ,-1.0 ));
+                //std::cout << "[debug] NGenJets : " << nGenJet30 << std::endl;
+                //std::cout << "\t yield = " << tag_obj.JetVetoUp(0) << " " << tag_obj.JetVetoDown(0) << std::endl;
+                //std::cout << "\t resum = " << tag_obj.JetVetoUp(1) << " " << tag_obj.JetVetoDown(1) << std::endl;
+                //std::cout << "\t mig01 = " << tag_obj.JetVetoUp(2) << " " << tag_obj.JetVetoDown(2) << std::endl;
+                //std::cout << "\t mig12 = " << tag_obj.JetVetoUp(3) << " " << tag_obj.JetVetoDown(3) << std::endl; 
+            //}
             if ( getQCDWeights_ ) {
                 for( unsigned int weight_index = 0; weight_index < (*WeightHandle).size(); weight_index++ ){
                     vector<uint16_t> compressed_weights = (*WeightHandle)[weight_index].pdf_weight_container;
@@ -247,8 +320,8 @@ namespace flashgg {
                         tag_obj.setPdf(j-1,uncompressed[j]/uncompressed[0]);
                     }
                     //                    for( unsigned int j=0; j<(*WeightHandle)[weight_index].alpha_s_container.size();j++ ) {
-                        //                        cout << "compressed variation " << (*WeightHandle)[weight_index].alpha_s_container[j] << endl;
-                        //                        cout << "uncompressed variation " << j << " " << uncompressed_alpha[j] << endl;
+                    //                        cout << "compressed variation " << (*WeightHandle)[weight_index].alpha_s_container[j] << endl;
+                    //                        cout << "uncompressed variation " << j << " " << uncompressed_alpha[j] << endl;
                     //                    }
                     tag_obj.setAlphaUp(uncompressed_alpha[0]/uncompressed[0]);
                     tag_obj.setAlphaDown(uncompressed_alpha[1]/uncompressed[0]);
@@ -260,16 +333,16 @@ namespace flashgg {
                     tag_obj.setScaleDown(2,uncompressed_scale[8]/uncompressed_scale[0]);
 
                     //                    for( unsigned int j=0; j<(*WeightHandle)[weight_index].qcd_scale_container.size();j++ ) {
-                        //                        cout << "compressed scale " << (*WeightHandle)[weight_index].qcd_scale_container[j] << endl;
-                        //                        cout << "uncompressed scale " << j << " " << uncompressed_scale[j] << endl;
+                    //                        cout << "compressed scale " << (*WeightHandle)[weight_index].qcd_scale_container[j] << endl;
+                    //                        cout << "uncompressed scale " << j << " " << uncompressed_scale[j] << endl;
                     //                    }
-
+                    
                     //                    std::cout << "Alpha Up: " << tag_obj.alphaUp() << std::endl;
                     //                    std::cout << "Alpha Down: " << tag_obj.alphaDown() <<std::endl;
-
+                    
                     //                    for ( unsigned int j = 0 ; j < 3 ; j++) {
-                        //                        std::cout << "Scale Up [" << j << "]: " << tag_obj.scaleUp(j) << std::endl;
-                        //                        std::cout << "Scale Down [" << j  << "]: " << tag_obj.scaleDown(j) << std::endl;
+                    //                        std::cout << "Scale Up [" << j << "]: " << tag_obj.scaleUp(j) << std::endl;
+                    //                        std::cout << "Scale Down [" << j  << "]: " << tag_obj.scaleDown(j) << std::endl;
                     //                    }
                     
                     
@@ -378,7 +451,34 @@ namespace flashgg {
                 } else {
                     truth_obj.setHTXSInfo( 0, 0, 0, 0., 0. );
                 }
+                if ( getJetVetoWeights_ ) {
+                    // filling the yield uncert
+                    tag_obj.setJetVetoUp  (0, getJetVetoWeight(yield, nGenJet30 , 1.0 ));                               
+                    tag_obj.setJetVetoDown(0, getJetVetoWeight(yield, nGenJet30 ,-1.0 ));
+                    // filling the resumation uncert
+                    tag_obj.setJetVetoUp  (1, getJetVetoWeight(resum, nGenJet30 , 1.0 ));
+                    tag_obj.setJetVetoDown(1, getJetVetoWeight(resum, nGenJet30 ,-1.0 ));
+                    // filling the jet bin migration 0->1 uncert
+                    tag_obj.setJetVetoUp  (2, getJetVetoWeight(mig01, nGenJet30 , 1.0 ));
+                    tag_obj.setJetVetoDown(2, getJetVetoWeight(mig01, nGenJet30 ,-1.0 ));
+                    // filling the jet bin migration 1->2 uncert
+                    tag_obj.setJetVetoUp  (3, getJetVetoWeight(mig12, nGenJet30 , 1.0 ));
+                    tag_obj.setJetVetoDown(3, getJetVetoWeight(mig12, nGenJet30 ,-1.0 ));
+                    // filling the jet vbf 2j uncertainty
+                    tag_obj.setJetVetoUp  (4, vbf_2j( truth_obj.HTXSstage1cat() ));
+                    tag_obj.setJetVetoUp  (4, vbf_2j( truth_obj.HTXSstage1cat() ));
+                    // filling the jet vbf 3j uncertainty
+                    tag_obj.setJetVetoUp  (5, vbf_3j( truth_obj.HTXSstage1cat() ));
+                    tag_obj.setJetVetoUp  (5, vbf_3j( truth_obj.HTXSstage1cat() ));
+                    
 
+                    //std::cout << "[debug] NGenJets : " << nGenJet30 << std::endl;
+                    //std::cout << "\t yield = " << tag_obj.JetVetoUp(0) << " " << tag_obj.JetVetoDown(0) << std::endl;
+                    //std::cout << "\t resum = " << tag_obj.JetVetoUp(1) << " " << tag_obj.JetVetoDown(1) << std::endl;
+                    //std::cout << "\t mig01 = " << tag_obj.JetVetoUp(2) << " " << tag_obj.JetVetoDown(2) << std::endl;
+                    //std::cout << "\t mig12 = " << tag_obj.JetVetoUp(3) << " " << tag_obj.JetVetoDown(3) << std::endl;
+                }
+                
                 // Yacine: filling tagTruth Tag with 3 jets matchings
                 // the idea is to fill the truth_obj using Jack's 
                 // implementation
@@ -551,7 +651,6 @@ namespace flashgg {
 
             bool VBFpresel = 1;
             if ( requireVBFPreselection_ ) {
-
                 /*
                 std::cout << "  Requiring VBF Preselection... dijet_LeadJPt=" << tag_obj.VBFMVA().dijet_LeadJPt
                           << " dijet_SubJPt=" << tag_obj.VBFMVA().dijet_SubJPt
@@ -560,13 +659,11 @@ namespace flashgg {
                           << " dijet_Mjj=" << tag_obj.VBFMVA().dijet_Mjj << std::endl;
                 */
 
-                VBFpresel = ( tag_obj.VBFMVA().dijet_LeadJPt > vbfPreselLeadPtMin_ 
-                              && tag_obj.VBFMVA().dijet_SubJPt > vbfPreselSubleadPtMin_ 
-                              && tag_obj.diPhoton()->leadPhotonId() > vbfPreselPhoIDMVAMin_
-                              && tag_obj.diPhoton()->subLeadPhotonId() > vbfPreselPhoIDMVAMin_
-                              && tag_obj.VBFMVA().leadPho_PToM > (1./3) 
-                              && tag_obj.VBFMVA().sublPho_PToM > (1./4) 
-                              && tag_obj.VBFMVA().dijet_Mjj > 250. );
+                VBFpresel = ( tag_obj.VBFMVA().dijet_LeadJPt > 30. 
+                                && tag_obj.VBFMVA().dijet_SubJPt > 20. 
+                                && tag_obj.VBFMVA().leadPho_PToM > (1./3) 
+                                && tag_obj.VBFMVA().sublPho_PToM > (1./4) 
+                                && tag_obj.VBFMVA().dijet_Mjj > 250. );
 
                 //                std::cout << "  VBFpresel=" << VBFpresel << std::endl;
             }
